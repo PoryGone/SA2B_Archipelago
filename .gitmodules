@@ -1,3 +1,6 @@
 [submodule "APCpp"]
 	path = APCpp
 	url = https://github.com/N00byKing/APCpp
+[submodule "lib/APCpp"]
+	path = lib/APCpp
+	url = https://github.com/N00byKing/APCpp.git
