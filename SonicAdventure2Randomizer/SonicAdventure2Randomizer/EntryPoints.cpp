@@ -12,6 +12,11 @@ extern "C"
 	{
 		// Executed every running frame of SA2
 		ScoreP1 += 1;
+
+		if (ScoreP1 % 2000 == 0)
+		{
+			EffectExplosionExec(*MainCharacter);
+		}
 	}
 
 	__declspec(dllexport) void __cdecl OnInput()
