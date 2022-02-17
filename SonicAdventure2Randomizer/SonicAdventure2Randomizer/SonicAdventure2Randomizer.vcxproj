@@ -152,10 +152,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
+    <ClInclude Include="ModLoader\MemAccess.h" />
+    <ClInclude Include="ModLoader\ninja.h" />
+    <ClInclude Include="ModLoader\njdef.h" />
+    <ClInclude Include="ModLoader\SA2Enums.h" />
+    <ClInclude Include="ModLoader\SA2Functions.h" />
+    <ClInclude Include="ModLoader\SA2ModInfo.h" />
+    <ClInclude Include="ModLoader\SA2ModLoader.h" />
+    <ClInclude Include="ModLoader\SA2Structs.h" />
+    <ClInclude Include="ModLoader\SA2Variables.h" />
+    <ClInclude Include="ModLoader\UsercallFunctionHandler.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="EntryPoints.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

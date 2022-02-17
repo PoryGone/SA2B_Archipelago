@@ -11,6 +11,7 @@ extern "C"
 	__declspec(dllexport) void __cdecl OnFrame()
 	{
 		// Executed every running frame of SA2
+		ScoreP1 += 1;
 	}
 
 	__declspec(dllexport) void __cdecl OnInput()
