@@ -51,6 +51,9 @@
     <ClInclude Include="ModLoader\UsercallFunctionHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Items\Emblems.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -60,6 +63,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="EntryPoints.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Items\Emblems.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

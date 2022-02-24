@@ -1,4 +1,7 @@
 #include "pch.h"
+#include "Items/Emblems.h"
+
+EmblemManager* _emblemManager;
 
 extern "C"
 {
@@ -6,27 +9,35 @@ extern "C"
 	{
 		// Executed at startup, contains helperFunctions and the path to your mod (useful for getting the config file.)
 		// This is where we override functions, replace static data, etc.
+		_emblemManager = new EmblemManager();
+		_emblemManager->OnInitFunction(path, helperFunctions);
 	}
 
 	__declspec(dllexport) void __cdecl OnFrame()
 	{
 		// Executed every running frame of SA2
-		ScoreP1 += 1;
-
-		if (ScoreP1 % 2000 == 0)
+		if (_emblemManager)
 		{
-			EffectExplosionExec(*MainCharacter);
+			_emblemManager->OnFrameFunction();
 		}
 	}
 
 	__declspec(dllexport) void __cdecl OnInput()
 	{
 		// Executed before the game processes input
+		if (_emblemManager)
+		{
+			_emblemManager->OnInputFunction();
+		}
 	}
 
 	__declspec(dllexport) void __cdecl OnControl()
 	{
 		// Executed when the game processes input
+		if (_emblemManager)
+		{
+			_emblemManager->OnControlFunction();
+		}
 	}
 
 	__declspec(dllexport) ModInfo SA2ModInfo = { ModLoaderVer }; // This is needed for the Mod Loader to recognize the DLL.
