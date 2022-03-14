@@ -1,7 +1,9 @@
 #include "pch.h"
 #include "Items/Emblems.h"
+#include "Locations/LocationManager.h"
 
 EmblemManager* _emblemManager;
+LocationManager* _locationManager;
 
 extern "C"
 {
@@ -11,6 +13,9 @@ extern "C"
 		// This is where we override functions, replace static data, etc.
 		_emblemManager = new EmblemManager();
 		_emblemManager->OnInitFunction(path, helperFunctions);
+
+		_locationManager = new LocationManager();
+		_locationManager->OnInitFunction(path, helperFunctions);
 	}
 
 	__declspec(dllexport) void __cdecl OnFrame()
@@ -19,6 +24,11 @@ extern "C"
 		if (_emblemManager)
 		{
 			_emblemManager->OnFrameFunction();
+		}
+
+		if (_locationManager)
+		{
+			_locationManager->OnFrameFunction();
 		}
 	}
 
