@@ -1,9 +1,12 @@
 #include "pch.h"
 #include "Items/Emblems.h"
 #include "Locations/LocationManager.h"
+#include "Archipelago/ArchipelagoManager.h"
+
 
 EmblemManager* _emblemManager;
 LocationManager* _locationManager;
+ArchipelagoManager* _archipelagoManager;
 
 extern "C"
 {
@@ -16,6 +19,9 @@ extern "C"
 
 		_locationManager = new LocationManager();
 		_locationManager->OnInitFunction(path, helperFunctions);
+
+		_archipelagoManager = new ArchipelagoManager();
+		_archipelagoManager->OnInitFunction(path, helperFunctions);
 	}
 
 	__declspec(dllexport) void __cdecl OnFrame()
@@ -29,6 +35,11 @@ extern "C"
 		if (_locationManager)
 		{
 			_locationManager->OnFrameFunction();
+		}
+
+		if (_archipelagoManager)
+		{
+			_archipelagoManager->OnFrameFunction();
 		}
 	}
 
