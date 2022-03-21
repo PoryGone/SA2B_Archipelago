@@ -63,6 +63,21 @@
     <ClInclude Include="Archipelago\ArchipelagoManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ModLoaderCommon\IniFile.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ModLoaderCommon\stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ModLoaderCommon\targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ModLoaderCommon\TextConv.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ModLoaderCommon\Utils.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -84,6 +99,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Archipelago\ArchipelagoManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ModLoaderCommon\IniFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ModLoaderCommon\stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ModLoaderCommon\TextConv.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

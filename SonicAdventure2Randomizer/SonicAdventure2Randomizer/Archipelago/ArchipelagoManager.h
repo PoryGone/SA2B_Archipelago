@@ -14,7 +14,8 @@ public:
 private:
 	const HelperFunctions* _helperFunctions;
 
-	unsigned int _timer = 0;
-
-	const unsigned int MEMORY_CHECK_TIME = 600;
+	// DeathLink functions
+	void DeathLinkSend();
+	bool DeathLinkPending();
+	void DeathLinkClear();
 };
