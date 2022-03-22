@@ -14,6 +14,8 @@ public:
 private:
 	const HelperFunctions* _helperFunctions;
 
+
+	void Init(const char* ip, const char* playerName, const char* password);
 	// DeathLink functions
 	void DeathLinkSend();
 	bool DeathLinkPending();

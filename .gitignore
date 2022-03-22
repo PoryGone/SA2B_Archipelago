@@ -1,4 +1,6 @@
 *.vs
 /SonicAdventure2Randomizer/Debug
+/SonicAdventure2Randomizer/Release
 /SonicAdventure2Randomizer/SonicAdventure2Randomizer/Debug
+/SonicAdventure2Randomizer/SonicAdventure2Randomizer/Release
 /APCppSrc
