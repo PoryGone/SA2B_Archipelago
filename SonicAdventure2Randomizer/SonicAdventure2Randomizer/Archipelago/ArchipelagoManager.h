@@ -20,4 +20,6 @@ private:
 	void DeathLinkSend();
 	bool DeathLinkPending();
 	void DeathLinkClear();
+
+	int _deathLinkTimer = 0;
 };

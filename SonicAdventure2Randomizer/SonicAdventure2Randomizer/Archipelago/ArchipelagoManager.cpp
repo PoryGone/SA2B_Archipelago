@@ -26,15 +26,26 @@ void ArchipelagoManager::OnInitFunction(const char* path, const HelperFunctions&
 
 void ArchipelagoManager::OnFrameFunction()
 {
+    if (this->_deathLinkTimer > 0)
+    {
+        this->_deathLinkTimer--;
+
+        return;
+    }
+
     if (this->DeathLinkPending() && GameState == GameStates::GameStates_Ingame) // They died
     {
         KillPlayer(0);
+
+        this->_deathLinkTimer = 200;
     
         this->DeathLinkClear();
     }
     else if (!this->DeathLinkPending() && MainCharObj1[0] != NULL && MainCharObj1[0]->Action == Action_Death) // We Died
     {
         this->DeathLinkSend();
+
+        this->_deathLinkTimer = 200;
     }
 }
 
