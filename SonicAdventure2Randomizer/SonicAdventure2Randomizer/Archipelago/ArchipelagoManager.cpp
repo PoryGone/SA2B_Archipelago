@@ -26,6 +26,11 @@ void ArchipelagoManager::OnInitFunction(const char* path, const HelperFunctions&
 
 void ArchipelagoManager::OnFrameFunction()
 {
+    if (!this->IsInit())
+    {
+        return;
+    }
+
     if (this->_deathLinkTimer > 0)
     {
         this->_deathLinkTimer--;
@@ -49,19 +54,20 @@ void ArchipelagoManager::OnFrameFunction()
     }
 }
 
-void ArchipelagoManager::OnInputFunction()
-{
-
-}
-
-void ArchipelagoManager::OnControlFunction()
-{
-
-}
 
 void noop() {}
 
 void ResetItems()
+{
+
+}
+
+void RecvItem(int, bool)
+{
+
+}
+
+void CheckLocation(int)
 {
 
 }
@@ -73,12 +79,18 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_SetDeathLinkSupported(true);
     AP_EnableQueueItemRecvMsgs(false);
     AP_SetItemClearCallback(&ResetItems);
-    //AP_SetItemRecvCallback(&V6AP_RecvItem);
-    //AP_SetLocationCheckedCallback(&V6AP_CheckLocation);
+    AP_SetItemRecvCallback(&RecvItem);
+    AP_SetLocationCheckedCallback(&CheckLocation);
     AP_SetDeathLinkRecvCallback(&noop);
     AP_Start();
 }
 
+bool ArchipelagoManager::IsInit()
+{
+    return AP_IsInit();
+}
+
+// DeathLink Functions
 void ArchipelagoManager::DeathLinkSend() 
 {
     AP_DeathLinkSend();
@@ -92,4 +104,15 @@ bool ArchipelagoManager::DeathLinkPending()
 void ArchipelagoManager::DeathLinkClear() 
 {
     AP_DeathLinkClear();
+}
+
+void ArchipelagoManager::SendItem(int index)
+{
+    if (!this->IsInit())
+    {
+        return;
+    }
+
+    int ap_index = index + AP_ID_OFFSET;
+    AP_SendItem(ap_index);
 }
