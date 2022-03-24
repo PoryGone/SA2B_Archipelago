@@ -2,6 +2,7 @@
 #include "ArchipelagoManager.h"
 #include "../Locations/LocationData.h"
 
+#include "../Utilities/MessageQueue.h"
 #include "../../lib/APCpp/Archipelago.h"
 
 #include <map>
@@ -31,27 +32,9 @@ void ArchipelagoManager::OnFrameFunction()
         return;
     }
 
-    if (this->_deathLinkTimer > 0)
-    {
-        this->_deathLinkTimer--;
+    this->OnFrameDeathLink();
 
-        return;
-    }
-
-    if (this->DeathLinkPending() && GameState == GameStates::GameStates_Ingame) // They died
-    {
-        KillPlayer(0);
-
-        this->_deathLinkTimer = 200;
-    
-        this->DeathLinkClear();
-    }
-    else if (!this->DeathLinkPending() && MainCharObj1[0] != NULL && MainCharObj1[0]->Action == Action_Death) // We Died
-    {
-        this->DeathLinkSend();
-
-        this->_deathLinkTimer = 200;
-    }
+    this->OnFrameMessageQueue();
 }
 
 
@@ -96,7 +79,48 @@ bool ArchipelagoManager::IsInit()
     return AP_IsInit();
 }
 
+void ArchipelagoManager::OnFrameMessageQueue()
+{
+    if (!AP_IsMessagePending())
+    {
+        return;
+    }
+
+    MessageQueue* messageQueue = &MessageQueue::GetInstance();
+    std::vector<std::string> msg = AP_GetLatestMessage();
+    for (unsigned int i = 0; i < msg.size(); i++)
+    {
+        messageQueue->AddMessage(msg.at(i));
+    }
+    AP_ClearLatestMessage();
+}
+
 // DeathLink Functions
+void ArchipelagoManager::OnFrameDeathLink()
+{
+    if (this->_deathLinkTimer > 0)
+    {
+        this->_deathLinkTimer--;
+
+        return;
+    }
+
+    if (this->DeathLinkPending() && GameState == GameStates::GameStates_Ingame) // They died
+    {
+        KillPlayer(0);
+
+        this->_deathLinkTimer = 200;
+
+        this->DeathLinkClear();
+    }
+    else if (!this->DeathLinkPending() && MainCharObj1[0] != NULL && MainCharObj1[0]->Action == Action_Death) // We Died
+    {
+        this->DeathLinkSend();
+
+        this->_deathLinkTimer = 200;
+    }
+}
+
 void ArchipelagoManager::DeathLinkSend() 
 {
     AP_DeathLinkSend();

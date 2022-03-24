@@ -30,8 +30,10 @@ private:
 
 	void Init(const char* ip, const char* playerName, const char* password);
 	bool IsInit();
+	void OnFrameMessageQueue();
 
 	// DeathLink functions
+	void OnFrameDeathLink();
 	void DeathLinkSend();
 	bool DeathLinkPending();
 	void DeathLinkClear();

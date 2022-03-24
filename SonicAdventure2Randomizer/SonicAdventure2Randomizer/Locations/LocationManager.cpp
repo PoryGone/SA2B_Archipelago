@@ -1,7 +1,7 @@
 #include "../pch.h"
-#include "../Utilities/MessageQueue.h"
 #include "LocationManager.h"
 #include "LocationData.h"
+#include "../Utilities/MessageQueue.h"
 
 void LocationManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
 {
