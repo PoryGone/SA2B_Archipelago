@@ -1,4 +1,5 @@
 #include "../pch.h"
+#include "../Utilities/MessageQueue.h"
 #include "LocationManager.h"
 #include "LocationData.h"
 
@@ -14,9 +15,6 @@ void LocationManager::OnInitFunction(const char* path, const HelperFunctions& he
 
 void LocationManager::OnFrameFunction()
 {
-	this->_helperFunctions->SetDebugFontColor(0xFFF542C8);
-	this->_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 1), "On Frame Locations");
-
 	this->_timer++;
 
 	if (this->_timer > MEMORY_CHECK_TIME)
@@ -27,7 +25,7 @@ void LocationManager::OnFrameFunction()
 		{
 			if (this->_LevelClearData.find(i) != this->_LevelClearData.end())
 			{
-				LevelClearCheckData checkData = this->_LevelClearData[i];
+				LevelClearCheckData& checkData = this->_LevelClearData[i];
 
 				if (!checkData.CheckSent)
 				{
@@ -41,6 +39,12 @@ void LocationManager::OnFrameFunction()
 							this->_archipelagoManager->SendItem(i);
 
 							checkData.CheckSent = true;
+
+							MessageQueue* messageQueue = &MessageQueue::GetInstance();
+
+							std::string message = std::string("Sent Check: ");
+							message += std::to_string(i);
+							messageQueue->AddMessage(message);
 						}
 					}
 				}

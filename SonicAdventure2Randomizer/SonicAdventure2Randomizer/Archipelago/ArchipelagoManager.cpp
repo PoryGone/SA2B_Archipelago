@@ -57,19 +57,25 @@ void ArchipelagoManager::OnFrameFunction()
 
 void noop() {}
 
-void ResetItems()
+void SA2_ResetItems()
 {
+    ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
 
+    apm->ResetItems();
 }
 
-void RecvItem(int, bool)
+void SA2_RecvItem(int item_id, bool notify)
 {
+    ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
 
+    apm->ReceiveItem(item_id, notify);
 }
 
-void CheckLocation(int)
+void SA2_CheckLocation(int loc_id)
 {
+    ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
 
+    apm->CheckLocation(loc_id);
 }
 
 void ArchipelagoManager::Init(const char* ip, const char* playerName, const char* password)
@@ -78,9 +84,9 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
 
     AP_SetDeathLinkSupported(true);
     AP_EnableQueueItemRecvMsgs(false);
-    AP_SetItemClearCallback(&ResetItems);
-    AP_SetItemRecvCallback(&RecvItem);
-    AP_SetLocationCheckedCallback(&CheckLocation);
+    AP_SetItemClearCallback(&SA2_ResetItems);
+    AP_SetItemRecvCallback(&SA2_RecvItem);
+    AP_SetLocationCheckedCallback(&SA2_CheckLocation);
     AP_SetDeathLinkRecvCallback(&noop);
     AP_Start();
 }
@@ -106,6 +112,7 @@ void ArchipelagoManager::DeathLinkClear()
     AP_DeathLinkClear();
 }
 
+// Item Functions
 void ArchipelagoManager::SendItem(int index)
 {
     if (!this->IsInit())
@@ -115,4 +122,19 @@ void ArchipelagoManager::SendItem(int index)
 
     int ap_index = index + AP_ID_OFFSET;
     AP_SendItem(ap_index);
+}
+
+void ArchipelagoManager::ResetItems()
+{
+
+}
+
+void ArchipelagoManager::ReceiveItem(int item_id, bool notify)
+{
+
+}
+
+void ArchipelagoManager::CheckLocation(int loc_id)
+{
+
 }

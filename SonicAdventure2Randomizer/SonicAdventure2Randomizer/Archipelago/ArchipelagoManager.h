@@ -15,7 +15,12 @@ public:
 	void OnInitFunction(const char* path, const HelperFunctions& helperFunctions);
 	void OnFrameFunction();
 
+
+	// Item Functions
 	void SendItem(int index);
+	void ResetItems();
+	void ReceiveItem(int item_id, bool notify);
+	void CheckLocation(int loc_id);
 
 private:
 	const HelperFunctions* _helperFunctions;
