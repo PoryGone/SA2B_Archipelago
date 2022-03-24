@@ -29,7 +29,6 @@ void EmblemManager::OnInitFunction(const char* path, const HelperFunctions& help
 	_helperFunctions = &helperFunctions;
 	DebugString = "On Frame Emblems";
 	//WriteJump(getEmblemExecStart_ptr, getEmblemExecEnd_ptr);
-	MessageQueue::GetInstance().AddMessage("Emblem Manager Initialized");
 }
 
 void EmblemManager::OnFrameFunction()
