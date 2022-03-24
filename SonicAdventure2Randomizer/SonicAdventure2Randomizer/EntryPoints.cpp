@@ -7,6 +7,7 @@
 EmblemManager* _emblemManager;
 LocationManager* _locationManager;
 ArchipelagoManager* _archipelagoManager;
+MessageQueue& _messageQueue = MessageQueue::GetInstance();
 
 extern "C"
 {
@@ -14,6 +15,8 @@ extern "C"
 	{
 		// Executed at startup, contains helperFunctions and the path to your mod (useful for getting the config file.)
 		// This is where we override functions, replace static data, etc.
+		_messageQueue.OnInitFunction(path, helperFunctions);
+
 		_emblemManager = new EmblemManager();
 		_emblemManager->OnInitFunction(path, helperFunctions);
 
@@ -41,6 +44,8 @@ extern "C"
 		{
 			_archipelagoManager->OnFrameFunction();
 		}
+
+		_messageQueue.OnFrameFunction();
 	}
 
 	__declspec(dllexport) void __cdecl OnInput()
