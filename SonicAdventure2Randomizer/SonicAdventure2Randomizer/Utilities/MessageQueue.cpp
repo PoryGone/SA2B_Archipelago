@@ -46,7 +46,7 @@ void MessageQueue::OnFrameFunction()
 		if (!currentMessages[i].message.empty())
 		{
 			_helperFunctions->SetDebugFontColor(currentMessages[i].color);
-			_helperFunctions->DisplayDebugString(NJM_LOCATION(0, MESSAGE_QUEUE_START_LINE - i), currentMessages[i].message.c_str());
+			_helperFunctions->DisplayDebugString(NJM_LOCATION(0, MESSAGE_QUEUE_START_LINE + i), currentMessages[i].message.c_str());
 		}
 	}
 }
