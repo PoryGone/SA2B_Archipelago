@@ -10,7 +10,7 @@ constexpr unsigned int MEMORY_CHECK_TIME = 600;
 class LocationManager
 {
 public:
-	void OnInitFunction(const char* path, const HelperFunctions& helperFunctions, ArchipelagoManager* archipelagoManager);
+	void OnInitFunction(const char* path, const HelperFunctions& helperFunctions);
 	void OnFrameFunction();
 	void OnInputFunction();
 	void OnControlFunction();

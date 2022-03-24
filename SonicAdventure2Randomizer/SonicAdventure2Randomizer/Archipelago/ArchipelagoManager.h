@@ -6,6 +6,12 @@ constexpr unsigned int AP_ID_OFFSET = 0xFF0000;
 class ArchipelagoManager
 {
 public:
+	static ArchipelagoManager& getInstance()
+	{
+		static ArchipelagoManager instance;
+		return instance;
+	}
+
 	void OnInitFunction(const char* path, const HelperFunctions& helperFunctions);
 	void OnFrameFunction();
 
@@ -24,5 +30,4 @@ private:
 	void DeathLinkSend();
 	bool DeathLinkPending();
 	void DeathLinkClear();
-
 };

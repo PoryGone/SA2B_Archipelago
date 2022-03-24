@@ -2,10 +2,10 @@
 #include "LocationManager.h"
 #include "LocationData.h"
 
-void LocationManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions, ArchipelagoManager* archipelagoManager)
+void LocationManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
 {
 	this->_helperFunctions = &helperFunctions;
-	this->_archipelagoManager = archipelagoManager;
+	this->_archipelagoManager = &ArchipelagoManager::getInstance();
 
 	this->_LevelClearData.clear();
 

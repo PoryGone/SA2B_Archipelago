@@ -17,11 +17,11 @@ extern "C"
 		_emblemManager = new EmblemManager();
 		_emblemManager->OnInitFunction(path, helperFunctions);
 
-		_archipelagoManager = new ArchipelagoManager();
+		_archipelagoManager = &ArchipelagoManager::getInstance();
 		_archipelagoManager->OnInitFunction(path, helperFunctions);
 
 		_locationManager = new LocationManager();
-		_locationManager->OnInitFunction(path, helperFunctions, _archipelagoManager);
+		_locationManager->OnInitFunction(path, helperFunctions);
 	}
 
 	__declspec(dllexport) void __cdecl OnFrame()
