@@ -108,16 +108,32 @@ void ArchipelagoManager::OnFrameDeathLink()
     if (this->DeathLinkPending() && GameState == GameStates::GameStates_Ingame) // They died
     {
         KillPlayer(0);
+        if (CurrentCharacter == Characters_MechTails || CurrentCharacter == Characters_MechEggman)
+        {
+            if (MainCharObj2[0] != NULL && MainCharObj1[0] != NULL)
+            {
+                MainCharObj2[0]->MechHP = 0;
+                MainCharObj1[0]->Status |= Status_Hurt;
+            }
+        }
 
         this->_deathLinkTimer = 200;
 
         this->DeathLinkClear();
     }
-    else if (!this->DeathLinkPending() && MainCharObj1[0] != NULL && MainCharObj1[0]->Action == Action_Death) // We Died
+    else if (!this->DeathLinkPending() && 
+             MainCharObj1[0] != NULL && 
+             MainCharObj2[0] != NULL)
     {
-        this->DeathLinkSend();
+        if (MainCharObj1[0]->Action == Action_Death ||
+            MainCharObj1[0]->Action == Action_Drown ||
+            MainCharObj1[0]->Action == Action_Quicksand ||
+            (MainCharObj2[0]->Powerups & (1 << PowerupBits::PowerupBits_Dead))) // We Died
+        {
+            this->DeathLinkSend();
 
-        this->_deathLinkTimer = 200;
+            this->_deathLinkTimer = 200;
+        }
     }
 }
 
