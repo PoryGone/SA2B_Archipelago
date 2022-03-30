@@ -1,10 +1,12 @@
 #include "pch.h"
 #include "Items/Emblems.h"
+#include "Items/ItemManager.h"
 #include "Locations/LocationManager.h"
 #include "Archipelago/ArchipelagoManager.h"
 
 
 EmblemManager* _emblemManager;
+ItemManager* _itemManager;
 LocationManager* _locationManager;
 ArchipelagoManager* _archipelagoManager;
 MessageQueue& _messageQueue = MessageQueue::GetInstance();
@@ -19,6 +21,9 @@ extern "C"
 
 		_emblemManager = new EmblemManager();
 		_emblemManager->OnInitFunction(path, helperFunctions);
+
+		_itemManager = &ItemManager::getInstance();
+		_itemManager->OnInitFunction(path, helperFunctions);
 
 		_archipelagoManager = &ArchipelagoManager::getInstance();
 		_archipelagoManager->OnInitFunction(path, helperFunctions);

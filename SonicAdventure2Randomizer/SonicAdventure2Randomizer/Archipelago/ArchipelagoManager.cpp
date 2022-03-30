@@ -1,6 +1,7 @@
 #include "../pch.h"
 #include "ArchipelagoManager.h"
 #include "../Locations/LocationData.h"
+#include "../Items/ItemManager.h"
 
 #include "../Utilities/MessageQueue.h"
 #include "../../lib/APCpp/Archipelago.h"
@@ -171,7 +172,9 @@ void ArchipelagoManager::ResetItems()
 
 void ArchipelagoManager::ReceiveItem(int item_id, bool notify)
 {
+    ItemManager* itemManager = &ItemManager::getInstance();
 
+    itemManager->ReceiveItem(item_id, notify);
 }
 
 void ArchipelagoManager::CheckLocation(int loc_id)
