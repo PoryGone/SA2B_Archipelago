@@ -10,7 +10,6 @@ public:
 	void OnFrameFunction();
 	void OnInputFunction();
 	void OnControlFunction();
-	static std::string DebugString;
 
 private:
 	const HelperFunctions* _helperFunctions;
