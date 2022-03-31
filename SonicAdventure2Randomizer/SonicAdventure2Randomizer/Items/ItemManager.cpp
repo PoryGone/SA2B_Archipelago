@@ -57,6 +57,8 @@ void ItemManager::ReceiveItem(int item_id, bool notify)
 				std::string message = std::string("New Emblem Count: ");
 				message += std::to_string((int)dataValue);
 				messageQueue->AddMessage(message);
+
+				ProbablySavesSaveFile();
 			}
 			else
 			{
