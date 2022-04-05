@@ -1,6 +1,7 @@
 #include "../pch.h"
 #pragma once
 #include <map>
+#include <string>
 
 enum ItemValue
 {
@@ -26,7 +27,7 @@ enum ItemValue
 
     IV_ShadowFlameRing,
     IV_ShadowAirShoes,
-    IV_ShadowAincientLight,
+    IV_ShadowAncientLight,
     IV_ShadowMysticMelody,
 
     IV_EggmanLaserBlaster,
@@ -45,11 +46,12 @@ enum ItemValue
 
 struct ItemData
 {
-    ItemData() : Address(0x00) {}
-    ItemData(int address) : Address(address) {}
+    ItemData() : Address(0x00), DisplayName(std::string("Unknown")) {}
+    ItemData(int address, std::string displayName) : Address(address), DisplayName(displayName) {}
 
     int Address;
     int AmountObtained = 0;
+    std::string DisplayName;
 };
 
 

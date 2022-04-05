@@ -66,29 +66,23 @@ void ItemManager::ReceiveItem(int item_id, bool notify)
 				messageQueue->AddMessage(message);
 			}
 		}
-		else
-		{
-			std::string message = std::string("New Emblem Fail: ");
-			message += std::to_string(this->_ItemData.size());
-			messageQueue->AddMessage(message);
-		}
 	}
 	else
 	{
 		ItemData& receivedItem = this->_ItemData[item_id];
 
-		if (receivedItem.AmountObtained > 0)
+		if (receivedItem.AmountObtained == 0)
 		{
-			bool success = WriteData((void*)receivedItem.Address, (void*)0x1, (SIZE_T)1);
+			bool success = WriteData<1>((void*)receivedItem.Address, 0x1);
 
 			receivedItem.AmountObtained++;
 
 			if (success)
 			{
-				if (notify)
+				//if (notify)
 				{
-					std::string message = std::string("Successfully received: ");
-					message += std::to_string(item_id);
+					std::string message = std::string("Successfully received ");
+					message += receivedItem.DisplayName;
 					messageQueue->AddMessage(message);
 				}
 			}
@@ -101,8 +95,10 @@ void ItemManager::ReceiveItem(int item_id, bool notify)
 		}
 		else
 		{
-			std::string message = std::string("Received Duplicate: ");
+			std::string message = std::string("Received Duplicate ID: ");
 			message += std::to_string(item_id);
+			message += std::string("| Count: ");
+			message += std::to_string(receivedItem.AmountObtained);
 			messageQueue->AddMessage(message);
 		}
 	}
