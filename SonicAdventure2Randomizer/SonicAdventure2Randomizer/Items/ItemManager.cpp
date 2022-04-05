@@ -58,48 +58,111 @@ void ItemManager::ReceiveItem(int item_id, bool notify)
 				message += std::to_string((int)dataValue);
 				messageQueue->AddMessage(message);
 
-				ProbablySavesSaveFile();
+ProbablySavesSaveFile();
 			}
 			else
 			{
-				std::string message = std::string("Failed to Write");
-				messageQueue->AddMessage(message);
+			std::string message = std::string("Failed to Write Emblem Count");
+			messageQueue->AddMessage(message);
 			}
 		}
 	}
 	else
 	{
-		ItemData& receivedItem = this->_ItemData[item_id];
+	ItemData& receivedItem = this->_ItemData[item_id];
 
-		if (receivedItem.AmountObtained == 0)
+	if (receivedItem.AmountObtained == 0)
+	{
+		bool success = WriteData<1>((void*)receivedItem.Address, 0x1);
+
+		receivedItem.AmountObtained++;
+
+		if (success)
 		{
-			bool success = WriteData<1>((void*)receivedItem.Address, 0x1);
+			this->HandleEquipment(item_id);
 
-			receivedItem.AmountObtained++;
-
-			if (success)
+			//if (notify)
 			{
-				//if (notify)
-				{
-					std::string message = std::string("Successfully received ");
-					message += receivedItem.DisplayName;
-					messageQueue->AddMessage(message);
-				}
-			}
-			else
-			{
-				std::string message = std::string("Write failed: ");
-				message += std::to_string(item_id);
+				std::string message = std::string("Successfully received ");
+				message += receivedItem.DisplayName;
 				messageQueue->AddMessage(message);
 			}
 		}
 		else
 		{
-			std::string message = std::string("Received Duplicate ID: ");
+			std::string message = std::string("Write failed: ");
 			message += std::to_string(item_id);
-			message += std::string("| Count: ");
-			message += std::to_string(receivedItem.AmountObtained);
 			messageQueue->AddMessage(message);
+		}
+	}
+	else
+	{
+		std::string message = std::string("Received Duplicate Item: ");
+		message += receivedItem.DisplayName;
+		messageQueue->AddMessage(message);
+	}
+	}
+}
+
+int APItemIDtoSA2ItemID(int APID)
+{
+	switch (APID)
+	{
+	case ItemValue::IV_SonicGloves:			return Upgrades_SonicMagicGloves;
+	case ItemValue::IV_SonicLightShoes:		return Upgrades_SonicLightShoes;
+	case ItemValue::IV_SonicAncientLight:	return Upgrades_SonicAncientLight;
+	case ItemValue::IV_SonicBounceBracelet: return Upgrades_SonicBounceBracelet;
+	case ItemValue::IV_SonicFlameRing:		return Upgrades_SonicFlameRing;
+	case ItemValue::IV_SonicMysticMelody:	return Upgrades_SonicMysticMelody;
+
+	case ItemValue::IV_TailsLaserBlaster: return Upgrades_TailsLaserBlaster;
+	case ItemValue::IV_TailsBooster:	  return Upgrades_TailsBooster;
+	case ItemValue::IV_TailsMysticMelody: return Upgrades_TailsMysticMelody;
+	case ItemValue::IV_TailsBazooka:	  return Upgrades_TailsBazooka;
+
+	case ItemValue::IV_KnucklesMysticMelody: return Upgrades_KnucklesMysticMelody;
+	case ItemValue::IV_KnucklesShovelClaw:   return Upgrades_KnucklesShovelClaw;
+	case ItemValue::IV_KnucklesAirNecklace:  return Upgrades_KnucklesAirNecklace;
+	case ItemValue::IV_KnucklesHammerGloves: return Upgrades_KnucklesHammerGloves;
+	case ItemValue::IV_KnucklesSunglasses:   return Upgrades_KnucklesSunglasses;
+
+	case ItemValue::IV_ShadowFlameRing:    return Upgrades_ShadowFlameRing;
+	case ItemValue::IV_ShadowAirShoes:     return Upgrades_ShadowAirShoes;
+	case ItemValue::IV_ShadowAncientLight: return Upgrades_ShadowAncientLight;
+	case ItemValue::IV_ShadowMysticMelody: return Upgrades_ShadowMysticMelody;
+
+	case ItemValue::IV_EggmanLaserBlaster:    return Upgrades_EggmanLaserBlaster;
+	case ItemValue::IV_EggmanMysticMelody:    return Upgrades_EggmanMysticMelody;
+	case ItemValue::IV_EggmanJetEngine:       return Upgrades_EggmanJetEngine;
+	case ItemValue::IV_EggmanLargeCannon:     return Upgrades_EggmanLargeCannon;
+	case ItemValue::IV_EggmanProtectiveArmor: return Upgrades_EggmanProtectiveArmor;
+
+	case ItemValue::IV_RougeMysticMelody:  return Upgrades_RougeMysticMelody;
+	case ItemValue::IV_RougePickNails:     return Upgrades_RougePickNails;
+	case ItemValue::IV_RougeTreasureScope: return Upgrades_RougeTreasureScope;
+	case ItemValue::IV_RougeIronBoots:     return Upgrades_RougeIronBoots;
+	}
+}
+
+void ItemManager::HandleEquipment(int EquipmentItem)
+{
+	if (!(GameState == GameStates::GameStates_Ingame || GameState == GameStates::GameStates_Pause))
+	{
+		return;
+	}
+
+	if ((CurrentCharacter == Characters_Sonic      && EquipmentItem >= IV_SonicGloves          && EquipmentItem <= IV_SonicMysticMelody) ||
+		(CurrentCharacter == Characters_MechTails  && EquipmentItem >= IV_TailsLaserBlaster    && EquipmentItem <= IV_TailsBazooka) ||
+		(CurrentCharacter == Characters_Knuckles   && EquipmentItem >= IV_KnucklesMysticMelody && EquipmentItem <= IV_KnucklesSunglasses) ||
+		(CurrentCharacter == Characters_Shadow     && EquipmentItem >= IV_ShadowFlameRing      && EquipmentItem <= IV_ShadowMysticMelody) ||
+		(CurrentCharacter == Characters_MechEggman && EquipmentItem >= IV_EggmanLaserBlaster   && EquipmentItem <= IV_EggmanProtectiveArmor) ||
+		(CurrentCharacter == Characters_Rouge      && EquipmentItem >= IV_RougeMysticMelody    && EquipmentItem <= IV_RougeIronBoots))
+	{
+		if (MainCharObj2[0] != NULL)
+		{
+			int NewEquipBit = APItemIDtoSA2ItemID(EquipmentItem);
+
+			MainCharObj2[0]->Upgrades |= NewEquipBit;
 		}
 	}
 }

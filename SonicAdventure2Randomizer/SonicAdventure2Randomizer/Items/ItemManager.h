@@ -23,6 +23,7 @@ public:
 	void ReceiveItem(int item_id, bool notify);
 
 private:
+	void HandleEquipment(int EquipmentItem);
 	const HelperFunctions* _helperFunctions;
 
 	std::map<int, ItemData> _ItemData;
