@@ -15,11 +15,24 @@ void ItemManager::OnInitFunction(const char* path, const HelperFunctions& helper
 	this->_ItemData.clear();
 
 	InitializeItemData(this->_ItemData);
+
+	// Retarget Equipment Save File Data to 0x1DEC638
+	WriteData<1>((void*)0x6D87FB, 0x38);
+	WriteData<1>((void*)0x6D87FC, 0xC6);
+
+	WriteData<1>((void*)0x6D864B, 0x38);
+	WriteData<1>((void*)0x6D864C, 0xC6);
 }
 
 void ItemManager::OnFrameFunction()
 {
+	// Hacky Thing - Eggman Mystic Melody new spot defaults to 0x1E
+	char dataValue = *(char*)0x1DEC650;
 
+	if (dataValue == 0x1E)
+	{
+		WriteData<1>((void*)0x1DEC650, 0x00);
+	}
 }
 
 void ItemManager::ResetItems()
@@ -58,7 +71,7 @@ void ItemManager::ReceiveItem(int item_id, bool notify)
 				message += std::to_string((int)dataValue);
 				messageQueue->AddMessage(message);
 
-ProbablySavesSaveFile();
+				ProbablySavesSaveFile();
 			}
 			else
 			{
@@ -69,38 +82,38 @@ ProbablySavesSaveFile();
 	}
 	else
 	{
-	ItemData& receivedItem = this->_ItemData[item_id];
+		ItemData& receivedItem = this->_ItemData[item_id];
 
-	if (receivedItem.AmountObtained == 0)
-	{
-		bool success = WriteData<1>((void*)receivedItem.Address, 0x1);
-
-		receivedItem.AmountObtained++;
-
-		if (success)
+		if (receivedItem.AmountObtained == 0)
 		{
-			this->HandleEquipment(item_id);
+			bool success = WriteData<1>((void*)receivedItem.Address, 0x1);
 
-			//if (notify)
+			receivedItem.AmountObtained++;
+
+			if (success)
 			{
-				std::string message = std::string("Successfully received ");
-				message += receivedItem.DisplayName;
+				this->HandleEquipment(item_id);
+
+				//if (notify)
+				{
+					std::string message = std::string("Successfully received ");
+					message += receivedItem.DisplayName;
+					messageQueue->AddMessage(message);
+				}
+			}
+			else
+			{
+				std::string message = std::string("Write failed: ");
+				message += std::to_string(item_id);
 				messageQueue->AddMessage(message);
 			}
 		}
 		else
 		{
-			std::string message = std::string("Write failed: ");
-			message += std::to_string(item_id);
+			std::string message = std::string("Received Duplicate Item: ");
+			message += receivedItem.DisplayName;
 			messageQueue->AddMessage(message);
 		}
-	}
-	else
-	{
-		std::string message = std::string("Received Duplicate Item: ");
-		message += receivedItem.DisplayName;
-		messageQueue->AddMessage(message);
-	}
 	}
 }
 
@@ -141,6 +154,8 @@ int APItemIDtoSA2ItemID(int APID)
 	case ItemValue::IV_RougePickNails:     return Upgrades_RougePickNails;
 	case ItemValue::IV_RougeTreasureScope: return Upgrades_RougeTreasureScope;
 	case ItemValue::IV_RougeIronBoots:     return Upgrades_RougeIronBoots;
+
+	default: return Upgrades_SonicLightShoes;
 	}
 }
 

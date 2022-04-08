@@ -40,14 +40,19 @@ extern "C"
 			_emblemManager->OnFrameFunction();
 		}
 
-		if (_locationManager)
+		if (_itemManager)
 		{
-			_locationManager->OnFrameFunction();
+			_itemManager->OnFrameFunction();
 		}
 
 		if (_archipelagoManager)
 		{
 			_archipelagoManager->OnFrameFunction();
+		}
+
+		if (_locationManager)
+		{
+			_locationManager->OnFrameFunction();
 		}
 
 		_messageQueue.OnFrameFunction();
