@@ -71,6 +71,9 @@ void ItemManager::ReceiveItem(int item_id, bool notify)
 				message += std::to_string((int)dataValue);
 				messageQueue->AddMessage(message);
 
+				// Cutscene Emblem Count
+				WriteData<1>((void*)0x0174B032, dataValue);
+
 				ProbablySavesSaveFile();
 			}
 			else
