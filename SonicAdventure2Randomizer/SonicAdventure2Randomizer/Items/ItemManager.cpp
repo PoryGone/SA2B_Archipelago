@@ -16,7 +16,7 @@ void ItemManager::OnInitFunction(const char* path, const HelperFunctions& helper
 
 	InitializeItemData(this->_ItemData);
 
-	// Retarget Equipment Save File Data to 0x1DEC638
+	// Retarget Equipment Save File Data to 0x1DEC638 
 	WriteData<1>((void*)0x6D87FB, 0x38);
 	WriteData<1>((void*)0x6D87FC, 0xC6);
 
