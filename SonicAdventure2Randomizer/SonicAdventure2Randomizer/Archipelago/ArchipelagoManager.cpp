@@ -7,30 +7,42 @@
 #include "../../lib/APCpp/Archipelago.h"
 
 #include <map>
-#include "../ModloaderCommon/IniFile.hpp"
 
 
 void ArchipelagoManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
 {
 	_helperFunctions = &helperFunctions;
 
-    const IniFile* settings = new IniFile(std::string(path) + "\\config.ini");
-
-    if (settings)
-    {
-        std::string serverIP        = settings->getString("AP", "IP");
-        std::string playerName      = settings->getString("AP", "PlayerName");
-        std::string serverPassword  = settings->getString("AP", "Password");
-
-        this->Init(serverIP.c_str(), playerName.c_str(), serverPassword.c_str());
-    }
+    this->_settingsINI = new IniFile(std::string(path) + "\\config.ini");
 }
 
 void ArchipelagoManager::OnFrameFunction()
 {
     if (!this->IsInit())
     {
-        return;
+        if (*(char*)0x1DEC600 != 0)
+        {
+            if (this->_settingsINI)
+            {
+                std::string serverIP = this->_settingsINI->getString("AP", "IP");
+                std::string playerName = this->_settingsINI->getString("AP", "PlayerName");
+                std::string serverPassword = this->_settingsINI->getString("AP", "Password");
+
+                this->Init(serverIP.c_str(), playerName.c_str(), serverPassword.c_str());
+            }
+            else
+            {
+                MessageQueue* messageQueue = &MessageQueue::GetInstance();
+                std::string msg = "Invalid Settings INI";
+                messageQueue->AddMessage(msg);
+
+                return;
+            }
+        }
+        else
+        {
+            return;
+        }
     }
 
     this->OnFrameDeathLink();

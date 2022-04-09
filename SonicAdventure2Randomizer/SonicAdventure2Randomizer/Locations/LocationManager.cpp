@@ -15,6 +15,11 @@ void LocationManager::OnInitFunction(const char* path, const HelperFunctions& he
 
 void LocationManager::OnFrameFunction()
 {
+	if (!this->_archipelagoManager->IsInit())
+	{
+		return;
+	}
+
 	this->_timer++;
 
 	if (this->_timer > MEMORY_CHECK_TIME)

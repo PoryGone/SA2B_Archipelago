@@ -1,6 +1,8 @@
 #include "../pch.h"
 #pragma once
 
+#include "../ModloaderCommon/IniFile.hpp"
+
 constexpr unsigned int AP_ID_OFFSET = 0xFF0000;
 
 class ArchipelagoManager
@@ -15,6 +17,7 @@ public:
 	void OnInitFunction(const char* path, const HelperFunctions& helperFunctions);
 	void OnFrameFunction();
 
+	bool IsInit();
 
 	// Item Functions
 	void SendItem(int index);
@@ -24,12 +27,12 @@ public:
 
 private:
 	const HelperFunctions* _helperFunctions;
+	const IniFile* _settingsINI;
 
 	int _deathLinkTimer = 0;
 
 
 	void Init(const char* ip, const char* playerName, const char* password);
-	bool IsInit();
 	void OnFrameMessageQueue();
 
 	// DeathLink functions
