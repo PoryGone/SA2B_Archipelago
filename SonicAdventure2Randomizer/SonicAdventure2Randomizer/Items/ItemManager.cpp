@@ -37,7 +37,7 @@ void ItemManager::OnFrameFunction()
 
 void ItemManager::ResetItems()
 {
-
+	EmblemCount = 0;
 }
 
 void ItemManager::ReceiveItem(int item_id, bool notify)

@@ -167,7 +167,9 @@ void ArchipelagoManager::SendItem(int index)
 
 void ArchipelagoManager::ResetItems()
 {
+    ItemManager* itemManager = &ItemManager::getInstance();
 
+    itemManager->ResetItems();
 }
 
 void ArchipelagoManager::ReceiveItem(int item_id, bool notify)
