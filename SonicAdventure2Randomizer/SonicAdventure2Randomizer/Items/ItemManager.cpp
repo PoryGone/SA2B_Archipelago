@@ -22,6 +22,12 @@ void ItemManager::OnInitFunction(const char* path, const HelperFunctions& helper
 
 	WriteData<1>((void*)0x6D864B, 0x38);
 	WriteData<1>((void*)0x6D864C, 0xC6);
+
+	// Prevent Upgrades from being Temporarily Granted at Upgade Spots
+	WriteData<1>((void*)0x6D881B, 0x90);
+	WriteData<1>((void*)0x6D881C, 0x90);
+	WriteData<1>((void*)0x6D881D, 0x90);
+
 }
 
 void ItemManager::OnFrameFunction()
