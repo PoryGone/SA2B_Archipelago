@@ -87,6 +87,12 @@
     <ClInclude Include="Items\ItemManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Locations\StageSelectManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Locations\StageSelectData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -126,6 +132,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Items\ItemManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Locations\StageSelectManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Locations\StageSelectData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

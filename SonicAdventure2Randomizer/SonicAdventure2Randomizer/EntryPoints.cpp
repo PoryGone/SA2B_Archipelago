@@ -2,12 +2,14 @@
 #include "Items/Emblems.h"
 #include "Items/ItemManager.h"
 #include "Locations/LocationManager.h"
+#include "Locations/StageSelectManager.h"
 #include "Archipelago/ArchipelagoManager.h"
 
 
 EmblemManager* _emblemManager;
 ItemManager* _itemManager;
 LocationManager* _locationManager;
+StageSelectManager* _stageSelectManager;
 ArchipelagoManager* _archipelagoManager;
 MessageQueue& _messageQueue = MessageQueue::GetInstance();
 
@@ -30,6 +32,9 @@ extern "C"
 
 		_locationManager = new LocationManager();
 		_locationManager->OnInitFunction(path, helperFunctions);
+
+		_stageSelectManager = new StageSelectManager();
+		_stageSelectManager->OnInitFunction(path, helperFunctions);
 	}
 
 	__declspec(dllexport) void __cdecl OnFrame()
@@ -53,6 +58,11 @@ extern "C"
 		if (_locationManager)
 		{
 			_locationManager->OnFrameFunction();
+		}
+
+		if (_stageSelectManager)
+		{
+			_stageSelectManager->OnFrameFunction();
 		}
 
 		_messageQueue.OnFrameFunction();
