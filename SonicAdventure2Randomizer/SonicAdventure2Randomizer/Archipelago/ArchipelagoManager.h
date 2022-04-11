@@ -3,6 +3,8 @@
 
 #include "../ModloaderCommon/IniFile.hpp"
 
+#include <map>
+
 constexpr unsigned int AP_ID_OFFSET = 0xFF0000;
 
 class ArchipelagoManager
@@ -24,6 +26,9 @@ public:
 	void ResetItems();
 	void ReceiveItem(int item_id, bool notify);
 	void CheckLocation(int loc_id);
+
+	void SetMusicMap(std::map<int, int> map);
+	void SetMusicShuffle(int shuffleType);
 
 private:
 	const HelperFunctions* _helperFunctions;

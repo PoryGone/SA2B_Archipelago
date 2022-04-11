@@ -4,12 +4,14 @@
 #include "Locations/LocationManager.h"
 #include "Locations/StageSelectManager.h"
 #include "Archipelago/ArchipelagoManager.h"
+#include "Aesthetics/MusicManager.h"
 
 
 EmblemManager* _emblemManager;
 ItemManager* _itemManager;
 LocationManager* _locationManager;
 StageSelectManager* _stageSelectManager;
+MusicManager* _musicManager;
 ArchipelagoManager* _archipelagoManager;
 MessageQueue& _messageQueue = MessageQueue::GetInstance();
 
@@ -27,14 +29,17 @@ extern "C"
 		_itemManager = &ItemManager::getInstance();
 		_itemManager->OnInitFunction(path, helperFunctions);
 
+		_musicManager = &MusicManager::getInstance();
+		_musicManager->OnInitFunction(path, helperFunctions);
+
+		_stageSelectManager = new StageSelectManager();
+		_stageSelectManager->OnInitFunction(path, helperFunctions);
+
 		_archipelagoManager = &ArchipelagoManager::getInstance();
 		_archipelagoManager->OnInitFunction(path, helperFunctions);
 
 		_locationManager = new LocationManager();
 		_locationManager->OnInitFunction(path, helperFunctions);
-
-		_stageSelectManager = new StageSelectManager();
-		_stageSelectManager->OnInitFunction(path, helperFunctions);
 	}
 
 	__declspec(dllexport) void __cdecl OnFrame()

@@ -2,11 +2,11 @@
 #include "ArchipelagoManager.h"
 #include "../Locations/LocationData.h"
 #include "../Items/ItemManager.h"
+#include "../Aesthetics/MusicManager.h"
 
 #include "../Utilities/MessageQueue.h"
 #include "../../lib/APCpp/Archipelago.h"
 
-#include <map>
 
 
 void ArchipelagoManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
@@ -74,6 +74,20 @@ void SA2_CheckLocation(int loc_id)
     apm->CheckLocation(loc_id);
 }
 
+void SA2_SetMusicMap(std::map<int, int> map) 
+{
+    ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
+
+    apm->SetMusicMap(map);
+}
+
+void SA2_SetMusicShuffle(int shuffleType)
+{
+    ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
+
+    apm->SetMusicShuffle(shuffleType);
+}
+
 void ArchipelagoManager::Init(const char* ip, const char* playerName, const char* password)
 {
     AP_Init(ip, "Sonic Adventure 2 Battle", playerName, password);
@@ -84,6 +98,8 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_SetItemRecvCallback(&SA2_RecvItem);
     AP_SetLocationCheckedCallback(&SA2_CheckLocation);
     AP_SetDeathLinkRecvCallback(&noop);
+    AP_RegisterSlotDataMapIntIntCallback("MusicMap", &SA2_SetMusicMap);
+    AP_RegisterSlotDataIntCallback("MusicShuffle", &SA2_SetMusicShuffle);
     AP_Start();
 }
 
@@ -194,4 +210,18 @@ void ArchipelagoManager::ReceiveItem(int item_id, bool notify)
 void ArchipelagoManager::CheckLocation(int loc_id)
 {
 
+}
+
+void ArchipelagoManager::SetMusicMap(std::map<int, int> map)
+{
+    MusicManager* musicManager = &MusicManager::getInstance();
+
+    musicManager->SetMusicMap(map);
+}
+
+void ArchipelagoManager::SetMusicShuffle(int shuffleType)
+{
+    MusicManager* musicManager = &MusicManager::getInstance();
+
+    musicManager->SetMusicShuffle(shuffleType);
 }
