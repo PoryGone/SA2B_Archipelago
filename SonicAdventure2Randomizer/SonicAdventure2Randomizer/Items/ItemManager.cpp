@@ -103,6 +103,7 @@ void ItemManager::ReceiveItem(int item_id, bool notify)
 			{
 				this->HandleEquipment(item_id);
 
+				ProbablySavesSaveFile();
 				//if (notify)
 				{
 					std::string message = std::string("Successfully received ");

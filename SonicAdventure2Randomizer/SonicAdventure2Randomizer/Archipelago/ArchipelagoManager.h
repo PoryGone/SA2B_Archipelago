@@ -35,7 +35,9 @@ private:
 	const IniFile* _settingsINI;
 
 	int _deathLinkTimer = 0;
+	std::string _seedName;
 
+	bool _connectionRejected = false;
 
 	void Init(const char* ip, const char* playerName, const char* password);
 	void OnFrameMessageQueue();

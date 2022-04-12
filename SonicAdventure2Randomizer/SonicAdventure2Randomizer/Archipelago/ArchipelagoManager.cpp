@@ -7,7 +7,10 @@
 #include "../Utilities/MessageQueue.h"
 #include "../../lib/APCpp/Archipelago.h"
 
+#include <functional>
 
+
+DataPointer(unsigned int, SeedHash, 0x1DEC6FC);
 
 void ArchipelagoManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
 {
@@ -18,6 +21,17 @@ void ArchipelagoManager::OnInitFunction(const char* path, const HelperFunctions&
 
 void ArchipelagoManager::OnFrameFunction()
 {
+    if (this->_connectionRejected)
+    {
+        std::string msg1 = "Incorrect Save File Loaded.";
+        std::string msg2 = "Relaunch game and load the correct save.";
+        _helperFunctions->SetDebugFontColor(0xFFF542C8);
+        _helperFunctions->DisplayDebugString(NJM_LOCATION(0, 0), msg1.c_str());
+        _helperFunctions->DisplayDebugString(NJM_LOCATION(0, 1), msg2.c_str());
+
+        return;
+    }
+
     if (!this->IsInit())
     {
         if (*(char*)0x1DEC600 != 0)
@@ -42,6 +56,36 @@ void ArchipelagoManager::OnFrameFunction()
         else
         {
             return;
+        }
+    }
+
+    if (this->_seedName.length() == 0)
+    {
+        AP_RoomInfo RoomInfo;
+        AP_GetRoomInfo(&RoomInfo);
+
+        if (RoomInfo.seed_name.length() != 0)
+        {
+            this->_seedName = RoomInfo.seed_name;
+
+            std::size_t seedHash = std::hash<std::string>{}(this->_seedName);
+
+            if (SeedHash == 0)
+            {
+                SeedHash = seedHash;
+
+                ProbablySavesSaveFile();
+            }
+            else
+            {
+                if (SeedHash != seedHash)
+                {
+                    if (!this->_settingsINI || !this->_settingsINI->getBool("AP", "IgnoreFileSafety", false))
+                    {
+                        this->_connectionRejected = true;
+                    }
+                }
+            }
         }
     }
 
@@ -105,7 +149,7 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
 
 bool ArchipelagoManager::IsInit()
 {
-    return AP_IsInit();
+    return (AP_IsInit() && !this->_connectionRejected);
 }
 
 void ArchipelagoManager::OnFrameMessageQueue()
@@ -195,6 +239,11 @@ void ArchipelagoManager::SendItem(int index)
 
 void ArchipelagoManager::ResetItems()
 {
+    if (!this->IsInit())
+    {
+        return;
+    }
+
     ItemManager* itemManager = &ItemManager::getInstance();
 
     itemManager->ResetItems();
@@ -202,6 +251,11 @@ void ArchipelagoManager::ResetItems()
 
 void ArchipelagoManager::ReceiveItem(int item_id, bool notify)
 {
+    if (!this->IsInit())
+    {
+        return;
+    }
+
     ItemManager* itemManager = &ItemManager::getInstance();
 
     itemManager->ReceiveItem(item_id, notify);
@@ -214,6 +268,11 @@ void ArchipelagoManager::CheckLocation(int loc_id)
 
 void ArchipelagoManager::SetMusicMap(std::map<int, int> map)
 {
+    if (!this->IsInit())
+    {
+        return;
+    }
+
     MusicManager* musicManager = &MusicManager::getInstance();
 
     musicManager->SetMusicMap(map);
@@ -221,6 +280,11 @@ void ArchipelagoManager::SetMusicMap(std::map<int, int> map)
 
 void ArchipelagoManager::SetMusicShuffle(int shuffleType)
 {
+    if (!this->IsInit())
+    {
+        return;
+    }
+
     MusicManager* musicManager = &MusicManager::getInstance();
 
     musicManager->SetMusicShuffle(shuffleType);
