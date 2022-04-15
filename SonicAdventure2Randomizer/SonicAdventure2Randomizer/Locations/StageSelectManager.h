@@ -14,4 +14,5 @@ private:
 	std::map<int, StageSelectStageData> _stageSelectDataMap;
 
 	void UnlockAllLevels();
+	void HideMenuButtons();
 };
