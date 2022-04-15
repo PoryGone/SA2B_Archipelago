@@ -24,6 +24,8 @@ void StageSelectManager::OnFrameFunction()
 
 void StageSelectManager::UnlockAllLevels()
 {
+	WriteData<1>((void*)0x6773D0, 0x2D);
+	WriteData<1>((void*)0x6773C9, 0xF1);
 	for (int i = 0; i < StageSelectStage::SSS_COUNT; i++)
 	{
 		WriteData<1>((void*)this->_stageSelectDataMap[i].UnlockMemAddress, unlockByteData);
