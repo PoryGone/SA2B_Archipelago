@@ -6,6 +6,11 @@
 class StageSelectManager
 {
 public:
+	static StageSelectManager& GetInstance()
+	{
+		static StageSelectManager instance;
+		return instance;
+	}
 	void OnInitFunction(const char* path, const HelperFunctions& helperFunctions);
 	void OnFrameFunction();
 

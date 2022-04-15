@@ -10,9 +10,9 @@
 EmblemManager* _emblemManager;
 ItemManager* _itemManager;
 LocationManager* _locationManager;
-StageSelectManager* _stageSelectManager;
 MusicManager* _musicManager;
 ArchipelagoManager* _archipelagoManager;
+StageSelectManager& _stageSelectManager = StageSelectManager::GetInstance();
 MessageQueue& _messageQueue = MessageQueue::GetInstance();
 
 extern "C"
@@ -23,6 +23,8 @@ extern "C"
 		// This is where we override functions, replace static data, etc.
 		_messageQueue.OnInitFunction(path, helperFunctions);
 
+		_stageSelectManager.OnInitFunction(path, helperFunctions);
+
 		_emblemManager = new EmblemManager();
 		_emblemManager->OnInitFunction(path, helperFunctions);
 
@@ -31,9 +33,6 @@ extern "C"
 
 		_musicManager = &MusicManager::getInstance();
 		_musicManager->OnInitFunction(path, helperFunctions);
-
-		_stageSelectManager = new StageSelectManager();
-		_stageSelectManager->OnInitFunction(path, helperFunctions);
 
 		_archipelagoManager = &ArchipelagoManager::getInstance();
 		_archipelagoManager->OnInitFunction(path, helperFunctions);
@@ -65,10 +64,7 @@ extern "C"
 			_locationManager->OnFrameFunction();
 		}
 
-		if (_stageSelectManager)
-		{
-			_stageSelectManager->OnFrameFunction();
-		}
+		_stageSelectManager.OnFrameFunction();
 
 		_messageQueue.OnFrameFunction();
 	}
