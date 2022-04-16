@@ -37,4 +37,5 @@ void InitializeStageSelectData(std::map<int, StageSelectStageData>& outStageSele
 	outStageSelectData[StageSelectStage::SSS_FinalChase] = StageSelectStageData(0x01DEE4DD);
 	outStageSelectData[StageSelectStage::SSS_CannonCore] = StageSelectStageData(0x01DEE045);
 	outStageSelectData[StageSelectStage::SSS_GreenHill] = StageSelectStageData(0x01DEDDF9);
+	outStageSelectData[StageSelectStage::SSS_Biolizard] = StageSelectStageData(0x1DEF801);
 }
