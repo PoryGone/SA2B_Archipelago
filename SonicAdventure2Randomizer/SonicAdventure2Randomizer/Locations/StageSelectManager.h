@@ -20,4 +20,5 @@ private:
 
 	void UnlockAllLevels();
 	void HideMenuButtons();
+	void HandleBiolizard();
 };

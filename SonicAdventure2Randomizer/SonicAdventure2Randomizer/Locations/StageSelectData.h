@@ -43,10 +43,18 @@ enum StageSelectStage
 
 struct StageSelectStageData
 {
-    StageSelectStageData() : UnlockMemAddress(0x00) {}
-    StageSelectStageData(int unlockMemAddress) : UnlockMemAddress(unlockMemAddress) {}
+    StageSelectStageData() : UnlockMemAddress(0x00), TileIDAddress(0x00), TileCharacterAddress(0x00), TileColumnAddress(0x00), TileRowAddress(0x00) {}
+    StageSelectStageData(int unlockMemAddress, int tileMemAddress) : UnlockMemAddress(unlockMemAddress), 
+                                                                     TileIDAddress(tileMemAddress), 
+                                                                     TileCharacterAddress(tileMemAddress + 4), 
+                                                                     TileColumnAddress(tileMemAddress + 8), 
+                                                                     TileRowAddress(tileMemAddress + 12) {}
 
-    int UnlockMemAddress;
+    int UnlockMemAddress = 0x00;
+    int TileIDAddress = 0x00;
+    int TileCharacterAddress;
+    int TileColumnAddress;
+    int TileRowAddress;
 };
 
 void InitializeStageSelectData(std::map<int, StageSelectStageData>& outStageSelectData);
