@@ -190,7 +190,7 @@ void ArchipelagoManager::OnFrameDeathLink()
             }
         }
 
-        this->_deathLinkTimer = 200;
+        this->_deathLinkTimer = 420;
 
         this->DeathLinkClear();
     }
@@ -205,7 +205,7 @@ void ArchipelagoManager::OnFrameDeathLink()
         {
             this->DeathLinkSend();
 
-            this->_deathLinkTimer = 200;
+            this->_deathLinkTimer = 420;
         }
     }
 }
