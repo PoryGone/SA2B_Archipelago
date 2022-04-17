@@ -1,5 +1,6 @@
 #include "../pch.h"
 #include "StageSelectManager.h"
+#include "../Utilities/MessageQueue.h"
 
 void* saveLevelDataReadOffset_ptr = (void*)0x6773b6;
 const char saveLevelDataReadOffset = '\x3d';
@@ -21,6 +22,22 @@ void StageSelectManager::OnFrameFunction()
 	UnlockAllLevels();
 	HideMenuButtons();
 	HandleBiolizard();
+}
+
+void StageSelectManager::SetEmblemsForCannonsCore(int emblemsRequired)
+{
+	_emblemsForCannonsCore = emblemsRequired;
+	std::string message = "Emblems For Core: ";
+	message.append(std::to_string(_emblemsForCannonsCore));
+	MessageQueue::GetInstance().AddMessage(message);
+}
+
+void StageSelectManager::SetRegionEmblemMap(std::map<int, int> map)
+{
+	_regionEmblemMap = map;
+	std::string message = "Region Map Regions: ";
+	message.append(std::to_string(map.size()));
+	MessageQueue::GetInstance().AddMessage(message);
 }
 
 void StageSelectManager::UnlockAllLevels()

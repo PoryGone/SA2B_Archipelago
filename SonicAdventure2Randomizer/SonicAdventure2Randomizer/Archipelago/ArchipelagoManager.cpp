@@ -8,6 +8,7 @@
 #include "../../lib/APCpp/Archipelago.h"
 
 #include <functional>
+#include "../Locations/StageSelectManager.h"
 
 
 DataPointer(unsigned int, SeedHash, 0x1DEC6FC);
@@ -132,6 +133,20 @@ void SA2_SetMusicShuffle(int shuffleType)
     apm->SetMusicShuffle(shuffleType);
 }
 
+void SA2_SetEmblemsForCannonsCore(int emblemsRequired)
+{
+    StageSelectManager* ssm = &StageSelectManager::GetInstance();
+
+    ssm->SetEmblemsForCannonsCore(emblemsRequired);
+}
+
+void SA2_SetRegionEmblemMap(std::map<int, int> map)
+{
+    StageSelectManager* ssm = &StageSelectManager::GetInstance();
+
+    ssm->SetRegionEmblemMap(map);
+}
+
 void ArchipelagoManager::Init(const char* ip, const char* playerName, const char* password)
 {
     AP_Init(ip, "Sonic Adventure 2 Battle", playerName, password);
@@ -144,6 +159,8 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_SetDeathLinkRecvCallback(&noop);
     AP_RegisterSlotDataMapIntIntCallback("MusicMap", &SA2_SetMusicMap);
     AP_RegisterSlotDataIntCallback("MusicShuffle", &SA2_SetMusicShuffle);
+    AP_RegisterSlotDataIntCallback("EmblemsForCannonsCore", &SA2_SetEmblemsForCannonsCore);
+    AP_RegisterSlotDataMapIntIntCallback("RegionEmblemMap", &SA2_SetRegionEmblemMap);
     AP_Start();
 }
 
