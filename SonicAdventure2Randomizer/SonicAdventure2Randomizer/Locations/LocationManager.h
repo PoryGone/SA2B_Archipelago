@@ -5,7 +5,7 @@
 #include "LocationData.h"
 #include "../Archipelago/ArchipelagoManager.h"
 
-constexpr unsigned int MEMORY_CHECK_TIME = 600;
+constexpr unsigned int MEMORY_CHECK_TIME = 120;
 
 class LocationManager
 {
