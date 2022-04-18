@@ -38,6 +38,7 @@ void InitializeStageSelectData(std::map<int, StageSelectStageData>& outStageSele
 	outStageSelectData[StageSelectStage::SSS_FinalChase]     = StageSelectStageData(0x01DEE4DD, 0x00C75258);
 	outStageSelectData[StageSelectStage::SSS_CannonCore]     = StageSelectStageData(0x01DEE045, 0x00C75248);
 
-	outStageSelectData[StageSelectStage::SSS_GreenHill] = StageSelectStageData(0x01DEDDF9, 0x00C75188);
-	outStageSelectData[StageSelectStage::SSS_Biolizard] = StageSelectStageData(0x01DEF801, 0x00000000);
+	outStageSelectData[StageSelectStage::SSS_GreenHill]  = StageSelectStageData(0x01DEDDF9, 0x00C75188);
+	outStageSelectData[StageSelectStage::SSS_ChaoGarden] = StageSelectStageData(0x01DEEECC, 0x00C751D8);
+	outStageSelectData[StageSelectStage::SSS_Biolizard]  = StageSelectStageData(0x01DEF801, 0x00000000);
 }

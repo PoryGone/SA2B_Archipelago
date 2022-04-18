@@ -6,9 +6,13 @@ void* saveLevelDataReadOffset_ptr = (void*)0x6773b6;
 const char saveLevelDataReadOffset = '\x3d';
 const char unlockByteData = '\x01';
 const char lockByteData = '\x00';
+const char nullop = '\x90';
 
 DataPointer(char, StoryModeButton, 0x1D1BC01);
 DataPointer(char, SP_SelectedButton, 0x1D1BC00);
+
+DataPointer(char, SS_CameraPos, 0x1D1BEC0);
+DataPointer(char, SS_SelectedTile, 0x1D1BF08);
 
 void StageSelectManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
 {
@@ -23,6 +27,7 @@ void StageSelectManager::OnFrameFunction()
 	HideMenuButtons();
 	HandleBiolizard();
 	SetLevelsLockState();
+	HandleStageSelectCamera();
 }
 
 void StageSelectManager::SetEmblemsForCannonsCore(int emblemsRequired)
@@ -102,29 +107,32 @@ void StageSelectManager::LayoutLevels()
 
 void StageSelectManager::SetLevelsLockState()
 {
-	for (int i = 0; i < StageSelectStage::SSS_COUNT; i++)
-	{
-		if (i < _regionEmblemMap.size() && EmblemCount >= _regionEmblemMap[i])
-		{
-			WriteData<1>((void*)this->_stageSelectDataMap[i].UnlockMemAddress, unlockByteData);
-			if (i == StageSelectStage::SSS_Route101)
-			{
-				WriteData<1>((void*)0x6773D0, 0x2D);
-			}
-			if (i == StageSelectStage::SSS_Route280)
-			{
-				WriteData<1>((void*)0x6773C9, 0xF1);
-			}
-		}
-	}
-	if (EmblemCount >= _emblemsForCannonsCore)
-	{
-		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_CannonCore].UnlockMemAddress, unlockByteData);
-	}
-	else
-	{
-		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_CannonCore].UnlockMemAddress, lockByteData);
-	}
+    //Make Route 101 and 280 available
+    WriteData<1>((void*)0x6773D0, 0x2D);
+    WriteData<1>((void*)0x6773C9, 0xF1);
+
+    for (int i = 0; i < StageSelectStage::SSS_COUNT; i++)
+    {
+        if (_regionEmblemMap.count(i) != 0)
+        {
+            if (EmblemCount >= _regionEmblemMap.at(i))
+            {
+                WriteData<1>((void*)this->_stageSelectDataMap.at(i).UnlockMemAddress, unlockByteData);
+            }
+            else
+            {
+                WriteData<1>((void*)this->_stageSelectDataMap.at(i).UnlockMemAddress, lockByteData);
+            }
+        }
+    }
+    if (EmblemCount >= _emblemsForCannonsCore)
+    {
+        WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_CannonCore].UnlockMemAddress, unlockByteData);
+    }
+    else
+    {
+        WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_CannonCore].UnlockMemAddress, lockByteData);
+    }
 }
 
 void StageSelectManager::UnlockAllLevels()
@@ -175,6 +183,56 @@ void StageSelectManager::HandleBiolizard()
 			WriteData<1>((void*)0x1DEB320, 0x03);
 
 			WriteData<1>((void*)0x174B044, 0x0C);
+		}
+	}
+}
+
+void TurnOffVanillaCamera()
+{
+	WriteData<7>((void*)0x677456, nullop);
+	WriteData<7>((void*)0x677492, nullop);
+	WriteData<7>((void*)0x67749B, nullop);
+	WriteData<7>((void*)0x6774BD, nullop);
+	WriteData<7>((void*)0x678137, nullop);
+	WriteData<7>((void*)0x678144, nullop);
+	WriteData<7>((void*)0x678169, nullop);
+	WriteData<7>((void*)0x678191, nullop);
+	WriteData<7>((void*)0x6781D3, nullop);
+	WriteData<7>((void*)0x6781F5, nullop);
+	WriteData<7>((void*)0x678220, nullop);
+	WriteData<7>((void*)0x678219, nullop);
+}
+
+void StageSelectManager::HandleStageSelectCamera()
+{
+	TurnOffVanillaCamera();
+
+	if (SS_SelectedTile < TileIDtoStageIndex.size())
+	{
+		int currentTileStageIndex = this->TileIDtoStageIndex[SS_SelectedTile];
+
+		if (currentTileStageIndex < this->_stageSelectDataMap.size())
+		{
+			const int currentTileXPosAddress = this->_stageSelectDataMap.at(currentTileStageIndex).TileColumnAddress;
+
+			int currentTileXPos = *(char*)currentTileXPosAddress;
+
+			if (currentTileXPos > 0x13)
+			{
+				SS_CameraPos = 0x03;
+			}
+			else if (currentTileXPos > 0x0D)
+			{
+				SS_CameraPos = 0x02;
+			}
+			else if (currentTileXPos > 0x08)
+			{
+				SS_CameraPos = 0x01;
+			}
+			else
+			{
+				SS_CameraPos = 0x00;
+			}
 		}
 	}
 }

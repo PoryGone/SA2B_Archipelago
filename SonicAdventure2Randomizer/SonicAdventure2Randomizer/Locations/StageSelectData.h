@@ -36,6 +36,7 @@ enum StageSelectStage
     SSS_FinalChase,
     SSS_CannonCore,
     SSS_GreenHill,
+    SSS_ChaoGarden,
     SSS_Biolizard,
 
     SSS_COUNT
