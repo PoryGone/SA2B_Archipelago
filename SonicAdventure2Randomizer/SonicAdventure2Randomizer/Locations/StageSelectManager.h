@@ -1,6 +1,7 @@
 #include "../pch.h"
 #include "StageSelectData.h"
 #include <map>
+#include <vector>
 #pragma once
 
 class StageSelectManager
@@ -22,7 +23,19 @@ private:
 	int _emblemsForCannonsCore;
 	std::map<int, int> _regionEmblemMap;
 
+	void LayoutLevels();
+	void SetLevelsLockState();
 	void UnlockAllLevels();
 	void HideMenuButtons();
 	void HandleBiolizard();
+};
+
+struct GateLevelCollection
+{
+public:
+	GateLevelCollection() : EmblemCount(0), Levels() {}
+	GateLevelCollection(int _emblemCount) : EmblemCount(_emblemCount), Levels() {}
+
+	int EmblemCount;
+	std::vector<int> Levels;
 };
