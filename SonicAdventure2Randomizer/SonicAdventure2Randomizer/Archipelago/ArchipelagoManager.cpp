@@ -12,6 +12,7 @@
 
 
 DataPointer(unsigned int, SeedHash, 0x1DEC6FC);
+DataPointer(char, LastStoryComplete, 0x1DEFA95);
 
 void ArchipelagoManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
 {
@@ -99,9 +100,23 @@ void ArchipelagoManager::OnFrameFunction()
                     if (!this->_settingsINI || !this->_settingsINI->getBool("AP", "IgnoreFileSafety", false))
                     {
                         this->_connectionRejected = true;
+
+                        return;
                     }
                 }
             }
+        }
+    }
+
+    if (CurrentLevel == LevelIDs_FinalHazard)
+    {
+        if (GameState == GameStates_GoToNextLevel)
+        {
+            MessageQueue* messageQueue = &MessageQueue::GetInstance();
+            std::string msg = "Victory!";
+            messageQueue->AddMessage(msg);
+
+            this->SendStoryComplete();
         }
     }
 
@@ -187,6 +202,11 @@ bool ArchipelagoManager::IsInit()
 bool ArchipelagoManager::IsAuth()
 {
     return !this->_authFailed;
+}
+
+void ArchipelagoManager::SendStoryComplete()
+{
+    AP_StoryComplete();
 }
 
 void ArchipelagoManager::OnFrameMessageQueue()

@@ -14,6 +14,8 @@ DataPointer(char, SP_SelectedButton, 0x1D1BC00);
 DataPointer(char, SS_CameraPos, 0x1D1BEC0);
 DataPointer(char, SS_SelectedTile, 0x1D1BF08);
 
+DataPointer(char, CannonCore1_Rank, 0x01DEE040);
+
 void StageSelectManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
 {
 	_helperFunctions = &helperFunctions;
@@ -137,10 +139,6 @@ void StageSelectManager::SetLevelsLockState()
 
 void StageSelectManager::UnlockAllLevels()
 {
-	// Biolizard Tile
-	WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_GreenHill].TileIDAddress, 0x41);
-	WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_GreenHill].TileCharacterAddress, 0x01);
-
 	// Route 101
 	WriteData<1>((void*)0x6773D0, 0x2D);
 
@@ -165,6 +163,17 @@ void StageSelectManager::HideMenuButtons()
 
 void StageSelectManager::HandleBiolizard()
 {
+	if (CannonCore1_Rank > 0)
+	{
+		// Biolizard Tile
+		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_GreenHill].TileIDAddress, 0x41);
+		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_GreenHill].TileCharacterAddress, 0x01);
+		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_GreenHill].TileColumnAddress, 0x1B);
+		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_GreenHill].TileRowAddress, 0x04);
+
+		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_Biolizard].UnlockMemAddress, unlockByteData);
+	}
+
 	if (CurrentLevel == LevelIDs_Biolizard)
 	{
 		if (TimerMinutes == 0 && TimerSeconds < 5)

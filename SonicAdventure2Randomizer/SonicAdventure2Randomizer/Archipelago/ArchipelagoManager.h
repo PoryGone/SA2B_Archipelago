@@ -22,6 +22,8 @@ public:
 	bool IsInit();
 	bool IsAuth();
 
+	void SendStoryComplete();
+
 	// Item Functions
 	void SendItem(int index);
 	void ResetItems();
@@ -38,9 +40,10 @@ private:
 	int _deathLinkTimer = 0;
 	std::string _seedName;
 
-	int _authFailed = false;
-
+	bool _authFailed = false;
 	bool _connectionRejected = false;
+
+	bool _completionSent = false;
 
 	void Init(const char* ip, const char* playerName, const char* password);
 	void OnFrameMessageQueue();
