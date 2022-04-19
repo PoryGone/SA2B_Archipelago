@@ -15,7 +15,7 @@ void LocationManager::OnInitFunction(const char* path, const HelperFunctions& he
 
 void LocationManager::OnFrameFunction()
 {
-	if (!this->_archipelagoManager->IsInit())
+	if (!this->_archipelagoManager->IsInit() || !this->_archipelagoManager->IsAuth())
 	{
 		return;
 	}

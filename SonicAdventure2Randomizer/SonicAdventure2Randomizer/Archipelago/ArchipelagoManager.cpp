@@ -35,6 +35,10 @@ void ArchipelagoManager::OnFrameFunction()
 
     if (!this->IsInit())
     {
+        std::string msg = "Not Connected";
+        _helperFunctions->SetDebugFontColor(0xFFF542C8);
+        _helperFunctions->DisplayDebugString(NJM_LOCATION(0, 0), msg.c_str());
+
         if (*(char*)0x1DEC600 != 0)
         {
             if (this->_settingsINI)
@@ -44,12 +48,12 @@ void ArchipelagoManager::OnFrameFunction()
                 std::string serverPassword = this->_settingsINI->getString("AP", "Password");
 
                 this->Init(serverIP.c_str(), playerName.c_str(), serverPassword.c_str());
+
             }
             else
             {
-                MessageQueue* messageQueue = &MessageQueue::GetInstance();
-                std::string msg = "Invalid Settings INI";
-                messageQueue->AddMessage(msg);
+                std::string msg2 = "Invalid Settings INI";
+                _helperFunctions->DisplayDebugString(NJM_LOCATION(0, 1), msg2.c_str());
 
                 return;
             }
@@ -60,11 +64,22 @@ void ArchipelagoManager::OnFrameFunction()
         }
     }
 
+    AP_RoomInfo RoomInfo;
+    this->_authFailed = (AP_GetRoomInfo(&RoomInfo) == 1);
+
+    if (this->_authFailed)
+    {
+        std::string msg = "Connection Failed";
+        std::string msg2 = "Verify server connection and try again.";
+        _helperFunctions->SetDebugFontColor(0xFFF542C8);
+        _helperFunctions->DisplayDebugString(NJM_LOCATION(0, 0), msg.c_str());
+        _helperFunctions->DisplayDebugString(NJM_LOCATION(0, 1), msg2.c_str());
+
+        return;
+    }
+
     if (this->_seedName.length() == 0)
     {
-        AP_RoomInfo RoomInfo;
-        AP_GetRoomInfo(&RoomInfo);
-
         if (RoomInfo.seed_name.length() != 0)
         {
             this->_seedName = RoomInfo.seed_name;
@@ -167,6 +182,11 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
 bool ArchipelagoManager::IsInit()
 {
     return (AP_IsInit() && !this->_connectionRejected);
+}
+
+bool ArchipelagoManager::IsAuth()
+{
+    return !this->_authFailed;
 }
 
 void ArchipelagoManager::OnFrameMessageQueue()

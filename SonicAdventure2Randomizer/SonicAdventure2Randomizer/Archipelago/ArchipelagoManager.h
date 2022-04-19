@@ -20,6 +20,7 @@ public:
 	void OnFrameFunction();
 
 	bool IsInit();
+	bool IsAuth();
 
 	// Item Functions
 	void SendItem(int index);
@@ -36,6 +37,8 @@ private:
 
 	int _deathLinkTimer = 0;
 	std::string _seedName;
+
+	int _authFailed = false;
 
 	bool _connectionRejected = false;
 
