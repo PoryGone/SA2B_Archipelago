@@ -165,6 +165,11 @@ void SA2_SetMusicShuffle(int shuffleType)
 
 void SA2_SetEmblemsForCannonsCore(int emblemsRequired)
 {
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
     StageSelectManager* ssm = &StageSelectManager::GetInstance();
 
     ssm->SetEmblemsForCannonsCore(emblemsRequired);
@@ -172,6 +177,11 @@ void SA2_SetEmblemsForCannonsCore(int emblemsRequired)
 
 void SA2_SetRegionEmblemMap(std::map<int, int> map)
 {
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
     StageSelectManager* ssm = &StageSelectManager::GetInstance();
 
     ssm->SetRegionEmblemMap(map);
