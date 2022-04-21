@@ -79,8 +79,6 @@ void ItemManager::ReceiveItem(int item_id, bool notify)
 
 				// Cutscene Emblem Count
 				WriteData<1>((void*)0x0174B032, dataValue);
-
-				ProbablySavesSaveFile();
 			}
 			else
 			{
@@ -103,7 +101,6 @@ void ItemManager::ReceiveItem(int item_id, bool notify)
 			{
 				this->HandleEquipment(item_id);
 
-				ProbablySavesSaveFile();
 				//if (notify)
 				{
 					std::string message = std::string("Successfully received ");
