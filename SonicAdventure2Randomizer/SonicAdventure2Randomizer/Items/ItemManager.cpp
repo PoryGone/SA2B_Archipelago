@@ -8,11 +8,15 @@
 #include <map>
 
 
+DataPointer(char, SavedChecksReceived, 0x1DEF5D9);
+
 void ItemManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
 {
 	_helperFunctions = &helperFunctions;
 
 	this->_ItemData.clear();
+
+	this->_thisSessionChecksReceived = 0;
 
 	InitializeItemData(this->_ItemData);
 
@@ -51,6 +55,8 @@ void ItemManager::ReceiveItem(int item_id, bool notify)
 	item_id = item_id - AP_ITEM_ID_OFFSET;
 	MessageQueue* messageQueue = &MessageQueue::GetInstance();
 
+	this->_thisSessionChecksReceived++;
+
 	if (item_id > ItemValue::IV_NUM_ITEMS)
 	{
 		std::string message = std::string("Received Invalid ID: ");
@@ -73,17 +79,22 @@ void ItemManager::ReceiveItem(int item_id, bool notify)
 
 			if (success)
 			{
-				std::string message = std::string("New Emblem Count: ");
-				message += std::to_string((int)dataValue);
-				messageQueue->AddMessage(message);
+				if (this->_thisSessionChecksReceived > SavedChecksReceived)
+				{
+					SavedChecksReceived = this->_thisSessionChecksReceived;
+
+					std::string message = std::string("New Emblem Count: ");
+					message += std::to_string((int)dataValue);
+					messageQueue->AddMessage(message);
+				}
 
 				// Cutscene Emblem Count
 				WriteData<1>((void*)0x0174B032, dataValue);
 			}
 			else
 			{
-			std::string message = std::string("Failed to Write Emblem Count");
-			messageQueue->AddMessage(message);
+				std::string message = std::string("Failed to Write Emblem Count");
+				messageQueue->AddMessage(message);
 			}
 		}
 	}
@@ -101,8 +112,10 @@ void ItemManager::ReceiveItem(int item_id, bool notify)
 			{
 				this->HandleEquipment(item_id);
 
-				//if (notify)
+				if (this->_thisSessionChecksReceived > SavedChecksReceived)
 				{
+					SavedChecksReceived = this->_thisSessionChecksReceived;
+
 					std::string message = std::string("Successfully received ");
 					message += receivedItem.DisplayName;
 					messageQueue->AddMessage(message);

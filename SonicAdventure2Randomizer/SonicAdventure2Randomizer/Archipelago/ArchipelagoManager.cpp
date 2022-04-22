@@ -14,11 +14,15 @@
 DataPointer(unsigned int, SeedHash, 0x1DEC6FC);
 DataPointer(char, LastStoryComplete, 0x1DEFA95);
 
+DataPointer(char, SavedChecksSent, 0x1DEF5DA);
+
 void ArchipelagoManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
 {
 	_helperFunctions = &helperFunctions;
 
     this->_settingsINI = new IniFile(std::string(path) + "\\config.ini");
+
+    this->_thisSessionChecksSent = 0;
 }
 
 void ArchipelagoManager::OnFrameFunction()
@@ -298,6 +302,13 @@ void ArchipelagoManager::SendItem(int index)
     if (!this->IsInit())
     {
         return;
+    }
+
+    this->_thisSessionChecksSent++;
+    if (this->_thisSessionChecksSent > SavedChecksSent)
+    {
+        SavedChecksSent = this->_thisSessionChecksSent;
+        // Send Message
     }
 
     int ap_index = index + AP_ID_OFFSET;

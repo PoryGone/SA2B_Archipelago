@@ -45,6 +45,8 @@ private:
 
 	bool _completionSent = false;
 
+	__int8 _thisSessionChecksSent = 0;
+
 	void Init(const char* ip, const char* playerName, const char* password);
 	void OnFrameMessageQueue();
 

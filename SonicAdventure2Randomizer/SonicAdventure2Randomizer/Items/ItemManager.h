@@ -27,4 +27,5 @@ private:
 	const HelperFunctions* _helperFunctions;
 
 	std::map<int, ItemData> _ItemData;
+	__int8 _thisSessionChecksReceived = 0;
 };
