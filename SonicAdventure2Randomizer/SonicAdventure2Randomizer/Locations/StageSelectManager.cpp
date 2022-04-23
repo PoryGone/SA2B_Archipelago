@@ -3,8 +3,6 @@
 #include "../Utilities/MessageQueue.h"
 #include "../Archipelago/ArchipelagoManager.h"
 
-ArchipelagoManager& _apManager = ArchipelagoManager::getInstance();
-
 void* saveLevelDataReadOffset_ptr = (void*)0x6773b6;
 const char saveLevelDataReadOffset = '\x3d';
 const char unlockByteData = '\x01';
@@ -25,7 +23,6 @@ void StageSelectManager::OnInitFunction(const char* path, const HelperFunctions&
 	WriteData<1>(saveLevelDataReadOffset_ptr, saveLevelDataReadOffset);
 
 	InitializeStageSelectData(this->_stageSelectDataMap);
-	_apManager = ArchipelagoManager::getInstance();
 }
 
 void StageSelectManager::OnFrameFunction()
@@ -35,7 +32,7 @@ void StageSelectManager::OnFrameFunction()
 	SetLevelsLockState();
 	HandleStageSelectCamera();
 
-	if (_apManager.IsInit())
+	if (CurrentMenu == Menus::Menus_StageSelect)
 	{
 		_helperFunctions->SetDebugFontColor(0xFFF542C8);
 		if (_gateRequirements.size() > 1)
@@ -45,20 +42,20 @@ void StageSelectManager::OnFrameFunction()
 			gateRequirementMessage.append("/");
 			for (int g = 0; g < _gateRequirements.size(); g++)
 			{
-				if (_gateRequirements[g] > EmblemCount)
+				if (_gateRequirements[g] > EmblemCount || g == _gateRequirements.size() - 1)
 				{
 					gateRequirementMessage.append(std::to_string(_gateRequirements[g]));
 					break;
 				}
 			}
-			_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 48), gateRequirementMessage.c_str());
+			_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 3), gateRequirementMessage.c_str());
 		}
 
 		std::string cannonsCoreMessage = "Cannons Core Emblems: ";
 		cannonsCoreMessage.append(std::to_string(EmblemCount));
 		cannonsCoreMessage.append("/");
 		cannonsCoreMessage.append(std::to_string(_emblemsForCannonsCore));
-		_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 49), cannonsCoreMessage.c_str());
+		_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 2), cannonsCoreMessage.c_str());
 
 	}
 }
@@ -66,18 +63,12 @@ void StageSelectManager::OnFrameFunction()
 void StageSelectManager::SetEmblemsForCannonsCore(int emblemsRequired)
 {
 	_emblemsForCannonsCore = emblemsRequired;
-	std::string message = "Emblems For Core: ";
-	message.append(std::to_string(_emblemsForCannonsCore));
-	MessageQueue::GetInstance().AddMessage(message);
 }
 
 void StageSelectManager::SetRegionEmblemMap(std::map<int, int> map)
 {
 	_regionEmblemMap = map;
 	LayoutLevels();
-	std::string message = "Region Map Regions: ";
-	message.append(std::to_string(map.size()));
-	MessageQueue::GetInstance().AddMessage(message);
 }
 
 int GateIndex(std::vector<GateLevelCollection>& gates, int emblemCount)
@@ -110,15 +101,12 @@ void StageSelectManager::LayoutLevels()
 			gates[index].Levels.emplace_back(i);
 		}
 	}
-	std::string debugStr = "Gate Levels: ";
 	std::sort(gates.begin(), gates.end(), CompareGateLevelCollections);
 	int col = 1;
 	int row = 3;
 	for (int g = 0; g < gates.size(); g++)
 	{
 		_gateRequirements.emplace_back(gates[g].EmblemCount);
-		debugStr.append(std::to_string(gates[g].Levels.size()));
-		debugStr.append(", ");
 		for (int l = 0; l < gates[g].Levels.size(); l++)
 		{
 			StageSelectStageData data = this->_stageSelectDataMap[gates[g].Levels[l]];
@@ -137,7 +125,6 @@ void StageSelectManager::LayoutLevels()
 		col += 2;
 		row = 3;
 	}
-	MessageQueue::GetInstance().AddMessage(debugStr);
 }
 
 void StageSelectManager::SetLevelsLockState()
