@@ -17,6 +17,7 @@ void ItemManager::OnInitFunction(const char* path, const HelperFunctions& helper
 	this->_ItemData.clear();
 
 	this->_thisSessionChecksReceived = 0;
+	this->_EmblemsReceived = 0;
 
 	InitializeItemData(this->_ItemData);
 
@@ -43,10 +44,17 @@ void ItemManager::OnFrameFunction()
 	{
 		WriteData<1>((void*)0x1DEC650, 0x00);
 	}
+
+	if (this->_EmblemsReceived > EmblemCount)
+	{
+		EmblemCount = this->_EmblemsReceived;
+		WriteData<1>((void*)0x0174B032, this->_EmblemsReceived);
+	}
 }
 
 void ItemManager::ResetItems()
 {
+	this->_EmblemsReceived = 0;
 	EmblemCount = 0;
 }
 
@@ -74,7 +82,8 @@ void ItemManager::ReceiveItem(int item_id, bool notify)
 			// DataPointer macro creates a static field, which doesn't work for this case
 			char dataValue = *(char*)receivedItem.Address;
 
-			dataValue++;
+			this->_EmblemsReceived++;
+			dataValue = this->_EmblemsReceived;
 			bool success = WriteData<1>((void*)receivedItem.Address, dataValue);
 
 			if (success)
