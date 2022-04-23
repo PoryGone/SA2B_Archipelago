@@ -28,4 +28,5 @@ private:
 
 	std::map<int, ItemData> _ItemData;
 	__int8 _thisSessionChecksReceived = 0;
+	__int8 _EmblemsReceived = 0;
 };
