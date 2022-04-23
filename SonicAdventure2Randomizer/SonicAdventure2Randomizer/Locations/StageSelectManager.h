@@ -23,6 +23,7 @@ private:
 	std::map<int, StageSelectStageData> _stageSelectDataMap;
 	int _emblemsForCannonsCore;
 	std::map<int, int> _regionEmblemMap;
+    std::vector<int> _gateRequirements;
 
 	void LayoutLevels();
 	void SetLevelsLockState();

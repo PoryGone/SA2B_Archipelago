@@ -1,6 +1,9 @@
 #include "../pch.h"
 #include "StageSelectManager.h"
 #include "../Utilities/MessageQueue.h"
+#include "../Archipelago/ArchipelagoManager.h"
+
+ArchipelagoManager& _apManager = ArchipelagoManager::getInstance();
 
 void* saveLevelDataReadOffset_ptr = (void*)0x6773b6;
 const char saveLevelDataReadOffset = '\x3d';
@@ -22,6 +25,7 @@ void StageSelectManager::OnInitFunction(const char* path, const HelperFunctions&
 	WriteData<1>(saveLevelDataReadOffset_ptr, saveLevelDataReadOffset);
 
 	InitializeStageSelectData(this->_stageSelectDataMap);
+	_apManager = ArchipelagoManager::getInstance();
 }
 
 void StageSelectManager::OnFrameFunction()
@@ -30,6 +34,33 @@ void StageSelectManager::OnFrameFunction()
 	HandleBiolizard();
 	SetLevelsLockState();
 	HandleStageSelectCamera();
+
+	if (_apManager.IsInit())
+	{
+		_helperFunctions->SetDebugFontColor(0xFFF542C8);
+		if (_gateRequirements.size() > 1)
+		{
+			std::string gateRequirementMessage = "Next Gate Emblems: ";
+			gateRequirementMessage.append(std::to_string(EmblemCount));
+			gateRequirementMessage.append("/");
+			for (int g = 0; g < _gateRequirements.size(); g++)
+			{
+				if (_gateRequirements[g] > EmblemCount)
+				{
+					gateRequirementMessage.append(std::to_string(_gateRequirements[g]));
+					break;
+				}
+			}
+			_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 48), gateRequirementMessage.c_str());
+		}
+
+		std::string cannonsCoreMessage = "Cannons Core Emblems: ";
+		cannonsCoreMessage.append(std::to_string(EmblemCount));
+		cannonsCoreMessage.append("/");
+		cannonsCoreMessage.append(std::to_string(_emblemsForCannonsCore));
+		_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 49), cannonsCoreMessage.c_str());
+
+	}
 }
 
 void StageSelectManager::SetEmblemsForCannonsCore(int emblemsRequired)
@@ -70,6 +101,7 @@ bool CompareGateLevelCollections(GateLevelCollection a, GateLevelCollection b)
 void StageSelectManager::LayoutLevels()
 {
 	std::vector<GateLevelCollection> gates = std::vector<GateLevelCollection>();
+	_gateRequirements = std::vector<int>();
 	for (int i = 0; i < StageSelectStage::SSS_COUNT; i++)
 	{
 		if (i < _regionEmblemMap.size())
@@ -84,6 +116,7 @@ void StageSelectManager::LayoutLevels()
 	int row = 3;
 	for (int g = 0; g < gates.size(); g++)
 	{
+		_gateRequirements.emplace_back(gates[g].EmblemCount);
 		debugStr.append(std::to_string(gates[g].Levels.size()));
 		debugStr.append(", ");
 		for (int l = 0; l < gates[g].Levels.size(); l++)
