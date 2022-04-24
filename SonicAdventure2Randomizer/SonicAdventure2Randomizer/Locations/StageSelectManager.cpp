@@ -30,6 +30,11 @@ void StageSelectManager::OnInitFunction(const char* path, const HelperFunctions&
 
 void StageSelectManager::OnFrameFunction()
 {
+	if (CurrentMenu == Menus::Menus_Main)
+	{
+		SS_SelectedTile = this->_firstStageIndex;
+	}
+
 	HideMenuButtons();
 	HandleBiolizard();
 	SetLevelsLockState();
@@ -98,6 +103,13 @@ bool CompareGateLevelCollections(GateLevelCollection a, GateLevelCollection b)
 	return a.EmblemCount < b.EmblemCount;
 }
 
+__int8 TileIndexFromAddress(int Address)
+{
+	__int8 TileIndex = (__int8)((Address - 0xC75078) / 0x10);
+
+	return TileIndex;
+}
+
 void StageSelectManager::LayoutLevels()
 {
 	std::vector<GateLevelCollection> gates = std::vector<GateLevelCollection>();
@@ -110,20 +122,23 @@ void StageSelectManager::LayoutLevels()
 			gates[index].Levels.emplace_back(i);
 		}
 	}
-	std::string debugStr = "Gate Levels: ";
 	std::sort(gates.begin(), gates.end(), CompareGateLevelCollections);
 	int col = 1;
 	int row = 3;
 	for (int g = 0; g < gates.size(); g++)
 	{
 		_gateRequirements.emplace_back(gates[g].EmblemCount);
-		debugStr.append(std::to_string(gates[g].Levels.size()));
-		debugStr.append(", ");
 		for (int l = 0; l < gates[g].Levels.size(); l++)
 		{
 			StageSelectStageData data = this->_stageSelectDataMap[gates[g].Levels[l]];
 			WriteData<1>((void*)data.TileColumnAddress, col);
 			WriteData<1>((void*)data.TileRowAddress, row);
+
+			if (col == 1 && row == 3)
+			{
+				this->_firstStageIndex = TileIndexFromAddress(data.TileIDAddress);
+			}
+
 			if (row == 5)
 			{
 				row = 3;
@@ -137,7 +152,6 @@ void StageSelectManager::LayoutLevels()
 		col += 2;
 		row = 3;
 	}
-	MessageQueue::GetInstance().AddMessage(debugStr);
 }
 
 void StageSelectManager::SetLevelsLockState()
@@ -243,6 +257,9 @@ void TurnOffVanillaCamera()
 	WriteData<7>((void*)0x6781F5, nullop);
 	WriteData<7>((void*)0x678220, nullop);
 	WriteData<7>((void*)0x678219, nullop);
+
+	WriteData<2>((void*)0x67745F, nullop);
+	WriteData<2>((void*)0x677469, nullop);
 }
 
 void StageSelectManager::HandleStageSelectCamera()

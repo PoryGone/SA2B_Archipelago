@@ -25,6 +25,8 @@ private:
 	std::map<int, int> _regionEmblemMap;
     std::vector<int> _gateRequirements;
 
+    __int8 _firstStageIndex = 0x17;
+
 	void LayoutLevels();
 	void SetLevelsLockState();
 	void UnlockAllLevels();
