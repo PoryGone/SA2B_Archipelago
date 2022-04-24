@@ -37,7 +37,7 @@ void StageSelectManager::OnFrameFunction()
 	SetLevelsLockState();
 	HandleStageSelectCamera();
 
-	if (CurrentMenu == Menus::Menus_StageSelect)
+	if (CurrentMenu == Menus::Menus_StageSelect && GameMode == GameMode::GameMode_Advertise)
 	{
 		_helperFunctions->SetDebugFontColor(0xFFF542C8);
 		if (_gateRequirements.size() > 1)
