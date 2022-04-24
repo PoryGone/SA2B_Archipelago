@@ -44,12 +44,6 @@ void LocationManager::OnFrameFunction()
 							this->_archipelagoManager->SendItem(i);
 
 							checkData.CheckSent = true;
-
-							MessageQueue* messageQueue = &MessageQueue::GetInstance();
-
-							std::string message = std::string("Sent Check: ");
-							message += std::to_string(i);
-							messageQueue->AddMessage(message);
 						}
 					}
 				}
