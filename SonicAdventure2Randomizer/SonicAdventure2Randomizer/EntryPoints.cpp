@@ -5,12 +5,14 @@
 #include "Locations/StageSelectManager.h"
 #include "Archipelago/ArchipelagoManager.h"
 #include "Aesthetics/MusicManager.h"
+#include "Aesthetics/CreditsManager.h"
 
 
 EmblemManager* _emblemManager;
 ItemManager* _itemManager;
 LocationManager* _locationManager;
 MusicManager* _musicManager;
+CreditsManager* _creditsManager;
 ArchipelagoManager* _archipelagoManager;
 StageSelectManager& _stageSelectManager = StageSelectManager::GetInstance();
 MessageQueue& _messageQueue = MessageQueue::GetInstance();
@@ -33,6 +35,9 @@ extern "C"
 
 		_musicManager = &MusicManager::getInstance();
 		_musicManager->OnInitFunction(path, helperFunctions);
+
+		_creditsManager = new CreditsManager();
+		_creditsManager->OnInitFunction(path, helperFunctions);
 
 		_archipelagoManager = &ArchipelagoManager::getInstance();
 		_archipelagoManager->OnInitFunction(path, helperFunctions);
