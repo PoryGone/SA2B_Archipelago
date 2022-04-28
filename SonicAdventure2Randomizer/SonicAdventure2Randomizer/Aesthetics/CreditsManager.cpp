@@ -74,6 +74,8 @@ void CreditsManager::OnInitFunction(const char* path, const HelperFunctions& hel
 	updatedCredits.emplace_back();
 	updatedCredits.push_back(SA2BCreditsEntry(CreditsEntryType::CET_Name, SA2B_AP_Color, "N00BYKING"));
 	updatedCredits.emplace_back();
+	updatedCredits.push_back(SA2BCreditsEntry(CreditsEntryType::CET_Name, SA2B_AP_Color, "THEBULBLAXEMPIRE"));
+	updatedCredits.emplace_back();
 	updatedCredits.push_back(SA2BCreditsEntry(CreditsEntryType::CET_Name, SA2B_AP_Color, "X-HAX COMMUNITY"));
 	updatedCredits.emplace_back();
 	updatedCredits.push_back(SA2BCreditsEntry(CreditsEntryType::CET_Name, SA2B_AP_Color, "ARCHIPELAGO COMMUNITY"));
