@@ -33,12 +33,6 @@ void CreditsManager::OnInitFunction(const char* path, const HelperFunctions& hel
 	{
 		if (Credits[i].Type != CreditsEntryType::CET_Blank)
 		{
-			if (Credits[i].Type > 2)
-			{
-				std::string typeMessage = "Unknown Type: ";
-				typeMessage.append(std::to_string(Credits[i].Type));
-				MessageQueue::GetInstance().AddMessage(typeMessage.c_str());
-			}
 			if (consecutiveBlanks > MinimumBlanksToStealFrom)
 			{
 				consecutiveBlanks -= BlanksToSteal;
