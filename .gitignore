@@ -1,7 +1,7 @@
 *.vs
-/SonicAdventure2Randomizer/Debug
-/SonicAdventure2Randomizer/Release
-/SonicAdventure2Randomizer/SonicAdventure2Randomizer/Debug
-/SonicAdventure2Randomizer/SonicAdventure2Randomizer/Release
+/SA2B_Archipelago/Debug
+/SA2B_Archipelago/Release
+/SA2B_Archipelago/SA2B_Archipelago/Debug
+/SA2B_Archipelago/SA2B_Archipelago/Release
 /APCppSrc
 /lib
