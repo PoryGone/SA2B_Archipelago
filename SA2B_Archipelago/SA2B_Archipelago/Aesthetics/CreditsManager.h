@@ -8,6 +8,13 @@ enum CreditsEntryType
 	CET_Blank = 0,
 	CET_Name = 1,
 	CET_Title = 2,
+	CET_Logo_0 = 3,
+	CET_Logo_1 = 4,
+	CET_Logo_2 = 5,
+	CET_Logo_3 = 6,
+	CET_Logo_4 = 7,
+	CET_Logo_5 = 8,
+	CET_Logo_6 = 9,
 };
 
 struct SA2BCreditsColor
