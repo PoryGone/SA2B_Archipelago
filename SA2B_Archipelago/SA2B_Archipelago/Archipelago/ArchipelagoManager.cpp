@@ -265,6 +265,15 @@ void ArchipelagoManager::OnFrameDeathLink()
 
         this->DeathLinkClear();
     }
+    else if (!this->DeathLinkPending() &&
+             CurrentLevel == LevelIDs::LevelIDs_Route101280 &&
+             GameState == GameStates::GameStates_RestartLevel_1) // We Died, Car Flavored
+    {
+        this->DeathLinkSend();
+        MessageQueue::GetInstance().AddMessage(std::string("Death Sent"));
+
+        this->_deathLinkTimer = 420;
+    }
     else if (!this->DeathLinkPending() && 
              MainCharObj1[0] != NULL && 
              MainCharObj2[0] != NULL)
@@ -275,6 +284,7 @@ void ArchipelagoManager::OnFrameDeathLink()
             (MainCharObj2[0]->Powerups & (1 << PowerupBits::PowerupBits_Dead))) // We Died
         {
             this->DeathLinkSend();
+            MessageQueue::GetInstance().AddMessage(std::string("Death Sent"));
 
             this->_deathLinkTimer = 420;
         }
