@@ -6,7 +6,7 @@
 
 constexpr unsigned int MESSAGE_QUEUE_DISPLAY_COUNT = 5;
 constexpr unsigned int MESSAGE_QUEUE_START_LINE = 35;
-constexpr double MESSAGE_QUEUE_DISPLAY_TIME = 5.0;
+constexpr double MESSAGE_QUEUE_DISPLAY_TIME = 10.0;
 
 struct TimeStampedMessage
 {
