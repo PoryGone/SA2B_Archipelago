@@ -21,7 +21,7 @@ public:
 private:
 	const HelperFunctions* _helperFunctions;
 	std::map<int, StageSelectStageData> _stageSelectDataMap;
-	int _emblemsForCannonsCore;
+	int _emblemsForCannonsCore = 200;
 	std::map<int, int> _regionEmblemMap;
     std::vector<int> _gateRequirements;
 
