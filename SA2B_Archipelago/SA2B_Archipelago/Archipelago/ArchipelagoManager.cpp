@@ -251,13 +251,20 @@ void ArchipelagoManager::OnFrameDeathLink()
 
     if (this->DeathLinkPending() && GameState == GameStates::GameStates_Ingame) // They died
     {
-        KillPlayer(0);
-        if (CurrentCharacter == Characters_MechTails || CurrentCharacter == Characters_MechEggman)
+        if (CurrentLevel == LevelIDs::LevelIDs_Route101280)
         {
-            if (MainCharObj2[0] != NULL && MainCharObj1[0] != NULL)
+            GameState = GameStates::GameStates_RestartLevel_1;
+        }
+        else
+        {
+            KillPlayer(0);
+            if (CurrentCharacter == Characters_MechTails || CurrentCharacter == Characters_MechEggman)
             {
-                MainCharObj2[0]->MechHP = 0;
-                MainCharObj1[0]->Status |= Status_Hurt;
+                if (MainCharObj2[0] != NULL && MainCharObj1[0] != NULL)
+                {
+                    MainCharObj2[0]->MechHP = 0;
+                    MainCharObj1[0]->Status |= Status_Hurt;
+                }
             }
         }
 
