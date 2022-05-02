@@ -11,6 +11,8 @@
 
 static char* __cdecl GetShuffledTrack(char* song) 
 {
+    MessageQueue::GetInstance().AddMessage(song);
+
     MusicManager * musicMan = &MusicManager::getInstance();
 
     switch (musicMan->_ShuffleType)

@@ -39,15 +39,15 @@ public:
 		"advsng_3.adx", // Options
 		"advsng_4.adx", // Stage Select
 		"advsng_5.adx", // Tutorial
-		"a_mine.adx", // Aquatic Mine
+		"A_MINE.ADX", // Aquatic Mine
 		"boss_01.adx", // Big Foot
-		"BOSS_02A.ADX", // Egg Golem Sonic
-		"BOSS_02B.ADX", // Egg Golem Eggman
+		"boss_02a.adx", // Egg Golem Sonic
+		"boss_02b.adx", // Egg Golem Eggman
 		"boss_03.adx", // Vs Knuckles/Rouge
 		"boss_04.adx", // Sonic vs Shadow 1
 		"boss_05.adx", // Sonic vs Shadow 2
 		"boss_06.adx", // Vs Biolizard
-		"BOSS_07.ADX", // Vs FinalHazard
+		"boss_07.adx", // Vs FinalHazard
 		"btl_ce.adx", // Battle City Escape (Good)
 		"btl_pc.adx", // Battle Pyramid Cave (Unique)
 		"btl_sel.adx", // Battle Menu
@@ -56,12 +56,12 @@ public:
 		"chao_g_bgm_n.adx", // Neutral Chao Garden
 		"chao_g_iede.adx", // Chao dying??? (Good)
 		"chao_hall.adx", // Chao Lobby
-		"CHAO_K_M.ADX", // Chao Kindergarten
+		"chao_k_m.adx", // Chao Kindergarten
 		"chao_l_m.adx", // Chao Race/Karate Entrance
 		"chao_r_b.adx", // Chao Race 1
 		"chao_r_c.adx", // Chao Race 2
 		"chao_r_d.adx", // Chao Race 3 (Dark)
-		"CHAO_R_E.ADX", // Chao Teleporter
+		"chao_r_e.adx", // Chao Teleporter
 		"chao_r_h.adx", // Chao Race 4 (Hero)
 		"chao_r_j.adx", // Chao Race 5
 		"c_btl_cv.adx", // Chao Race Lobby
@@ -70,7 +70,7 @@ public:
 		"c_core_1.adx", // Cannon's Core 1 (Tails/Eggman)
 		"c_core_2.adx", // Cannon's Core 2 (Rouge/Knuckles)
 		"c_core_5.adx", // Cannon's Core 3 (Sonic)
-		"C_CORE_6.ADX", // Cannon's Core 4 (SA1 Drums)
+		"c_core_6.adx", // Cannon's Core 4 (SA1 Drums)
 		"c_escap1.adx", // City Escape 1
 		"c_escap2.adx", // City Escape 2 (GUN Truck)
 		"c_escap3.adx", // City Escape 3 (Better version of 1)
@@ -78,7 +78,7 @@ public:
 		"c_wall.adx", // Cosmic Wall
 		"d_chambr.adx", // Death Chamber
 		"d_lagoon.adx", // Dry Lagoon
-		"E006_SNG.ADX", // Jail Cell Cutscene (Good)
+		"e006_sng.adx", // Jail Cell Cutscene (Good)
 		"e021_sng.adx", // Mission Prep Cutscene Dark (Good)
 		"e_engine.adx", // Eternal Engine
 		"e_quart.adx", // Egg Quarters
