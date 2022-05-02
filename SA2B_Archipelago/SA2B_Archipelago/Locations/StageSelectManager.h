@@ -26,6 +26,7 @@ private:
     std::vector<int> _gateRequirements;
 
     __int8 _firstStageIndex = 0x17;
+    __int8 _previousSettingsSelection = 0x02;
 
 	void LayoutLevels();
 	void SetLevelsLockState();

@@ -11,6 +11,10 @@ const char nullop = '\x90';
 
 DataPointer(char, StoryModeButton, 0x1D1BC01);
 DataPointer(char, SP_SelectedButton, 0x1D1BC00);
+DataPointer(char, Extras_SelectedButton, 0x1D1BC38);
+DataPointer(char, EmblemResultsButton, 0x1D1BC3B);
+
+DataPointer(__int8, Settings_SelectedOption, 0x1D7BAA0);
 
 DataPointer(char, SS_CameraPos, 0x1D1BEC0);
 DataPointer(char, SS_SelectedTile, 0x1D1BF08);
@@ -196,6 +200,29 @@ void StageSelectManager::HideMenuButtons()
 	if (SP_SelectedButton == 0x00)
 	{
 		SP_SelectedButton = 0x01;
+	}
+
+	EmblemResultsButton = 0x01;
+	if (Extras_SelectedButton == 0x02)
+	{
+		Extras_SelectedButton = 0x03;
+	}
+
+	if (CurrentMenu == Menus::Menus_Settings)
+	{
+		if (Settings_SelectedOption == 0x01) // File Select Button
+		{
+			if (this->_previousSettingsSelection == 0x00)
+			{
+				Settings_SelectedOption = 0x02;
+			}
+			else
+			{
+				Settings_SelectedOption = 0x00;
+			}
+		}
+
+		this->_previousSettingsSelection = Settings_SelectedOption;
 	}
 }
 
