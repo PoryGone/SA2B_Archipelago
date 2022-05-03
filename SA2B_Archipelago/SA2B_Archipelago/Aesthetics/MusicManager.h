@@ -115,9 +115,9 @@ public:
 	};
 
 	std::array<const char*, 47> _LevelMusicNames = {
-		"a_mine.adx", "boss_01.adx", "BOSS_02A.ADX", "BOSS_02B.ADX", "boss_03.adx", "boss_04.adx",
-		"boss_05.adx", "boss_06.adx", "BOSS_07.ADX", "btl_ce.adx", "btl_pc.adx", "c_core_1.adx",
-		"c_core_2.adx", "c_core_5.adx", "C_CORE_6.ADX", "c_escap1.adx", "c_escap2.adx", "c_escap3.adx",
+		"A_MINE.ADX", "boss_01.adx", "boss_02a.adx", "boss_02b.adx", "boss_03.adx", "boss_04.adx",
+		"boss_05.adx", "boss_06.adx", "boss_07.adx", "btl_ce.adx", "btl_pc.adx", "c_core_1.adx",
+		"c_core_2.adx", "c_core_5.adx", "c_core_6.adx", "c_escap1.adx", "c_escap2.adx", "c_escap3.adx",
 		"c_gadget.adx", "c_wall.adx", "d_chambr.adx", "d_lagoon.adx", "e_engine.adx", "e_quart.adx",
 		"f_chase.adx", "f_rush.adx", "g_fores.adx", "g_hill.adx", "h_base.adx", "i_gate.adx",
 		"kart.adx", "l_colony.adx", "m_harb1.adx", "m_harb2.adx", "m_herd.adx", "m_space.adx",
