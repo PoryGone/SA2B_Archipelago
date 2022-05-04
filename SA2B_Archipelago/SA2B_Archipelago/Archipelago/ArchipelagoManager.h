@@ -32,12 +32,15 @@ public:
 
 	void SetMusicMap(std::map<int, int> map);
 	void SetMusicShuffle(int shuffleType);
+	void SetDeathLink(bool deathLinkActive);
 
 private:
 	const HelperFunctions* _helperFunctions;
 	const IniFile* _settingsINI;
 
 	int _deathLinkTimer = 0;
+	bool _deathLinkActive = false;
+
 	std::string _seedName;
 
 	bool _authFailed = false;

@@ -160,6 +160,13 @@ void SA2_SetMusicMap(std::map<int, int> map)
     apm->SetMusicMap(map);
 }
 
+void SA2_SetDeathLink(int deathLinkActive)
+{
+    ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
+
+    apm->SetDeathLink(deathLinkActive != 0);
+}
+
 void SA2_SetMusicShuffle(int shuffleType)
 {
     ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
@@ -202,6 +209,7 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_SetLocationCheckedCallback(&SA2_CheckLocation);
     AP_SetDeathLinkRecvCallback(&noop);
     AP_RegisterSlotDataMapIntIntCallback("MusicMap", &SA2_SetMusicMap);
+    AP_RegisterSlotDataIntCallback("DeathLink", &SA2_SetDeathLink);
     AP_RegisterSlotDataIntCallback("MusicShuffle", &SA2_SetMusicShuffle);
     AP_RegisterSlotDataIntCallback("EmblemsForCannonsCore", &SA2_SetEmblemsForCannonsCore);
     AP_RegisterSlotDataMapIntIntCallback("RegionEmblemMap", &SA2_SetRegionEmblemMap);
@@ -242,9 +250,17 @@ void ArchipelagoManager::OnFrameMessageQueue()
 // DeathLink Functions
 void ArchipelagoManager::OnFrameDeathLink()
 {
+    if (!this->_deathLinkActive)
+    {
+        return;
+    }
+
     if (this->_deathLinkTimer > 0)
     {
-        this->_deathLinkTimer--;
+        if (TimerStopped == 0 || GameState != GameStates::GameStates_Ingame)
+        {
+            this->_deathLinkTimer--;
+        }
 
         return;
     }
@@ -283,8 +299,7 @@ void ArchipelagoManager::OnFrameDeathLink()
     }
     else if (!this->DeathLinkPending() && 
              MainCharObj1[0] != NULL && 
-             MainCharObj2[0] != NULL &&
-             TimerStopped == 0)
+             MainCharObj2[0] != NULL)
     {
         if (MainCharObj1[0]->Action == Action_Death ||
             MainCharObj1[0]->Action == Action_Drown ||
@@ -384,4 +399,9 @@ void ArchipelagoManager::SetMusicShuffle(int shuffleType)
     MusicManager* musicManager = &MusicManager::getInstance();
 
     musicManager->SetMusicShuffle(shuffleType);
+}
+
+void ArchipelagoManager::SetDeathLink(bool deathLinkActive)
+{
+    this->_deathLinkActive = deathLinkActive;
 }
