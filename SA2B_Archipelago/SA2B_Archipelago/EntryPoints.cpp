@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "Items/Emblems.h"
+#include "Utilities/MessageQueue.h"
 #include "Items/ItemManager.h"
 #include "Locations/LocationManager.h"
 #include "Locations/StageSelectManager.h"
@@ -8,7 +8,6 @@
 #include "Aesthetics/CreditsManager.h"
 
 
-EmblemManager* _emblemManager;
 ItemManager* _itemManager;
 LocationManager* _locationManager;
 MusicManager* _musicManager;
@@ -26,9 +25,6 @@ extern "C"
 		_messageQueue.OnInitFunction(path, helperFunctions);
 
 		_stageSelectManager.OnInitFunction(path, helperFunctions);
-
-		_emblemManager = new EmblemManager();
-		_emblemManager->OnInitFunction(path, helperFunctions);
 
 		_itemManager = &ItemManager::getInstance();
 		_itemManager->OnInitFunction(path, helperFunctions);
@@ -49,11 +45,6 @@ extern "C"
 	__declspec(dllexport) void __cdecl OnFrame()
 	{
 		// Executed every running frame of SA2
-		if (_emblemManager)
-		{
-			_emblemManager->OnFrameFunction();
-		}
-
 		if (_itemManager)
 		{
 			_itemManager->OnFrameFunction();
@@ -77,19 +68,11 @@ extern "C"
 	__declspec(dllexport) void __cdecl OnInput()
 	{
 		// Executed before the game processes input
-		if (_emblemManager)
-		{
-			_emblemManager->OnInputFunction();
-		}
 	}
 
 	__declspec(dllexport) void __cdecl OnControl()
 	{
 		// Executed when the game processes input
-		if (_emblemManager)
-		{
-			_emblemManager->OnControlFunction();
-		}
 	}
 
 	__declspec(dllexport) ModInfo SA2ModInfo = { ModLoaderVer }; // This is needed for the Mod Loader to recognize the DLL.

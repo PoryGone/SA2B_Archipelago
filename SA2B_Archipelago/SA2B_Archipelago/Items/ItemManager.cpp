@@ -10,6 +10,13 @@
 
 DataPointer(char, SavedChecksReceived, 0x1DEF5D9);
 
+void* endLevelSave_ptr = (void*)0x4457df;
+void* updateSettingsSave_ptr = (void*)0x44390C;
+void* exitChaoGardenSave_ptr = (void*)0x4448E1;
+void* winChaoKarateSave_ptr = (void*)0x542C0C;
+//void* winChaoRaceSave_ptr = (void*)0x46F8E4; // This seems like a generic helper function that gets called all the time
+const char nullop = '\x90';
+
 void ItemManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
 {
 	_helperFunctions = &helperFunctions;
@@ -33,6 +40,12 @@ void ItemManager::OnInitFunction(const char* path, const HelperFunctions& helper
 	WriteData<1>((void*)0x6D881C, 0x90);
 	WriteData<1>((void*)0x6D881D, 0x90);
 
+	// Emblem Recalculation Calls
+	WriteData<5>(endLevelSave_ptr, nullop);
+	WriteData<5>(updateSettingsSave_ptr, nullop);
+	WriteData<5>(exitChaoGardenSave_ptr, nullop);
+	WriteData<5>(winChaoKarateSave_ptr, nullop);
+	//WriteData<2>(winChaoRaceSave_ptr, nullop);
 }
 
 void ItemManager::OnFrameFunction()

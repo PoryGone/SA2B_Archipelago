@@ -161,7 +161,6 @@
     <ClInclude Include="Aesthetics\MusicManager.h" />
     <ClInclude Include="Archipelago\ArchipelagoManager.h" />
     <ClInclude Include="framework.h" />
-    <ClInclude Include="Items\Emblems.h" />
     <ClInclude Include="Items\ItemData.h" />
     <ClInclude Include="Items\ItemManager.h" />
     <ClInclude Include="Locations\LocationData.h" />
@@ -202,12 +201,6 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="Items\Emblems.cpp">
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../pch.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../pch.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../pch.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../pch.h</PrecompiledHeaderFile>
-    </ClCompile>
     <ClCompile Include="EntryPoints.cpp" />
     <ClCompile Include="Items\ItemData.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../pch.h</PrecompiledHeaderFile>
