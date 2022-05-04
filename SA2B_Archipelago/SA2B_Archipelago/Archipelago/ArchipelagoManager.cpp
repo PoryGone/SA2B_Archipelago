@@ -283,7 +283,8 @@ void ArchipelagoManager::OnFrameDeathLink()
     }
     else if (!this->DeathLinkPending() && 
              MainCharObj1[0] != NULL && 
-             MainCharObj2[0] != NULL)
+             MainCharObj2[0] != NULL &&
+             TimerStopped == 0)
     {
         if (MainCharObj1[0]->Action == Action_Death ||
             MainCharObj1[0]->Action == Action_Drown ||
