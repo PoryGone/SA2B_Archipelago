@@ -4,8 +4,7 @@
 #include <ctime>
 #pragma once
 
-constexpr unsigned int MESSAGE_QUEUE_DISPLAY_COUNT = 5;
-constexpr unsigned int MESSAGE_QUEUE_START_LINE = 35;
+constexpr unsigned int MAX_MESSAGE_QUEUE_DISPLAY_COUNT = 15;
 constexpr double MESSAGE_QUEUE_DISPLAY_TIME = 10.0;
 
 struct TimeStampedMessage
@@ -34,8 +33,16 @@ public:
 	void OnFrameFunction();
 	void AddMessage(std::string message, int color = 0xFFF542C8);
 
+	void SetFontSize(int newFontSize);
+	void SetDisplayCount(int newDisplayCount);
+
 private:
+
+	int _startLine = 35;
+	int _displayCount = 5;
+	int _debugFontSize = 16;
+
 	const HelperFunctions* _helperFunctions;
 	std::queue<TimeStampedMessage> messages;
-	TimeStampedMessage currentMessages[MESSAGE_QUEUE_DISPLAY_COUNT];
+	std::vector<TimeStampedMessage> currentMessages;
 };

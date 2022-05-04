@@ -4,6 +4,11 @@
 void MessageQueue::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
 {
 	_helperFunctions = &helperFunctions;
+
+	for (int i = 0; i < MAX_MESSAGE_QUEUE_DISPLAY_COUNT; i++)
+	{
+		this->currentMessages.push_back(TimeStampedMessage());
+	}
 }
 
 double GetTimeSinceMessage(TimeStampedMessage message)
@@ -14,7 +19,7 @@ double GetTimeSinceMessage(TimeStampedMessage message)
 void MessageQueue::OnFrameFunction()
 {
 	//Remove Old Messages
-	for (int i = 0; i < MESSAGE_QUEUE_DISPLAY_COUNT; i++)
+	for (int i = 0; i < this->_displayCount; i++)
 	{
 		if (!currentMessages[i].message.empty() && GetTimeSinceMessage(currentMessages[i]) > MESSAGE_QUEUE_DISPLAY_TIME)
 		{
@@ -22,7 +27,7 @@ void MessageQueue::OnFrameFunction()
 		}
 	}
 	//Move Messages Down
-	for (int i = 1; i < MESSAGE_QUEUE_DISPLAY_COUNT; i++)
+	for (int i = 1; i < this->_displayCount; i++)
 	{
 		if (currentMessages[i-1].message.empty() && !currentMessages[i].message.empty())
 		{
@@ -31,7 +36,7 @@ void MessageQueue::OnFrameFunction()
 		}
 	}
 	//Add New Messages
-	for (int i = 0; i < MESSAGE_QUEUE_DISPLAY_COUNT; i++)
+	for (int i = 0; i < this->_displayCount; i++)
 	{
 		if (currentMessages[i].message.empty() && !messages.empty())
 		{
@@ -41,14 +46,28 @@ void MessageQueue::OnFrameFunction()
 		}
 	}
 	//Display Messages
-	for (int i = 0; i < MESSAGE_QUEUE_DISPLAY_COUNT; i++)
+	for (int i = 0; i < this->_displayCount; i++)
 	{
 		if (!currentMessages[i].message.empty())
 		{
 			_helperFunctions->SetDebugFontColor(currentMessages[i].color);
-			_helperFunctions->DisplayDebugString(NJM_LOCATION(0, MESSAGE_QUEUE_START_LINE + i), currentMessages[i].message.c_str());
+			_helperFunctions->DisplayDebugString(NJM_LOCATION(0, this->_startLine + i), currentMessages[i].message.c_str());
 		}
 	}
+}
+
+void MessageQueue::SetFontSize(int newFontSize)
+{
+	this->_debugFontSize = newFontSize;
+
+	_helperFunctions->SetDebugFontSize(this->_debugFontSize);
+}
+
+void MessageQueue::SetDisplayCount(int newDisplayCount)
+{
+	this->_displayCount = newDisplayCount;
+
+	this->_startLine = ((VerticalResolution / (int)this->_debugFontSize) - this->_displayCount);
 }
 
 void MessageQueue::AddMessage(std::string message, int color)

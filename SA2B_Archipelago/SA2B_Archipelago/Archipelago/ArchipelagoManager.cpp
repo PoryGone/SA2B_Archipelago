@@ -22,6 +22,9 @@ void ArchipelagoManager::OnInitFunction(const char* path, const HelperFunctions&
 
     this->_settingsINI = new IniFile(std::string(path) + "\\config.ini");
 
+    MessageQueue::GetInstance().SetFontSize(this->_settingsINI->getInt("General", "MessageFontSize"));
+    MessageQueue::GetInstance().SetDisplayCount(this->_settingsINI->getInt("General", "MessageDisplayCount"));
+
     this->_thisSessionChecksSent = 0;
 }
 
