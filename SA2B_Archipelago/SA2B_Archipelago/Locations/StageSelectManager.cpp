@@ -284,6 +284,8 @@ void StageSelectManager::HandleStageSelectCamera()
 {
 	TurnOffVanillaCamera();
 
+	bool is4by3 = ((HorizontalResolution / VerticalResolution) < 1.34f);
+
 	if (SS_SelectedTile < TileIDtoStageIndex.size())
 	{
 		int currentTileStageIndex = this->TileIDtoStageIndex[SS_SelectedTile];
@@ -298,7 +300,7 @@ void StageSelectManager::HandleStageSelectCamera()
 			{
 				SS_CameraPos = 0x03;
 			}
-			else if (currentTileXPos > 0x0D)
+			else if (currentTileXPos > 0x0D && is4by3)
 			{
 				SS_CameraPos = 0x02;
 			}
