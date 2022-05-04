@@ -50,6 +50,7 @@ void MessageQueue::OnFrameFunction()
 	{
 		if (!currentMessages[i].message.empty())
 		{
+			_helperFunctions->SetDebugFontSize(this->_debugFontSize);
 			_helperFunctions->SetDebugFontColor(currentMessages[i].color);
 			_helperFunctions->DisplayDebugString(NJM_LOCATION(0, this->_startLine + i), currentMessages[i].message.c_str());
 		}
@@ -58,6 +59,11 @@ void MessageQueue::OnFrameFunction()
 
 void MessageQueue::SetFontSize(int newFontSize)
 {
+	if (newFontSize == 0)
+	{
+		return;
+	}
+
 	this->_debugFontSize = newFontSize;
 
 	_helperFunctions->SetDebugFontSize(this->_debugFontSize);
@@ -65,9 +71,14 @@ void MessageQueue::SetFontSize(int newFontSize)
 
 void MessageQueue::SetDisplayCount(int newDisplayCount)
 {
+	if (newDisplayCount == 0)
+	{
+		return;
+	}
+
 	this->_displayCount = newDisplayCount;
 
-	this->_startLine = ((VerticalResolution / (int)this->_debugFontSize) - this->_displayCount);
+	this->_startLine = ((VerticalResolution / this->_debugFontSize) - this->_displayCount);
 }
 
 void MessageQueue::AddMessage(std::string message, int color)

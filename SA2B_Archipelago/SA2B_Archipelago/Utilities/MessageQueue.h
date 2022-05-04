@@ -40,7 +40,7 @@ private:
 
 	int _startLine = 35;
 	int _displayCount = 5;
-	int _debugFontSize = 16;
+	int _debugFontSize = 12;
 
 	const HelperFunctions* _helperFunctions;
 	std::queue<TimeStampedMessage> messages;
