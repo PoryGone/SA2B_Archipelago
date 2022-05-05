@@ -71,6 +71,19 @@ void ArchipelagoManager::OnFrameFunction()
             return;
         }
     }
+    else if (AP_GetConnectionStatus() != AP_ConnectionStatus::Authenticated)
+    {
+        std::string msg1 = "Connection to Archipelago lost.";
+        std::string msg2 = "Reconnecting...";
+        _helperFunctions->SetDebugFontColor(0xFFF542C8);
+        _helperFunctions->DisplayDebugString(NJM_LOCATION(0, 0), msg1.c_str());
+        _helperFunctions->DisplayDebugString(NJM_LOCATION(0, 1), msg2.c_str());
+    }
+
+    std::string msg1 = "Connection Status: ";
+    msg1.append(std::to_string(AP_GetConnectionStatus()));
+    _helperFunctions->SetDebugFontColor(0xFFF542C8);
+    _helperFunctions->DisplayDebugString(NJM_LOCATION(0, 2), msg1.c_str());
 
     AP_RoomInfo RoomInfo;
     this->_authFailed = (AP_GetRoomInfo(&RoomInfo) == 1);
