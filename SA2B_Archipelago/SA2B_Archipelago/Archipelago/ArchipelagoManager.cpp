@@ -30,7 +30,7 @@ void ArchipelagoManager::OnInitFunction(const char* path, const HelperFunctions&
 
 void ArchipelagoManager::OnFrameFunction()
 {
-    if (this->_connectionRejected)
+    if (this->_badSaveFile)
     {
         std::string msg1 = "Incorrect Save File Loaded.";
         std::string msg2 = "Relaunch game and load the correct save.";
@@ -39,6 +39,22 @@ void ArchipelagoManager::OnFrameFunction()
         _helperFunctions->DisplayDebugString(NJM_LOCATION(0, 1), msg2.c_str());
 
         return;
+    }
+
+    if (this->_badModVersion)
+    {
+        std::string msg1 = "Incorrect Mod Version.";
+        std::string msg2 = "Local Version: ";
+        msg2.append(std::to_string(MOD_VERSION / 100));
+        msg2.append(".");
+        msg2.append(std::to_string(MOD_VERSION % 100));
+        msg2.append(" | Server Version: ");
+        msg2.append(std::to_string(this->_serverModVersion / 100));
+        msg2.append(".");
+        msg2.append(std::to_string(this->_serverModVersion % 100));
+        _helperFunctions->SetDebugFontColor(0xFFF542C8);
+        _helperFunctions->DisplayDebugString(NJM_LOCATION(0, 0), msg1.c_str());
+        _helperFunctions->DisplayDebugString(NJM_LOCATION(0, 1), msg2.c_str());
     }
 
     if (!this->IsInit())
@@ -106,7 +122,7 @@ void ArchipelagoManager::OnFrameFunction()
                 {
                     if (!this->_settingsINI || !this->_settingsINI->getBool("AP", "IgnoreFileSafety", false))
                     {
-                        this->_connectionRejected = true;
+                        this->_badSaveFile = true;
 
                         return;
                     }
@@ -170,6 +186,13 @@ void SA2_SetDeathLink(int deathLinkActive)
     apm->SetDeathLink(deathLinkActive != 0);
 }
 
+void SA2_CompareModVersion(int modVersion)
+{
+    ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
+
+    apm->VerfyModVersion(modVersion);
+}
+
 void SA2_SetMusicShuffle(int shuffleType)
 {
     ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
@@ -211,8 +234,9 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_SetItemRecvCallback(&SA2_RecvItem);
     AP_SetLocationCheckedCallback(&SA2_CheckLocation);
     AP_SetDeathLinkRecvCallback(&noop);
-    AP_RegisterSlotDataMapIntIntCallback("MusicMap", &SA2_SetMusicMap);
     AP_RegisterSlotDataIntCallback("DeathLink", &SA2_SetDeathLink);
+    AP_RegisterSlotDataIntCallback("ModVersion", &SA2_CompareModVersion);
+    AP_RegisterSlotDataMapIntIntCallback("MusicMap", &SA2_SetMusicMap);
     AP_RegisterSlotDataIntCallback("MusicShuffle", &SA2_SetMusicShuffle);
     AP_RegisterSlotDataIntCallback("EmblemsForCannonsCore", &SA2_SetEmblemsForCannonsCore);
     AP_RegisterSlotDataMapIntIntCallback("RegionEmblemMap", &SA2_SetRegionEmblemMap);
@@ -221,7 +245,7 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
 
 bool ArchipelagoManager::IsInit()
 {
-    return (AP_IsInit() && !this->_connectionRejected);
+    return (AP_IsInit() && !this->_badSaveFile && !this->_badModVersion);
 }
 
 bool ArchipelagoManager::IsAuth()
@@ -407,4 +431,13 @@ void ArchipelagoManager::SetMusicShuffle(int shuffleType)
 void ArchipelagoManager::SetDeathLink(bool deathLinkActive)
 {
     this->_deathLinkActive = deathLinkActive;
+}
+
+void ArchipelagoManager::VerfyModVersion(int modVersion)
+{
+    if (modVersion != MOD_VERSION)
+    {
+        this->_badModVersion = true;
+        this->_serverModVersion = modVersion;
+    }
 }

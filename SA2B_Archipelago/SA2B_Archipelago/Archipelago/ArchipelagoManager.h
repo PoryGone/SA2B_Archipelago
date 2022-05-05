@@ -6,6 +6,7 @@
 #include <map>
 
 constexpr unsigned int AP_ID_OFFSET = 0xFF0000;
+constexpr int MOD_VERSION = 003;
 
 class ArchipelagoManager
 {
@@ -33,6 +34,7 @@ public:
 	void SetMusicMap(std::map<int, int> map);
 	void SetMusicShuffle(int shuffleType);
 	void SetDeathLink(bool deathLinkActive);
+	void VerfyModVersion(int modVersion);
 
 private:
 	const HelperFunctions* _helperFunctions;
@@ -44,7 +46,10 @@ private:
 	std::string _seedName;
 
 	bool _authFailed = false;
-	bool _connectionRejected = false;
+	bool _badSaveFile = false;
+	bool _badModVersion = false;
+
+	int _serverModVersion = 0;
 
 	bool _completionSent = false;
 
