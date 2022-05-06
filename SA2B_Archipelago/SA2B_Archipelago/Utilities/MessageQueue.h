@@ -36,6 +36,8 @@ public:
 	void SetFontSize(int newFontSize);
 	void SetDisplayCount(int newDisplayCount);
 
+	int GetFontSize() { return this->_debugFontSize; }
+
 private:
 
 	int _startLine = 35;

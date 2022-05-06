@@ -16,12 +16,14 @@ public:
 	void OnInitFunction(const char* path, const HelperFunctions& helperFunctions);
 	void OnFrameFunction();
 	void SetEmblemsForCannonsCore(int emblemsRequired);
+    void SetMissionCount(int missionCount);
 	void SetRegionEmblemMap(std::map<int, int> map);
 
 private:
 	const HelperFunctions* _helperFunctions;
 	std::map<int, StageSelectStageData> _stageSelectDataMap;
 	int _emblemsForCannonsCore = 200;
+	int _missionCount = 1;
 	std::map<int, int> _regionEmblemMap;
     std::vector<int> _gateRequirements;
 

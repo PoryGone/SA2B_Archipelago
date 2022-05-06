@@ -66,12 +66,21 @@ void StageSelectManager::OnFrameFunction()
 		cannonsCoreMessage.append(std::to_string(_emblemsForCannonsCore));
 		_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 2), cannonsCoreMessage.c_str());
 
+		std::string missionCountMessage = "Missions Active: ";
+		missionCountMessage.append(std::to_string(this->_missionCount));
+		int missionCountMessageXPos = ((HorizontalResolution / MessageQueue::GetInstance().GetFontSize()) - missionCountMessage.length());
+		_helperFunctions->DisplayDebugString(NJM_LOCATION(missionCountMessageXPos, 0), missionCountMessage.c_str());
 	}
 }
 
 void StageSelectManager::SetEmblemsForCannonsCore(int emblemsRequired)
 {
 	_emblemsForCannonsCore = emblemsRequired;
+}
+
+void StageSelectManager::SetMissionCount(int missionCount)
+{
+	this->_missionCount = missionCount;
 }
 
 void StageSelectManager::SetRegionEmblemMap(std::map<int, int> map)
