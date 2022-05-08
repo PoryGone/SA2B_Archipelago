@@ -27,6 +27,8 @@ void StageSelectManager::OnInitFunction(const char* path, const HelperFunctions&
 	WriteData<1>(saveLevelDataReadOffset_ptr, saveLevelDataReadOffset);
 
 	InitializeStageSelectData(this->_stageSelectDataMap);
+	InitializeItemData(this->_itemData);
+	InitializeCharacterItemRanges(this->_characterItemRanges);
 }
 
 void StageSelectManager::OnFrameFunction()
@@ -41,36 +43,7 @@ void StageSelectManager::OnFrameFunction()
 	SetLevelsLockState();
 	HandleStageSelectCamera();
 
-	if (CurrentMenu == Menus::Menus_StageSelect && GameMode == GameMode::GameMode_Advertise)
-	{
-		_helperFunctions->SetDebugFontColor(0xFFF542C8);
-		if (_gateRequirements.size() > 1)
-		{
-			std::string gateRequirementMessage = "Next Gate Emblems: ";
-			gateRequirementMessage.append(std::to_string(EmblemCount));
-			gateRequirementMessage.append("/");
-			for (int g = 0; g < _gateRequirements.size(); g++)
-			{
-				if (_gateRequirements[g] > EmblemCount || g == _gateRequirements.size() - 1)
-				{
-					gateRequirementMessage.append(std::to_string(_gateRequirements[g]));
-					break;
-				}
-			}
-			_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 3), gateRequirementMessage.c_str());
-		}
-
-		std::string cannonsCoreMessage = "Cannons Core Emblems: ";
-		cannonsCoreMessage.append(std::to_string(EmblemCount));
-		cannonsCoreMessage.append("/");
-		cannonsCoreMessage.append(std::to_string(_emblemsForCannonsCore));
-		_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 2), cannonsCoreMessage.c_str());
-
-		std::string missionCountMessage = "Missions Active: ";
-		missionCountMessage.append(std::to_string(this->_missionCount));
-		int missionCountMessageXPos = ((HorizontalResolution / MessageQueue::GetInstance().GetFontSize()) - missionCountMessage.length());
-		_helperFunctions->DisplayDebugString(NJM_LOCATION(missionCountMessageXPos, 0), missionCountMessage.c_str());
-	}
+	DrawStageSelectText();
 }
 
 void StageSelectManager::SetEmblemsForCannonsCore(int emblemsRequired)
@@ -143,7 +116,7 @@ void StageSelectManager::LayoutLevels()
 				this->_firstStageIndex = TileIndexFromAddress(data.TileIDAddress);
 			}
 
-			if (row == 5)
+			if (row == 5 && l < (gates[g].Levels.size() - 1))
 			{
 				row = 3;
 				col++;
@@ -186,6 +159,117 @@ void StageSelectManager::SetLevelsLockState()
     {
         WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_CannonCore].UnlockMemAddress, lockByteData);
     }
+}
+
+void StageSelectManager::DrawStageSelectText()
+{
+	if (CurrentMenu == Menus::Menus_StageSelect && GameMode == GameMode::GameMode_Advertise)
+	{
+		_helperFunctions->SetDebugFontColor(0xFFF542C8);
+		if (_gateRequirements.size() > 1)
+		{
+			if (EmblemCount >= _gateRequirements[_gateRequirements.size() - 1])
+			{
+				_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 4), "All Gates Unlocked");
+			}
+			else
+			{
+				std::string gateRequirementMessage = "Next Gate Emblems: ";
+				gateRequirementMessage.append(std::to_string(EmblemCount));
+				gateRequirementMessage.append("/");
+				for (int g = 0; g < _gateRequirements.size(); g++)
+				{
+					if (_gateRequirements[g] > EmblemCount || g == _gateRequirements.size() - 1)
+					{
+						gateRequirementMessage.append(std::to_string(_gateRequirements[g]));
+						break;
+					}
+				}
+				_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 4), gateRequirementMessage.c_str());
+			}
+		}
+
+		std::string cannonsCoreMessage = "Cannons Core Emblems: ";
+		cannonsCoreMessage.append(std::to_string(EmblemCount));
+		cannonsCoreMessage.append("/");
+		cannonsCoreMessage.append(std::to_string(_emblemsForCannonsCore));
+		_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 3), cannonsCoreMessage.c_str());
+
+		std::string missionCountMessage = "Missions Active: ";
+		missionCountMessage.append(std::to_string(this->_missionCount));
+		_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 2), missionCountMessage.c_str());
+
+		DrawCurrentLevelUpgrade();
+		DrawCurrentCharacterUpgrades();
+	}
+}
+
+void StageSelectManager::DrawDebugTextOnScreenRight(std::string text, int row)
+{
+	int missionCountMessageXPos = ((HorizontalResolution / MessageQueue::GetInstance().GetFontSize()) - text.length());
+	_helperFunctions->DisplayDebugString(NJM_LOCATION(missionCountMessageXPos, row), text.c_str());
+}
+
+void StageSelectManager::DrawCurrentLevelUpgrade()
+{
+	if (SS_SelectedTile < TileIDtoStageIndex.size())
+	{
+		int currentTileStageIndex = this->TileIDtoStageIndex[SS_SelectedTile];
+		if (currentTileStageIndex < this->_stageSelectDataMap.size())
+		{
+			std::string message = "";
+			if (this->_stageSelectDataMap.at(currentTileStageIndex).UpgradeAddress == 0x00)
+			{
+				message = "Level Upgrade: None";
+			}
+			else
+			{
+				if (*(char*)this->_stageSelectDataMap.at(currentTileStageIndex).UpgradeAddress > 0x00)
+				{
+					message = "Level Upgrade: Aquired";
+				}
+				else
+				{
+					message = "Level Upgrade: Not Aquired";
+				}
+			}
+			DrawDebugTextOnScreenRight(message, 0);
+		}
+	}
+}
+
+void StageSelectManager::DrawCurrentCharacterUpgrades()
+{
+	if (SS_SelectedTile < TileIDtoStageIndex.size())
+	{
+		int currentTileStageIndex = this->TileIDtoStageIndex[SS_SelectedTile];
+		if (currentTileStageIndex < this->_stageSelectDataMap.size())
+		{
+			char character = *(char*)this->_stageSelectDataMap.at(currentTileStageIndex).TileCharacterAddress;
+			CharacterItemRange range = GetItemRangeForCharacter(character);
+			int row = 2;
+			for (int i = range.Start; i <= range.End; i++)
+			{
+				if (*(char*)this->_itemData.at(i).Address > 0x00)
+				{
+					DrawDebugTextOnScreenRight(_itemData.at(i).DisplayNameShort, row);
+					row++;
+				}
+			}
+		}
+	}
+}
+
+CharacterItemRange StageSelectManager::GetItemRangeForCharacter(char character)
+{
+	for (int i = 0; i < _characterItemRanges.size(); i++)
+	{
+		if (_characterItemRanges[i].Character == character)
+		{
+			return _characterItemRanges[i];
+		}
+	}
+	return CharacterItemRange();
 }
 
 void StageSelectManager::UnlockAllLevels()

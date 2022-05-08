@@ -1,4 +1,5 @@
 #include "../pch.h"
+#include "../Items/ItemData.h"
 #include "StageSelectData.h"
 #include <map>
 #include <array>
@@ -26,6 +27,8 @@ private:
 	int _missionCount = 1;
 	std::map<int, int> _regionEmblemMap;
     std::vector<int> _gateRequirements;
+    std::map<int, ItemData> _itemData;
+    std::vector<CharacterItemRange> _characterItemRanges;
 
     __int8 _firstStageIndex = 0x17;
     __int8 _previousSettingsSelection = 0x02;
@@ -36,7 +39,11 @@ private:
 	void HideMenuButtons();
 	void HandleBiolizard();
 	void HandleStageSelectCamera();
-
+    void DrawStageSelectText();
+    void DrawDebugTextOnScreenRight(std::string text, int row);
+    void DrawCurrentLevelUpgrade();
+    void DrawCurrentCharacterUpgrades();
+    CharacterItemRange GetItemRangeForCharacter(char character);
 
     std::array<int, 33> TileIDtoStageIndex = {
         SSS_HiddenBase,
@@ -73,6 +80,7 @@ private:
         SSS_FinalRush,
         SSS_MadSpace
     };
+
 };
 
 struct GateLevelCollection
