@@ -138,7 +138,7 @@ void ItemManager::ReceiveItem(int item_id, bool notify)
 				{
 					SavedChecksReceived = this->_thisSessionChecksReceived;
 
-					std::string message = std::string("Successfully received ");
+					std::string message = std::string("Received ");
 					message += receivedItem.DisplayName;
 					messageQueue->AddMessage(message);
 				}
