@@ -5,7 +5,6 @@
 #pragma once
 
 constexpr unsigned int MAX_MESSAGE_QUEUE_DISPLAY_COUNT = 15;
-constexpr double MESSAGE_QUEUE_DISPLAY_TIME = 10.0;
 
 struct TimeStampedMessage
 {
@@ -35,6 +34,7 @@ public:
 
 	void SetFontSize(int newFontSize);
 	void SetDisplayCount(int newDisplayCount);
+	void SetDisplayDuration(float newDisplayDuration);
 
 	int GetFontSize() { return this->_debugFontSize; }
 
@@ -42,6 +42,7 @@ private:
 
 	int _startLine = 35;
 	int _displayCount = 5;
+	float _displayDuration = 10.0f;
 	int _debugFontSize = 12;
 
 	const HelperFunctions* _helperFunctions;

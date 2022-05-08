@@ -21,7 +21,7 @@ void MessageQueue::OnFrameFunction()
 	//Remove Old Messages
 	for (int i = 0; i < this->_displayCount; i++)
 	{
-		if (!currentMessages[i].message.empty() && GetTimeSinceMessage(currentMessages[i]) > MESSAGE_QUEUE_DISPLAY_TIME)
+		if (!currentMessages[i].message.empty() && GetTimeSinceMessage(currentMessages[i]) > this->_displayDuration)
 		{
 			currentMessages[i] = TimeStampedMessage();
 		}
@@ -79,6 +79,16 @@ void MessageQueue::SetDisplayCount(int newDisplayCount)
 	this->_displayCount = newDisplayCount;
 
 	this->_startLine = ((VerticalResolution / this->_debugFontSize) - this->_displayCount);
+}
+
+void MessageQueue::SetDisplayDuration(float newDisplayDuration)
+{
+	if (newDisplayDuration == 0)
+	{
+		return;
+	}
+
+	this->_displayDuration = newDisplayDuration;
 }
 
 void MessageQueue::AddMessage(std::string message, int color)

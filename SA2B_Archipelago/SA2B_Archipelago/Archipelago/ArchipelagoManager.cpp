@@ -24,6 +24,7 @@ void ArchipelagoManager::OnInitFunction(const char* path, const HelperFunctions&
 
     MessageQueue::GetInstance().SetFontSize(this->_settingsINI->getInt("General", "MessageFontSize"));
     MessageQueue::GetInstance().SetDisplayCount(this->_settingsINI->getInt("General", "MessageDisplayCount"));
+    MessageQueue::GetInstance().SetDisplayDuration(this->_settingsINI->getFloat("General", "MessageDisplayDuration"));
 
     this->_thisSessionChecksSent = 0;
 }
