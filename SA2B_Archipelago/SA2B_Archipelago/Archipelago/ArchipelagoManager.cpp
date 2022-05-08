@@ -318,6 +318,8 @@ void ArchipelagoManager::OnFrameDeathLink()
             {
                 if (MainCharObj2[0] != NULL && MainCharObj1[0] != NULL)
                 {
+                    MainCharObj2[0]->Powerups = (MainCharObj2[0]->Powerups & ~(1 << PowerupBits::PowerupBits_Barrier));
+                    MainCharObj2[0]->Powerups = (MainCharObj2[0]->Powerups & ~(1 << PowerupBits::PowerupBits_MagneticBarrier));
                     MainCharObj2[0]->MechHP = 0;
                     MainCharObj1[0]->Status |= Status_Hurt;
                 }
