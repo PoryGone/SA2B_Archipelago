@@ -305,7 +305,7 @@ void StageSelectManager::HandleStageSelectCamera()
 
 			int currentTileXPos = *(char*)currentTileXPosAddress;
 
-			if (currentTileXPos > 0x13)
+			if (currentTileXPos > 0x14)
 			{
 				SS_CameraPos = 0x03;
 			}
