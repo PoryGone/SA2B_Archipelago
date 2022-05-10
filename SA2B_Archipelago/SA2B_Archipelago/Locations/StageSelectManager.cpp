@@ -226,11 +226,11 @@ void StageSelectManager::DrawCurrentLevelUpgrade()
 			{
 				if (*(char*)this->_stageSelectDataMap.at(currentTileStageIndex).UpgradeAddress > 0x00)
 				{
-					message = "Level Upgrade: Aquired";
+					message = "Level Upgrade: Acquired";
 				}
 				else
 				{
-					message = "Level Upgrade: Not Aquired";
+					message = "Level Upgrade: Not Acquired";
 				}
 			}
 			DrawDebugTextOnScreenRight(message, 0);
