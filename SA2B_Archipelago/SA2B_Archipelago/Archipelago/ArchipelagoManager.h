@@ -6,7 +6,7 @@
 #include <map>
 
 constexpr unsigned int AP_ID_OFFSET = 0xFF0000;
-constexpr int MOD_VERSION = 003;
+constexpr int MOD_VERSION = 100;
 
 class ArchipelagoManager
 {
