@@ -52,12 +52,21 @@ void LocationManager::OnFrameFunction()
 	}
 }
 
-void LocationManager::OnInputFunction()
+void LocationManager::CheckLocation(int location_id)
 {
+	if (this->_LevelClearData.find(location_id) != this->_LevelClearData.end())
+	{
+		LevelClearCheckData& checkData = this->_LevelClearData[location_id];
 
-}
+		if (location_id == LCC_CannonCore_1)
+		{
+			// Don't Collect Cannon's Core 1
+			return;
+		}
 
-void LocationManager::OnControlFunction()
-{
+		checkData.CheckSent = true;
 
+		// This value will need to be updated if Mission Requirements are randomized
+		WriteData<1>((void*)checkData.Address, 0x01);
+	}
 }

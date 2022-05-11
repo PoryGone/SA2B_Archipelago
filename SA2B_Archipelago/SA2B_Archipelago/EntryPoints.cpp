@@ -38,7 +38,7 @@ extern "C"
 		_archipelagoManager = &ArchipelagoManager::getInstance();
 		_archipelagoManager->OnInitFunction(path, helperFunctions);
 
-		_locationManager = new LocationManager();
+		_locationManager = &LocationManager::getInstance();
 		_locationManager->OnInitFunction(path, helperFunctions);
 	}
 

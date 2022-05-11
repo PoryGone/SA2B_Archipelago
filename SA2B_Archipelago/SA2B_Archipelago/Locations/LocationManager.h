@@ -10,10 +10,15 @@ constexpr unsigned int MEMORY_CHECK_TIME = 120;
 class LocationManager
 {
 public:
+	static LocationManager& getInstance()
+	{
+		static LocationManager instance;
+		return instance;
+	}
+
 	void OnInitFunction(const char* path, const HelperFunctions& helperFunctions);
 	void OnFrameFunction();
-	void OnInputFunction();
-	void OnControlFunction();
+	void CheckLocation(int location_id);
 
 private:
 	const HelperFunctions* _helperFunctions;

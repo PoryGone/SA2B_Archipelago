@@ -2,6 +2,7 @@
 #include "ArchipelagoManager.h"
 #include "../Locations/LocationData.h"
 #include "../Items/ItemManager.h"
+#include "../Locations/LocationManager.h"
 #include "../Aesthetics/MusicManager.h"
 
 #include "../Utilities/MessageQueue.h"
@@ -419,7 +420,14 @@ void ArchipelagoManager::ReceiveItem(int item_id, bool notify)
 
 void ArchipelagoManager::CheckLocation(int loc_id)
 {
+    if (!this->IsInit())
+    {
+        return;
+    }
 
+    LocationManager* locationManager = &LocationManager::getInstance();
+
+    locationManager->CheckLocation(loc_id - AP_ID_OFFSET);
 }
 
 void ArchipelagoManager::SetMusicMap(std::map<int, int> map)
