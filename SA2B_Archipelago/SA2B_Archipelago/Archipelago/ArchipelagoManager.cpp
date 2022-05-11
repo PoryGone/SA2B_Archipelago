@@ -321,7 +321,9 @@ void ArchipelagoManager::OnFrameDeathLink()
                 {
                     MainCharObj2[0]->Powerups = (MainCharObj2[0]->Powerups & ~(1 << PowerupBits::PowerupBits_Barrier));
                     MainCharObj2[0]->Powerups = (MainCharObj2[0]->Powerups & ~(1 << PowerupBits::PowerupBits_MagneticBarrier));
+                    MainCharObj2[0]->Powerups = (MainCharObj2[0]->Powerups & ~(1 << PowerupBits::PowerupBits_Invincibility));
                     MainCharObj2[0]->MechHP = 0;
+                    MainCharObj1[0]->field_6 = 0; // Invulvnerability Frames
                     MainCharObj1[0]->Status |= Status_Hurt;
                 }
             }
