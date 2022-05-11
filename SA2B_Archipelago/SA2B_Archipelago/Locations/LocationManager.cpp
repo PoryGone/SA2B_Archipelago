@@ -66,6 +66,14 @@ void LocationManager::CheckLocation(int location_id)
 
 		checkData.CheckSent = true;
 
+		char dataValue = *(char*)checkData.Address;
+
+		if (dataValue > 0x00)
+		{
+			// Don't Overwrite existing Rankings
+			return;
+		}
+
 		// This value will need to be updated if Mission Requirements are randomized
 		WriteData<1>((void*)checkData.Address, 0x01);
 	}
