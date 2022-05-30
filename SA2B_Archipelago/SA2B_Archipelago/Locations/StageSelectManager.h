@@ -18,6 +18,7 @@ public:
 	void OnFrameFunction();
 	void SetEmblemsForCannonsCore(int emblemsRequired);
     void SetMissionCount(int missionCount);
+    void SetRequiredRank(int requiredRank);
 	void SetRegionEmblemMap(std::map<int, int> map);
 
 private:
@@ -25,6 +26,7 @@ private:
 	std::map<int, StageSelectStageData> _stageSelectDataMap;
 	int _emblemsForCannonsCore = 200;
 	int _missionCount = 1;
+	int _requiredRank = 0;
 	std::map<int, int> _regionEmblemMap;
     std::vector<int> _gateRequirements;
     std::map<int, ItemData> _itemData;

@@ -238,6 +238,10 @@ void SA2_SetRequiredRank(int requiredRank)
     LocationManager* locationManager = &LocationManager::getInstance();
 
     locationManager->SetRequiredRank(requiredRank);
+
+    StageSelectManager* ssm = &StageSelectManager::GetInstance();
+
+    ssm->SetRequiredRank(requiredRank);
 }
 
 void SA2_SetRegionEmblemMap(std::map<int, int> map)
