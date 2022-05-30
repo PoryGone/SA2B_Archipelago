@@ -86,6 +86,10 @@ void ItemManager::ReceiveItem(int item_id, bool notify)
 
 		return;
 	}
+	else if (item_id == ItemValue::IV_Maria)
+	{
+		return;
+	}
 	else if (item_id == ItemValue::IV_Emblem)
 	{
 		if (this->_ItemData.find(item_id) != this->_ItemData.end())
