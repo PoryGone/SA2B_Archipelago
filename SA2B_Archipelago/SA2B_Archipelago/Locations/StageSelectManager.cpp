@@ -56,6 +56,11 @@ void StageSelectManager::SetMissionCount(int missionCount)
 	this->_missionCount = missionCount;
 }
 
+void StageSelectManager::SetRequiredRank(int requiredRank)
+{
+	this->_requiredRank = requiredRank;
+}
+
 void StageSelectManager::SetRegionEmblemMap(std::map<int, int> map)
 {
 	_regionEmblemMap = map;
@@ -321,7 +326,7 @@ void StageSelectManager::HideMenuButtons()
 
 void StageSelectManager::HandleBiolizard()
 {
-	if (CannonCore1_Rank > 0)
+	if (CannonCore1_Rank > this->_requiredRank)
 	{
 		// Biolizard Tile
 		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_GreenHill].TileIDAddress, 0x41);
@@ -330,6 +335,10 @@ void StageSelectManager::HandleBiolizard()
 		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_GreenHill].TileRowAddress, 0x04);
 
 		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_Biolizard].UnlockMemAddress, unlockByteData);
+	}
+	else
+	{
+		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_Biolizard].UnlockMemAddress, lockByteData);
 	}
 
 	if (CurrentLevel == LevelIDs_Biolizard)

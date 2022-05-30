@@ -41,6 +41,8 @@ enum ItemValue
     IV_RougeTreasureScope,
     IV_RougeIronBoots,
 
+    IV_Maria,
+
     IV_NUM_ITEMS
 };
 

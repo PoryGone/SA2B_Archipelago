@@ -37,7 +37,14 @@ void LocationManager::OnFrameFunction()
 					// DataPointer macro creates a static field, which doesn't work for this case
 					char dataValue = *(char*)checkData.Address;
 
-					if (dataValue > 0x00)
+					int requiredValue = 0;
+
+					if (i <= LevelClearCheck::LCC_CannonCore_5)
+					{
+						requiredValue = this->_requiredRank;
+					}
+
+					if (dataValue > requiredValue)
 					{
 						if (this->_archipelagoManager)
 						{
@@ -45,6 +52,23 @@ void LocationManager::OnFrameFunction()
 
 							checkData.CheckSent = true;
 						}
+					}
+				}
+				else
+				{
+					// Capture offline collects, show the proper Rank for them
+					char dataValue = *(char*)checkData.Address;
+
+					int requiredValue = 0;
+
+					if (i <= LevelClearCheck::LCC_CannonCore_5)
+					{
+						requiredValue = this->_requiredRank;
+					}
+
+					if (dataValue <= requiredValue)
+					{
+						WriteData<1>((void*)checkData.Address, requiredValue + 1);
 					}
 				}
 			}
@@ -68,13 +92,17 @@ void LocationManager::CheckLocation(int location_id)
 
 		char dataValue = *(char*)checkData.Address;
 
-		if (dataValue > 0x00)
+		if (dataValue > this->_requiredRank)
 		{
 			// Don't Overwrite existing Rankings
 			return;
 		}
 
-		// This value will need to be updated if Mission Requirements are randomized
-		WriteData<1>((void*)checkData.Address, 0x01);
+		WriteData<1>((void*)checkData.Address, this->_requiredRank + 1);
 	}
+}
+
+void LocationManager::SetRequiredRank(int requiredRank)
+{
+	this->_requiredRank = requiredRank;
 }
