@@ -10,6 +10,7 @@
 
 #include <functional>
 #include "../Locations/StageSelectManager.h"
+#include "../Aesthetics/StatsManager.h"
 
 
 DataPointer(unsigned int, SeedHash, 0x1DEC6FC);
@@ -289,6 +290,7 @@ bool ArchipelagoManager::IsAuth()
 
 void ArchipelagoManager::SendStoryComplete()
 {
+    StatsManager::GetInstance().Victory();
     AP_StoryComplete();
 }
 
@@ -311,10 +313,6 @@ void ArchipelagoManager::OnFrameMessageQueue()
 // DeathLink Functions
 void ArchipelagoManager::OnFrameDeathLink()
 {
-    if (!this->_deathLinkActive)
-    {
-        return;
-    }
 
     if (this->_deathLinkTimer > 0)
     {
@@ -358,7 +356,6 @@ void ArchipelagoManager::OnFrameDeathLink()
              GameState == GameStates::GameStates_RestartLevel_1) // We Died, Car Flavored
     {
         this->DeathLinkSend();
-        MessageQueue::GetInstance().AddMessage(std::string("Death Sent"));
 
         this->_deathLinkTimer = 420;
     }
@@ -372,7 +369,6 @@ void ArchipelagoManager::OnFrameDeathLink()
             (MainCharObj2[0]->Powerups & (1 << PowerupBits::PowerupBits_Dead))) // We Died
         {
             this->DeathLinkSend();
-            MessageQueue::GetInstance().AddMessage(std::string("Death Sent"));
 
             this->_deathLinkTimer = 420;
         }
@@ -381,7 +377,13 @@ void ArchipelagoManager::OnFrameDeathLink()
 
 void ArchipelagoManager::DeathLinkSend() 
 {
+    StatsManager::GetInstance().DeathLinkSent();
+    if (!this->_deathLinkActive)
+    {
+        return;
+    }
     AP_DeathLinkSend();
+    MessageQueue::GetInstance().AddMessage(std::string("Death Sent"));
 }
 
 bool ArchipelagoManager::DeathLinkPending() 
@@ -391,6 +393,7 @@ bool ArchipelagoManager::DeathLinkPending()
 
 void ArchipelagoManager::DeathLinkClear() 
 {
+    StatsManager::GetInstance().DeathLinkReceived();
     AP_DeathLinkClear();
 }
 

@@ -96,6 +96,9 @@
     <ClInclude Include="Aesthetics\CreditsManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Aesthetics\StatsManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -144,6 +147,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Aesthetics\CreditsManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Aesthetics\StatsManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
