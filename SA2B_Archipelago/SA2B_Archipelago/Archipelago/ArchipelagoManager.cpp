@@ -244,6 +244,21 @@ void SA2_SetRequiredRank(int requiredRank)
     ssm->SetRequiredRank(requiredRank);
 }
 
+void SA2_SetChaoPacks(int chaoRaceChecks)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    if (chaoRaceChecks == 1)
+    {
+        LocationManager* locationManager = &LocationManager::getInstance();
+
+        locationManager->SetRacesPacked(true);
+    }
+}
+
 void SA2_SetRegionEmblemMap(std::map<int, int> map)
 {
     if (!ArchipelagoManager::getInstance().IsInit())
@@ -273,6 +288,7 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_RegisterSlotDataIntCallback("EmblemsForCannonsCore", &SA2_SetEmblemsForCannonsCore);
     AP_RegisterSlotDataIntCallback("IncludeMissions", &SA2_SetMissionCount);
     AP_RegisterSlotDataIntCallback("RequiredRank", &SA2_SetRequiredRank);
+    AP_RegisterSlotDataIntCallback("ChaoRaceChecks", &SA2_SetChaoPacks);
     AP_RegisterSlotDataMapIntIntCallback("RegionEmblemMap", &SA2_SetRegionEmblemMap);
     AP_Start();
 }
