@@ -36,6 +36,8 @@ public:
 	void SetDeathLink(bool deathLinkActive);
 	void VerfyModVersion(int modVersion);
 
+	std::string GetSeedName() { return this->_seedName; };
+
 private:
 	const HelperFunctions* _helperFunctions;
 	const IniFile* _settingsINI;

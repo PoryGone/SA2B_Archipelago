@@ -284,12 +284,13 @@ enum ChaoGardenCheck
     CGC_Dark_3 = 0x23C,
     CGC_Dark_4 = 0x23D,
 
+    CGC_END_RACE = CGC_Dark_4,
+
     CGC_Beginner_Karate     = 0x300,
     CGC_Intermediate_Karate = 0x301,
     CGC_Expert_Karate       = 0x302,
     CGC_Super_Karate        = 0x303,
 
-    CGC_END = CGC_Super_Karate,
 };
 
 struct ChaoGardenCheckData

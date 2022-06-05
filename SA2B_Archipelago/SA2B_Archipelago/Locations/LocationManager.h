@@ -23,6 +23,7 @@ public:
 	void CheckLocation(int location_id);
 	void SetRequiredRank(int requiredRank);
 	void SetRacesPacked(bool racesPacked);
+	void SetChaoEnabled(bool chaoEnabled);
 
 private:
 	const HelperFunctions* _helperFunctions;
@@ -32,6 +33,7 @@ private:
 	unsigned int _chaoTimer = 0;
 	int _requiredRank = 0;
 	bool _racesPacked = false;
+	bool _chaoEnabled = false;
 
 	std::map<int, LevelClearCheckData> _LevelClearData;
 	std::map<int, ChaoGardenCheckData> _ChaoGardenData;
