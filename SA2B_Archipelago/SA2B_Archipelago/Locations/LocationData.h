@@ -306,8 +306,3 @@ struct ChaoGardenCheckData
 void InitializeChaoGardenChecks(std::map<int, ChaoGardenCheckData>& outChaoGardenChecks);
 
 void InitializeChaoRacePacks(std::map<int, std::vector<int>>& outChaoRacePacks);
-
-struct ChaoRacePack
-{
-
-};
