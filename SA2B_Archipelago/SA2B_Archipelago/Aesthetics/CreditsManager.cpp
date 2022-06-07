@@ -92,9 +92,4 @@ void CreditsManager::UpdateCredits(std::vector<SA2BCreditsEntry> statsEntries)
 	//14 entries for stats
 
 	OverwriteCredits(updatedCredits);
-	/*
-	std::string logMessage = "Blank Credits Spots: ";
-	logMessage.append(std::to_string(549 - updatedCredits.size()));
-	MessageQueue::GetInstance().AddMessage(logMessage.c_str());
-	*/
 }

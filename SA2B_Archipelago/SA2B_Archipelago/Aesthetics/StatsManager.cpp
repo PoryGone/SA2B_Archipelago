@@ -12,12 +12,15 @@ void StatsManager::OnInitFunction(const char* path, const HelperFunctions& helpe
 
 void StatsManager::OnFrameFunction()
 {
-	int rings = (int)RingCount[0];
-	if (rings > _lastRingCount)
+	if (CurrentLevel != LevelIDs_FinalHazard)
 	{
-		apStats.RingsCollected += rings - _lastRingCount;
+		int rings = (int)RingCount[0];
+		if (rings > _lastRingCount)
+		{
+			apStats.RingsCollected += rings - _lastRingCount;
+		}
+		_lastRingCount = rings;
 	}
-	_lastRingCount = rings;
 	if (EmeraldManagerObj2)
 	{
 		if (EmeraldManagerObj2->HintCount > _lastHintCount)
@@ -26,14 +29,6 @@ void StatsManager::OnFrameFunction()
 		}
 		_lastHintCount = EmeraldManagerObj2->HintCount;
 	}
-	/*
-	std::string msg = "";
-	//msg.append(std::to_string(rings));
-	//msg.append(", ");
-	msg.append(std::to_string(apStats.HintMonitorsUsed));
-	_helperFunctions->SetDebugFontColor(0xFFF542C8);
-	_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 6), msg.c_str());
-	*/
 }
 
 void StatsManager::DeathLinkSent()
