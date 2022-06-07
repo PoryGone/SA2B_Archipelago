@@ -63,6 +63,9 @@ void ItemManager::OnFrameFunction()
 		EmblemCount = this->_EmblemsReceived;
 		WriteData<1>((void*)0x0174B032, this->_EmblemsReceived);
 	}
+
+	this->OnFrameJunkQueue();
+	this->OnFrameTrapQueue();
 }
 
 void ItemManager::ResetItems()
@@ -78,15 +81,7 @@ void ItemManager::ReceiveItem(int item_id, bool notify)
 
 	this->_thisSessionChecksReceived++;
 
-	if (item_id > ItemValue::IV_NUM_ITEMS)
-	{
-		std::string message = std::string("Received Invalid ID: ");
-		message += std::to_string(item_id);
-		messageQueue->AddMessage(message);
-
-		return;
-	}
-	else if (item_id == ItemValue::IV_Maria)
+	if (item_id == ItemValue::IV_Maria)
 	{
 		return;
 	}
@@ -124,7 +119,7 @@ void ItemManager::ReceiveItem(int item_id, bool notify)
 			}
 		}
 	}
-	else
+	else if (item_id < ItemValue::IV_Maria) // Upgrades
 	{
 		ItemData& receivedItem = this->_ItemData[item_id];
 
@@ -160,6 +155,44 @@ void ItemManager::ReceiveItem(int item_id, bool notify)
 			message += receivedItem.DisplayName;
 			messageQueue->AddMessage(message);
 		}
+	}
+	else if (item_id <= ItemValue::IV_Invincibility) // Junk
+	{
+		this->HandleJunk(item_id);
+
+		if (this->_thisSessionChecksReceived > SavedChecksReceived)
+		{
+			SavedChecksReceived = this->_thisSessionChecksReceived;
+
+			ItemData& receivedItem = this->_ItemData[item_id];
+
+			std::string message = std::string("Received ");
+			message += receivedItem.DisplayName;
+			messageQueue->AddMessage(message);
+		}
+	}
+	else if (item_id <= ItemValue::IV_TinyTrap) // Trap
+	{
+		this->HandleTrap(item_id);
+
+		if (this->_thisSessionChecksReceived > SavedChecksReceived)
+		{
+			SavedChecksReceived = this->_thisSessionChecksReceived;
+
+			ItemData& receivedItem = this->_ItemData[item_id];
+
+			std::string message = std::string("Received ");
+			message += receivedItem.DisplayName;
+			messageQueue->AddMessage(message);
+		}
+	}
+	else
+	{
+		std::string message = std::string("Received Invalid ID: ");
+		message += std::to_string(item_id);
+		messageQueue->AddMessage(message);
+
+		return;
 	}
 }
 
@@ -225,5 +258,47 @@ void ItemManager::HandleEquipment(int EquipmentItem)
 
 			MainCharObj2[0]->Upgrades |= NewEquipBit;
 		}
+	}
+}
+
+void ItemManager::HandleJunk(int item_id)
+{
+	this->_JunkQueue.push(item_id);
+}
+
+void ItemManager::HandleTrap(int item_id)
+{
+	this->_TrapQueue.push(item_id);
+}
+
+void ItemManager::OnFrameJunkQueue()
+{
+	if (!(GameState == GameStates::GameStates_Ingame || GameState == GameStates::GameStates_Pause))
+	{
+		return;
+	}
+}
+
+void ItemManager::OnFrameTrapQueue()
+{
+	if (!(GameState == GameStates::GameStates_Ingame || GameState == GameStates::GameStates_Pause))
+	{
+		return;
+	}
+
+	if (this->_TrapQueue.size() == 0)
+	{
+		return;
+	}
+
+	// Timer Stuff
+
+	int trap_id = this->_TrapQueue.front();
+	this->_TrapQueue.pop();
+	switch (trap_id)
+	{
+	case ItemValue::IV_TimeStopTrap:
+
+		break;
 	}
 }

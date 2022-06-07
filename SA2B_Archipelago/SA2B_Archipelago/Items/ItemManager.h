@@ -2,6 +2,7 @@
 #pragma once
 
 #include <map>
+#include <queue>
 #include "ItemData.h"
 
 constexpr unsigned int AP_ITEM_ID_OFFSET = 0xFF0000;
@@ -24,9 +25,16 @@ public:
 
 private:
 	void HandleEquipment(int EquipmentItem);
+	void HandleJunk(int item_id);
+	void HandleTrap(int item_id);
+	void OnFrameJunkQueue();
+	void OnFrameTrapQueue();
 	const HelperFunctions* _helperFunctions;
 
 	std::map<int, ItemData> _ItemData;
 	__int8 _thisSessionChecksReceived = 0;
 	__int8 _EmblemsReceived = 0;
+
+	std::queue<int> _JunkQueue;
+	std::queue<int> _TrapQueue;
 };

@@ -43,4 +43,16 @@ void InitializeItemData(std::map<int, ItemData> &outItemData)
     outItemData[ItemValue::IV_RougePickNails]     = ItemData(0x1DEB319, std::string("Rouge - Pick Nails"), std::string("Pick Nails"));
     outItemData[ItemValue::IV_RougeTreasureScope] = ItemData(0x1DEB31A, std::string("Rouge - Treasure Scope"), std::string("Treasure Scope"));
     outItemData[ItemValue::IV_RougeIronBoots]     = ItemData(0x1DEB31B, std::string("Rouge - Iron Boots"), std::string("Iron Boots"));
+    
+    outItemData[ItemValue::IV_FiveRings]      = ItemData(0x0000000, std::string("5 Rings"), std::string());
+    outItemData[ItemValue::IV_TenRings]       = ItemData(0x0000000, std::string("10 Rings"), std::string());
+    outItemData[ItemValue::IV_TwentyRings]    = ItemData(0x0000000, std::string("20 Rings"), std::string());
+    outItemData[ItemValue::IV_Shield]         = ItemData(0x0000000, std::string("Shield"), std::string());
+    outItemData[ItemValue::IV_MagneticShield] = ItemData(0x0000000, std::string("Magnetic Shield"), std::string());
+    outItemData[ItemValue::IV_Invincibility]  = ItemData(0x0000000, std::string("Invincibility"), std::string());
+
+    outItemData[ItemValue::IV_OmochaoTrap]  = ItemData(0x0000000, std::string("OmoTrap"), std::string());
+    outItemData[ItemValue::IV_TimeStopTrap] = ItemData(0x0000000, std::string("Chaos Control Trap"), std::string());
+    outItemData[ItemValue::IV_ConfuseTrap]  = ItemData(0x0000000, std::string("Confusion Trap"), std::string());
+    outItemData[ItemValue::IV_TinyTrap]     = ItemData(0x0000000, std::string("Tiny Trap"), std::string());
 }
