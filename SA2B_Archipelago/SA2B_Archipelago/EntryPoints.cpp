@@ -6,15 +6,17 @@
 #include "Archipelago/ArchipelagoManager.h"
 #include "Aesthetics/MusicManager.h"
 #include "Aesthetics/CreditsManager.h"
+#include "Aesthetics/StatsManager.h"
 
 
 ItemManager* _itemManager;
 LocationManager* _locationManager;
 MusicManager* _musicManager;
-CreditsManager* _creditsManager;
 ArchipelagoManager* _archipelagoManager;
+CreditsManager& _creditsManager = CreditsManager::GetInstance();
 StageSelectManager& _stageSelectManager = StageSelectManager::GetInstance();
 MessageQueue& _messageQueue = MessageQueue::GetInstance();
+StatsManager& _statsManager = StatsManager::GetInstance();
 
 extern "C"
 {
@@ -32,14 +34,16 @@ extern "C"
 		_musicManager = &MusicManager::getInstance();
 		_musicManager->OnInitFunction(path, helperFunctions);
 
-		_creditsManager = new CreditsManager();
-		_creditsManager->OnInitFunction(path, helperFunctions);
+		_creditsManager.OnInitFunction(path, helperFunctions);
 
 		_archipelagoManager = &ArchipelagoManager::getInstance();
 		_archipelagoManager->OnInitFunction(path, helperFunctions);
 
 		_locationManager = &LocationManager::getInstance();
 		_locationManager->OnInitFunction(path, helperFunctions);
+
+		_statsManager.OnInitFunction(path, helperFunctions);
+
 	}
 
 	__declspec(dllexport) void __cdecl OnFrame()
@@ -63,6 +67,8 @@ extern "C"
 		_stageSelectManager.OnFrameFunction();
 
 		_messageQueue.OnFrameFunction();
+
+		_statsManager.OnFrameFunction();
 	}
 
 	__declspec(dllexport) void __cdecl OnInput()
