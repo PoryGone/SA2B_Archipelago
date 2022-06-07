@@ -15,7 +15,7 @@ public:
 	int dword_1DEC72C;
 };
 
-DataPointer(APStats, apStats, 0x1DEC6FC);
+DataPointer(APStats, apStats, 0x01DED1B4);
 
 class StatsManager
 {

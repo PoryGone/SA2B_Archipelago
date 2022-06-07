@@ -2,7 +2,7 @@
 #include "CreditsManager.h"
 #include "../Utilities/MessageQueue.h"
 
-DataArray(SA2BCreditsEntry, Credits, 0x966400, 549);
+DataArray(SA2BCreditsEntry, Credits, 0x966400, 549); //Data end 0x969778
 // 3 minimum with 2 blanks to steal leaves 30 free credits lines
 const int MinimumBlanksToStealFrom = 3;
 const int BlanksToSteal = 2;
@@ -55,7 +55,7 @@ void GenerateAPCredits(std::vector<SA2BCreditsEntry>& apCredits)
 
 void OverwriteCredits(std::vector<SA2BCreditsEntry>& newCredits)
 {
-	for (int i = 0; i < 549; i++)
+	for (size_t i = 0; i < 549; i++)
 	{
 		if (newCredits.size() > i)
 		{
@@ -75,17 +75,21 @@ void CreditsManager::OnInitFunction(const char* path, const HelperFunctions& hel
 	UpdateCredits(empty);
 }
 
-void CreditsManager::UpdateCredits(std::vector<SA2BCreditsEntry>& statsEntries)
+void CreditsManager::UpdateCredits(std::vector<SA2BCreditsEntry> statsEntries)
 {
 	std::vector<SA2BCreditsEntry> updatedCredits = std::vector<SA2BCreditsEntry>();
 
-	for (int i = 0; i < apCredits.size(); i++)
+	for (size_t i = 0; i < apCredits.size(); i++)
 	{
 		updatedCredits.push_back(apCredits[i]);
 	}
 
-	for (int i = 0; i < statsEntries.size(); i++)
+	for (size_t i = 0; i < statsEntries.size(); i++)
 	{
+		if (statsEntries[i].Type != CreditsEntryType::CET_Blank && statsEntries[i].Text)
+		{
+			MessageQueue::GetInstance().AddMessage(statsEntries[i].Text);
+		}
 		updatedCredits.push_back(statsEntries[i]);
 	}
 

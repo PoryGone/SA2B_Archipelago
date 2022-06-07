@@ -38,7 +38,7 @@ struct SA2BCreditsEntry
 	const char* Text;
 };
 
-const SA2BCreditsColor SA2B_AP_Color = SA2BCreditsColor(1.0, 0.96078, 0.25882, 0.78431);
+const SA2BCreditsColor SA2B_AP_Color = SA2BCreditsColor(1.0f, 0.96078f, 0.25882f, 0.78431f);
 
 class CreditsManager
 {
@@ -49,7 +49,7 @@ public:
 		return instance;
 	}
 	void OnInitFunction(const char* path, const HelperFunctions& helperFunctions);
-	void UpdateCredits(std::vector<SA2BCreditsEntry>& statsEntries);
+	void UpdateCredits(std::vector<SA2BCreditsEntry> statsEntries);
 
 private:
 	std::vector<SA2BCreditsEntry> apCredits = std::vector<SA2BCreditsEntry>();
