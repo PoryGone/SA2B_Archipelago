@@ -1,6 +1,10 @@
 #include "../pch.h"
 #pragma once
+#include <vector>
 #include <map>
+
+#define CHAO_LOCATION_INTERNAL_OFFSET 0x18DA0 // 0x01A0F993 - 0x019F6BF3
+#define CHAO_LOCATION_STORAGE_OFFSET 0x3DCE2D // 0x01DEC7C0 - 0x01A0F993
 
 enum LevelClearCheck
 {
@@ -207,5 +211,98 @@ struct LevelClearCheckData
     bool CheckSent = false;
 };
 
-
 void InitializeLevelClearChecks(std::map<int, LevelClearCheckData>& outLevelClearChecks);
+
+
+enum ChaoGardenCheck
+{
+    CGC_BEGIN = 0x200,
+    CGC_CrabPool_1 = 0x200,
+    CGC_CrabPool_2 = 0x201,
+    CGC_CrabPool_3 = 0x202,
+    CGC_StumpValley_1 = 0x203,
+    CGC_StumpValley_2 = 0x204,
+    CGC_StumpValley_3 = 0x205,
+    CGC_MushroomForest_1 = 0x206,
+    CGC_MushroomForest_2 = 0x207,
+    CGC_MushroomForest_3 = 0x208,
+    CGC_BlockCanyon_1 = 0x209,
+    CGC_BlockCanyon_2 = 0x20A,
+    CGC_BlockCanyon_3 = 0x20B,
+
+    CGC_Aquamarine_1 = 0x20C,
+    CGC_Aquamarine_2 = 0x20D,
+    CGC_Aquamarine_3 = 0x20E,
+    CGC_Aquamarine_4 = 0x20F,
+    CGC_Aquamarine_5 = 0x210,
+    CGC_Topaz_1 = 0x211,
+    CGC_Topaz_2 = 0x212,
+    CGC_Topaz_3 = 0x213,
+    CGC_Topaz_4 = 0x214,
+    CGC_Topaz_5 = 0x215,
+    CGC_Peridot_1 = 0x216,
+    CGC_Peridot_2 = 0x217,
+    CGC_Peridot_3 = 0x218,
+    CGC_Peridot_4 = 0x219,
+    CGC_Peridot_5 = 0x21A,
+    CGC_Garnet_1 = 0x21B,
+    CGC_Garnet_2 = 0x21C,
+    CGC_Garnet_3 = 0x21D,
+    CGC_Garnet_4 = 0x21E,
+    CGC_Garnet_5 = 0x21F,
+    CGC_Onyx_1 = 0x220,
+    CGC_Onyx_2 = 0x221,
+    CGC_Onyx_3 = 0x222,
+    CGC_Onyx_4 = 0x223,
+    CGC_Onyx_5 = 0x224,
+    CGC_Diamond_1 = 0x225,
+    CGC_Diamond_2 = 0x226,
+    CGC_Diamond_3 = 0x227,
+    CGC_Diamond_4 = 0x228,
+    CGC_Diamond_5 = 0x229,
+
+    CGC_Challenge_1  = 0x22A,
+    CGC_Challenge_2  = 0x22B,
+    CGC_Challenge_3  = 0x22C,
+    CGC_Challenge_4  = 0x22D,
+    CGC_Challenge_5  = 0x22E,
+    CGC_Challenge_6  = 0x22F,
+    CGC_Challenge_7  = 0x230,
+    CGC_Challenge_8  = 0x231,
+    CGC_Challenge_9  = 0x232,
+    CGC_Challenge_10 = 0x233,
+    CGC_Challenge_11 = 0x234,
+    CGC_Challenge_12 = 0x235,
+
+    CGC_Hero_1 = 0x236,
+    CGC_Hero_2 = 0x237,
+    CGC_Hero_3 = 0x238,
+    CGC_Hero_4 = 0x239,
+
+    CGC_Dark_1 = 0x23A,
+    CGC_Dark_2 = 0x23B,
+    CGC_Dark_3 = 0x23C,
+    CGC_Dark_4 = 0x23D,
+
+    CGC_END_RACE = CGC_Dark_4,
+
+    CGC_Beginner_Karate     = 0x300,
+    CGC_Intermediate_Karate = 0x301,
+    CGC_Expert_Karate       = 0x302,
+    CGC_Super_Karate        = 0x303,
+
+};
+
+struct ChaoGardenCheckData
+{
+    ChaoGardenCheckData() : Address(0x00), Index(0x00) {}
+    ChaoGardenCheckData(int address, int index) : Address(address), Index(index) {}
+
+    int Address;
+    int Index;
+    bool CheckSent = false;
+};
+
+void InitializeChaoGardenChecks(std::map<int, ChaoGardenCheckData>& outChaoGardenChecks);
+
+void InitializeChaoRacePacks(std::map<int, std::vector<int>>& outChaoRacePacks);
