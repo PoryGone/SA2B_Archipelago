@@ -18,12 +18,22 @@ void StatsManager::OnFrameFunction()
 		apStats.RingsCollected += rings - _lastRingCount;
 	}
 	_lastRingCount = rings;
-	//std::string msg = "";
+	if (EmeraldManagerObj2)
+	{
+		if (EmeraldManagerObj2->HintCount > _lastHintCount)
+		{
+			apStats.HintMonitorsUsed += EmeraldManagerObj2->HintCount - _lastHintCount;
+		}
+		_lastHintCount = EmeraldManagerObj2->HintCount;
+	}
+	/*
+	std::string msg = "";
 	//msg.append(std::to_string(rings));
-	/*msg.append(", ");
-	msg.append(std::to_string(apStats.RingsCollected));
+	//msg.append(", ");
+	msg.append(std::to_string(apStats.HintMonitorsUsed));
 	_helperFunctions->SetDebugFontColor(0xFFF542C8);
-	_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 6), msg.c_str());*/
+	_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 6), msg.c_str());
+	*/
 }
 
 void StatsManager::DeathLinkSent()
@@ -39,6 +49,11 @@ void StatsManager::DeathLinkReceived()
 void StatsManager::DeathLinkAvtive(bool isActive)
 {
 	_deathLinkActive = isActive;
+}
+
+void StatsManager::HintMonitorUsed()
+{
+	apStats.HintMonitorsUsed++;
 }
 
 void StatsManager::CanonsCoreUnlocked()
@@ -70,7 +85,6 @@ SA2BCreditsEntry CreateStatsEntry(std::string title, std::string stat)
 	char* statLine_c = new char[31];
 	strncpy(statLine_c, statLine.c_str(), 31);
 	statLine_c[30] = '\0';
-	//MessageQueue::GetInstance().AddMessage(statLine_c);
 	return SA2BCreditsEntry(CreditsEntryType::CET_Name, SA2B_AP_Color, statLine_c);
 }
 
@@ -116,6 +130,10 @@ void StatsManager::Victory()
 	else
 	{
 		creditsEntries.emplace_back(CreateStatsEntry("DEATHS", std::to_string(apStats.SentDeaths)));
+	}
+	if (apStats.HintMonitorsUsed > 0)
+	{
+		creditsEntries.emplace_back(CreateStatsEntry("HINT MONITORS USED", std::to_string(apStats.HintMonitorsUsed)));
 	}
 	if (apStats.CCUnlockFrames > 0)
 	{

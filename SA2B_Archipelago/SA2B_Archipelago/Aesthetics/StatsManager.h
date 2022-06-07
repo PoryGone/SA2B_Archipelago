@@ -30,6 +30,7 @@ public:
 	void DeathLinkSent();
 	void DeathLinkReceived();
 	void DeathLinkAvtive(bool isActive);
+	void HintMonitorUsed();
 	void CanonsCoreUnlocked();
 	void GateUnlocked(int index);
 	void Victory();
@@ -37,5 +38,6 @@ public:
 private:
 	const HelperFunctions* _helperFunctions;
 	int _lastRingCount;
+	int _lastHintCount;
 	bool _deathLinkActive;
 };

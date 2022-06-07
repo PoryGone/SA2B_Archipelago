@@ -86,10 +86,6 @@ void CreditsManager::UpdateCredits(std::vector<SA2BCreditsEntry> statsEntries)
 
 	for (size_t i = 0; i < statsEntries.size(); i++)
 	{
-		if (statsEntries[i].Type != CreditsEntryType::CET_Blank && statsEntries[i].Text)
-		{
-			MessageQueue::GetInstance().AddMessage(statsEntries[i].Text);
-		}
 		updatedCredits.push_back(statsEntries[i]);
 	}
 
