@@ -6,6 +6,8 @@
 #include "ItemData.h"
 
 constexpr unsigned int AP_ITEM_ID_OFFSET = 0xFF0000;
+constexpr unsigned int TRAP_DURATION = 600;
+constexpr unsigned int TRAP_COOLDOWN = 60;
 
 class ItemManager
 {
@@ -37,4 +39,10 @@ private:
 
 	std::queue<int> _JunkQueue;
 	std::queue<int> _TrapQueue;
+
+	int _ActiveTrap = 0;
+	int _ActiveTrapTimer = 0;
+	int _TrapCooldownTimer = 0;
+
+	CharObj2Base* _p2Obj;
 };
