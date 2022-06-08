@@ -360,11 +360,9 @@ void RestoreOmochao()
 		WriteData<1>((void*)0x6C0A9D, 0x01);
 		WriteData<1>((void*)0x6C0A9E, 0x00);
 		WriteData<1>((void*)0x6C0A9F, 0x00);
-
 		WriteData<1>((void*)0x6C0AA0, 0x83);
 		WriteData<1>((void*)0x6C0AA1, 0xE8);
 		WriteData<1>((void*)0x6C0AA2, 0x01);
-
 		WriteData<1>((void*)0x6C0AA3, 0x0F);
 		WriteData<1>((void*)0x6C0AA4, 0x84);
 		WriteData<1>((void*)0x6C0AA5, 0xE9);
