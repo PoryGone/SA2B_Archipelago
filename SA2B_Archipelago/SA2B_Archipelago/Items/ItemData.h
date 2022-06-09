@@ -43,6 +43,19 @@ enum ItemValue
 
     IV_Maria,
 
+    IV_FiveRings = 0x20,
+    IV_TenRings,
+    IV_TwentyRings,
+    IV_ExtraLife,
+    IV_Shield,
+    IV_MagneticShield,
+    IV_Invincibility,
+
+    IV_OmochaoTrap = 0x30,
+    IV_TimeStopTrap,
+    IV_ConfuseTrap,
+    IV_TinyTrap,
+
     IV_NUM_ITEMS
 };
 

@@ -172,6 +172,7 @@
     <ClInclude Include="ModLoaderCommon\stdafx.h" />
     <ClInclude Include="ModLoaderCommon\targetver.h" />
     <ClInclude Include="ModLoaderCommon\TextConv.hpp" />
+    <ClInclude Include="ModLoaderCommon\Trampoline.h" />
     <ClInclude Include="ModLoaderCommon\Utils.hpp" />
     <ClInclude Include="ModLoader\MemAccess.h" />
     <ClInclude Include="ModLoader\ninja.h" />
@@ -246,6 +247,10 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="ModLoaderCommon\TextConv.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="ModLoaderCommon\Trampoline.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../pch.h</PrecompiledHeaderFile>
     </ClCompile>

@@ -99,6 +99,9 @@
     <ClInclude Include="Aesthetics\StatsManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ModLoaderCommon\Trampoline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -150,6 +153,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Aesthetics\StatsManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ModLoaderCommon\Trampoline.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
