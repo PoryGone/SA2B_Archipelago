@@ -533,7 +533,7 @@ void ItemManager::OnFrameTrapQueue()
 		break;
 	case ItemValue::IV_TimeStopTrap:
 		Sonic2PTimeStopMan_Load(this->_p2Obj);
-
+		PlayVoice(2, 1524);
 		if (MainCharObj1[0])
 		{
 			this->_TimeStopPos = MainCharObj1[0]->Position;
@@ -544,10 +544,12 @@ void ItemManager::OnFrameTrapQueue()
 		{
 			MainCharObj2[0]->ConfuseTime = TRAP_DURATION;
 			ConfuStar_Load(0);
+			PlayVoice(2, 671);
 		}
 		break;
 	case ItemValue::IV_TinyTrap:
 		// Nothing
+		PlayVoice(2, 1374);
 		break;
 	}
 }
