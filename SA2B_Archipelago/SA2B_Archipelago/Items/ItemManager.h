@@ -4,6 +4,9 @@
 #include <map>
 #include <queue>
 #include "ItemData.h"
+#include "../ModLoaderCommon/Trampoline.h"
+
+FunctionPointer(double, sa2b_ceil, (double a1), 0x007A7B50);
 
 constexpr unsigned int AP_ITEM_ID_OFFSET = 0xFF0000;
 constexpr unsigned int TRAP_DURATION = 600;
@@ -25,6 +28,8 @@ public:
 	void ResetItems();
 	void ReceiveItem(int item_id, bool notify);
 
+	int _TimeStopTimer;
+
 private:
 	void HandleEquipment(int EquipmentItem);
 	void HandleJunk(int item_id);
@@ -43,6 +48,8 @@ private:
 	int _ActiveTrap = 0;
 	int _ActiveTrapTimer = 0;
 	int _TrapCooldownTimer = 0;
+
+	NJS_VECTOR _TimeStopPos;
 
 	CharObj2Base* _p2Obj;
 };

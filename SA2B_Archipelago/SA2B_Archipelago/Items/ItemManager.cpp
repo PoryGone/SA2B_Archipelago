@@ -7,6 +7,7 @@
 #include "../ModLoader/MemAccess.h"
 #include <map>
 #include <random>
+//#include <math.h>
 
 
 DataPointer(char, SavedChecksReceived, 0x1DEF5D9);
@@ -18,9 +19,34 @@ void* winChaoKarateSave_ptr = (void*)0x542C0C;
 //void* winChaoRaceSave_ptr = (void*)0x46F8E4; // This seems like a generic helper function that gets called all the time
 const char nullop = '\x90';
 
+
+static Trampoline* sub_724780_trampoline;
+
+void sub_724780_original(ObjectMaster* a1)
+{
+	void* target = sub_724780_trampoline->Target();
+	__asm
+	{
+		push[a1]
+		call target
+	}
+}
+
+static void __cdecl sub_724780_cpp(ObjectMaster* a1)
+{
+	ItemManager::getInstance()._TimeStopTimer = sa2b_ceil((double)(*((unsigned __int16*)a1->Data2.Undefined + 2) - *((unsigned __int16*)a1->Data2.Undefined + 1)));
+
+	sub_724780_original(a1);
+}
+
+
 void ItemManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
 {
 	_helperFunctions = &helperFunctions;
+
+	sub_724780_trampoline = new Trampoline(reinterpret_cast<intptr_t>((void*)0x00724780),
+										   static_cast<intptr_t>(0x00724786),
+										   &sub_724780_cpp);
 
 	this->_ItemData.clear();
 
@@ -299,8 +325,6 @@ void ItemManager::OnFrameJunkQueue()
 
 std::random_device rand_dev;
 std::default_random_engine rng(rand_dev());
-//DataPointer(__int16, TimeStopTimer, 0x193912D6);
-//DataPointer(__int16, TimeStopLength, 0x193912D8);
 DataPointer(int, StageMessageCount, 0xB5D200);
 ObjectMaster* LoadOmochao(NJS_VECTOR* position)
 {
@@ -386,16 +410,31 @@ void ItemManager::OnFrameTrapQueue()
 {
 	if (!(GameState == GameStates::GameStates_Ingame))
 	{
+		this->_ActiveTrap = 0;
+		this->_TimeStopPos = NJS_VECTOR();
 		return;
 	}
 
 	if (CurrentLevel == LevelIDs_Route101280 || CurrentLevel == LevelIDs_ChaoWorld || CurrentLevel == LevelIDs_FinalHazard)
 	{
+		this->_ActiveTrap = 0;
+		this->_TimeStopPos = NJS_VECTOR();
 		return;
 	}
 
 	if (MainCharObj2[0] && (MainCharObj2[0]->Powerups & Powerups_Dead))
 	{
+		this->_ActiveTrap = 0;
+		this->_TimeStopPos = NJS_VECTOR();
+		return;
+	}
+
+	if (MainCharObj1[0] && (MainCharObj1[0]->Action == Action_Death ||
+		MainCharObj1[0]->Action == Action_Drown ||
+		MainCharObj1[0]->Action == Action_Quicksand))
+	{
+		this->_ActiveTrap = 0;
+		this->_TimeStopPos = NJS_VECTOR();
 		return;
 	}
 
@@ -408,12 +447,13 @@ void ItemManager::OnFrameTrapQueue()
 	{
 		if (CurrentCharacter != Characters_Sonic && CurrentCharacter != Characters_Shadow)
 		{
-			if ((MainCharObj1[0] != NULL) && (MainCharObj2[0] != NULL))
+			if ((MainCharObj1[0]) && (MainCharObj2[0]))
 			{
 				// Needs some work to get the timing better
-				//if (TimeStopTimer < TimeStopLength)
+				if (this->_TimeStopTimer > 0)
 				{
 					MainCharObj1[0]->Action = Action_None;
+					MainCharObj1[0]->Position = this->_TimeStopPos;
 					MainCharObj2[0]->Speed.x = 0.0;
 					MainCharObj2[0]->Speed.y = 0.0;
 					MainCharObj2[0]->Speed.z = 0.0;
@@ -457,6 +497,7 @@ void ItemManager::OnFrameTrapQueue()
 	}
 
 	this->_ActiveTrap = 0;
+	this->_TimeStopPos = NJS_VECTOR();
 
 	if (this->_TrapCooldownTimer > 0)
 	{
@@ -485,14 +526,18 @@ void ItemManager::OnFrameTrapQueue()
 	{
 	case ItemValue::IV_OmochaoTrap:
 		RestoreOmochao();
-		AllocateObjectMaster(CheckLoadOmochao, 2, "CheckLoadOmochao");
-		AllocateObjectMaster(CheckLoadOmochao, 2, "CheckLoadOmochao");
-		AllocateObjectMaster(CheckLoadOmochao, 2, "CheckLoadOmochao");
-		AllocateObjectMaster(CheckLoadOmochao, 2, "CheckLoadOmochao");
-		AllocateObjectMaster(CheckLoadOmochao, 2, "CheckLoadOmochao");
+		for (int i = 0; i < 5; i++)
+		{
+			AllocateObjectMaster(CheckLoadOmochao, 2, "CheckLoadOmochao");
+		}
 		break;
 	case ItemValue::IV_TimeStopTrap:
 		Sonic2PTimeStopMan_Load(this->_p2Obj);
+
+		if (MainCharObj1[0])
+		{
+			this->_TimeStopPos = MainCharObj1[0]->Position;
+		}
 		break;
 	case ItemValue::IV_ConfuseTrap:
 		if (MainCharObj2[0])
