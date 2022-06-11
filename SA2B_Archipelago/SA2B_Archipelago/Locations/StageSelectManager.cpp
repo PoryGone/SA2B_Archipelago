@@ -21,12 +21,15 @@ DataPointer(char, SS_SelectedTile, 0x1D1BF08);
 
 DataPointer(char, CannonCore1_Rank, 0x01DEE040);
 
+DataArray(char, GateBossSaveData, 0x01DED4C4, 5);
+
 void StageSelectManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
 {
 	_helperFunctions = &helperFunctions;
 	WriteData<1>(saveLevelDataReadOffset_ptr, saveLevelDataReadOffset);
 
 	InitializeStageSelectData(this->_stageSelectDataMap);
+	InitializeStageSelectBossData(this->_stageSelectBossDataMap);
 	InitializeItemData(this->_itemData);
 	InitializeCharacterItemRanges(this->_characterItemRanges);
 }
@@ -40,7 +43,9 @@ void StageSelectManager::OnFrameFunction()
 
 	HideMenuButtons();
 	HandleBiolizard();
+	HandleBossStage();
 	SetLevelsLockState();
+	LayoutBossGates();
 	HandleStageSelectCamera();
 
 	DrawStageSelectText();
@@ -65,6 +70,11 @@ void StageSelectManager::SetRegionEmblemMap(std::map<int, int> map)
 {
 	_regionEmblemMap = map;
 	LayoutLevels();
+}
+
+void StageSelectManager::SetBossGates(std::map<int, int> map)
+{
+	_bossGates = map;
 }
 
 int GateIndex(std::vector<GateLevelCollection>& gates, int emblemCount)
@@ -95,6 +105,7 @@ __int8 TileIndexFromAddress(int Address)
 void StageSelectManager::LayoutLevels()
 {
 	std::vector<GateLevelCollection> gates = std::vector<GateLevelCollection>();
+	_gateBossLayoutData = std::vector<GateBossLayout>();
 	_gateRequirements = std::vector<int>();
 	for (int i = 0; i < StageSelectStage::SSS_COUNT; i++)
 	{
@@ -109,6 +120,14 @@ void StageSelectManager::LayoutLevels()
 	int row = 3;
 	for (int g = 0; g < gates.size(); g++)
 	{
+		if (g > 0)
+		{
+			//Generate gate boss tile data
+			_gateBossLayoutData.push_back(GateBossLayout(
+				StageIconLocation(col - 1, 4),
+				StageIconLocation(col, row),
+				(StageSelectStage)gates[g].Levels[0]));
+		}
 		_gateRequirements.emplace_back(gates[g].EmblemCount);
 		for (int l = 0; l < gates[g].Levels.size(); l++)
 		{
@@ -136,17 +155,64 @@ void StageSelectManager::LayoutLevels()
 	}
 }
 
+void StageSelectManager::LayoutBossGates()
+{
+	if (_gateRequirements.size() == 0 || _bossGates.size() == 0 || _gateBossLayoutData.size() == 0)
+	{
+		return;
+	}
+	for (std::map<int, int>::iterator i = _bossGates.begin(); i != _bossGates.end(); ++i)
+	{
+		if (_gateRequirements[i->first] <= EmblemCount)
+		{
+			if (i->first > 1 && GateBossSaveData[i->first - 1] == 0)
+			{
+				break;
+			}
+			bool unlocked = GateBossSaveData[i->first - 1] == 1;
+			if (unlocked)
+			{
+				StageSelectStageData tileData = this->_stageSelectDataMap[_gateBossLayoutData[i->first - 1].FirstGateStage];
+				WriteData<1>((void*)tileData.TileColumnAddress, _gateBossLayoutData[i->first - 1].StageLocation.X);
+				WriteData<1>((void*)tileData.TileRowAddress, _gateBossLayoutData[i->first - 1].StageLocation.Y);
+				WriteData<1>((void*)tileData.TileCharacterAddress, tileData.DefaultCharacter);
+				WriteData<1>((void*)tileData.TileIDAddress, StageSelectStageToLevelID(_gateBossLayoutData[i->first - 1].FirstGateStage));
+			}
+			else
+			{
+				BossStageData stageData = _stageSelectBossDataMap[i->second].GetBossStage(_gateBossLayoutData[i->first - 1].FirstGateStage);
+				StageSelectStageData tileData = this->_stageSelectDataMap[_gateBossLayoutData[i->first - 1].FirstGateStage];
+				WriteData<1>((void*)tileData.TileColumnAddress, _gateBossLayoutData[i->first - 1].BossLocation.X);
+				WriteData<1>((void*)tileData.TileRowAddress, _gateBossLayoutData[i->first - 1].BossLocation.Y);
+				WriteData<1>((void*)tileData.TileCharacterAddress, stageData.Character);
+				WriteData<1>((void*)tileData.TileIDAddress, stageData.LevelID);
+				WriteData<1>((void*)stageData.UnlockMemAddress, unlockByteData);
+			}
+		}
+	}
+}
+
 void StageSelectManager::SetLevelsLockState()
 {
     //Make Route 101 and 280 available
     WriteData<1>((void*)0x6773D0, 0x2D);
     WriteData<1>((void*)0x6773C9, 0xF1);
 
+	//Lock levels behind an uncleared boss gate
+	int lastUnlockedGateEmblemCount = 0;
+	for (int i = 1; i < _gateRequirements.size(); i++)
+	{
+		if (EmblemCount >= _gateRequirements[i] && GateBossSaveData[i - 1] == 1)
+		{
+			lastUnlockedGateEmblemCount = _gateRequirements[i];
+		}
+	}
+
     for (int i = 0; i < StageSelectStage::SSS_COUNT; i++)
     {
         if (_regionEmblemMap.count(i) != 0)
         {
-            if (EmblemCount >= _regionEmblemMap.at(i))
+            if (lastUnlockedGateEmblemCount >= _regionEmblemMap.at(i))
             {
                 WriteData<1>((void*)this->_stageSelectDataMap.at(i).UnlockMemAddress, unlockByteData);
             }
@@ -324,24 +390,17 @@ void StageSelectManager::HideMenuButtons()
 	}
 }
 
-void StageSelectManager::HandleBiolizard()
+bool IsBossLevel()
 {
-	if (CannonCore1_Rank > this->_requiredRank)
-	{
-		// Biolizard Tile
-		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_GreenHill].TileIDAddress, 0x41);
-		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_GreenHill].TileCharacterAddress, 0x01);
-		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_GreenHill].TileColumnAddress, 0x1B);
-		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_GreenHill].TileRowAddress, 0x04);
+	return CurrentLevel == LevelIDs_Biolizard || CurrentLevel == LevelIDs_SonicVsShadow1 || CurrentLevel == LevelIDs_SonicVsShadow2 ||
+		   CurrentLevel == LevelIDs_TailsVsEggman1 || CurrentLevel == LevelIDs_TailsVsEggman2 || CurrentLevel == LevelIDs_KnucklesVsRouge ||
+		   CurrentLevel == LevelIDs_BigFoot || CurrentLevel == LevelIDs_HotShot || CurrentLevel == LevelIDs_FlyingDog ||
+		   CurrentLevel == LevelIDs_EggGolemS || CurrentLevel == LevelIDs_EggGolemE || CurrentLevel == LevelIDs_KingBoomBoo;
+}
 
-		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_Biolizard].UnlockMemAddress, unlockByteData);
-	}
-	else
-	{
-		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_Biolizard].UnlockMemAddress, lockByteData);
-	}
-
-	if (CurrentLevel == LevelIDs_Biolizard)
+void StageSelectManager::HandleBossStage()
+{
+	if (IsBossLevel())
 	{
 		if (TimerMinutes == 0 && TimerSeconds < 5)
 		{
@@ -360,6 +419,24 @@ void StageSelectManager::HandleBiolizard()
 
 			WriteData<1>((void*)0x174B044, 0x0C);
 		}
+	}
+}
+
+void StageSelectManager::HandleBiolizard()
+{
+	if (CannonCore1_Rank > this->_requiredRank)
+	{
+		// Biolizard Tile
+		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_GreenHill].TileIDAddress, 0x41);
+		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_GreenHill].TileCharacterAddress, 0x01);
+		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_GreenHill].TileColumnAddress, 0x1B);
+		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_GreenHill].TileRowAddress, 0x04);
+
+		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_Biolizard].UnlockMemAddress, unlockByteData);
+	}
+	else
+	{
+		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_Biolizard].UnlockMemAddress, lockByteData);
 	}
 }
 

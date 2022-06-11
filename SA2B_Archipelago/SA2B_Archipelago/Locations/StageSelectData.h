@@ -46,13 +46,14 @@ enum StageSelectStage
 
 struct StageSelectStageData
 {
-    StageSelectStageData() : UnlockMemAddress(0x00), TileIDAddress(0x00), TileCharacterAddress(0x00), TileColumnAddress(0x00), TileRowAddress(0x00), UpgradeAddress(0x00) {}
-    StageSelectStageData(int unlockMemAddress, int tileMemAddress, int upgradeAddress) : UnlockMemAddress(unlockMemAddress), 
+    StageSelectStageData() : UnlockMemAddress(0x00), TileIDAddress(0x00), TileCharacterAddress(0x00), TileColumnAddress(0x00), TileRowAddress(0x00), UpgradeAddress(0x00), DefaultCharacter() {}
+    StageSelectStageData(int unlockMemAddress, int tileMemAddress, int upgradeAddress, Characters defaultCharacter) : UnlockMemAddress(unlockMemAddress), 
                                                                      TileIDAddress(tileMemAddress), 
                                                                      TileCharacterAddress(tileMemAddress + 4), 
                                                                      TileColumnAddress(tileMemAddress + 8), 
                                                                      TileRowAddress(tileMemAddress + 12),
-                                                                     UpgradeAddress(upgradeAddress) {}
+                                                                     UpgradeAddress(upgradeAddress),
+                                                                     DefaultCharacter(defaultCharacter) {}
 
     int UnlockMemAddress = 0x00;
     int TileIDAddress = 0x00;
@@ -60,6 +61,57 @@ struct StageSelectStageData
     int TileColumnAddress;
     int TileRowAddress;
     int UpgradeAddress;
+    Characters DefaultCharacter;
+};
+
+enum StageSelectBoss
+{
+    SSB_Speed_1 = 0x00,
+    SSB_Speed_2,
+    SSB_Mech_1,
+    SSB_Mech_2,
+    SSB_Hunt_1,
+    SSB_BigFoot,
+    SSB_HotShot,
+    SSB_FlyingDog,
+    SSB_EggGolem_Sonic,
+    SSB_EggGolem_Eggman,
+    SSB_KingBoomBoo,
+
+    SSB_COUNT
+};
+
+struct BossStageData
+{
+    BossStageData() : Character(Characters::Characters_Sonic), LevelID(0x00), UnlockMemAddress(0x00) {}
+    BossStageData(Characters character, int levelID, int unlockMemAddress) : Character(character), LevelID(levelID), UnlockMemAddress(unlockMemAddress) {}
+
+    Characters Character;
+    int LevelID;
+    int UnlockMemAddress = 0x00;
+
+    bool IsValid()
+    {
+        return LevelID != 0x00;
+    }
+};
+
+struct StageSelectBossData
+{
+    StageSelectBossData() : Stage_0(), Stage_1() {}
+    StageSelectBossData(BossStageData stage_0, BossStageData stage_1) : Stage_0(stage_0), Stage_1(stage_1) {}
+
+    BossStageData Stage_0;
+    BossStageData Stage_1;
+
+    BossStageData GetBossStage(int nextLevelID)
+    {
+        if (Stage_1.IsValid() && nextLevelID % 2 == 1)
+        {
+            return Stage_1;
+        }
+        return Stage_0;
+    }
 };
 
 struct CharacterItemRange
@@ -74,4 +126,8 @@ struct CharacterItemRange
 
 void InitializeStageSelectData(std::map<int, StageSelectStageData>& outStageSelectData);
 
+void InitializeStageSelectBossData(std::map<int, StageSelectBossData>& outStageBossData);
+
 void InitializeCharacterItemRanges(std::vector<CharacterItemRange>& outCharacterItemRanges);
+
+LevelIDs StageSelectStageToLevelID(StageSelectStage stage);
