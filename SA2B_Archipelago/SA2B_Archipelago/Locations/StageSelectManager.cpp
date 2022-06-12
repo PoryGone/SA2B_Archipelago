@@ -10,6 +10,8 @@ const char lockByteData = '\x00';
 const char nullop = '\x90';
 
 DataPointer(char, StoryModeButton, 0x1D1BC01);
+DataPointer(char, KartRaceModeButton, 0x1D1BC03);
+DataPointer(char, BossBattleModeButton, 0x1D1BC04);
 DataPointer(char, SP_SelectedButton, 0x1D1BC00);
 DataPointer(char, Extras_SelectedButton, 0x1D1BC38);
 DataPointer(char, EmblemResultsButton, 0x1D1BC3B);
@@ -195,8 +197,8 @@ void StageSelectManager::LayoutBossGates()
 void StageSelectManager::SetLevelsLockState()
 {
     //Make Route 101 and 280 available
-    WriteData<1>((void*)0x6773D0, 0x2D);
-    WriteData<1>((void*)0x6773C9, 0xF1);
+    WriteData<1>((void*)0x6773D0, 0x3A);
+    WriteData<1>((void*)0x6773C9, 0xFE);
 
 	//Lock levels behind an uncleared boss gate
 	int lastUnlockedGateEmblemCount = 0;
@@ -365,6 +367,8 @@ void StageSelectManager::HideMenuButtons()
 	{
 		SP_SelectedButton = 0x01;
 	}
+	KartRaceModeButton = 0x01;
+	BossBattleModeButton = 0x01;
 
 	EmblemResultsButton = 0x01;
 	if (Extras_SelectedButton == 0x02)
