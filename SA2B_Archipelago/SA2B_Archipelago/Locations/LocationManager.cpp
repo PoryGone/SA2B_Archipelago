@@ -221,9 +221,9 @@ void LocationManager::CheckLocation(int location_id)
 	{
 		LevelClearCheckData& checkData = this->_LevelClearData[location_id];
 
-		if (location_id == LCC_CannonCore_1)
+		if (location_id == LCC_CannonCore_1 || location_id >= LCC_Boss_1)
 		{
-			// Don't Collect Cannon's Core 1
+			// Don't Collect Cannon's Core 1 or Bosses
 			return;
 		}
 

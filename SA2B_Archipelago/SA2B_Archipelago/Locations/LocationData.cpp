@@ -223,6 +223,12 @@ void InitializeLevelClearChecks(std::map<int, LevelClearCheckData> &outLevelClea
     outLevelClearChecks[LevelClearCheck::LCC_Route280_3] = LevelClearCheckData(0x01DEF4EE);
     outLevelClearChecks[LevelClearCheck::LCC_Route280_4] = LevelClearCheckData(0x01DEF4EF);
     outLevelClearChecks[LevelClearCheck::LCC_Route280_5] = LevelClearCheckData(0x01DEF4F0);
+
+    outLevelClearChecks[LevelClearCheck::LCC_Boss_1] = LevelClearCheckData(0x01DEE59C);
+    outLevelClearChecks[LevelClearCheck::LCC_Boss_2] = LevelClearCheckData(0x01DEE59D);
+    outLevelClearChecks[LevelClearCheck::LCC_Boss_3] = LevelClearCheckData(0x01DEE59E);
+    outLevelClearChecks[LevelClearCheck::LCC_Boss_4] = LevelClearCheckData(0x01DEE59F);
+    outLevelClearChecks[LevelClearCheck::LCC_Boss_5] = LevelClearCheckData(0x01DEE5A0);
 }
 
 void InitializeChaoGardenChecks(std::map<int, ChaoGardenCheckData>& outChaoGardenChecks)

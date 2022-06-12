@@ -21,7 +21,7 @@ DataPointer(char, SS_SelectedTile, 0x1D1BF08);
 
 DataPointer(char, CannonCore1_Rank, 0x01DEE040);
 
-DataArray(char, GateBossSaveData, 0x01DED4C4, 5);
+DataArray(char, GateBossSaveData, 0x01DEE59C, 5);
 
 void StageSelectManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
 {
@@ -165,11 +165,11 @@ void StageSelectManager::LayoutBossGates()
 	{
 		if (_gateRequirements[i->first] <= EmblemCount)
 		{
-			if (i->first > 1 && GateBossSaveData[i->first - 1] == 0)
+			if (i->first > 1 && GateBossSaveData[i->first - 2] == 0)
 			{
 				break;
 			}
-			bool unlocked = GateBossSaveData[i->first - 1] == 1;
+			bool unlocked = GateBossSaveData[i->first - 1] >= 1;
 			if (unlocked)
 			{
 				StageSelectStageData tileData = this->_stageSelectDataMap[_gateBossLayoutData[i->first - 1].FirstGateStage];
@@ -202,7 +202,7 @@ void StageSelectManager::SetLevelsLockState()
 	int lastUnlockedGateEmblemCount = 0;
 	for (int i = 1; i < _gateRequirements.size(); i++)
 	{
-		if (EmblemCount >= _gateRequirements[i] && GateBossSaveData[i - 1] == 1)
+		if (EmblemCount >= _gateRequirements[i] && GateBossSaveData[i - 1] >= 1)
 		{
 			lastUnlockedGateEmblemCount = _gateRequirements[i];
 		}
@@ -392,7 +392,7 @@ void StageSelectManager::HideMenuButtons()
 
 bool IsBossLevel()
 {
-	return CurrentLevel == LevelIDs_Biolizard || CurrentLevel == LevelIDs_SonicVsShadow1 || CurrentLevel == LevelIDs_SonicVsShadow2 ||
+	return CurrentLevel == LevelIDs_SonicVsShadow1 || CurrentLevel == LevelIDs_SonicVsShadow2 ||
 		   CurrentLevel == LevelIDs_TailsVsEggman1 || CurrentLevel == LevelIDs_TailsVsEggman2 || CurrentLevel == LevelIDs_KnucklesVsRouge ||
 		   CurrentLevel == LevelIDs_BigFoot || CurrentLevel == LevelIDs_HotShot || CurrentLevel == LevelIDs_FlyingDog ||
 		   CurrentLevel == LevelIDs_EggGolemS || CurrentLevel == LevelIDs_EggGolemE || CurrentLevel == LevelIDs_KingBoomBoo;
@@ -402,22 +402,15 @@ void StageSelectManager::HandleBossStage()
 {
 	if (IsBossLevel())
 	{
-		if (TimerMinutes == 0 && TimerSeconds < 5)
+		if (GameState == GameStates_GoToNextLevel)
 		{
-			WriteData<1>((void*)0x1DEB060, 0xCC);
-			WriteData<1>((void*)0x1DEB061, 0x00);
-			WriteData<1>((void*)0x1DEB062, 0x00);
-			WriteData<1>((void*)0x1DEB063, 0x00);
-			WriteData<1>((void*)0x1DEB064, 0xCD);
-			WriteData<1>((void*)0x1DEB065, 0x00);
-			WriteData<1>((void*)0x1DEB066, 0x00);
-			WriteData<1>((void*)0x1DEB067, 0x00);
-
-			WriteData<1>((void*)0x1DEB31E, 0x03);
-			WriteData<1>((void*)0x1DEB31F, 0x03);
-			WriteData<1>((void*)0x1DEB320, 0x03);
-
-			WriteData<1>((void*)0x174B044, 0x0C);
+			for (std::map<int, int>::iterator it = _bossGates.begin(); it != _bossGates.end(); ++it)
+			{
+				if (CurrentLevel == this->_stageSelectBossDataMap[it->second].GetBossStage(0).LevelID)
+				{
+					GateBossSaveData[it->first - 1] = 0x05;
+				}
+			}
 		}
 	}
 }
@@ -437,6 +430,27 @@ void StageSelectManager::HandleBiolizard()
 	else
 	{
 		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_Biolizard].UnlockMemAddress, lockByteData);
+	}
+
+	if (CurrentLevel == LevelIDs_Biolizard)
+	{
+		if (TimerMinutes == 0 && TimerSeconds < 5)
+		{
+			WriteData<1>((void*)0x1DEB060, 0xCC);
+			WriteData<1>((void*)0x1DEB061, 0x00);
+			WriteData<1>((void*)0x1DEB062, 0x00);
+			WriteData<1>((void*)0x1DEB063, 0x00);
+			WriteData<1>((void*)0x1DEB064, 0xCD);
+			WriteData<1>((void*)0x1DEB065, 0x00);
+			WriteData<1>((void*)0x1DEB066, 0x00);
+			WriteData<1>((void*)0x1DEB067, 0x00);
+
+			WriteData<1>((void*)0x1DEB31E, 0x03);
+			WriteData<1>((void*)0x1DEB31F, 0x03);
+			WriteData<1>((void*)0x1DEB320, 0x03);
+
+			WriteData<1>((void*)0x174B044, 0x0C);
+		}
 	}
 }
 
