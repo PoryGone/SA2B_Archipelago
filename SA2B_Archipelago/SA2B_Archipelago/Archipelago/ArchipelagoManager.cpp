@@ -410,7 +410,7 @@ void ArchipelagoManager::OnFrameDeathLink()
     {
         if (MainCharObj1[0]->Action == Action_Death ||
             MainCharObj1[0]->Action == Action_Drown ||
-            MainCharObj1[0]->Action == Action_Quicksand ||
+            (MainCharObj1[0]->Action == Action_Quicksand && CurrentLevel != LevelIDs_EggGolemS) ||
             (MainCharObj2[0]->Powerups & (1 << PowerupBits::PowerupBits_Dead))) // We Died
         {
             this->DeathLinkSend();
