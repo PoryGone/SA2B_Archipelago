@@ -16,7 +16,7 @@ void* endLevelSave_ptr = (void*)0x4457df;
 void* updateSettingsSave_ptr = (void*)0x44390C;
 void* exitChaoGardenSave_ptr = (void*)0x4448E1;
 void* winChaoKarateSave_ptr = (void*)0x542C0C;
-//void* winChaoRaceSave_ptr = (void*)0x46F8E4; // This seems like a generic helper function that gets called all the time
+void* winChaoRaceSave_ptr = (void*)0x52C9B9;
 const char nullop = '\x90';
 
 
@@ -72,7 +72,7 @@ void ItemManager::OnInitFunction(const char* path, const HelperFunctions& helper
 	WriteData<5>(updateSettingsSave_ptr, nullop);
 	WriteData<5>(exitChaoGardenSave_ptr, nullop);
 	WriteData<5>(winChaoKarateSave_ptr, nullop);
-	//WriteData<2>(winChaoRaceSave_ptr, nullop);
+	WriteData<5>(winChaoRaceSave_ptr, nullop);
 
 	// Chaos Control Traps
 	this->_p2Obj = new CharObj2Base;
