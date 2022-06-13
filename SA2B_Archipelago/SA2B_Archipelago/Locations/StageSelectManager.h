@@ -70,6 +70,7 @@ private:
 
     __int8 _firstStageIndex = 0x17;
     __int8 _previousSettingsSelection = 0x02;
+    bool _needsSave = false;
 
 	void LayoutLevels();
 	void SetLevelsLockState();

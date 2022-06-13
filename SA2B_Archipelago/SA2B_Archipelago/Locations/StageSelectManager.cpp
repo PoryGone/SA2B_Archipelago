@@ -404,6 +404,12 @@ bool IsBossLevel()
 
 void StageSelectManager::HandleBossStage()
 {
+	if (this->_needsSave && GameState == GameStates_Inactive)
+	{
+		ProbablySavesSaveFile();
+		this->_needsSave = false;
+	}
+
 	if (IsBossLevel())
 	{
 		if (GameState == GameStates_GoToNextLevel)
@@ -413,6 +419,7 @@ void StageSelectManager::HandleBossStage()
 				if (CurrentLevel == this->_stageSelectBossDataMap[it->second].GetBossStage(0).LevelID)
 				{
 					GateBossSaveData[it->first - 1] = 0x05;
+					this->_needsSave = true;
 				}
 			}
 		}
