@@ -2,6 +2,7 @@
 #include "StageSelectManager.h"
 #include "../Utilities/MessageQueue.h"
 #include "../Archipelago/ArchipelagoManager.h"
+#include "../Aesthetics/StatsManager.h"
 
 void* saveLevelDataReadOffset_ptr = (void*)0x6773b6;
 const char saveLevelDataReadOffset = '\x3d';
@@ -447,6 +448,7 @@ void StageSelectManager::HandleBossStage()
 				{
 					GateBossSaveData[it->first - 1] = 0x05;
 					this->_needsSave = true;
+					StatsManager::GetInstance().GateUnlocked(it->first - 1);
 				}
 			}
 		}
