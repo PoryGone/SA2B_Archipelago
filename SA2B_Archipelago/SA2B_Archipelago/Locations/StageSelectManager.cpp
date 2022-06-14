@@ -34,12 +34,12 @@ void StageSelectManager::OnInitFunction(const char* path, const HelperFunctions&
 {
 	_helperFunctions = &helperFunctions;
 	WriteData<1>(saveLevelDataReadOffset_ptr, saveLevelDataReadOffset);
-	UpdateTitleHeaderArrays();
 
 	InitializeStageSelectData(this->_stageSelectDataMap);
 	InitializeStageSelectBossData(this->_stageSelectBossDataMap);
 	InitializeItemData(this->_itemData);
 	InitializeCharacterItemRanges(this->_characterItemRanges);
+	UpdateTitleHeaderArrays();
 }
 
 void StageSelectManager::OnFrameFunction()
@@ -198,6 +198,8 @@ void StageSelectManager::LayoutBossGates()
 			}
 		}
 	}
+
+	WriteData<5>((void*)0x1DEF5B0, lockByteData);
 }
 
 void StageSelectManager::SetLevelsLockState()
