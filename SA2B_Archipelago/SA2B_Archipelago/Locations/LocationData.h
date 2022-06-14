@@ -199,6 +199,12 @@ enum LevelClearCheck
     LCC_CosmicWall_Upgrade,
     LCC_FinalChase_Upgrade,
 
+    LCC_Boss_1 = 0x100,
+    LCC_Boss_2,
+    LCC_Boss_3,
+    LCC_Boss_4,
+    LCC_Boss_5,
+
     LCC_NUM_CHECKS
 };
 

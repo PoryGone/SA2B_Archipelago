@@ -8,8 +8,11 @@ const char saveLevelDataReadOffset = '\x3d';
 const char unlockByteData = '\x01';
 const char lockByteData = '\x00';
 const char nullop = '\x90';
+void* japaneseStageTitleAtlas_ptr = (void*)0x676837;
 
 DataPointer(char, StoryModeButton, 0x1D1BC01);
+DataPointer(char, KartRaceModeButton, 0x1D1BC03);
+DataPointer(char, BossBattleModeButton, 0x1D1BC04);
 DataPointer(char, SP_SelectedButton, 0x1D1BC00);
 DataPointer(char, Extras_SelectedButton, 0x1D1BC38);
 DataPointer(char, EmblemResultsButton, 0x1D1BC3B);
@@ -21,14 +24,22 @@ DataPointer(char, SS_SelectedTile, 0x1D1BF08);
 
 DataPointer(char, CannonCore1_Rank, 0x01DEE040);
 
+DataArray(char, GateBossSaveData, 0x01DEE59C, 5);
+
+DataArray(int, JapanesseStageHeaders, 0x008A0470, 68);
+DataArray(int, EnglishStageHeaders, 0x8A0560, 45);
+
+
 void StageSelectManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
 {
 	_helperFunctions = &helperFunctions;
 	WriteData<1>(saveLevelDataReadOffset_ptr, saveLevelDataReadOffset);
 
 	InitializeStageSelectData(this->_stageSelectDataMap);
+	InitializeStageSelectBossData(this->_stageSelectBossDataMap);
 	InitializeItemData(this->_itemData);
 	InitializeCharacterItemRanges(this->_characterItemRanges);
+	UpdateTitleHeaderArrays();
 }
 
 void StageSelectManager::OnFrameFunction()
@@ -40,7 +51,9 @@ void StageSelectManager::OnFrameFunction()
 
 	HideMenuButtons();
 	HandleBiolizard();
+	HandleBossStage();
 	SetLevelsLockState();
+	LayoutBossGates();
 	HandleStageSelectCamera();
 
 	DrawStageSelectText();
@@ -65,6 +78,11 @@ void StageSelectManager::SetRegionEmblemMap(std::map<int, int> map)
 {
 	_regionEmblemMap = map;
 	LayoutLevels();
+}
+
+void StageSelectManager::SetBossGates(std::map<int, int> map)
+{
+	_bossGates = map;
 }
 
 int GateIndex(std::vector<GateLevelCollection>& gates, int emblemCount)
@@ -95,6 +113,7 @@ __int8 TileIndexFromAddress(int Address)
 void StageSelectManager::LayoutLevels()
 {
 	std::vector<GateLevelCollection> gates = std::vector<GateLevelCollection>();
+	_gateBossLayoutData = std::vector<GateBossLayout>();
 	_gateRequirements = std::vector<int>();
 	for (int i = 0; i < StageSelectStage::SSS_COUNT; i++)
 	{
@@ -109,6 +128,14 @@ void StageSelectManager::LayoutLevels()
 	int row = 3;
 	for (int g = 0; g < gates.size(); g++)
 	{
+		if (g > 0)
+		{
+			//Generate gate boss tile data
+			_gateBossLayoutData.push_back(GateBossLayout(
+				StageIconLocation(col - 1, 4),
+				StageIconLocation(col, row),
+				(StageSelectStage)gates[g].Levels[0]));
+		}
 		_gateRequirements.emplace_back(gates[g].EmblemCount);
 		for (int l = 0; l < gates[g].Levels.size(); l++)
 		{
@@ -136,17 +163,66 @@ void StageSelectManager::LayoutLevels()
 	}
 }
 
+void StageSelectManager::LayoutBossGates()
+{
+	if (_gateRequirements.size() == 0 || _bossGates.size() == 0 || _gateBossLayoutData.size() == 0)
+	{
+		return;
+	}
+	for (std::map<int, int>::iterator i = _bossGates.begin(); i != _bossGates.end(); ++i)
+	{
+		if (_gateRequirements[i->first] <= EmblemCount)
+		{
+			if (i->first > 1 && GateBossSaveData[i->first - 2] == 0)
+			{
+				break;
+			}
+			bool unlocked = GateBossSaveData[i->first - 1] >= 1;
+			if (unlocked)
+			{
+				StageSelectStageData tileData = this->_stageSelectDataMap[_gateBossLayoutData[i->first - 1].FirstGateStage];
+				WriteData<1>((void*)tileData.TileColumnAddress, _gateBossLayoutData[i->first - 1].StageLocation.X);
+				WriteData<1>((void*)tileData.TileRowAddress, _gateBossLayoutData[i->first - 1].StageLocation.Y);
+				WriteData<1>((void*)tileData.TileCharacterAddress, tileData.DefaultCharacter);
+				WriteData<1>((void*)tileData.TileIDAddress, StageSelectStageToLevelID(_gateBossLayoutData[i->first - 1].FirstGateStage));
+			}
+			else
+			{
+				BossStageData stageData = _stageSelectBossDataMap[i->second].GetBossStage(_gateBossLayoutData[i->first - 1].FirstGateStage);
+				StageSelectStageData tileData = this->_stageSelectDataMap[_gateBossLayoutData[i->first - 1].FirstGateStage];
+				WriteData<1>((void*)tileData.TileColumnAddress, _gateBossLayoutData[i->first - 1].BossLocation.X);
+				WriteData<1>((void*)tileData.TileRowAddress, _gateBossLayoutData[i->first - 1].BossLocation.Y);
+				WriteData<1>((void*)tileData.TileCharacterAddress, stageData.Character);
+				WriteData<1>((void*)tileData.TileIDAddress, stageData.LevelID);
+				WriteData<1>((void*)stageData.UnlockMemAddress, unlockByteData);
+			}
+		}
+	}
+
+	WriteData<5>((void*)0x1DEF5B0, lockByteData);
+}
+
 void StageSelectManager::SetLevelsLockState()
 {
     //Make Route 101 and 280 available
-    WriteData<1>((void*)0x6773D0, 0x2D);
-    WriteData<1>((void*)0x6773C9, 0xF1);
+    WriteData<1>((void*)0x6773D0, 0x3A);
+    WriteData<1>((void*)0x6773C9, 0xFE);
+
+	//Lock levels behind an uncleared boss gate
+	int lastUnlockedGateEmblemCount = 0;
+	for (int i = 1; i < _gateRequirements.size(); i++)
+	{
+		if (EmblemCount >= _gateRequirements[i] && GateBossSaveData[i - 1] >= 1)
+		{
+			lastUnlockedGateEmblemCount = _gateRequirements[i];
+		}
+	}
 
     for (int i = 0; i < StageSelectStage::SSS_COUNT; i++)
     {
         if (_regionEmblemMap.count(i) != 0)
         {
-            if (EmblemCount >= _regionEmblemMap.at(i))
+            if (lastUnlockedGateEmblemCount >= _regionEmblemMap.at(i))
             {
                 WriteData<1>((void*)this->_stageSelectDataMap.at(i).UnlockMemAddress, unlockByteData);
             }
@@ -292,6 +368,25 @@ void StageSelectManager::UnlockAllLevels()
 	}
 }
 
+void StageSelectManager::UpdateTitleHeaderArrays()
+{
+	//Japanese Stage Title Atlas ptr
+	//Point English stage titles to the start of the Japanese stage titles
+	//to make room for the boss headers
+	WriteData<1>((void*)0x676837, '\x70');
+	WriteData<1>((void*)0x676838, '\x04');
+
+	for (int i = 0; i < EnglishStageHeaders_Length; i++)
+	{
+		JapanesseStageHeaders[i] = EnglishStageHeaders[i];
+	}
+
+	for (int i = 0; i < SSB_COUNT; i++)
+	{
+		JapanesseStageHeaders[_stageSelectBossDataMap[i].GetBossStage(0).LevelID] = 0x07;
+	}
+}
+
 void StageSelectManager::HideMenuButtons()
 {
 	StoryModeButton = 0x01;
@@ -299,6 +394,8 @@ void StageSelectManager::HideMenuButtons()
 	{
 		SP_SelectedButton = 0x01;
 	}
+	KartRaceModeButton = 0x01;
+	BossBattleModeButton = 0x01;
 
 	EmblemResultsButton = 0x01;
 	if (Extras_SelectedButton == 0x02)
@@ -321,6 +418,38 @@ void StageSelectManager::HideMenuButtons()
 		}
 
 		this->_previousSettingsSelection = Settings_SelectedOption;
+	}
+}
+
+bool IsBossLevel()
+{
+	return CurrentLevel == LevelIDs_SonicVsShadow1 || CurrentLevel == LevelIDs_SonicVsShadow2 ||
+		   CurrentLevel == LevelIDs_TailsVsEggman1 || CurrentLevel == LevelIDs_TailsVsEggman2 || CurrentLevel == LevelIDs_KnucklesVsRouge ||
+		   CurrentLevel == LevelIDs_BigFoot || CurrentLevel == LevelIDs_HotShot || CurrentLevel == LevelIDs_FlyingDog ||
+		   CurrentLevel == LevelIDs_EggGolemS || CurrentLevel == LevelIDs_EggGolemE || CurrentLevel == LevelIDs_KingBoomBoo;
+}
+
+void StageSelectManager::HandleBossStage()
+{
+	if (this->_needsSave && GameState == GameStates_Inactive)
+	{
+		ProbablySavesSaveFile();
+		this->_needsSave = false;
+	}
+
+	if (IsBossLevel())
+	{
+		if (GameState == GameStates_GoToNextLevel)
+		{
+			for (std::map<int, int>::iterator it = _bossGates.begin(); it != _bossGates.end(); ++it)
+			{
+				if (CurrentLevel == this->_stageSelectBossDataMap[it->second].GetBossStage(0).LevelID)
+				{
+					GateBossSaveData[it->first - 1] = 0x05;
+					this->_needsSave = true;
+				}
+			}
+		}
 	}
 }
 

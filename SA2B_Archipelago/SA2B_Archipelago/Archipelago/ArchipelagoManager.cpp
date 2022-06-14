@@ -287,6 +287,18 @@ void SA2_SetRegionEmblemMap(std::map<int, int> map)
     ssm->SetRegionEmblemMap(map);
 }
 
+void SA2_SetGateBosses(std::map<int, int> map)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    StageSelectManager* ssm = &StageSelectManager::GetInstance();
+
+    ssm->SetBossGates(map);
+}
+
 void ArchipelagoManager::Init(const char* ip, const char* playerName, const char* password)
 {
     AP_Init(ip, "Sonic Adventure 2 Battle", playerName, password);
@@ -307,6 +319,7 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_RegisterSlotDataIntCallback("ChaoRaceChecks", &SA2_SetChaoPacks);
     AP_RegisterSlotDataIntCallback("ChaoGardenDifficulty", &SA2_SetChaoDifficulty);
     AP_RegisterSlotDataMapIntIntCallback("RegionEmblemMap", &SA2_SetRegionEmblemMap);
+    AP_RegisterSlotDataMapIntIntCallback("GateBosses", &SA2_SetGateBosses);
     AP_Start();
 }
 
@@ -397,7 +410,7 @@ void ArchipelagoManager::OnFrameDeathLink()
     {
         if (MainCharObj1[0]->Action == Action_Death ||
             MainCharObj1[0]->Action == Action_Drown ||
-            MainCharObj1[0]->Action == Action_Quicksand ||
+            (MainCharObj1[0]->Action == Action_Quicksand && CurrentLevel != LevelIDs_EggGolemS) ||
             (MainCharObj2[0]->Powerups & (1 << PowerupBits::PowerupBits_Dead))) // We Died
         {
             this->DeathLinkSend();

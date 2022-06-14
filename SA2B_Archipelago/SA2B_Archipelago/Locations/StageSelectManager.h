@@ -6,6 +6,38 @@
 #include <vector>
 #pragma once
 
+struct GateLevelCollection
+{
+public:
+    GateLevelCollection() : EmblemCount(0), Levels() {}
+    GateLevelCollection(int _emblemCount) : EmblemCount(_emblemCount), Levels() {}
+
+    int EmblemCount;
+    std::vector<int> Levels;
+};
+
+struct StageIconLocation
+{
+    StageIconLocation() : X(0), Y(0) {}
+    StageIconLocation(int _x, int _y) : X(_x), Y(_y) {}
+
+    int X;
+    int Y;
+};
+
+struct GateBossLayout
+{
+    GateBossLayout() : BossLocation(), StageLocation(), FirstGateStage() {}
+    GateBossLayout(StageIconLocation bossLocation, StageIconLocation stageLocation, StageSelectStage firstGateStage) : 
+        BossLocation(bossLocation),
+        StageLocation(stageLocation),
+        FirstGateStage(firstGateStage) {}
+
+    StageIconLocation BossLocation;
+    StageIconLocation StageLocation;
+    StageSelectStage FirstGateStage;
+};
+
 class StageSelectManager
 {
 public:
@@ -20,26 +52,34 @@ public:
     void SetMissionCount(int missionCount);
     void SetRequiredRank(int requiredRank);
 	void SetRegionEmblemMap(std::map<int, int> map);
+    void SetBossGates(std::map<int, int> map);
 
 private:
 	const HelperFunctions* _helperFunctions;
 	std::map<int, StageSelectStageData> _stageSelectDataMap;
+    std::map<int, StageSelectBossData> _stageSelectBossDataMap;
 	int _emblemsForCannonsCore = 200;
 	int _missionCount = 1;
 	int _requiredRank = 0;
 	std::map<int, int> _regionEmblemMap;
+    std::map<int, int> _bossGates;
     std::vector<int> _gateRequirements;
     std::map<int, ItemData> _itemData;
     std::vector<CharacterItemRange> _characterItemRanges;
+    std::vector<GateBossLayout> _gateBossLayoutData;
 
     __int8 _firstStageIndex = 0x17;
     __int8 _previousSettingsSelection = 0x02;
+    bool _needsSave = false;
 
+    void UpdateTitleHeaderArrays();
 	void LayoutLevels();
 	void SetLevelsLockState();
+    void LayoutBossGates();
 	void UnlockAllLevels();
 	void HideMenuButtons();
 	void HandleBiolizard();
+    void HandleBossStage();
 	void HandleStageSelectCamera();
     void DrawStageSelectText();
     void DrawDebugTextOnScreenRight(std::string text, int row);
@@ -83,14 +123,4 @@ private:
         SSS_MadSpace
     };
 
-};
-
-struct GateLevelCollection
-{
-public:
-	GateLevelCollection() : EmblemCount(0), Levels() {}
-	GateLevelCollection(int _emblemCount) : EmblemCount(_emblemCount), Levels() {}
-
-	int EmblemCount;
-	std::vector<int> Levels;
 };
