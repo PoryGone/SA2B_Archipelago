@@ -8,6 +8,7 @@ const char saveLevelDataReadOffset = '\x3d';
 const char unlockByteData = '\x01';
 const char lockByteData = '\x00';
 const char nullop = '\x90';
+void* japaneseStageTitleAtlas_ptr = (void*)0x676837;
 
 DataPointer(char, StoryModeButton, 0x1D1BC01);
 DataPointer(char, KartRaceModeButton, 0x1D1BC03);
@@ -25,10 +26,15 @@ DataPointer(char, CannonCore1_Rank, 0x01DEE040);
 
 DataArray(char, GateBossSaveData, 0x01DEE59C, 5);
 
+DataArray(int, JapanesseStageHeaders, 0x008A0470, 68);
+DataArray(int, EnglishStageHeaders, 0x8A0560, 45);
+
+
 void StageSelectManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
 {
 	_helperFunctions = &helperFunctions;
 	WriteData<1>(saveLevelDataReadOffset_ptr, saveLevelDataReadOffset);
+	UpdateTitleHeaderArrays();
 
 	InitializeStageSelectData(this->_stageSelectDataMap);
 	InitializeStageSelectBossData(this->_stageSelectBossDataMap);
@@ -357,6 +363,25 @@ void StageSelectManager::UnlockAllLevels()
 	for (int i = 0; i < StageSelectStage::SSS_COUNT; i++)
 	{
 		WriteData<1>((void*)this->_stageSelectDataMap[i].UnlockMemAddress, unlockByteData);
+	}
+}
+
+void StageSelectManager::UpdateTitleHeaderArrays()
+{
+	//Japanese Stage Title Atlas ptr
+	//Point English stage titles to the start of the Japanese stage titles
+	//to make room for the boss headers
+	WriteData<1>((void*)0x676837, '\x70');
+	WriteData<1>((void*)0x676838, '\x04');
+
+	for (int i = 0; i < EnglishStageHeaders_Length; i++)
+	{
+		JapanesseStageHeaders[i] = EnglishStageHeaders[i];
+	}
+
+	for (int i = 0; i < SSB_COUNT; i++)
+	{
+		JapanesseStageHeaders[_stageSelectBossDataMap[i].GetBossStage(0).LevelID] = 0x07;
 	}
 }
 

@@ -72,6 +72,7 @@ private:
     __int8 _previousSettingsSelection = 0x02;
     bool _needsSave = false;
 
+    void UpdateTitleHeaderArrays();
 	void LayoutLevels();
 	void SetLevelsLockState();
     void LayoutBossGates();
