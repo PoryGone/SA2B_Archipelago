@@ -47,7 +47,7 @@ private:
 
 	int _ActiveTrap = 0;
 	int _ActiveTrapTimer = 0;
-	int _TrapCooldownTimer = 0;
+	int _TrapCooldownTimer = TRAP_COOLDOWN;
 
 	NJS_VECTOR _TimeStopPos;
 

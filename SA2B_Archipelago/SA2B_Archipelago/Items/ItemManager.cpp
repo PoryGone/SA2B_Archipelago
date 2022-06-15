@@ -311,6 +311,18 @@ void ItemManager::OnFrameJunkQueue()
 		return;
 	}
 
+	if (MainCharObj1[0] && (MainCharObj1[0]->Action == Action_Death ||
+		MainCharObj1[0]->Action == Action_Drown ||
+		(MainCharObj1[0]->Action == Action_Quicksand && CurrentLevel != LevelIDs_EggGolemS)))
+	{
+		return;
+	}
+
+	if (TimerStopped)
+	{
+		return;
+	}
+
 	while (this->_JunkQueue.size() > 0)
 	{
 		int itemToGrant = this->_JunkQueue.front();
@@ -431,7 +443,7 @@ void ItemManager::OnFrameTrapQueue()
 
 	if (MainCharObj1[0] && (MainCharObj1[0]->Action == Action_Death ||
 		MainCharObj1[0]->Action == Action_Drown ||
-		MainCharObj1[0]->Action == Action_Quicksand))
+		(MainCharObj1[0]->Action == Action_Quicksand && CurrentLevel != LevelIDs_EggGolemS)))
 	{
 		this->_ActiveTrap = 0;
 		this->_TimeStopPos = NJS_VECTOR();
@@ -499,14 +511,19 @@ void ItemManager::OnFrameTrapQueue()
 	this->_ActiveTrap = 0;
 	this->_TimeStopPos = NJS_VECTOR();
 
-	if (this->_TrapCooldownTimer > 0)
+	if (TimerStopped)
 	{
-		this->_TrapCooldownTimer--;
 		return;
 	}
 
 	if (this->_TrapQueue.size() == 0)
 	{
+		return;
+	}
+
+	if (this->_TrapCooldownTimer > 0)
+	{
+		this->_TrapCooldownTimer--;
 		return;
 	}
 
