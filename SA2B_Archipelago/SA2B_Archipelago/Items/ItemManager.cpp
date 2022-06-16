@@ -183,12 +183,6 @@ void ItemManager::ReceiveItem(int item_id, bool notify)
 				messageQueue->AddMessage(message);
 			}
 		}
-		else
-		{
-			std::string message = std::string("Received Duplicate Item: ");
-			message += receivedItem.DisplayName;
-			messageQueue->AddMessage(message);
-		}
 	}
 	else if (item_id <= ItemValue::IV_Invincibility) // Junk
 	{
