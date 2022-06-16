@@ -315,3 +315,16 @@ void LocationManager::SetChaoEnabled(bool chaoEnabled)
 {
 	this->_chaoEnabled = chaoEnabled;
 }
+
+void LocationManager::ResetLocations()
+{
+	for (auto& pair : this->_LevelClearData)
+	{
+		pair.second.CheckSent = false;
+	}
+
+	for (auto& pair : this->_ChaoGardenData)
+	{
+		pair.second.CheckSent = false;
+	}
+}

@@ -16,8 +16,6 @@
 DataPointer(unsigned int, SeedHash, 0x1DEC6FC);
 DataPointer(char, LastStoryComplete, 0x1DEFA95);
 
-DataPointer(char, SavedChecksSent, 0x1DEF5DA);
-
 void ArchipelagoManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
 {
 	_helperFunctions = &helperFunctions;
@@ -27,8 +25,6 @@ void ArchipelagoManager::OnInitFunction(const char* path, const HelperFunctions&
     MessageQueue::GetInstance().SetFontSize(this->_settingsINI->getInt("General", "MessageFontSize"));
     MessageQueue::GetInstance().SetDisplayCount(this->_settingsINI->getInt("General", "MessageDisplayCount"));
     MessageQueue::GetInstance().SetDisplayDuration(this->_settingsINI->getFloat("General", "MessageDisplayDuration"));
-
-    this->_thisSessionChecksSent = 0;
 }
 
 void ArchipelagoManager::OnFrameFunction()
@@ -64,7 +60,7 @@ void ArchipelagoManager::OnFrameFunction()
 
     if (!this->IsInit())
     {
-        std::string msg = "Not Connected";
+        std::string msg = "Load a Save File to Connect";
         _helperFunctions->SetDebugFontColor(0xFFF542C8);
         _helperFunctions->DisplayDebugString(NJM_LOCATION(0, 0), msg.c_str());
 
@@ -92,20 +88,32 @@ void ArchipelagoManager::OnFrameFunction()
             return;
         }
     }
-
-    AP_RoomInfo RoomInfo;
-    this->_authFailed = (AP_GetRoomInfo(&RoomInfo) == 1);
-
-    if (this->_authFailed)
+    else if (AP_GetConnectionStatus() != AP_ConnectionStatus::Authenticated)
     {
-        std::string msg = "Connection Failed";
-        std::string msg2 = "Verify server connection and try again.";
+        std::string msg1 = "Connection to Archipelago lost.";
+        std::string msg2 = "Reconnecting...";
         _helperFunctions->SetDebugFontColor(0xFFF542C8);
-        _helperFunctions->DisplayDebugString(NJM_LOCATION(0, 0), msg.c_str());
+        _helperFunctions->DisplayDebugString(NJM_LOCATION(0, 0), msg1.c_str());
         _helperFunctions->DisplayDebugString(NJM_LOCATION(0, 1), msg2.c_str());
+
+        this->_authFailed = true;
 
         return;
     }
+
+    this->_authFailed = false;
+
+    this->_keepAliveTimer++;
+
+    if (this->_keepAliveTimer >= KEEP_ALIVE)
+    {
+        this->_keepAliveTimer = 0;
+
+        AP_KeepAlive();
+    }
+
+    AP_RoomInfo RoomInfo;
+    AP_GetRoomInfo(&RoomInfo);
 
     if (this->_seedName.length() == 0)
     {
@@ -450,13 +458,6 @@ void ArchipelagoManager::SendItem(int index)
         return;
     }
 
-    this->_thisSessionChecksSent++;
-    if (this->_thisSessionChecksSent > SavedChecksSent)
-    {
-        SavedChecksSent = this->_thisSessionChecksSent;
-        // Send Message
-    }
-
     int ap_index = index + AP_ID_OFFSET;
     AP_SendItem(ap_index);
 }
@@ -471,6 +472,10 @@ void ArchipelagoManager::ResetItems()
     ItemManager* itemManager = &ItemManager::getInstance();
 
     itemManager->ResetItems();
+
+    LocationManager* locationManager = &LocationManager::getInstance();
+
+    locationManager->ResetLocations();
 }
 
 void ArchipelagoManager::ReceiveItem(int item_id, bool notify)

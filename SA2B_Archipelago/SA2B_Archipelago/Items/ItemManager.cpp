@@ -103,6 +103,7 @@ void ItemManager::OnFrameFunction()
 
 void ItemManager::ResetItems()
 {
+	this->_thisSessionChecksReceived = 0;
 	this->_EmblemsReceived = 0;
 	EmblemCount = 0;
 }
@@ -182,19 +183,14 @@ void ItemManager::ReceiveItem(int item_id, bool notify)
 				messageQueue->AddMessage(message);
 			}
 		}
-		else
-		{
-			std::string message = std::string("Received Duplicate Item: ");
-			message += receivedItem.DisplayName;
-			messageQueue->AddMessage(message);
-		}
 	}
 	else if (item_id <= ItemValue::IV_Invincibility) // Junk
 	{
-		this->HandleJunk(item_id);
-
 		if (this->_thisSessionChecksReceived > SavedChecksReceived)
 		{
+			// Don't recollect the junk items
+			this->HandleJunk(item_id);
+
 			SavedChecksReceived = this->_thisSessionChecksReceived;
 
 			ItemData& receivedItem = this->_ItemData[item_id];
@@ -206,10 +202,11 @@ void ItemManager::ReceiveItem(int item_id, bool notify)
 	}
 	else if (item_id <= ItemValue::IV_TinyTrap) // Trap
 	{
-		this->HandleTrap(item_id);
-
 		if (this->_thisSessionChecksReceived > SavedChecksReceived)
 		{
+			// Don't recollect the trap items
+			this->HandleTrap(item_id);
+
 			SavedChecksReceived = this->_thisSessionChecksReceived;
 		}
 	}

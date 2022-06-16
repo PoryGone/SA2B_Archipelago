@@ -24,6 +24,7 @@ public:
 	void SetRequiredRank(int requiredRank);
 	void SetRacesPacked(bool racesPacked);
 	void SetChaoEnabled(bool chaoEnabled);
+	void ResetLocations();
 
 private:
 	const HelperFunctions* _helperFunctions;
