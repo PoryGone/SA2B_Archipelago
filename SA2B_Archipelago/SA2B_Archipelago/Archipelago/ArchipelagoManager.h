@@ -8,6 +8,8 @@
 constexpr unsigned int AP_ID_OFFSET = 0xFF0000;
 constexpr int MOD_VERSION = 100;
 
+constexpr int KEEP_ALIVE = 3600;
+
 class ArchipelagoManager
 {
 public:
@@ -42,6 +44,8 @@ private:
 	const HelperFunctions* _helperFunctions;
 	const IniFile* _settingsINI;
 
+	int _keepAliveTimer = 0;
+
 	int _deathLinkTimer = 0;
 	bool _deathLinkActive = false;
 
@@ -54,8 +58,6 @@ private:
 	int _serverModVersion = 0;
 
 	bool _completionSent = false;
-
-	__int8 _thisSessionChecksSent = 0;
 
 	void Init(const char* ip, const char* playerName, const char* password);
 	void OnFrameMessageQueue();
