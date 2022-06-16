@@ -55,11 +55,14 @@ private:
 	bool _badSaveFile = false;
 	bool _badModVersion = false;
 
+	bool _offlinePlay = false;
+
 	int _serverModVersion = 0;
 
 	bool _completionSent = false;
 
 	void Init(const char* ip, const char* playerName, const char* password);
+	void Init(const char* fileName);
 	void OnFrameMessageQueue();
 
 	// DeathLink functions

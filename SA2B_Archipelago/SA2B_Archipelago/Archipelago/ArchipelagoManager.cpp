@@ -72,7 +72,18 @@ void ArchipelagoManager::OnFrameFunction()
                 std::string playerName = this->_settingsINI->getString("AP", "PlayerName");
                 std::string serverPassword = this->_settingsINI->getString("AP", "Password");
 
-                this->Init(serverIP.c_str(), playerName.c_str(), serverPassword.c_str());
+                if (serverIP.length() > 0)
+                {
+                    this->Init(serverIP.c_str(), playerName.c_str(), serverPassword.c_str());
+                }
+                else
+                {
+                    std::string fileName = this->_settingsINI->getString("AP", "FileName");
+
+                    this->Init(fileName.c_str());
+
+                    this->_offlinePlay = true;
+                }
 
             }
             else
@@ -88,7 +99,7 @@ void ArchipelagoManager::OnFrameFunction()
             return;
         }
     }
-    else if (AP_GetConnectionStatus() != AP_ConnectionStatus::Authenticated)
+    else if ((AP_GetConnectionStatus() != AP_ConnectionStatus::Authenticated) && !this->_offlinePlay)
     {
         std::string msg1 = "Connection to Archipelago lost.";
         std::string msg2 = "Reconnecting...";
@@ -197,6 +208,7 @@ void SA2_SetDeathLink(int deathLinkActive)
     ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
 
     apm->SetDeathLink(deathLinkActive != 0);
+    AP_SetDeathLinkSupported(deathLinkActive != 0);
 }
 
 void SA2_CompareModVersion(int modVersion)
@@ -307,11 +319,8 @@ void SA2_SetGateBosses(std::map<int, int> map)
     ssm->SetBossGates(map);
 }
 
-void ArchipelagoManager::Init(const char* ip, const char* playerName, const char* password)
+void GenericInit()
 {
-    AP_Init(ip, "Sonic Adventure 2 Battle", playerName, password);
-
-    AP_SetDeathLinkSupported(true);
     AP_EnableQueueItemRecvMsgs(false);
     AP_SetItemClearCallback(&SA2_ResetItems);
     AP_SetItemRecvCallback(&SA2_RecvItem);
@@ -328,6 +337,23 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_RegisterSlotDataIntCallback("ChaoGardenDifficulty", &SA2_SetChaoDifficulty);
     AP_RegisterSlotDataMapIntIntCallback("RegionEmblemMap", &SA2_SetRegionEmblemMap);
     AP_RegisterSlotDataMapIntIntCallback("GateBosses", &SA2_SetGateBosses);
+}
+
+void ArchipelagoManager::Init(const char* ip, const char* playerName, const char* password)
+{
+    AP_Init(ip, "Sonic Adventure 2 Battle", playerName, password);
+
+    GenericInit();
+
+    AP_Start();
+}
+
+void ArchipelagoManager::Init(const char* fileName)
+{
+    AP_Init(fileName);
+
+    GenericInit();
+
     AP_Start();
 }
 
