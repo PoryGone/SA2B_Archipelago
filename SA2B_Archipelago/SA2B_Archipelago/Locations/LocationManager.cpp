@@ -53,6 +53,15 @@ void LocationManager::OnFrameFunction()
 							checkData.CheckSent = true;
 						}
 					}
+					else if (dataValue > checkData.PrevValue)
+					{
+						checkData.PrevValue = dataValue;
+
+						if (GameState != GameStates_Inactive)
+						{
+							MessageQueue::GetInstance().AddMessage("Mission Rank too low");
+						}
+					}
 				}
 				else
 				{

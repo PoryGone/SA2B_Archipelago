@@ -215,6 +215,7 @@ struct LevelClearCheckData
 
     int Address;
     bool CheckSent = false;
+    char PrevValue = 0;
 };
 
 void InitializeLevelClearChecks(std::map<int, LevelClearCheckData>& outLevelClearChecks);
