@@ -366,10 +366,9 @@ void ArchipelagoManager::OnFrameMessageQueue()
 // DeathLink Functions
 void ArchipelagoManager::OnFrameDeathLink()
 {
-
     if (this->_deathLinkTimer > 0)
     {
-        if (TimerStopped == 0 || GameState != GameStates::GameStates_Ingame)
+        if ((TimerStopped == 0 || GameState != GameStates::GameStates_Ingame) && GameState != GameStates::GameStates_Pause)
         {
             this->_deathLinkTimer--;
         }
@@ -381,7 +380,10 @@ void ArchipelagoManager::OnFrameDeathLink()
     {
         if (CurrentLevel == LevelIDs::LevelIDs_Route101280)
         {
-            GameState = GameStates::GameStates_RestartLevel_1;
+            if (!TimerStopped)
+            {
+                GameState = GameStates::GameStates_RestartLevel_1;
+            }
         }
         else
         {
