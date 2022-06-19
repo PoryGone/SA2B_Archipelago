@@ -386,6 +386,8 @@ void StageSelectManager::UpdateTitleHeaderArrays()
 	{
 		JapanesseStageHeaders[_stageSelectBossDataMap[i].GetBossStage(0).LevelID] = 0x07;
 	}
+	//Set Biolizard header
+	JapanesseStageHeaders[0x41] = 0x00;
 }
 
 void StageSelectManager::HideMenuButtons()
