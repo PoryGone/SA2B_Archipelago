@@ -197,6 +197,10 @@ void SA2_SetDeathLink(int deathLinkActive)
     ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
 
     apm->SetDeathLink(deathLinkActive != 0);
+
+    StatsManager* stats = &StatsManager::GetInstance();
+
+    stats->DeathLinkActive(deathLinkActive != 0);
 }
 
 void SA2_CompareModVersion(int modVersion)

@@ -29,7 +29,7 @@ public:
 	void OnFrameFunction();
 	void DeathLinkSent();
 	void DeathLinkReceived();
-	void DeathLinkAvtive(bool isActive);
+	void DeathLinkActive(bool isActive);
 	void HintMonitorUsed();
 	void CanonsCoreUnlocked();
 	void GateUnlocked(int index);

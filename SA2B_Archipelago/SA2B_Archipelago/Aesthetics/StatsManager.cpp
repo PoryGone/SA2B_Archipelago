@@ -41,7 +41,7 @@ void StatsManager::DeathLinkReceived()
 	apStats.ReceivedDeaths++;
 }
 
-void StatsManager::DeathLinkAvtive(bool isActive)
+void StatsManager::DeathLinkActive(bool isActive)
 {
 	_deathLinkActive = isActive;
 }
@@ -132,7 +132,7 @@ void StatsManager::Victory()
 	}
 	if (apStats.CCUnlockFrames > 0)
 	{
-		creditsEntries.emplace_back(CreateStatsEntry("CANNONS CORE UNLOCK TIME", FormatGameTime(apStats.CCUnlockFrames)));
+		creditsEntries.emplace_back(CreateStatsEntry("CANONS CORE UNLOCK TIME", FormatGameTime(apStats.CCUnlockFrames)));
 	}
 	for (int i = 0; i < 5; i++)
 	{
