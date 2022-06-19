@@ -293,7 +293,7 @@ void ItemManager::HandleJunk(int item_id)
 
 void ItemManager::OnFrameJunkQueue()
 {
-	if (!(GameState == GameStates::GameStates_Ingame || GameState == GameStates::GameStates_Pause))
+	if (!(GameState == GameStates::GameStates_Ingame))
 	{
 		return;
 	}
@@ -320,14 +320,32 @@ void ItemManager::OnFrameJunkQueue()
 		return;
 	}
 
+	if (this->_JunkQueue.size() == 0)
+	{
+		return;
+	}
+
+	if (this->_JunkCooldownTimer > 0)
+	{
+		this->_JunkCooldownTimer--;
+		return;
+	}
+
 	while (this->_JunkQueue.size() > 0)
 	{
+		if (!MainCharacter[0])
+		{
+			break;
+		}
+
 		int itemToGrant = this->_JunkQueue.front();
 		this->_JunkQueue.pop();
 		ItemData& receivedItem = this->_ItemData[itemToGrant];
 
 		DisplayItemBoxItem(0, ItemBox_Items[receivedItem.Address].Texture);
 		ItemBox_Items[receivedItem.Address].Code(MainCharacter[0], 0);
+
+		this->_JunkCooldownTimer = JUNK_COOLDOWN;
 	}
 }
 
@@ -421,6 +439,12 @@ void ItemManager::OnFrameTrapQueue()
 	{
 		this->_ActiveTrap = 0;
 		this->_TimeStopPos = NJS_VECTOR();
+		if (MainCharObj1[0])
+		{
+			MainCharObj1[0]->Scale.x = 1.0f;
+			MainCharObj1[0]->Scale.y = 1.0f;
+			MainCharObj1[0]->Scale.z = 1.0f;
+		}
 		return;
 	}
 
@@ -428,6 +452,12 @@ void ItemManager::OnFrameTrapQueue()
 	{
 		this->_ActiveTrap = 0;
 		this->_TimeStopPos = NJS_VECTOR();
+		if (MainCharObj1[0])
+		{
+			MainCharObj1[0]->Scale.x = 1.0f;
+			MainCharObj1[0]->Scale.y = 1.0f;
+			MainCharObj1[0]->Scale.z = 1.0f;
+		}
 		return;
 	}
 
@@ -435,6 +465,12 @@ void ItemManager::OnFrameTrapQueue()
 	{
 		this->_ActiveTrap = 0;
 		this->_TimeStopPos = NJS_VECTOR();
+		if (MainCharObj1[0])
+		{
+			MainCharObj1[0]->Scale.x = 1.0f;
+			MainCharObj1[0]->Scale.y = 1.0f;
+			MainCharObj1[0]->Scale.z = 1.0f;
+		}
 		return;
 	}
 
@@ -444,6 +480,12 @@ void ItemManager::OnFrameTrapQueue()
 	{
 		this->_ActiveTrap = 0;
 		this->_TimeStopPos = NJS_VECTOR();
+		if (MainCharObj1[0])
+		{
+			MainCharObj1[0]->Scale.x = 1.0f;
+			MainCharObj1[0]->Scale.y = 1.0f;
+			MainCharObj1[0]->Scale.z = 1.0f;
+		}
 		return;
 	}
 
@@ -507,6 +549,12 @@ void ItemManager::OnFrameTrapQueue()
 
 	this->_ActiveTrap = 0;
 	this->_TimeStopPos = NJS_VECTOR();
+	if (MainCharObj1[0])
+	{
+		MainCharObj1[0]->Scale.x = 1.0f;
+		MainCharObj1[0]->Scale.y = 1.0f;
+		MainCharObj1[0]->Scale.z = 1.0f;
+	}
 
 	if (TimerStopped)
 	{
