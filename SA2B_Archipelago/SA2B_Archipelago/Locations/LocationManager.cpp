@@ -265,11 +265,6 @@ void LocationManager::CheckLocation(int location_id)
 		{
 			ChaoGardenCheckData& checkData = this->_ChaoGardenData[location_id];
 
-			if (checkData.CheckSent)
-			{
-				return;
-			}
-
 			checkData.CheckSent = true;
 
 			// Handle Challenge Race Upper bits
