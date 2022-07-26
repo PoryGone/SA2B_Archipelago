@@ -46,6 +46,7 @@ public:
 		static StageSelectManager instance;
 		return instance;
 	}
+    static void DrawDebugText(int location, const char* message);
 	void OnInitFunction(const char* path, const HelperFunctions& helperFunctions);
 	void OnFrameFunction();
 	void SetEmblemsForCannonsCore(int emblemsRequired);
