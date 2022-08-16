@@ -54,6 +54,7 @@ public:
     void SetRequiredRank(int requiredRank);
 	void SetRegionEmblemMap(std::map<int, int> map);
     void SetBossGates(std::map<int, int> map);
+    ObjectMaster* DrawIconObj;
 
 private:
 	const HelperFunctions* _helperFunctions;

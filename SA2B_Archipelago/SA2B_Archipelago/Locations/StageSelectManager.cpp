@@ -32,7 +32,7 @@ DataArray(int, EnglishStageHeaders, 0x8A0560, 45);
 
 FunctionPointer(void, ReleaseTextureList, (NJS_TEXLIST* a1), 0x77F9F0);
 
-ObjectMaster* DrawIconObj = nullptr;
+//ObjectMaster* DrawIconObj = nullptr;
 
 static NJS_TEXNAME UpgradeIconsTexName[28]; /*= {
 	{(void*)"eggman_jet_engine", 0, 0},
@@ -98,7 +98,7 @@ static NJS_TEXANIM	UpgradeIconsAnim[]{
 
 static NJS_TEXLIST UpgradeIconsTex = { arrayptrandlength(UpgradeIconsTexName, Uint32) };
 static TexPackInfo TexPack = { "STAFFROLL", &UpgradeIconsTex };
-static NJS_SPRITE Sprite = { { 0.0f, 0.0f, 0.0f }, 1.0f, 1.0f, 0, &UpgradeIconsTex, UpgradeIconsAnim };
+static NJS_SPRITE Sprite = { { -32.0f, 0.0f, 0.0f }, 1.0f, 1.0f, 0, &UpgradeIconsTex, UpgradeIconsAnim };
 
 void StageSelectManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
 {
@@ -116,23 +116,42 @@ void StageSelectManager::OnInitFunction(const char* path, const HelperFunctions&
 void DeleteUpgradeIcon(ObjectMaster* obj) 
 {
 	ReleaseTextureList(&UpgradeIconsTex);
-	DrawIconObj = nullptr;
+	MessageQueue::GetInstance().AddMessage(std::to_string((int)StageSelectManager::GetInstance().DrawIconObj).c_str());
+	StageSelectManager::GetInstance().DrawIconObj = nullptr;
+	MessageQueue::GetInstance().AddMessage(std::to_string((int)StageSelectManager::GetInstance().DrawIconObj).c_str());
 	MessageQueue::GetInstance().AddMessage("Delete Upgrade Icon");
 }
 
 void DrawUpgradeIcon(ObjectMaster* obj)
 {
 
-	Sprite.ang += 1;
-	if (Sprite.ang >= 360) {
-		Sprite.ang = 0;
-	}
+	float ratio = 480.0f / VerticalResolution;
+	float adjustedHorizontal = HorizontalResolution * ratio;
+	float adjustedMin = (adjustedHorizontal - 640.0f) / 2.0f;
+	float adjustedMax = adjustedHorizontal - adjustedMin;
+	adjustedMin = -adjustedMin;
+
 	Sprite.tanim = &UpgradeIconsAnim[0];
-	Sprite.p = { 64,64,0 };
+	//Sprite Position is based on 640x480 resolution which gets scaled up for higher resolutions
+	//The Screen height resolution remains consistent (0 and 480 will always be top and bottom)
+	//The Screen width is not consistent and will change based on the aspect ratio with 0-640 being the center portion (although parts of that could be off screen with dumb resolutions)
+	Sprite.p = { Sprite.p.x + 0.5f, 32.0f, 0.0f };
+	if (Sprite.p.x > (adjustedMax + 32.0f)) {
+		Sprite.p.x = adjustedMin - 32.0f;
+	}
+	Sprite.sx = 0.5f;
+	Sprite.sy = 0.5f;
+
+	
 
 	njDrawSprite2D(&Sprite, 1, 1, UpgradeIconsTex.textures[0].attr);
 
-	StageSelectManager::DrawDebugText(NJM_LOCATION(0,6), "Update Icon");
+	std::string debugStr = "Update Icon: ";
+	debugStr.append(std::to_string(Sprite.p.x));
+	debugStr.append(", ");
+	debugStr.append(std::to_string(Sprite.p.y));
+
+	StageSelectManager::DrawDebugText(NJM_LOCATION(0,6), debugStr.c_str());
 	
 }
 
@@ -156,7 +175,13 @@ void DrawUpgradeIconMain(ObjectMaster* obj)
 
 void StageSelectManager::OnFrameFunction()
 {
-	if (!DrawIconObj && GameState == GameStates_LoadItems)
+	std::string stateString = "";
+	stateString.append(std::to_string(GameState));
+	stateString.append(", ");
+	stateString.append(std::to_string(CurrentMenu));
+	_helperFunctions->SetDebugFontColor(0xFFF542C8);
+	_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 8), stateString.c_str());
+	if (!DrawIconObj && CurrentMenu == Menus::Menus_StageSelect && GameMode == GameMode::GameMode_Advertise) //GameState == GameStates_LoadItems)
 	{
 		LoadTextureList("AP_UPGRADEICONS", &UpgradeIconsTex);
 		MessageQueue::GetInstance().AddMessage(std::to_string(UpgradeIconsTex.textures[0].texaddr));
