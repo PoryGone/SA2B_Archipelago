@@ -1,6 +1,7 @@
 #include "../pch.h"
 #include "../Items/ItemData.h"
 #include "StageSelectData.h"
+#include "StageSelectIcons.h"
 #include <map>
 #include <array>
 #include <vector>
@@ -69,6 +70,7 @@ private:
     std::map<int, ItemData> _itemData;
     std::vector<CharacterItemRange> _characterItemRanges;
     std::vector<GateBossLayout> _gateBossLayoutData;
+    StageSelectIcons _stageSelectIcons;
 
     __int8 _firstStageIndex = 0x17;
     __int8 _previousSettingsSelection = 0x02;

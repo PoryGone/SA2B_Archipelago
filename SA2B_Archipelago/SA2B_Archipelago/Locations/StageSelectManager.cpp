@@ -30,75 +30,6 @@ DataArray(char, GateBossSaveData, 0x01DEE59C, 5);
 DataArray(int, JapanesseStageHeaders, 0x008A0470, 68);
 DataArray(int, EnglishStageHeaders, 0x8A0560, 45);
 
-FunctionPointer(void, ReleaseTextureList, (NJS_TEXLIST* a1), 0x77F9F0);
-
-//ObjectMaster* DrawIconObj = nullptr;
-
-static NJS_TEXNAME UpgradeIconsTexName[28]; /*= {
-	{(void*)"eggman_jet_engine", 0, 0},
-	{(void*)"eggman_large_cannon", 0, 0},
-	{(void*)"eggman_laser_blaster", 0, 0},
-	{(void*)"eggman_mystic_melody", 0, 0},
-	{(void*)"eggman_protective_armor", 0, 0},
-	{(void*)"knuckles_air_necklace", 0, 0},
-	{(void*)"knuckles_hammer_gloves", 0, 0},
-	{(void*)"knuckles_mystic_melody", 0, 0},
-	{(void*)"knuckles_shovel_claws", 0, 0},
-	{(void*)"knuckles_sunglasses", 0, 0},
-	{(void*)"rouge_iron_boots", 0, 0},
-	{(void*)"rouge_mystic_melody", 0, 0},
-	{(void*)"rouge_pick_nails", 0, 0},
-	{(void*)"rouge_treasure_scope", 0, 0},
-	{(void*)"shadow_air_shoes", 0, 0},
-	{(void*)"shadow_ancient_light", 0, 0},
-	{(void*)"shadow_flame_ring", 0, 0},
-	{(void*)"shadow_mystic_melody", 0, 0},
-	{(void*)"sonic_ancient_light", 0, 0},
-	{(void*)"sonic_bounce_bracelet", 0, 0},
-	{(void*)"sonic_flame_ring", 0, 0},
-	{(void*)"sonic_light_shoes", 0, 0},
-	{(void*)"sonic_magic_gloves", 0, 0},
-	{(void*)"sonic_mystic_melody", 0, 0},
-	{(void*)"tails_bazooka", 0, 0},
-	{(void*)"tails_booster", 0, 0},
-	{(void*)"tails_laser_blaster", 0, 0},
-	{(void*)"tails_mystic_melody", 0, 0}
-};*/
-
-static NJS_TEXANIM	UpgradeIconsAnim[]{
-	{ 0x80, 0x80, 0, 0, 0, 0, 0x100, 0x100, 0, 0x20 },
-	{ 0x80, 0x80, 0x40, 0x40, 0, 0, 0x100, 0x100, 1, 0x20 },
-	{ 0x80, 0x80, 0x40, 0x40, 0, 0, 0x100, 0x100, 2, 0x20 },
-	{ 0x80, 0x80, 0x40, 0x40, 0, 0, 0x80, 0x80, 3, 0x20 },
-	{ 0x80, 0x80, 0x40, 0x40, 0, 0, 0x80, 0x80, 4, 0x20 },
-	{ 0x80, 0x80, 0x40, 0x40, 0, 0, 0x80, 0x80, 5, 0x20 },
-	{ 0x80, 0x80, 0x40, 0x40, 0, 0, 0x80, 0x80, 6, 0x20 },
-	{ 0x80, 0x80, 0x40, 0x40, 0, 0, 0x80, 0x80, 7, 0x20 },
-	{ 0x80, 0x80, 0x40, 0x40, 0, 0, 0x80, 0x80, 8, 0x20 },
-	{ 0x80, 0x80, 0x40, 0x40, 0, 0, 0x80, 0x80, 9, 0x20 },
-	{ 0x80, 0x80, 0x40, 0x40, 0, 0, 0x100, 0x100, 10, 0x20 },
-	{ 0x80, 0x80, 0x40, 0x40, 0, 0, 0x80, 0x80, 11, 0x20 },
-	{ 0x80, 0x80, 0x40, 0x40, 0, 0, 0x80, 0x80, 12, 0x20 },
-	{ 0x80, 0x80, 0x40, 0x40, 0, 0, 0x80, 0x80, 13, 0x20 },
-	{ 0x80, 0x80, 0x40, 0x40, 0, 0, 0x80, 0x80, 14, 0x20 },
-	{ 0x80, 0x80, 0x40, 0x40, 0, 0, 0x80, 0x80, 15, 0x20 },
-	{ 0x80, 0x80, 0x40, 0x40, 0, 0, 0x80, 0x80, 16, 0x20 },
-	{ 0x80, 0x80, 0x40, 0x40, 0, 0, 0x80, 0x80, 17, 0x20 },
-	{ 0x80, 0x80, 0x40, 0x40, 0, 0, 0x80, 0x80, 18, 0x20 },
-	{ 0x80, 0x80, 0x40, 0x40, 0, 0, 0x80, 0x80, 19, 0x20 },
-	{ 0x80, 0x80, 0x40, 0x40, 0, 0, 0x80, 0x80, 20, 0x20 },
-	{ 0x80, 0x80, 0x40, 0x40, 0, 0, 0x80, 0x80, 21, 0x20 },
-	{ 0x80, 0x80, 0x40, 0x40, 0, 0, 0x80, 0x80, 22, 0x20 },
-	{ 0x80, 0x80, 0x40, 0x40, 0, 0, 0x80, 0x80, 23, 0x20 },
-	{ 0x80, 0x80, 0x40, 0x40, 0, 0, 0x80, 0x80, 24, 0x20 },
-	{ 0x80, 0x80, 0x40, 0x40, 0, 0, 0x80, 0x80, 25, 0x20 },
-	{ 0x80, 0x80, 0x40, 0x40, 0, 0, 0x80, 0x80, 26, 0x20 },
-	{ 0x80, 0x80, 0x40, 0x40, 0, 0, 0x80, 0x80, 27, 0x20 },
-};
-
-static NJS_TEXLIST UpgradeIconsTex = { arrayptrandlength(UpgradeIconsTexName, Uint32) };
-static TexPackInfo TexPack = { "STAFFROLL", &UpgradeIconsTex };
-static NJS_SPRITE Sprite = { { -32.0f, 0.0f, 0.0f }, 1.0f, 1.0f, 0, &UpgradeIconsTex, UpgradeIconsAnim };
 
 void StageSelectManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
 {
@@ -110,91 +41,20 @@ void StageSelectManager::OnInitFunction(const char* path, const HelperFunctions&
 	InitializeItemData(this->_itemData);
 	InitializeCharacterItemRanges(this->_characterItemRanges);
 	UpdateTitleHeaderArrays();
-
-}
-
-void DeleteUpgradeIcon(ObjectMaster* obj) 
-{
-	ReleaseTextureList(&UpgradeIconsTex);
-	MessageQueue::GetInstance().AddMessage(std::to_string((int)StageSelectManager::GetInstance().DrawIconObj).c_str());
-	StageSelectManager::GetInstance().DrawIconObj = nullptr;
-	MessageQueue::GetInstance().AddMessage(std::to_string((int)StageSelectManager::GetInstance().DrawIconObj).c_str());
-	MessageQueue::GetInstance().AddMessage("Delete Upgrade Icon");
-}
-
-void DrawUpgradeIcon(ObjectMaster* obj)
-{
-
-	float ratio = 480.0f / VerticalResolution;
-	float adjustedHorizontal = HorizontalResolution * ratio;
-	float adjustedMin = (adjustedHorizontal - 640.0f) / 2.0f;
-	float adjustedMax = adjustedHorizontal - adjustedMin;
-	adjustedMin = -adjustedMin;
-
-	Sprite.tanim = &UpgradeIconsAnim[0];
-	//Sprite Position is based on 640x480 resolution which gets scaled up for higher resolutions
-	//The Screen height resolution remains consistent (0 and 480 will always be top and bottom)
-	//The Screen width is not consistent and will change based on the aspect ratio with 0-640 being the center portion (although parts of that could be off screen with dumb resolutions)
-	Sprite.p = { Sprite.p.x + 0.5f, 32.0f, 0.0f };
-	if (Sprite.p.x > (adjustedMax + 32.0f)) {
-		Sprite.p.x = adjustedMin - 32.0f;
-	}
-	Sprite.sx = 0.5f;
-	Sprite.sy = 0.5f;
-
-	
-
-	njDrawSprite2D(&Sprite, 1, 1, UpgradeIconsTex.textures[0].attr);
-
-	std::string debugStr = "Update Icon: ";
-	debugStr.append(std::to_string(Sprite.p.x));
-	debugStr.append(", ");
-	debugStr.append(std::to_string(Sprite.p.y));
-
-	StageSelectManager::DrawDebugText(NJM_LOCATION(0,6), debugStr.c_str());
-	
-}
-
-void DrawUpgradeIconMain(ObjectMaster* obj)
-{
-	std::string str = "Update Icon Main ";
-	str.append(std::to_string(GameState));
-	StageSelectManager::DrawDebugText(NJM_LOCATION(0, 5), str.c_str());
-
-	if (GameState != GameStates_LoadFinished)
-		return;
-
-	if (obj->Data1.Entity->Action == 0) {
-		obj->DeleteSub = DeleteUpgradeIcon;
-		obj->DisplaySub_Delayed3 = DrawUpgradeIcon;
-		obj->Data1.Entity->Action = 1;
-		MessageQueue::GetInstance().AddMessage("Draw OBJ Setup");
-	}
-	
+	_stageSelectIcons = StageSelectIcons();
 }
 
 void StageSelectManager::OnFrameFunction()
 {
+	/*
 	std::string stateString = "";
 	stateString.append(std::to_string(GameState));
 	stateString.append(", ");
 	stateString.append(std::to_string(CurrentMenu));
 	_helperFunctions->SetDebugFontColor(0xFFF542C8);
 	_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 8), stateString.c_str());
-	if (!DrawIconObj && CurrentMenu == Menus::Menus_StageSelect && GameMode == GameMode::GameMode_Advertise) //GameState == GameStates_LoadItems)
-	{
-		LoadTextureList("AP_UPGRADEICONS", &UpgradeIconsTex);
-		MessageQueue::GetInstance().AddMessage(std::to_string(UpgradeIconsTex.textures[0].texaddr));
-		DrawIconObj = LoadObject(0, "UpgradeIcon", DrawUpgradeIconMain, LoadObj_Data1 | LoadObj_Data2);
-		DrawIconObj->DeleteSub = DeleteUpgradeIcon;
-		DrawIconObj->MainSub = DrawUpgradeIconMain;
-		DrawIconObj->DisplaySub_Delayed3 = DrawUpgradeIcon;
-	}
-	else if(DrawIconObj)
-	{
-		_helperFunctions->SetDebugFontColor(0xFFF542C8);
-		_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 7), DrawIconObj->Name);
-	}
+	*/
+	_stageSelectIcons.OnFrame();
 	
 	if (CurrentMenu == Menus::Menus_Main)
 	{
