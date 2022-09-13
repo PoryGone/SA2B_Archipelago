@@ -42,6 +42,7 @@ void StageSelectManager::OnInitFunction(const char* path, const HelperFunctions&
 	InitializeCharacterItemRanges(this->_characterItemRanges);
 	UpdateTitleHeaderArrays();
 	_stageSelectIcons = StageSelectIcons();
+	_stageSelectIcons.OnInit(&_stageSelectDataMap);
 }
 
 void StageSelectManager::OnFrameFunction()

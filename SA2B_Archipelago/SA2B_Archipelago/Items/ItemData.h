@@ -62,12 +62,14 @@ enum ItemValue
 struct ItemData
 {
     ItemData() : Address(0x00), DisplayName(std::string("Unknown")) {}
-    ItemData(int address, std::string displayName, std::string displayNameShort) : Address(address), DisplayName(displayName), DisplayNameShort(displayNameShort) {}
+    ItemData(int address, std::string displayName, std::string displayNameShort, int iconIndex) : Address(address), DisplayName(displayName), DisplayNameShort(displayNameShort), IconIndex(iconIndex) {}
 
     int Address;
     int AmountObtained = 0;
     std::string DisplayName;
     std::string DisplayNameShort;
+    //For character upgrades
+    int IconIndex = 0;
 };
 
 
