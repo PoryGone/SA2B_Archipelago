@@ -11,7 +11,7 @@ FunctionPointer(double, sa2b_ceil, (double a1), 0x007A7B50);
 constexpr unsigned int AP_ITEM_ID_OFFSET = 0xFF0000;
 constexpr unsigned int TRAP_DURATION = 600;
 constexpr unsigned int TRAP_COOLDOWN = 60;
-constexpr unsigned int JUNK_COOLDOWN = 60;
+constexpr unsigned int JUNK_COOLDOWN = 210;
 
 class ItemManager
 {

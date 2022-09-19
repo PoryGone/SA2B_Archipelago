@@ -331,7 +331,8 @@ void ItemManager::OnFrameJunkQueue()
 		return;
 	}
 
-	while (this->_JunkQueue.size() > 0)
+	int itemsPerFrame = 5;
+	while (itemsPerFrame > 0 and this->_JunkQueue.size() > 0)
 	{
 		if (!MainCharacter[0])
 		{
@@ -346,6 +347,7 @@ void ItemManager::OnFrameJunkQueue()
 		ItemBox_Items[receivedItem.Address].Code(MainCharacter[0], 0);
 
 		this->_JunkCooldownTimer = JUNK_COOLDOWN;
+		itemsPerFrame--;
 	}
 }
 
