@@ -100,7 +100,7 @@ public:
 		"p_lane.adx", // Prison Lane
 		"r_hwy.adx", // Radical Highway
 		"s_hall.adx", // Security Hall
-		"s_ocean.adx", // Sand Ocean
+		"S_OCEAN.ADX", // Sand Ocean
 		"s_rail.adx", // Sky Rail
 		"T3_KNUCK.ADX", // Theme of Knuckles (Vocal)
 		"t9_amy.adx", // Theme of Amy
@@ -109,7 +109,7 @@ public:
 		"T9_ROUGE.ADX", // Theme of Rouge (Vocal)
 		"T9_SHADO.ADX", // Theme of Shadow (Vocal)
 		"T9_SONIC.ADX", // Theme of Sonic
-		"w_bed.adx", // Weapons Bed
+		"W_BED.ADX", // Weapons Bed
 		"w_canyon.adx", // Wild Canyon
 		"w_jungl.adx"  // White Jungle
 	};
@@ -122,6 +122,6 @@ public:
 		"f_chase.adx", "f_rush.adx", "g_fores.adx", "g_hill.adx", "h_base.adx", "i_gate.adx",
 		"kart.adx", "l_colony.adx", "m_harb1.adx", "m_harb2.adx", "m_herd.adx", "m_space.adx",
 		"m_street.adx", "p_cave.adx", "p_hill.adx", "p_lane.adx", "r_hwy.adx", "s_hall.adx",
-		"s_ocean.adx", "s_rail.adx", "w_bed.adx", "w_canyon.adx", "w_jungl.adx"
+		"S_OCEAN.ADX", "s_rail.adx", "W_BED.ADX", "w_canyon.adx", "w_jungl.adx"
 	};
 };
