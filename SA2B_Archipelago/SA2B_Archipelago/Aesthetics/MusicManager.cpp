@@ -8,62 +8,39 @@
 #include <algorithm>
 #include <iterator>
 
+static int MusicIndex = 0;
 
 static char* __cdecl GetShuffledTrack(char* song) 
 {
     MusicManager * musicMan = &MusicManager::getInstance();
 
-    switch (musicMan->_ShuffleType)
+    int index = 0;
+    while (index < musicMan->_AllMusicNames.size())
     {
-        case MusicShuffleType::MST_Full:
+        if (strcmp(musicMan->_AllMusicNames[index], song) == 0)
         {
-            int index = 0;
-            while (index < musicMan->_AllMusicNames.size())
+            if (musicMan->_MusicMap.find(index) == musicMan->_MusicMap.end())
             {
-                if (strcmp(musicMan->_AllMusicNames[index], song) == 0)
-                {
-                    if (musicMan->_MusicMap.find(index) == musicMan->_MusicMap.end())
-                    {
-                        return song;
-                    }
-
-                    int newIndex = musicMan->_MusicMap.at(index);
-
-                    return (char*)musicMan->_AllMusicNames[newIndex];
-                }
-
-                index++;
+                return song;
             }
 
-            return song;
-        }
-        case MusicShuffleType::MST_Levels:
-        {
-            int index = 0;
-            while (index < musicMan->_LevelMusicNames.size())
+            int newIndex = musicMan->_MusicMap.at(index);
+
+            if (newIndex >= 100)
             {
-                if (strcmp(musicMan->_LevelMusicNames[index], song) == 0)
-                {
-                    if (musicMan->_MusicMap.find(index) == musicMan->_MusicMap.end())
-                    {
-                        return song;
-                    }
-
-                    int newIndex = musicMan->_MusicMap.at(index);
-
-                    return (char*)musicMan->_LevelMusicNames[newIndex];
-                }
-
-                index++;
+                newIndex -= 100;
+                return (char*)musicMan->_AllSADXMusicNames[newIndex];
             }
+            else
+            {
+                return (char*)musicMan->_AllMusicNames[newIndex];
+            }
+        }
 
-            return song;
-        }
-        default:
-        {
-            return song;
-        }
+        index++;
     }
+
+    return song;
 }
 
 static const int MusicJumpBackAddress = 0x442CF5;
