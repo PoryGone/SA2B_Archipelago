@@ -9,6 +9,7 @@ void LocationManager::OnInitFunction(const char* path, const HelperFunctions& he
 	this->_archipelagoManager = &ArchipelagoManager::getInstance();
 
 	InitializeLevelClearChecks(this->_LevelClearData);
+	InitializeChaoKeyChecks(this->_ChaoKeyData);
 	InitializeChaoGardenChecks(this->_ChaoGardenData);
 	InitializeChaoRacePacks(this->_ChaoRacePacks);
 }
@@ -26,65 +27,108 @@ void LocationManager::OnFrameFunction()
 	{
 		this->_timer = 0;
 
-		for (int i = 0; i < LevelClearCheck::LCC_NUM_CHECKS; i++)
+		this->OnFrameLevelClears();
+		this->OnFrameChaoKeys();
+	}
+
+	this->OnFrameChaoGarden();
+}
+
+void LocationManager::OnFrameLevelClears()
+{
+	for (int i = 0; i < LevelClearCheck::LCC_NUM_CHECKS; i++)
+	{
+		if (this->_LevelClearData.find(i) != this->_LevelClearData.end())
 		{
-			if (this->_LevelClearData.find(i) != this->_LevelClearData.end())
+			LevelClearCheckData& checkData = this->_LevelClearData[i];
+
+			if (!checkData.CheckSent)
 			{
-				LevelClearCheckData& checkData = this->_LevelClearData[i];
+				// DataPointer macro creates a static field, which doesn't work for this case
+				char dataValue = *(char*)checkData.Address;
 
-				if (!checkData.CheckSent)
+				int requiredValue = 0;
+
+				if (i <= LevelClearCheck::LCC_CannonCore_5)
 				{
-					// DataPointer macro creates a static field, which doesn't work for this case
-					char dataValue = *(char*)checkData.Address;
+					requiredValue = this->_requiredRank;
+				}
 
-					int requiredValue = 0;
-
-					if (i <= LevelClearCheck::LCC_CannonCore_5)
+				if (dataValue > requiredValue)
+				{
+					if (this->_archipelagoManager)
 					{
-						requiredValue = this->_requiredRank;
-					}
+						this->_archipelagoManager->SendItem(i);
 
-					if (dataValue > requiredValue)
-					{
-						if (this->_archipelagoManager)
-						{
-							this->_archipelagoManager->SendItem(i);
-
-							checkData.CheckSent = true;
-						}
-					}
-					else if (dataValue > checkData.PrevValue)
-					{
-						checkData.PrevValue = dataValue;
-
-						if (GameState != GameStates_Inactive)
-						{
-							MessageQueue::GetInstance().AddMessage("Mission Rank too low");
-						}
+						checkData.CheckSent = true;
 					}
 				}
-				else
+				else if (dataValue > checkData.PrevValue)
 				{
-					// Capture offline collects, show the proper Rank for them
-					char dataValue = *(char*)checkData.Address;
+					checkData.PrevValue = dataValue;
 
-					int requiredValue = 0;
-
-					if (i <= LevelClearCheck::LCC_CannonCore_5)
+					if (GameState != GameStates_Inactive)
 					{
-						requiredValue = this->_requiredRank;
+						MessageQueue::GetInstance().AddMessage("Mission Rank too low");
 					}
+				}
+			}
+			else
+			{
+				// Capture offline collects, show the proper Rank for them
+				char dataValue = *(char*)checkData.Address;
 
-					if (dataValue <= requiredValue)
-					{
-						WriteData<1>((void*)checkData.Address, requiredValue + 1);
-					}
+				int requiredValue = 0;
+
+				if (i <= LevelClearCheck::LCC_CannonCore_5)
+				{
+					requiredValue = this->_requiredRank;
+				}
+
+				if (dataValue <= requiredValue)
+				{
+					WriteData<1>((void*)checkData.Address, requiredValue + 1);
 				}
 			}
 		}
 	}
+}
 
-	this->OnFrameChaoGarden();
+void LocationManager::OnFrameChaoKeys()
+{
+	for (int i = ChaoKeyCheck::CKC_BEGIN; i < ChaoKeyCheck::CKC_NUM_CHECKS; i++)
+	{
+		if (this->_ChaoKeyData.find(i) != this->_ChaoKeyData.end())
+		{
+			ChaoKeyCheckData& checkData = this->_ChaoKeyData[i];
+
+			if (!checkData.CheckSent)
+			{
+				// DataPointer macro creates a static field, which doesn't work for this case
+				char dataValue = *(char*)checkData.Address;
+
+				if (dataValue == 0x01)
+				{
+					if (this->_archipelagoManager)
+					{
+						this->_archipelagoManager->SendItem(i);
+
+						checkData.CheckSent = true;
+					}
+				}
+			}
+			else
+			{
+				// Capture offline collects, show the proper Rank for them
+				char dataValue = *(char*)checkData.Address;
+
+				if (dataValue != 0x01)
+				{
+					WriteData<1>((void*)checkData.Address, 0x01);
+				}
+			}
+		}
+	}
 }
 
 void LocationManager::OnFrameChaoGarden()
@@ -306,11 +350,24 @@ void LocationManager::CheckLocation(int location_id)
 			}
 		}
 	}
+	else if (this->_ChaoKeyData.find(location_id) != this->_ChaoKeyData.end())
+	{
+		ChaoKeyCheckData& checkData = this->_ChaoKeyData[location_id];
+
+		checkData.CheckSent = true;
+
+		WriteData<1>((void*)checkData.Address, 0x01);
+	}
 }
 
 void LocationManager::SetRequiredRank(int requiredRank)
 {
 	this->_requiredRank = requiredRank;
+}
+
+void LocationManager::SetChaoKeysEnabled(bool chaoKeysEnabled)
+{
+	this->_chaoKeysEnabled = chaoKeysEnabled;
 }
 
 void LocationManager::SetRacesPacked(bool racesPacked)

@@ -313,3 +313,121 @@ struct ChaoGardenCheckData
 void InitializeChaoGardenChecks(std::map<int, ChaoGardenCheckData>& outChaoGardenChecks);
 
 void InitializeChaoRacePacks(std::map<int, std::vector<int>>& outChaoRacePacks);
+
+
+enum ChaoKeyCheck
+{
+    CKC_BEGIN = 0x400,
+    CKC_CityEscape_Chao_Key_1 = 0x400,
+    CKC_WildCanyon_Chao_Key_1,
+    CKC_PrisonLane_Chao_Key_1,
+    CKC_MetalHarbor_Chao_Key_1,
+    CKC_GreenForest_Chao_Key_1,
+    CKC_PumpkinHill_Chao_Key_1,
+    CKC_MissionStreet_Chao_Key_1,
+    CKC_AquaticMine_Chao_Key_1,
+    CKC_Route101_Chao_Key_1,
+    CKC_HiddenBase_Chao_Key_1,
+    CKC_PyramidCave_Chao_Key_1,
+    CKC_DeathChamber_Chao_Key_1,
+    CKC_EternalEngine_Chao_Key_1,
+    CKC_MeteorHerd_Chao_Key_1,
+    CKC_CrazyGadget_Chao_Key_1,
+    CKC_FinalRush_Chao_Key_1,
+    CKC_IronGate_Chao_Key_1,
+    CKC_DryLagoon_Chao_Key_1,
+    CKC_SandOcean_Chao_Key_1,
+    CKC_RadicalHighway_Chao_Key_1,
+    CKC_EggQuarters_Chao_Key_1,
+    CKC_LostColony_Chao_Key_1,
+    CKC_WeaponsBed_Chao_Key_1,
+    CKC_SecurityHall_Chao_Key_1,
+    CKC_WhiteJungle_Chao_Key_1,
+    CKC_Route280_Chao_Key_1,
+    CKC_SkyRail_Chao_Key_1,
+    CKC_MadSpace_Chao_Key_1,
+    CKC_CosmicWall_Chao_Key_1,
+    CKC_FinalChase_Chao_Key_1,
+    CKC_CannonCore_Chao_Key_1,
+
+    CKC_CityEscape_Chao_Key_2 = 0x420,
+    CKC_WildCanyon_Chao_Key_2,
+    CKC_PrisonLane_Chao_Key_2,
+    CKC_MetalHarbor_Chao_Key_2,
+    CKC_GreenForest_Chao_Key_2,
+    CKC_PumpkinHill_Chao_Key_2,
+    CKC_MissionStreet_Chao_Key_2,
+    CKC_AquaticMine_Chao_Key_2,
+    CKC_Route101_Chao_Key_2,
+    CKC_HiddenBase_Chao_Key_2,
+    CKC_PyramidCave_Chao_Key_2,
+    CKC_DeathChamber_Chao_Key_2,
+    CKC_EternalEngine_Chao_Key_2,
+    CKC_MeteorHerd_Chao_Key_2,
+    CKC_CrazyGadget_Chao_Key_2,
+    CKC_FinalRush_Chao_Key_2,
+    CKC_IronGate_Chao_Key_2,
+    CKC_DryLagoon_Chao_Key_2,
+    CKC_SandOcean_Chao_Key_2,
+    CKC_RadicalHighway_Chao_Key_2,
+    CKC_EggQuarters_Chao_Key_2,
+    CKC_LostColony_Chao_Key_2,
+    CKC_WeaponsBed_Chao_Key_2,
+    CKC_SecurityHall_Chao_Key_2,
+    CKC_WhiteJungle_Chao_Key_2,
+    CKC_Route280_Chao_Key_2,
+    CKC_SkyRail_Chao_Key_2,
+    CKC_MadSpace_Chao_Key_2,
+    CKC_CosmicWall_Chao_Key_2,
+    CKC_FinalChase_Chao_Key_2,
+    CKC_CannonCore_Chao_Key_2,
+
+    CKC_CityEscape_Chao_Key_3 = 0x440,
+    CKC_WildCanyon_Chao_Key_3,
+    CKC_PrisonLane_Chao_Key_3,
+    CKC_MetalHarbor_Chao_Key_3,
+    CKC_GreenForest_Chao_Key_3,
+    CKC_PumpkinHill_Chao_Key_3,
+    CKC_MissionStreet_Chao_Key_3,
+    CKC_AquaticMine_Chao_Key_3,
+    CKC_Route101_Chao_Key_3,
+    CKC_HiddenBase_Chao_Key_3,
+    CKC_PyramidCave_Chao_Key_3,
+    CKC_DeathChamber_Chao_Key_3,
+    CKC_EternalEngine_Chao_Key_3,
+    CKC_MeteorHerd_Chao_Key_3,
+    CKC_CrazyGadget_Chao_Key_3,
+    CKC_FinalRush_Chao_Key_3,
+    CKC_IronGate_Chao_Key_3,
+    CKC_DryLagoon_Chao_Key_3,
+    CKC_SandOcean_Chao_Key_3,
+    CKC_RadicalHighway_Chao_Key_3,
+    CKC_EggQuarters_Chao_Key_3,
+    CKC_LostColony_Chao_Key_3,
+    CKC_WeaponsBed_Chao_Key_3,
+    CKC_SecurityHall_Chao_Key_3,
+    CKC_WhiteJungle_Chao_Key_3,
+    CKC_Route280_Chao_Key_3,
+    CKC_SkyRail_Chao_Key_3,
+    CKC_MadSpace_Chao_Key_3,
+    CKC_CosmicWall_Chao_Key_3,
+    CKC_FinalChase_Chao_Key_3,
+    CKC_CannonCore_Chao_Key_3,
+
+    CKC_NUM_CHECKS
+};
+
+struct ChaoKeyCheckData
+{
+    ChaoKeyCheckData() : Address(0x00) {}
+    ChaoKeyCheckData(int address, int levelID, NJS_VECTOR position) : Address(address), LevelID(levelID), Position(position) {}
+
+    int Address;
+    int LevelID = 0x00;
+    NJS_VECTOR Position = { 0, 0, 0 };
+    float Range = 100.0f;
+    bool CheckSent = false;
+    char PrevValue = 0;
+};
+
+void InitializeChaoKeyChecks(std::map<int, ChaoKeyCheckData>& outChaoKeyChecks);

@@ -19,9 +19,12 @@ public:
 
 	void OnInitFunction(const char* path, const HelperFunctions& helperFunctions);
 	void OnFrameFunction();
+	void OnFrameLevelClears();
+	void OnFrameChaoKeys();
 	void OnFrameChaoGarden();
 	void CheckLocation(int location_id);
 	void SetRequiredRank(int requiredRank);
+	void SetChaoKeysEnabled(bool chaoKeysEnabled);
 	void SetRacesPacked(bool racesPacked);
 	void SetChaoEnabled(bool chaoEnabled);
 	void ResetLocations();
@@ -33,11 +36,13 @@ private:
 	unsigned int _timer = 0;
 	unsigned int _chaoTimer = 0;
 	int _requiredRank = 0;
+	bool _chaoKeysEnabled = false;
 	bool _racesPacked = false;
 	bool _chaoEnabled = false;
 
 	std::map<int, LevelClearCheckData> _LevelClearData;
 	std::map<int, ChaoGardenCheckData> _ChaoGardenData;
+	std::map<int, ChaoKeyCheckData> _ChaoKeyData;
 
 	std::map<int, std::vector<int>> _ChaoRacePacks;
 };

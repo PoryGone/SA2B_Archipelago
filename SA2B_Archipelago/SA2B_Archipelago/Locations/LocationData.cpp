@@ -231,6 +231,126 @@ void InitializeLevelClearChecks(std::map<int, LevelClearCheckData> &outLevelClea
     outLevelClearChecks[LevelClearCheck::LCC_Boss_5] = LevelClearCheckData(0x01DEE5A0);
 }
 
+void InitializeChaoKeyChecks(std::map<int, ChaoKeyCheckData>& outChaoKeyChecks)
+{
+    outChaoKeyChecks.clear();
+
+    outChaoKeyChecks[ChaoKeyCheck::CKC_GreenForest_Chao_Key_1] = ChaoKeyCheckData(0x01DEE8AC, LevelIDs_GreenForest, { 620, -1220, 3050 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_GreenForest_Chao_Key_2] = ChaoKeyCheckData(0x01DEE8AD, LevelIDs_GreenForest, { 6070, -1865, 7550 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_GreenForest_Chao_Key_3] = ChaoKeyCheckData(0x01DEE8AE, LevelIDs_GreenForest, { 8330, -1245, 8025 });
+
+    outChaoKeyChecks[ChaoKeyCheck::CKC_WhiteJungle_Chao_Key_1] = ChaoKeyCheckData(0x01DEE8AF, LevelIDs_WhiteJungle, { 3840, -2205, -1020 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_WhiteJungle_Chao_Key_2] = ChaoKeyCheckData(0x01DEE8B0, LevelIDs_WhiteJungle, { 12175, -3594, -7820 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_WhiteJungle_Chao_Key_3] = ChaoKeyCheckData(0x01DEE8B1, LevelIDs_WhiteJungle, { 13520, -3600, -6075 });
+
+    outChaoKeyChecks[ChaoKeyCheck::CKC_PumpkinHill_Chao_Key_1] = ChaoKeyCheckData(0x01DEE8B2, LevelIDs_PumpkinHill, { 95, -800, -180 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_PumpkinHill_Chao_Key_2] = ChaoKeyCheckData(0x01DEE8B3, LevelIDs_PumpkinHill, { 370, -986, -1060 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_PumpkinHill_Chao_Key_3] = ChaoKeyCheckData(0x01DEE8B4, LevelIDs_PumpkinHill, { 1940, -955, -1090 });
+
+    outChaoKeyChecks[ChaoKeyCheck::CKC_SkyRail_Chao_Key_1] = ChaoKeyCheckData(0x01DEE8B5, LevelIDs_SkyRail, { -540, -775, 2345 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_SkyRail_Chao_Key_2] = ChaoKeyCheckData(0x01DEE8B6, LevelIDs_SkyRail, { -3340, -2158, 3180 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_SkyRail_Chao_Key_3] = ChaoKeyCheckData(0x01DEE8B7, LevelIDs_SkyRail, { -2015, -2070, 4535 });
+
+    outChaoKeyChecks[ChaoKeyCheck::CKC_AquaticMine_Chao_Key_1] = ChaoKeyCheckData(0x01DEE8B8, LevelIDs_AquaticMine, { -130, 310, 130 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_AquaticMine_Chao_Key_2] = ChaoKeyCheckData(0x01DEE8B9, LevelIDs_AquaticMine, { -640, 25, -270 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_AquaticMine_Chao_Key_3] = ChaoKeyCheckData(0x01DEE8BA, LevelIDs_AquaticMine, { 255, -248, -300 });
+
+    outChaoKeyChecks[ChaoKeyCheck::CKC_SecurityHall_Chao_Key_1] = ChaoKeyCheckData(0x01DEE8BB, LevelIDs_SecurityHall, { -175, -933, -110 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_SecurityHall_Chao_Key_2] = ChaoKeyCheckData(0x01DEE8BC, LevelIDs_SecurityHall, { 75, 27, -10 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_SecurityHall_Chao_Key_3] = ChaoKeyCheckData(0x01DEE8BD, LevelIDs_SecurityHall, { 480, -513, 540 });
+
+    outChaoKeyChecks[ChaoKeyCheck::CKC_PrisonLane_Chao_Key_1] = ChaoKeyCheckData(0x01DEE8BE, LevelIDs_PrisonLane, { 105, -3, -210 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_PrisonLane_Chao_Key_2] = ChaoKeyCheckData(0x01DEE8BF, LevelIDs_PrisonLane, { -775, 97, 410 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_PrisonLane_Chao_Key_3] = ChaoKeyCheckData(0x01DEE8C0, LevelIDs_PrisonLane, { -1480, 237, -130 });
+
+    outChaoKeyChecks[ChaoKeyCheck::CKC_MetalHarbor_Chao_Key_1] = ChaoKeyCheckData(0x01DEE8C1, LevelIDs_MetalHarbor, { 2011, -170, -2090 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_MetalHarbor_Chao_Key_2] = ChaoKeyCheckData(0x01DEE8C2, LevelIDs_MetalHarbor, { 1850, -170, -5600 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_MetalHarbor_Chao_Key_3] = ChaoKeyCheckData(0x01DEE8C3, LevelIDs_MetalHarbor, { 4820, -270, -9225 });
+
+    outChaoKeyChecks[ChaoKeyCheck::CKC_IronGate_Chao_Key_1] = ChaoKeyCheckData(0x01DEE8C4, LevelIDs_IronGate, { 730, -230, -550 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_IronGate_Chao_Key_2] = ChaoKeyCheckData(0x01DEE8C5, LevelIDs_IronGate, { 3635, -864, -365 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_IronGate_Chao_Key_3] = ChaoKeyCheckData(0x01DEE8C6, LevelIDs_IronGate, { 6065, -1521, -1235 });
+
+    outChaoKeyChecks[ChaoKeyCheck::CKC_WeaponsBed_Chao_Key_1] = ChaoKeyCheckData(0x01DEE8C7, LevelIDs_WeaponsBed, { -200, -170, -1805 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_WeaponsBed_Chao_Key_2] = ChaoKeyCheckData(0x01DEE8C8, LevelIDs_WeaponsBed, { 2150, -170, -4385 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_WeaponsBed_Chao_Key_3] = ChaoKeyCheckData(0x01DEE8C9, LevelIDs_WeaponsBed, { 3750, -170, -9015 });
+
+    outChaoKeyChecks[ChaoKeyCheck::CKC_CityEscape_Chao_Key_1] = ChaoKeyCheckData(0x01DEE8CA, LevelIDs_CityEscape, { 2850, -8555, 6418 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_CityEscape_Chao_Key_2] = ChaoKeyCheckData(0x01DEE8CB, LevelIDs_CityEscape, { 6040, -10690, 4395 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_CityEscape_Chao_Key_3] = ChaoKeyCheckData(0x01DEE8CC, LevelIDs_CityEscape, { 7728, -14355, 6278 });
+
+    outChaoKeyChecks[ChaoKeyCheck::CKC_RadicalHighway_Chao_Key_1] = ChaoKeyCheckData(0x01DEE8CD, LevelIDs_RadicalHighway, { -1500, -1020, -4310 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_RadicalHighway_Chao_Key_2] = ChaoKeyCheckData(0x01DEE8CE, LevelIDs_RadicalHighway, { -5070, -2763, -4360 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_RadicalHighway_Chao_Key_3] = ChaoKeyCheckData(0x01DEE8CF, LevelIDs_RadicalHighway, { -6360, -5116, -11245 });
+
+    outChaoKeyChecks[ChaoKeyCheck::CKC_WildCanyon_Chao_Key_1] = ChaoKeyCheckData(0x01DEE8D0, LevelIDs_WildCanyon, { 300, 235, 150 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_WildCanyon_Chao_Key_2] = ChaoKeyCheckData(0x01DEE8D1, LevelIDs_WildCanyon, { 1070, 812, 20 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_WildCanyon_Chao_Key_3] = ChaoKeyCheckData(0x01DEE8D2, LevelIDs_WildCanyon, { -405, 927, -120 });
+
+    outChaoKeyChecks[ChaoKeyCheck::CKC_MissionStreet_Chao_Key_1] = ChaoKeyCheckData(0x01DEE8D3, LevelIDs_MissionStreet, { -1250, -58, -2265 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_MissionStreet_Chao_Key_2] = ChaoKeyCheckData(0x01DEE8D4, LevelIDs_MissionStreet, { -1260, 35, 3025 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_MissionStreet_Chao_Key_3] = ChaoKeyCheckData(0x01DEE8D5, LevelIDs_MissionStreet, { 2385, 200, -3460 });
+
+    outChaoKeyChecks[ChaoKeyCheck::CKC_DryLagoon_Chao_Key_1] = ChaoKeyCheckData(0x01DEE8D6, LevelIDs_DryLagoon, { -160, 55, 135 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_DryLagoon_Chao_Key_2] = ChaoKeyCheckData(0x01DEE8D7, LevelIDs_DryLagoon, { -140, 457, 255 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_DryLagoon_Chao_Key_3] = ChaoKeyCheckData(0x01DEE8D8, LevelIDs_DryLagoon, { -70, 429, 1410 });
+
+    outChaoKeyChecks[ChaoKeyCheck::CKC_SandOcean_Chao_Key_1] = ChaoKeyCheckData(0x01DEE8D9, LevelIDs_SandOcean, { 320, 30, -1980 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_SandOcean_Chao_Key_2] = ChaoKeyCheckData(0x01DEE8DA, LevelIDs_SandOcean, { 990, 90, -3420 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_SandOcean_Chao_Key_3] = ChaoKeyCheckData(0x01DEE8DB, LevelIDs_SandOcean, { 2625, 20, -4065 });
+
+    outChaoKeyChecks[ChaoKeyCheck::CKC_CrazyGadget_Chao_Key_1] = ChaoKeyCheckData(0x01DEE8DC, LevelIDs_CrazyGadget, { -5755, -1238, -3205 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_CrazyGadget_Chao_Key_2] = ChaoKeyCheckData(0x01DEE8DD, LevelIDs_CrazyGadget, { -8300, -1065, -3805 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_CrazyGadget_Chao_Key_3] = ChaoKeyCheckData(0x01DEE8DE, LevelIDs_CrazyGadget, { -10950, -1027, -2737 });
+
+    outChaoKeyChecks[ChaoKeyCheck::CKC_HiddenBase_Chao_Key_1] = ChaoKeyCheckData(0x01DEE8DF, LevelIDs_HiddenBase, { 150, 110, -2875 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_HiddenBase_Chao_Key_2] = ChaoKeyCheckData(0x01DEE8E0, LevelIDs_HiddenBase, { -3850, 110, -3080 });
+
+    outChaoKeyChecks[ChaoKeyCheck::CKC_EternalEngine_Chao_Key_1] = ChaoKeyCheckData(0x01DEE8E1, LevelIDs_EternalEngine, { -920, 578, -2200 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_EternalEngine_Chao_Key_2] = ChaoKeyCheckData(0x01DEE8E2, LevelIDs_EternalEngine, { -1600, 786, -5310 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_EternalEngine_Chao_Key_3] = ChaoKeyCheckData(0x01DEE8E3, LevelIDs_EternalEngine, { -2745, 836, -5200 });
+
+    outChaoKeyChecks[ChaoKeyCheck::CKC_DeathChamber_Chao_Key_1] = ChaoKeyCheckData(0x01DEE8E4, LevelIDs_DeathChamber, { 215, 0, 215 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_DeathChamber_Chao_Key_2] = ChaoKeyCheckData(0x01DEE8E5, LevelIDs_DeathChamber, { 600, 59, 1805 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_DeathChamber_Chao_Key_3] = ChaoKeyCheckData(0x01DEE8E6, LevelIDs_DeathChamber, { -980, -130, 290 });
+
+    outChaoKeyChecks[ChaoKeyCheck::CKC_EggQuarters_Chao_Key_1] = ChaoKeyCheckData(0x01DEE8E7, LevelIDs_EggQuarters, { -660, -30, 940 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_EggQuarters_Chao_Key_2] = ChaoKeyCheckData(0x01DEE8E8, LevelIDs_EggQuarters, { -80, 50, 395 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_EggQuarters_Chao_Key_3] = ChaoKeyCheckData(0x01DEE8E9, LevelIDs_EggQuarters, { -500, 40, 2680 });
+
+    outChaoKeyChecks[ChaoKeyCheck::CKC_LostColony_Chao_Key_1] = ChaoKeyCheckData(0x01DEE8EA, LevelIDs_LostColony, { -1553, -614, -2110 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_LostColony_Chao_Key_2] = ChaoKeyCheckData(0x01DEE8EB, LevelIDs_LostColony, { -881, -568, -2050 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_LostColony_Chao_Key_3] = ChaoKeyCheckData(0x01DEE8EC, LevelIDs_LostColony, { 1430, -918, -2400 });
+
+    outChaoKeyChecks[ChaoKeyCheck::CKC_PyramidCave_Chao_Key_1] = ChaoKeyCheckData(0x01DEE8ED, LevelIDs_PyramidCave, { -1450, -2010, -6415 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_PyramidCave_Chao_Key_2] = ChaoKeyCheckData(0x01DEE8EE, LevelIDs_PyramidCave, { -2505, -1731, -8560 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_PyramidCave_Chao_Key_3] = ChaoKeyCheckData(0x01DEE8EF, LevelIDs_PyramidCave, { -2750, -4050, -19270 });
+
+    outChaoKeyChecks[ChaoKeyCheck::CKC_FinalRush_Chao_Key_1] = ChaoKeyCheckData(0x01DEE8F0, LevelIDs_FinalRush, { 3855, -795, -705 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_FinalRush_Chao_Key_2] = ChaoKeyCheckData(0x01DEE8F1, LevelIDs_FinalRush, { 4290, -2641, 2895 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_FinalRush_Chao_Key_3] = ChaoKeyCheckData(0x01DEE8F2, LevelIDs_FinalRush, { 6025, -12751, 15862 });
+
+    outChaoKeyChecks[ChaoKeyCheck::CKC_MeteorHerd_Chao_Key_1] = ChaoKeyCheckData(0x01DEE8F3, LevelIDs_MeteorHerd, { 325, -600, -1020 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_MeteorHerd_Chao_Key_2] = ChaoKeyCheckData(0x01DEE8F4, LevelIDs_MeteorHerd, { 0, -440, -195 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_MeteorHerd_Chao_Key_3] = ChaoKeyCheckData(0x01DEE8F5, LevelIDs_MeteorHerd, { -425, 895, -420 });
+
+    outChaoKeyChecks[ChaoKeyCheck::CKC_CannonCore_Chao_Key_1] = ChaoKeyCheckData(0x01DEE8F6, LevelIDs_CannonsCoreS, { 570, 120, -2590 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_CannonCore_Chao_Key_2] = ChaoKeyCheckData(0x01DEE8F7, LevelIDs_CannonsCoreS, { -80, -131, -990 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_CannonCore_Chao_Key_3] = ChaoKeyCheckData(0x01DEE8F8, LevelIDs_CannonsCoreS, { -50, -480, -990 });
+
+    outChaoKeyChecks[ChaoKeyCheck::CKC_FinalChase_Chao_Key_1] = ChaoKeyCheckData(0x01DEE8F9, LevelIDs_FinalChase, { 3715, -4575, 3375 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_FinalChase_Chao_Key_2] = ChaoKeyCheckData(0x01DEE8FA, LevelIDs_FinalChase, { 4275, -5170, 8645 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_FinalChase_Chao_Key_3] = ChaoKeyCheckData(0x01DEE8FB, LevelIDs_FinalChase, { 1490, -7614, 18210 });
+
+    outChaoKeyChecks[ChaoKeyCheck::CKC_CosmicWall_Chao_Key_1] = ChaoKeyCheckData(0x01DEE8FC, LevelIDs_CosmicWall, { 3090, 1750, -725 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_CosmicWall_Chao_Key_2] = ChaoKeyCheckData(0x01DEE8FD, LevelIDs_CosmicWall, { 5678, 3167, 3530 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_CosmicWall_Chao_Key_3] = ChaoKeyCheckData(0x01DEE8FE, LevelIDs_CosmicWall, { 6648, 4317, 9268 });
+
+    outChaoKeyChecks[ChaoKeyCheck::CKC_MadSpace_Chao_Key_1] = ChaoKeyCheckData(0x01DEE8FF, LevelIDs_MadSpace, { 140, 327, -80 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_MadSpace_Chao_Key_2] = ChaoKeyCheckData(0x01DEE900, LevelIDs_MadSpace, { -620, 1699, 185 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_MadSpace_Chao_Key_3] = ChaoKeyCheckData(0x01DEE901, LevelIDs_MadSpace, { 100, 4099, -60 });
+}
+
 void InitializeChaoGardenChecks(std::map<int, ChaoGardenCheckData>& outChaoGardenChecks)
 {
     outChaoGardenChecks.clear();
