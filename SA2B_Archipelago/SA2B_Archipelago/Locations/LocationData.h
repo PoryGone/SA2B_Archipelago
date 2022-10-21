@@ -425,9 +425,273 @@ struct ChaoKeyCheckData
     int Address;
     int LevelID = 0x00;
     NJS_VECTOR Position = { 0, 0, 0 };
-    float Range = 100.0f;
+    float Range = 300.0f;
     bool CheckSent = false;
     char PrevValue = 0;
 };
 
 void InitializeChaoKeyChecks(std::map<int, ChaoKeyCheckData>& outChaoKeyChecks);
+
+enum PipeCheck
+{
+    PC_BEGIN = 0x500,
+    PC_CityEscape_Pipe_1 = 0x500,
+    PC_WildCanyon_Pipe_1,
+    PC_PrisonLane_Pipe_1,
+    PC_MetalHarbor_Pipe_1,
+    PC_GreenForest_Pipe_1,
+    PC_PumpkinHill_Pipe_1,
+    PC_MissionStreet_Pipe_1,
+    PC_AquaticMine_Pipe_1,
+    PC_Route101_Pipe_1,
+    PC_HiddenBase_Pipe_1,
+    PC_PyramidCave_Pipe_1,
+    PC_DeathChamber_Pipe_1,
+    PC_EternalEngine_Pipe_1,
+    PC_MeteorHerd_Pipe_1,
+    PC_CrazyGadget_Pipe_1,
+    PC_FinalRush_Pipe_1,
+    PC_IronGate_Pipe_1,
+    PC_DryLagoon_Pipe_1,
+    PC_SandOcean_Pipe_1,
+    PC_RadicalHighway_Pipe_1,
+    PC_EggQuarters_Pipe_1,
+    PC_LostColony_Pipe_1,
+    PC_WeaponsBed_Pipe_1,
+    PC_SecurityHall_Pipe_1,
+    PC_WhiteJungle_Pipe_1,
+    PC_Route280_Pipe_1,
+    PC_SkyRail_Pipe_1,
+    PC_MadSpace_Pipe_1,
+    PC_CosmicWall_Pipe_1,
+    PC_FinalChase_Pipe_1,
+    PC_CannonCore_Pipe_1,
+
+    PC_CityEscape_Pipe_2 = 0x520,
+    PC_WildCanyon_Pipe_2,
+    PC_PrisonLane_Pipe_2,
+    PC_MetalHarbor_Pipe_2,
+    PC_GreenForest_Pipe_2,
+    PC_PumpkinHill_Pipe_2,
+    PC_MissionStreet_Pipe_2,
+    PC_AquaticMine_Pipe_2,
+    PC_Route101_Pipe_2,
+    PC_HiddenBase_Pipe_2,
+    PC_PyramidCave_Pipe_2,
+    PC_DeathChamber_Pipe_2,
+    PC_EternalEngine_Pipe_2,
+    PC_MeteorHerd_Pipe_2,
+    PC_CrazyGadget_Pipe_2,
+    PC_FinalRush_Pipe_2,
+    PC_IronGate_Pipe_2,
+    PC_DryLagoon_Pipe_2,
+    PC_SandOcean_Pipe_2,
+    PC_RadicalHighway_Pipe_2,
+    PC_EggQuarters_Pipe_2,
+    PC_LostColony_Pipe_2,
+    PC_WeaponsBed_Pipe_2,
+    PC_SecurityHall_Pipe_2,
+    PC_WhiteJungle_Pipe_2,
+    PC_Route280_Pipe_2,
+    PC_SkyRail_Pipe_2,
+    PC_MadSpace_Pipe_2,
+    PC_CosmicWall_Pipe_2,
+    PC_FinalChase_Pipe_2,
+    PC_CannonCore_Pipe_2,
+
+    PC_CityEscape_Pipe_3 = 0x540,
+    PC_WildCanyon_Pipe_3,
+    PC_PrisonLane_Pipe_3,
+    PC_MetalHarbor_Pipe_3,
+    PC_GreenForest_Pipe_3,
+    PC_PumpkinHill_Pipe_3,
+    PC_MissionStreet_Pipe_3,
+    PC_AquaticMine_Pipe_3,
+    PC_Route101_Pipe_3,
+    PC_HiddenBase_Pipe_3,
+    PC_PyramidCave_Pipe_3,
+    PC_DeathChamber_Pipe_3,
+    PC_EternalEngine_Pipe_3,
+    PC_MeteorHerd_Pipe_3,
+    PC_CrazyGadget_Pipe_3,
+    PC_FinalRush_Pipe_3,
+    PC_IronGate_Pipe_3,
+    PC_DryLagoon_Pipe_3,
+    PC_SandOcean_Pipe_3,
+    PC_RadicalHighway_Pipe_3,
+    PC_EggQuarters_Pipe_3,
+    PC_LostColony_Pipe_3,
+    PC_WeaponsBed_Pipe_3,
+    PC_SecurityHall_Pipe_3,
+    PC_WhiteJungle_Pipe_3,
+    PC_Route280_Pipe_3,
+    PC_SkyRail_Pipe_3,
+    PC_MadSpace_Pipe_3,
+    PC_CosmicWall_Pipe_3,
+    PC_FinalChase_Pipe_3,
+    PC_CannonCore_Pipe_3,
+
+    PC_CityEscape_Pipe_4 = 0x560,
+    PC_WildCanyon_Pipe_4,
+    PC_PrisonLane_Pipe_4,
+    PC_MetalHarbor_Pipe_4,
+    PC_GreenForest_Pipe_4,
+    PC_PumpkinHill_Pipe_4,
+    PC_MissionStreet_Pipe_4,
+    PC_AquaticMine_Pipe_4,
+    PC_Route101_Pipe_4,
+    PC_HiddenBase_Pipe_4,
+    PC_PyramidCave_Pipe_4,
+    PC_DeathChamber_Pipe_4,
+    PC_EternalEngine_Pipe_4,
+    PC_MeteorHerd_Pipe_4,
+    PC_CrazyGadget_Pipe_4,
+    PC_FinalRush_Pipe_4,
+    PC_IronGate_Pipe_4,
+    PC_DryLagoon_Pipe_4,
+    PC_SandOcean_Pipe_4,
+    PC_RadicalHighway_Pipe_4,
+    PC_EggQuarters_Pipe_4,
+    PC_LostColony_Pipe_4,
+    PC_WeaponsBed_Pipe_4,
+    PC_SecurityHall_Pipe_4,
+    PC_WhiteJungle_Pipe_4,
+    PC_Route280_Pipe_4,
+    PC_SkyRail_Pipe_4,
+    PC_MadSpace_Pipe_4,
+    PC_CosmicWall_Pipe_4,
+    PC_FinalChase_Pipe_4,
+    PC_CannonCore_Pipe_4,
+
+    PC_CityEscape_Pipe_5 = 0x580,
+    PC_WildCanyon_Pipe_5,
+    PC_PrisonLane_Pipe_5,
+    PC_MetalHarbor_Pipe_5,
+    PC_GreenForest_Pipe_5,
+    PC_PumpkinHill_Pipe_5,
+    PC_MissionStreet_Pipe_5,
+    PC_AquaticMine_Pipe_5,
+    PC_Route101_Pipe_5,
+    PC_HiddenBase_Pipe_5,
+    PC_PyramidCave_Pipe_5,
+    PC_DeathChamber_Pipe_5,
+    PC_EternalEngine_Pipe_5,
+    PC_MeteorHerd_Pipe_5,
+    PC_CrazyGadget_Pipe_5,
+    PC_FinalRush_Pipe_5,
+    PC_IronGate_Pipe_5,
+    PC_DryLagoon_Pipe_5,
+    PC_SandOcean_Pipe_5,
+    PC_RadicalHighway_Pipe_5,
+    PC_EggQuarters_Pipe_5,
+    PC_LostColony_Pipe_5,
+    PC_WeaponsBed_Pipe_5,
+    PC_SecurityHall_Pipe_5,
+    PC_WhiteJungle_Pipe_5,
+    PC_Route280_Pipe_5,
+    PC_SkyRail_Pipe_5,
+    PC_MadSpace_Pipe_5,
+    PC_CosmicWall_Pipe_5,
+    PC_FinalChase_Pipe_5,
+    PC_CannonCore_Pipe_5,
+
+    PC_CityEscape_Pipe_6 = 0x5A0,
+    PC_WildCanyon_Pipe_6,
+    PC_PrisonLane_Pipe_6,
+    PC_MetalHarbor_Pipe_6,
+    PC_GreenForest_Pipe_6,
+    PC_PumpkinHill_Pipe_6,
+    PC_MissionStreet_Pipe_6,
+    PC_AquaticMine_Pipe_6,
+    PC_Route101_Pipe_6,
+    PC_HiddenBase_Pipe_6,
+    PC_PyramidCave_Pipe_6,
+    PC_DeathChamber_Pipe_6,
+    PC_EternalEngine_Pipe_6,
+    PC_MeteorHerd_Pipe_6,
+    PC_CrazyGadget_Pipe_6,
+    PC_FinalRush_Pipe_6,
+    PC_IronGate_Pipe_6,
+    PC_DryLagoon_Pipe_6,
+    PC_SandOcean_Pipe_6,
+    PC_RadicalHighway_Pipe_6,
+    PC_EggQuarters_Pipe_6,
+    PC_LostColony_Pipe_6,
+    PC_WeaponsBed_Pipe_6,
+    PC_SecurityHall_Pipe_6,
+    PC_WhiteJungle_Pipe_6,
+    PC_Route280_Pipe_6,
+    PC_SkyRail_Pipe_6,
+    PC_MadSpace_Pipe_6,
+    PC_CosmicWall_Pipe_6,
+    PC_FinalChase_Pipe_6,
+    PC_CannonCore_Pipe_6,
+
+    PC_NUM_CHECKS
+};
+
+struct PipeCheckData
+{
+    PipeCheckData() : Address(0x00) {}
+    PipeCheckData(int address, int levelID, NJS_VECTOR position) : Address(address), LevelID(levelID), Position(position) {}
+
+    int Address;
+    int LevelID = 0x00;
+    NJS_VECTOR Position = { 0, 0, 0 };
+    float Range = 30.0f;
+    bool CheckSent = false;
+    char PrevValue = 0;
+};
+
+void InitializePipeChecks(std::map<int, PipeCheckData>& outPipeChecks);
+
+enum GoldBeetleCheck
+{
+    GBC_BEGIN = 0x600,
+    GBC_CityEscape_Gold_Beetle_1 = 0x600,
+    GBC_WildCanyon_Gold_Beetle_1,
+    GBC_PrisonLane_Gold_Beetle_1,
+    GBC_MetalHarbor_Gold_Beetle_1,
+    GBC_GreenForest_Gold_Beetle_1,
+    GBC_PumpkinHill_Gold_Beetle_1,
+    GBC_MissionStreet_Gold_Beetle_1,
+    GBC_AquaticMine_Gold_Beetle_1,
+    GBC_Route101_Gold_Beetle_1,
+    GBC_HiddenBase_Gold_Beetle_1,
+    GBC_PyramidCave_Gold_Beetle_1,
+    GBC_DeathChamber_Gold_Beetle_1,
+    GBC_EternalEngine_Gold_Beetle_1,
+    GBC_MeteorHerd_Gold_Beetle_1,
+    GBC_CrazyGadget_Gold_Beetle_1,
+    GBC_FinalRush_Gold_Beetle_1,
+    GBC_IronGate_Gold_Beetle_1,
+    GBC_DryLagoon_Gold_Beetle_1,
+    GBC_SandOcean_Gold_Beetle_1,
+    GBC_RadicalHighway_Gold_Beetle_1,
+    GBC_EggQuarters_Gold_Beetle_1,
+    GBC_LostColony_Gold_Beetle_1,
+    GBC_WeaponsBed_Gold_Beetle_1,
+    GBC_SecurityHall_Gold_Beetle_1,
+    GBC_WhiteJungle_Gold_Beetle_1,
+    GBC_Route280_Gold_Beetle_1,
+    GBC_SkyRail_Gold_Beetle_1,
+    GBC_MadSpace_Gold_Beetle_1,
+    GBC_CosmicWall_Gold_Beetle_1,
+    GBC_FinalChase_Gold_Beetle_1,
+    GBC_CannonCore_Gold_Beetle_1,
+
+    GBC_NUM_CHECKS
+};
+
+struct GoldBeetleCheckData
+{
+    GoldBeetleCheckData() : Address(0x00) {}
+    GoldBeetleCheckData(int address, int levelID) : Address(address), LevelID(levelID) {}
+
+    int Address;
+    int LevelID = 0x00;
+    bool CheckSent = false;
+    char PrevValue = 0;
+};
+
+void InitializeGoldBeetleChecks(std::map<int, GoldBeetleCheckData>& outGoldBeetleChecks);

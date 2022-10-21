@@ -287,6 +287,51 @@ void SA2_SetChaoDifficulty(int chaoDifficulty)
     }
 }
 
+void SA2_SetChaoKeys(int chaoKeys)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    if (chaoKeys != 0)
+    {
+        LocationManager* locationManager = &LocationManager::getInstance();
+
+        locationManager->SetChaoKeysEnabled(true);
+    }
+}
+
+void SA2_SetPipes(int pipes)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    if (pipes > 0)
+    {
+        LocationManager* locationManager = &LocationManager::getInstance();
+
+        locationManager->SetPipesEnabled(true);
+    }
+}
+
+void SA2_SetGoldBeetles(int goldBeetles)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    if (goldBeetles > 0)
+    {
+        LocationManager* locationManager = &LocationManager::getInstance();
+
+        locationManager->SetGoldBeetlesEnabled(true);
+    }
+}
+
 void SA2_SetRegionEmblemMap(std::map<int, int> map)
 {
     if (!ArchipelagoManager::getInstance().IsInit())
@@ -328,6 +373,9 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_RegisterSlotDataIntCallback("EmblemsForCannonsCore", &SA2_SetEmblemsForCannonsCore);
     AP_RegisterSlotDataIntCallback("IncludeMissions", &SA2_SetMissionCount);
     AP_RegisterSlotDataIntCallback("RequiredRank", &SA2_SetRequiredRank);
+    AP_RegisterSlotDataIntCallback("ChaoKeys", &SA2_SetChaoKeys);
+    AP_RegisterSlotDataIntCallback("Pipes", &SA2_SetPipes);
+    AP_RegisterSlotDataIntCallback("GoldBeetles", &SA2_SetGoldBeetles);
     AP_RegisterSlotDataIntCallback("ChaoRaceChecks", &SA2_SetChaoPacks);
     AP_RegisterSlotDataIntCallback("ChaoGardenDifficulty", &SA2_SetChaoDifficulty);
     AP_RegisterSlotDataMapIntIntCallback("RegionEmblemMap", &SA2_SetRegionEmblemMap);

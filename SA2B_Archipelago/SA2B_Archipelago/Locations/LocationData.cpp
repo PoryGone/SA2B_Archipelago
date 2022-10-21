@@ -334,8 +334,8 @@ void InitializeChaoKeyChecks(std::map<int, ChaoKeyCheckData>& outChaoKeyChecks)
     outChaoKeyChecks[ChaoKeyCheck::CKC_MeteorHerd_Chao_Key_2] = ChaoKeyCheckData(0x01DEE8F4, LevelIDs_MeteorHerd, { 0, -440, -195 });
     outChaoKeyChecks[ChaoKeyCheck::CKC_MeteorHerd_Chao_Key_3] = ChaoKeyCheckData(0x01DEE8F5, LevelIDs_MeteorHerd, { -425, 895, -420 });
 
-    outChaoKeyChecks[ChaoKeyCheck::CKC_CannonCore_Chao_Key_1] = ChaoKeyCheckData(0x01DEE8F6, LevelIDs_CannonsCoreS, { 570, 120, -2590 });
-    outChaoKeyChecks[ChaoKeyCheck::CKC_CannonCore_Chao_Key_2] = ChaoKeyCheckData(0x01DEE8F7, LevelIDs_CannonsCoreS, { -80, -131, -990 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_CannonCore_Chao_Key_1] = ChaoKeyCheckData(0x01DEE8F6, LevelIDs_CannonsCoreE, { 570, 120, -2590 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_CannonCore_Chao_Key_2] = ChaoKeyCheckData(0x01DEE8F7, LevelIDs_CannonsCoreR, { -80, -131, -990 });
     outChaoKeyChecks[ChaoKeyCheck::CKC_CannonCore_Chao_Key_3] = ChaoKeyCheckData(0x01DEE8F8, LevelIDs_CannonsCoreS, { -50, -480, -990 });
 
     outChaoKeyChecks[ChaoKeyCheck::CKC_FinalChase_Chao_Key_1] = ChaoKeyCheckData(0x01DEE8F9, LevelIDs_FinalChase, { 3715, -4575, 3375 });
@@ -349,6 +349,170 @@ void InitializeChaoKeyChecks(std::map<int, ChaoKeyCheckData>& outChaoKeyChecks)
     outChaoKeyChecks[ChaoKeyCheck::CKC_MadSpace_Chao_Key_1] = ChaoKeyCheckData(0x01DEE8FF, LevelIDs_MadSpace, { 140, 327, -80 });
     outChaoKeyChecks[ChaoKeyCheck::CKC_MadSpace_Chao_Key_2] = ChaoKeyCheckData(0x01DEE900, LevelIDs_MadSpace, { -620, 1699, 185 });
     outChaoKeyChecks[ChaoKeyCheck::CKC_MadSpace_Chao_Key_3] = ChaoKeyCheckData(0x01DEE901, LevelIDs_MadSpace, { 100, 4099, -60 });
+}
+
+void InitializePipeChecks(std::map<int, PipeCheckData>& outPipeChecks)
+{
+    outPipeChecks.clear();
+
+    outPipeChecks[PipeCheck::PC_GreenForest_Pipe_1] = PipeCheckData(0x01DEE970, LevelIDs_GreenForest, { 222, -951, 3956 });
+    outPipeChecks[PipeCheck::PC_GreenForest_Pipe_2] = PipeCheckData(0x01DEE971, LevelIDs_GreenForest, { 8276, -727, 7726 });
+
+    outPipeChecks[PipeCheck::PC_WhiteJungle_Pipe_1] = PipeCheckData(0x01DEE972, LevelIDs_WhiteJungle, { 4163, -2224, -677 });
+    outPipeChecks[PipeCheck::PC_WhiteJungle_Pipe_2] = PipeCheckData(0x01DEE973, LevelIDs_WhiteJungle, { 6971, -1937, -3717 });
+    outPipeChecks[PipeCheck::PC_WhiteJungle_Pipe_3] = PipeCheckData(0x01DEE974, LevelIDs_WhiteJungle, { 10416, -3572, -7511 });
+    outPipeChecks[PipeCheck::PC_WhiteJungle_Pipe_4] = PipeCheckData(0x01DEE975, LevelIDs_WhiteJungle, { 11801, -3510, -7531 });
+
+    outPipeChecks[PipeCheck::PC_PumpkinHill_Pipe_1] = PipeCheckData(0x01DEE976, LevelIDs_PumpkinHill, { 64, -870, -1607 });
+
+    outPipeChecks[PipeCheck::PC_SkyRail_Pipe_1] = PipeCheckData(0x01DEE977, LevelIDs_SkyRail, { -525, -775, 1928 });
+    outPipeChecks[PipeCheck::PC_SkyRail_Pipe_2] = PipeCheckData(0x01DEE978, LevelIDs_SkyRail, { -3633, -1821, 3079 });
+    outPipeChecks[PipeCheck::PC_SkyRail_Pipe_3] = PipeCheckData(0x01DEE979, LevelIDs_SkyRail, { -3323, -1501, 3143 });
+    outPipeChecks[PipeCheck::PC_SkyRail_Pipe_4] = PipeCheckData(0x01DEE97A, LevelIDs_SkyRail, { -1938, -2051, 4611 });
+    outPipeChecks[PipeCheck::PC_SkyRail_Pipe_5] = PipeCheckData(0x01DEE97B, LevelIDs_SkyRail, { -2288, -4026, 8453 });
+    outPipeChecks[PipeCheck::PC_SkyRail_Pipe_6] = PipeCheckData(0x01DEE97C, LevelIDs_SkyRail, { -2291, -3876, 8523 });
+
+    outPipeChecks[PipeCheck::PC_AquaticMine_Pipe_1] = PipeCheckData(0x01DEE97D, LevelIDs_AquaticMine, { 124, 310, -25 });
+    outPipeChecks[PipeCheck::PC_AquaticMine_Pipe_2] = PipeCheckData(0x01DEE97E, LevelIDs_AquaticMine, { 339, -86, -184 });
+    outPipeChecks[PipeCheck::PC_AquaticMine_Pipe_3] = PipeCheckData(0x01DEE97F, LevelIDs_AquaticMine, { 151, -248, -329 });
+
+    outPipeChecks[PipeCheck::PC_SecurityHall_Pipe_1] = PipeCheckData(0x01DEE980, LevelIDs_SecurityHall, { -178, -883, 117 });
+
+    outPipeChecks[PipeCheck::PC_PrisonLane_Pipe_1] = PipeCheckData(0x01DEE981, LevelIDs_PrisonLane, { 105, -3, 215 });
+    outPipeChecks[PipeCheck::PC_PrisonLane_Pipe_2] = PipeCheckData(0x01DEE982, LevelIDs_PrisonLane, { -1483, 227, -78 });
+    outPipeChecks[PipeCheck::PC_PrisonLane_Pipe_3] = PipeCheckData(0x01DEE983, LevelIDs_PrisonLane, { -3450, 679, -175 });
+
+    outPipeChecks[PipeCheck::PC_MetalHarbor_Pipe_1] = PipeCheckData(0x01DEE984, LevelIDs_MetalHarbor, { 1649, -299, -2170 });
+
+    outPipeChecks[PipeCheck::PC_IronGate_Pipe_1] = PipeCheckData(0x01DEE985, LevelIDs_IronGate, { 1165, -271, -723 });
+    outPipeChecks[PipeCheck::PC_IronGate_Pipe_2] = PipeCheckData(0x01DEE986, LevelIDs_IronGate, { 2396, -663, -667 });
+    outPipeChecks[PipeCheck::PC_IronGate_Pipe_3] = PipeCheckData(0x01DEE987, LevelIDs_IronGate, { 3917, -903, -608 });
+    outPipeChecks[PipeCheck::PC_IronGate_Pipe_4] = PipeCheckData(0x01DEE988, LevelIDs_IronGate, { 4965, -1436, -1040 });
+    outPipeChecks[PipeCheck::PC_IronGate_Pipe_5] = PipeCheckData(0x01DEE989, LevelIDs_IronGate, { 5409, -1421, -1261 });
+
+    outPipeChecks[PipeCheck::PC_WeaponsBed_Pipe_1] = PipeCheckData(0x01DEE98A, LevelIDs_WeaponsBed, { 108, -170, -234 });
+    outPipeChecks[PipeCheck::PC_WeaponsBed_Pipe_2] = PipeCheckData(0x01DEE98B, LevelIDs_WeaponsBed, { 259, -170, -1761 });
+    outPipeChecks[PipeCheck::PC_WeaponsBed_Pipe_3] = PipeCheckData(0x01DEE98C, LevelIDs_WeaponsBed, { 1864, -270, -5951 });
+    outPipeChecks[PipeCheck::PC_WeaponsBed_Pipe_4] = PipeCheckData(0x01DEE98D, LevelIDs_WeaponsBed, { 3264, -170, -8747 });
+    outPipeChecks[PipeCheck::PC_WeaponsBed_Pipe_5] = PipeCheckData(0x01DEE98E, LevelIDs_WeaponsBed, { 3523, -220, -9523 });
+
+    outPipeChecks[PipeCheck::PC_CityEscape_Pipe_1] = PipeCheckData(0x01DEE98F, LevelIDs_CityEscape, { -1301, -6260, 9432 });
+    outPipeChecks[PipeCheck::PC_CityEscape_Pipe_2] = PipeCheckData(0x01DEE990, LevelIDs_CityEscape, { 380, -6570, 9970 });
+    outPipeChecks[PipeCheck::PC_CityEscape_Pipe_3] = PipeCheckData(0x01DEE991, LevelIDs_CityEscape, { 5815, -10790, 4506 });
+    outPipeChecks[PipeCheck::PC_CityEscape_Pipe_4] = PipeCheckData(0x01DEE992, LevelIDs_CityEscape, { 6383, -15950, 8675 });
+
+    outPipeChecks[PipeCheck::PC_RadicalHighway_Pipe_1] = PipeCheckData(0x01DEE993, LevelIDs_RadicalHighway, { -4966, -2713, -4319 });
+    outPipeChecks[PipeCheck::PC_RadicalHighway_Pipe_2] = PipeCheckData(0x01DEE994, LevelIDs_RadicalHighway, { -6338, -4550, -10033 });
+    outPipeChecks[PipeCheck::PC_RadicalHighway_Pipe_3] = PipeCheckData(0x01DEE995, LevelIDs_RadicalHighway, { -8263, -6455, -14335 });
+
+    outPipeChecks[PipeCheck::PC_WildCanyon_Pipe_1] = PipeCheckData(0x01DEE996, LevelIDs_WildCanyon, { 197, 200, -285 });
+    outPipeChecks[PipeCheck::PC_WildCanyon_Pipe_2] = PipeCheckData(0x01DEE997, LevelIDs_WildCanyon, { 318, 650, -197 });
+    outPipeChecks[PipeCheck::PC_WildCanyon_Pipe_3] = PipeCheckData(0x01DEE998, LevelIDs_WildCanyon, { 771, 950, 48 });
+
+    outPipeChecks[PipeCheck::PC_MissionStreet_Pipe_1] = PipeCheckData(0x01DEE999, LevelIDs_MissionStreet, { -1250, -165, -2516 });
+    outPipeChecks[PipeCheck::PC_MissionStreet_Pipe_2] = PipeCheckData(0x01DEE99A, LevelIDs_MissionStreet, { 2322, 200, -3303 });
+    outPipeChecks[PipeCheck::PC_MissionStreet_Pipe_3] = PipeCheckData(0x01DEE99B, LevelIDs_MissionStreet, { 4427, 448, -4018 });
+
+    outPipeChecks[PipeCheck::PC_DryLagoon_Pipe_1] = PipeCheckData(0x01DEE99C, LevelIDs_DryLagoon, { 164, 457, -432 });
+
+    outPipeChecks[PipeCheck::PC_SandOcean_Pipe_1] = PipeCheckData(0x01DEE99D, LevelIDs_SandOcean, { 1305, 30, -3765 });
+    outPipeChecks[PipeCheck::PC_SandOcean_Pipe_2] = PipeCheckData(0x01DEE99E, LevelIDs_SandOcean, { 1571, 30, -3760 });
+    outPipeChecks[PipeCheck::PC_SandOcean_Pipe_3] = PipeCheckData(0x01DEE99F, LevelIDs_SandOcean, { 2691, -61, -3794 });
+    outPipeChecks[PipeCheck::PC_SandOcean_Pipe_4] = PipeCheckData(0x01DEE9A0, LevelIDs_SandOcean, { 3411, 30, -4353 });
+    outPipeChecks[PipeCheck::PC_SandOcean_Pipe_5] = PipeCheckData(0x01DEE9A1, LevelIDs_SandOcean, { 3540, -100, -6033 });
+
+    outPipeChecks[PipeCheck::PC_CrazyGadget_Pipe_1] = PipeCheckData(0x01DEE9A2, LevelIDs_CrazyGadget, { 78, -31, -324 });
+    outPipeChecks[PipeCheck::PC_CrazyGadget_Pipe_2] = PipeCheckData(0x01DEE9A3, LevelIDs_CrazyGadget, { -2908, 150, -660 });
+    outPipeChecks[PipeCheck::PC_CrazyGadget_Pipe_3] = PipeCheckData(0x01DEE9A4, LevelIDs_CrazyGadget, { -4464, -618, -1603 });
+    outPipeChecks[PipeCheck::PC_CrazyGadget_Pipe_4] = PipeCheckData(0x01DEE9A5, LevelIDs_CrazyGadget, { -10315, -1352, -5534 });
+
+    outPipeChecks[PipeCheck::PC_HiddenBase_Pipe_1] = PipeCheckData(0x01DEE9A6, LevelIDs_HiddenBase, { -41, 110, -2944 });
+    outPipeChecks[PipeCheck::PC_HiddenBase_Pipe_2] = PipeCheckData(0x01DEE9A7, LevelIDs_HiddenBase, { -3050, 300, -3296 });
+    outPipeChecks[PipeCheck::PC_HiddenBase_Pipe_3] = PipeCheckData(0x01DEE9A8, LevelIDs_HiddenBase, { -3199, 250, -2979 });
+    outPipeChecks[PipeCheck::PC_HiddenBase_Pipe_4] = PipeCheckData(0x01DEE9A9, LevelIDs_HiddenBase, { -4027, 560, -3374 });
+    outPipeChecks[PipeCheck::PC_HiddenBase_Pipe_5] = PipeCheckData(0x01DEE9AA, LevelIDs_HiddenBase, { -4143, 610, -4428 });
+
+    outPipeChecks[PipeCheck::PC_EternalEngine_Pipe_1] = PipeCheckData(0x01DEE9AB, LevelIDs_EternalEngine, { 249, -30, -1187 });
+    outPipeChecks[PipeCheck::PC_EternalEngine_Pipe_2] = PipeCheckData(0x01DEE9AC, LevelIDs_EternalEngine, { 141, 597, -1838 });
+    outPipeChecks[PipeCheck::PC_EternalEngine_Pipe_3] = PipeCheckData(0x01DEE9AD, LevelIDs_EternalEngine, { -2396, 936, -5835 });
+    outPipeChecks[PipeCheck::PC_EternalEngine_Pipe_4] = PipeCheckData(0x01DEE9AE, LevelIDs_EternalEngine, { -1945, 335, -7964 });
+    outPipeChecks[PipeCheck::PC_EternalEngine_Pipe_5] = PipeCheckData(0x01DEE9AF, LevelIDs_EternalEngine, { 234, -1827, -9190 });
+
+    outPipeChecks[PipeCheck::PC_DeathChamber_Pipe_1] = PipeCheckData(0x01DEE9B0, LevelIDs_DeathChamber, { 577, 100, 514 });
+    outPipeChecks[PipeCheck::PC_DeathChamber_Pipe_2] = PipeCheckData(0x01DEE9B1, LevelIDs_DeathChamber, { 570, 100, -500 });
+    outPipeChecks[PipeCheck::PC_DeathChamber_Pipe_3] = PipeCheckData(0x01DEE9B2, LevelIDs_DeathChamber, { 1292, -30, -391 });
+
+    outPipeChecks[PipeCheck::PC_EggQuarters_Pipe_1] = PipeCheckData(0x01DEE9B3, LevelIDs_EggQuarters, { 325, -31, 1207 });
+    outPipeChecks[PipeCheck::PC_EggQuarters_Pipe_2] = PipeCheckData(0x01DEE9B4, LevelIDs_EggQuarters, { 2, 181, 273 });
+
+    outPipeChecks[PipeCheck::PC_LostColony_Pipe_1] = PipeCheckData(0x01DEE9B5, LevelIDs_LostColony, { -418, -643, -652 });
+    outPipeChecks[PipeCheck::PC_LostColony_Pipe_2] = PipeCheckData(0x01DEE9B6, LevelIDs_LostColony, { 585, -518, -2560 });
+
+    outPipeChecks[PipeCheck::PC_PyramidCave_Pipe_1] = PipeCheckData(0x01DEE9B7, LevelIDs_PyramidCave, { -2595, -1880, -8302 });
+    outPipeChecks[PipeCheck::PC_PyramidCave_Pipe_2] = PipeCheckData(0x01DEE9B8, LevelIDs_PyramidCave, { -2530, -1880, -8176 });
+    outPipeChecks[PipeCheck::PC_PyramidCave_Pipe_3] = PipeCheckData(0x01DEE9B9, LevelIDs_PyramidCave, { -2597, -1731, -8548 });
+    outPipeChecks[PipeCheck::PC_PyramidCave_Pipe_4] = PipeCheckData(0x01DEE9BA, LevelIDs_PyramidCave, { -2521, -1730, -8549 });
+
+    outPipeChecks[PipeCheck::PC_FinalRush_Pipe_1] = PipeCheckData(0x01DEE9BB, LevelIDs_FinalRush, { 4273, -3400, 3258 });
+    outPipeChecks[PipeCheck::PC_FinalRush_Pipe_2] = PipeCheckData(0x01DEE9BC, LevelIDs_FinalRush, { 6427, -9675, 5440 });
+
+    outPipeChecks[PipeCheck::PC_MeteorHerd_Pipe_1] = PipeCheckData(0x01DEE9BD, LevelIDs_MeteorHerd, { -525, -600, -876 });
+    outPipeChecks[PipeCheck::PC_MeteorHerd_Pipe_2] = PipeCheckData(0x01DEE9BE, LevelIDs_MeteorHerd, { 451, -600, 1129 });
+    outPipeChecks[PipeCheck::PC_MeteorHerd_Pipe_3] = PipeCheckData(0x01DEE9BF, LevelIDs_MeteorHerd, { 376, 707, 292 });
+
+    outPipeChecks[PipeCheck::PC_CannonCore_Pipe_1] = PipeCheckData(0x01DEE9C0, LevelIDs_CannonsCoreT, { -1108, -919, -1540 });
+    outPipeChecks[PipeCheck::PC_CannonCore_Pipe_2] = PipeCheckData(0x01DEE9C1, LevelIDs_CannonsCoreT, { -1822, -1299, -2559 });
+    outPipeChecks[PipeCheck::PC_CannonCore_Pipe_3] = PipeCheckData(0x01DEE9C2, LevelIDs_CannonsCoreE, { 986, 120, -1877 });
+    outPipeChecks[PipeCheck::PC_CannonCore_Pipe_4] = PipeCheckData(0x01DEE9C3, LevelIDs_CannonsCoreR, { -96, 144, 94 });
+    outPipeChecks[PipeCheck::PC_CannonCore_Pipe_5] = PipeCheckData(0x01DEE9C4, LevelIDs_CannonsCoreS, { -461, -480, -2080 });
+
+    outPipeChecks[PipeCheck::PC_FinalChase_Pipe_1] = PipeCheckData(0x01DEE9C5, LevelIDs_FinalChase, { 3687, -4225, 5395 });
+    outPipeChecks[PipeCheck::PC_FinalChase_Pipe_2] = PipeCheckData(0x01DEE9C6, LevelIDs_FinalChase, { 4361, -5416, 10140 });
+    outPipeChecks[PipeCheck::PC_FinalChase_Pipe_3] = PipeCheckData(0x01DEE9C7, LevelIDs_FinalChase, { 1481, -7614, 18249 });
+
+    outPipeChecks[PipeCheck::PC_CosmicWall_Pipe_1] = PipeCheckData(0x01DEE9C8, LevelIDs_CosmicWall, { 603, 250, 29 });
+    outPipeChecks[PipeCheck::PC_CosmicWall_Pipe_2] = PipeCheckData(0x01DEE9C9, LevelIDs_CosmicWall, { 3774, 2660, -889 });
+    outPipeChecks[PipeCheck::PC_CosmicWall_Pipe_3] = PipeCheckData(0x01DEE9CA, LevelIDs_CosmicWall, { 4302, 3167, -928 });
+    outPipeChecks[PipeCheck::PC_CosmicWall_Pipe_4] = PipeCheckData(0x01DEE9CB, LevelIDs_CosmicWall, { 5523, 3167, 3538 });
+    outPipeChecks[PipeCheck::PC_CosmicWall_Pipe_5] = PipeCheckData(0x01DEE9CC, LevelIDs_CosmicWall, { 6123, 2800, 7977 });
+
+    outPipeChecks[PipeCheck::PC_MadSpace_Pipe_1] = PipeCheckData(0x01DEE9CD, LevelIDs_MadSpace, { -133, 327, -79 });
+    outPipeChecks[PipeCheck::PC_MadSpace_Pipe_2] = PipeCheckData(0x01DEE9CE, LevelIDs_MadSpace, { 1182, 188, -405 });
+    outPipeChecks[PipeCheck::PC_MadSpace_Pipe_3] = PipeCheckData(0x01DEE9CF, LevelIDs_MadSpace, { 570, 3950, 866 });
+    outPipeChecks[PipeCheck::PC_MadSpace_Pipe_4] = PipeCheckData(0x01DEE9D0, LevelIDs_MadSpace, { 530, 4098, -426 });
+}
+
+void InitializeGoldBeetleChecks(std::map<int, GoldBeetleCheckData>& outGoldBeetleChecks)
+{
+    outGoldBeetleChecks.clear();
+
+    outGoldBeetleChecks[GoldBeetleCheck::GBC_GreenForest_Gold_Beetle_1] = GoldBeetleCheckData(0x01DEEA34, LevelIDs_GreenForest);
+    outGoldBeetleChecks[GoldBeetleCheck::GBC_WhiteJungle_Gold_Beetle_1] = GoldBeetleCheckData(0x01DEEA35, LevelIDs_WhiteJungle);
+    outGoldBeetleChecks[GoldBeetleCheck::GBC_SkyRail_Gold_Beetle_1] = GoldBeetleCheckData(0x01DEEA37, LevelIDs_SkyRail);
+    outGoldBeetleChecks[GoldBeetleCheck::GBC_AquaticMine_Gold_Beetle_1] = GoldBeetleCheckData(0x01DEEA38, LevelIDs_AquaticMine);
+    outGoldBeetleChecks[GoldBeetleCheck::GBC_SecurityHall_Gold_Beetle_1] = GoldBeetleCheckData(0x01DEEA39, LevelIDs_SecurityHall);
+    outGoldBeetleChecks[GoldBeetleCheck::GBC_PrisonLane_Gold_Beetle_1] = GoldBeetleCheckData(0x01DEEA3A, LevelIDs_PrisonLane);
+    outGoldBeetleChecks[GoldBeetleCheck::GBC_MetalHarbor_Gold_Beetle_1] = GoldBeetleCheckData(0x01DEEA3B, LevelIDs_MetalHarbor);
+    outGoldBeetleChecks[GoldBeetleCheck::GBC_IronGate_Gold_Beetle_1] = GoldBeetleCheckData(0x01DEEA3C, LevelIDs_IronGate);
+    outGoldBeetleChecks[GoldBeetleCheck::GBC_CityEscape_Gold_Beetle_1] = GoldBeetleCheckData(0x01DEEA3E, LevelIDs_CityEscape);
+    outGoldBeetleChecks[GoldBeetleCheck::GBC_RadicalHighway_Gold_Beetle_1] = GoldBeetleCheckData(0x01DEEA3F, LevelIDs_RadicalHighway);
+    outGoldBeetleChecks[GoldBeetleCheck::GBC_WildCanyon_Gold_Beetle_1] = GoldBeetleCheckData(0x01DEEA40, LevelIDs_WildCanyon);
+    outGoldBeetleChecks[GoldBeetleCheck::GBC_MissionStreet_Gold_Beetle_1] = GoldBeetleCheckData(0x01DEEA41, LevelIDs_MissionStreet);
+    outGoldBeetleChecks[GoldBeetleCheck::GBC_DryLagoon_Gold_Beetle_1] = GoldBeetleCheckData(0x01DEEA42, LevelIDs_DryLagoon);
+    outGoldBeetleChecks[GoldBeetleCheck::GBC_SandOcean_Gold_Beetle_1] = GoldBeetleCheckData(0x01DEEA43, LevelIDs_SandOcean);
+    outGoldBeetleChecks[GoldBeetleCheck::GBC_CrazyGadget_Gold_Beetle_1] = GoldBeetleCheckData(0x01DEEA44, LevelIDs_CrazyGadget);
+    outGoldBeetleChecks[GoldBeetleCheck::GBC_HiddenBase_Gold_Beetle_1] = GoldBeetleCheckData(0x01DEEA45, LevelIDs_HiddenBase);
+    outGoldBeetleChecks[GoldBeetleCheck::GBC_EternalEngine_Gold_Beetle_1] = GoldBeetleCheckData(0x01DEEA46, LevelIDs_EternalEngine);
+    outGoldBeetleChecks[GoldBeetleCheck::GBC_DeathChamber_Gold_Beetle_1] = GoldBeetleCheckData(0x01DEEA47, LevelIDs_DeathChamber);
+    outGoldBeetleChecks[GoldBeetleCheck::GBC_EggQuarters_Gold_Beetle_1] = GoldBeetleCheckData(0x01DEEA48, LevelIDs_EggQuarters);
+    outGoldBeetleChecks[GoldBeetleCheck::GBC_LostColony_Gold_Beetle_1] = GoldBeetleCheckData(0x01DEEA49, LevelIDs_LostColony);
+    outGoldBeetleChecks[GoldBeetleCheck::GBC_PyramidCave_Gold_Beetle_1] = GoldBeetleCheckData(0x01DEEA4A, LevelIDs_PyramidCave);
+    outGoldBeetleChecks[GoldBeetleCheck::GBC_FinalRush_Gold_Beetle_1] = GoldBeetleCheckData(0x01DEEA4B, LevelIDs_FinalRush);
+    outGoldBeetleChecks[GoldBeetleCheck::GBC_MeteorHerd_Gold_Beetle_1] = GoldBeetleCheckData(0x01DEEA4C, LevelIDs_MeteorHerd);
+    outGoldBeetleChecks[GoldBeetleCheck::GBC_CannonCore_Gold_Beetle_1] = GoldBeetleCheckData(0x01DEEA4D, LevelIDs_CannonsCoreS);
+    outGoldBeetleChecks[GoldBeetleCheck::GBC_FinalChase_Gold_Beetle_1] = GoldBeetleCheckData(0x01DEEA4E, LevelIDs_FinalChase);
+    outGoldBeetleChecks[GoldBeetleCheck::GBC_CosmicWall_Gold_Beetle_1] = GoldBeetleCheckData(0x01DEEA4F, LevelIDs_CosmicWall);
+    outGoldBeetleChecks[GoldBeetleCheck::GBC_MadSpace_Gold_Beetle_1] = GoldBeetleCheckData(0x01DEEA4A, LevelIDs_MadSpace);
 }
 
 void InitializeChaoGardenChecks(std::map<int, ChaoGardenCheckData>& outChaoGardenChecks)
