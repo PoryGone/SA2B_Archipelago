@@ -288,8 +288,8 @@ void InitializeChaoKeyChecks(std::map<int, ChaoKeyCheckData>& outChaoKeyChecks)
     outChaoKeyChecks[ChaoKeyCheck::CKC_WildCanyon_Chao_Key_3] = ChaoKeyCheckData(0x01DEE8D2, LevelIDs_WildCanyon, { -405, 927, -120 });
 
     outChaoKeyChecks[ChaoKeyCheck::CKC_MissionStreet_Chao_Key_1] = ChaoKeyCheckData(0x01DEE8D3, LevelIDs_MissionStreet, { -1250, -58, -2265 });
-    outChaoKeyChecks[ChaoKeyCheck::CKC_MissionStreet_Chao_Key_2] = ChaoKeyCheckData(0x01DEE8D4, LevelIDs_MissionStreet, { -1260, 35, 3025 });
-    outChaoKeyChecks[ChaoKeyCheck::CKC_MissionStreet_Chao_Key_3] = ChaoKeyCheckData(0x01DEE8D5, LevelIDs_MissionStreet, { 2385, 200, -3460 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_MissionStreet_Chao_Key_2] = ChaoKeyCheckData(0x01DEE8D4, LevelIDs_MissionStreet, { -1260, 35, -3025 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_MissionStreet_Chao_Key_3] = ChaoKeyCheckData(0x01DEE8D5, LevelIDs_MissionStreet, { 2835, 200, -3460 });
 
     outChaoKeyChecks[ChaoKeyCheck::CKC_DryLagoon_Chao_Key_1] = ChaoKeyCheckData(0x01DEE8D6, LevelIDs_DryLagoon, { -160, 55, 135 });
     outChaoKeyChecks[ChaoKeyCheck::CKC_DryLagoon_Chao_Key_2] = ChaoKeyCheckData(0x01DEE8D7, LevelIDs_DryLagoon, { -140, 457, 255 });
@@ -311,8 +311,8 @@ void InitializeChaoKeyChecks(std::map<int, ChaoKeyCheckData>& outChaoKeyChecks)
     outChaoKeyChecks[ChaoKeyCheck::CKC_EternalEngine_Chao_Key_3] = ChaoKeyCheckData(0x01DEE8E3, LevelIDs_EternalEngine, { -2745, 836, -5200 });
 
     outChaoKeyChecks[ChaoKeyCheck::CKC_DeathChamber_Chao_Key_1] = ChaoKeyCheckData(0x01DEE8E4, LevelIDs_DeathChamber, { 215, 0, 215 });
-    outChaoKeyChecks[ChaoKeyCheck::CKC_DeathChamber_Chao_Key_2] = ChaoKeyCheckData(0x01DEE8E5, LevelIDs_DeathChamber, { 600, 59, 1805 });
-    outChaoKeyChecks[ChaoKeyCheck::CKC_DeathChamber_Chao_Key_3] = ChaoKeyCheckData(0x01DEE8E6, LevelIDs_DeathChamber, { -980, -130, 290 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_DeathChamber_Chao_Key_2] = ChaoKeyCheckData(0x01DEE8E5, LevelIDs_DeathChamber, { -980, -130, 290 });
+    outChaoKeyChecks[ChaoKeyCheck::CKC_DeathChamber_Chao_Key_3] = ChaoKeyCheckData(0x01DEE8E6, LevelIDs_DeathChamber, { 600, 59, 1805 });
 
     outChaoKeyChecks[ChaoKeyCheck::CKC_EggQuarters_Chao_Key_1] = ChaoKeyCheckData(0x01DEE8E7, LevelIDs_EggQuarters, { -660, -30, 940 });
     outChaoKeyChecks[ChaoKeyCheck::CKC_EggQuarters_Chao_Key_2] = ChaoKeyCheckData(0x01DEE8E8, LevelIDs_EggQuarters, { -80, 50, 395 });
@@ -355,7 +355,7 @@ void InitializePipeChecks(std::map<int, PipeCheckData>& outPipeChecks)
 {
     outPipeChecks.clear();
 
-    outPipeChecks[PipeCheck::PC_GreenForest_Pipe_1] = PipeCheckData(0x01DEE970, LevelIDs_GreenForest, { 222, -951, 3956 });
+    outPipeChecks[PipeCheck::PC_GreenForest_Pipe_1] = PipeCheckData(0x01DEE970, LevelIDs_GreenForest, { 2222, -951, 3956 });
     outPipeChecks[PipeCheck::PC_GreenForest_Pipe_2] = PipeCheckData(0x01DEE971, LevelIDs_GreenForest, { 8276, -727, 7726 });
 
     outPipeChecks[PipeCheck::PC_WhiteJungle_Pipe_1] = PipeCheckData(0x01DEE972, LevelIDs_WhiteJungle, { 4163, -2224, -677 });
@@ -379,7 +379,7 @@ void InitializePipeChecks(std::map<int, PipeCheckData>& outPipeChecks)
     outPipeChecks[PipeCheck::PC_SecurityHall_Pipe_1] = PipeCheckData(0x01DEE980, LevelIDs_SecurityHall, { -178, -883, 117 });
 
     outPipeChecks[PipeCheck::PC_PrisonLane_Pipe_1] = PipeCheckData(0x01DEE981, LevelIDs_PrisonLane, { 105, -3, 215 });
-    outPipeChecks[PipeCheck::PC_PrisonLane_Pipe_2] = PipeCheckData(0x01DEE982, LevelIDs_PrisonLane, { -1483, 227, -78 });
+    outPipeChecks[PipeCheck::PC_PrisonLane_Pipe_2] = PipeCheckData(0x01DEE982, LevelIDs_PrisonLane, { -1483, 277, -78 });
     outPipeChecks[PipeCheck::PC_PrisonLane_Pipe_3] = PipeCheckData(0x01DEE983, LevelIDs_PrisonLane, { -3450, 679, -175 });
 
     outPipeChecks[PipeCheck::PC_MetalHarbor_Pipe_1] = PipeCheckData(0x01DEE984, LevelIDs_MetalHarbor, { 1649, -299, -2170 });
@@ -512,7 +512,7 @@ void InitializeGoldBeetleChecks(std::map<int, GoldBeetleCheckData>& outGoldBeetl
     outGoldBeetleChecks[GoldBeetleCheck::GBC_CannonCore_Gold_Beetle_1] = GoldBeetleCheckData(0x01DEEA4D, LevelIDs_CannonsCoreS);
     outGoldBeetleChecks[GoldBeetleCheck::GBC_FinalChase_Gold_Beetle_1] = GoldBeetleCheckData(0x01DEEA4E, LevelIDs_FinalChase);
     outGoldBeetleChecks[GoldBeetleCheck::GBC_CosmicWall_Gold_Beetle_1] = GoldBeetleCheckData(0x01DEEA4F, LevelIDs_CosmicWall);
-    outGoldBeetleChecks[GoldBeetleCheck::GBC_MadSpace_Gold_Beetle_1] = GoldBeetleCheckData(0x01DEEA4A, LevelIDs_MadSpace);
+    outGoldBeetleChecks[GoldBeetleCheck::GBC_MadSpace_Gold_Beetle_1] = GoldBeetleCheckData(0x01DEEA50, LevelIDs_MadSpace);
 }
 
 void InitializeChaoGardenChecks(std::map<int, ChaoGardenCheckData>& outChaoGardenChecks)

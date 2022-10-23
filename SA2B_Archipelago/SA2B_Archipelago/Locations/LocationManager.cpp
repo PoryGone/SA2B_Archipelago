@@ -24,6 +24,21 @@ static void __cdecl sub_6E9C00_cpp()
 }
 // End Chao Key Trampoline
 
+// Gold Beetle "Trampoline"
+static void __cdecl GoldBeetleDestroyed()
+{
+	LocationManager::getInstance().SendGoldBeetleLocationCheck();
+	if (MainCharObj2[0] && (MainCharObj2[0]->Powerups & Powerups_Invincibility) != 0)
+	{
+		AddScore(2000);
+	}
+	else
+	{
+		AddScore(2000);
+	}
+}
+// End Gold Beetle "Trampoline"
+
 void LocationManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
 {
 	this->_helperFunctions = &helperFunctions;
@@ -33,6 +48,9 @@ void LocationManager::OnInitFunction(const char* path, const HelperFunctions& he
 	sub_6E9C00_trampoline = new Trampoline(reinterpret_cast<intptr_t>((void*)0x006E9C00),
 										   static_cast<intptr_t>(0x006E9C05),
 										   &sub_6E9C00_cpp);
+
+	// Gold Beetle "Trampoline"
+	WriteCall(static_cast<void*>((void*)0x00505F48), &GoldBeetleDestroyed);
 
 	InitializeLevelClearChecks(this->_LevelClearData);
 	InitializeChaoKeyChecks(this->_ChaoKeyData);
