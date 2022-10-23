@@ -61,6 +61,7 @@ private:
 
 	void Init(const char* ip, const char* playerName, const char* password);
 	void OnFrameMessageQueue();
+	void OnFrameDebug();
 
 	// DeathLink functions
 	void OnFrameDeathLink();

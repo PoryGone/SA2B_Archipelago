@@ -159,6 +159,7 @@ void ArchipelagoManager::OnFrameFunction()
     this->OnFrameDeathLink();
 
     this->OnFrameMessageQueue();
+    this->OnFrameDebug();
 }
 
 
@@ -413,6 +414,26 @@ void ArchipelagoManager::OnFrameMessageQueue()
         messageQueue->AddMessage(msg.at(i));
     }
     AP_ClearLatestMessage();
+}
+
+void ArchipelagoManager::OnFrameDebug()
+{
+    if (!this->_settingsINI || !this->_settingsINI->getBool("AP", "DebugDisplayPositionXYZ", false))
+    {
+        return;
+    }
+
+    if (MainCharObj1[0])
+    {
+        std::string message = "X: ";
+        message.append(std::to_string((int)floor(MainCharObj1[0]->Position.x)));
+        message.append(" | Y: ");
+        message.append(std::to_string((int)floor(MainCharObj1[0]->Position.y)));
+        message.append(" | Z: ");
+        message.append(std::to_string((int)floor(MainCharObj1[0]->Position.z)));
+        int missionCountMessageXPos = ((HorizontalResolution / MessageQueue::GetInstance().GetFontSize()) - message.length());
+        _helperFunctions->DisplayDebugString(NJM_LOCATION(missionCountMessageXPos, 1), message.c_str());
+    }
 }
 
 // DeathLink Functions

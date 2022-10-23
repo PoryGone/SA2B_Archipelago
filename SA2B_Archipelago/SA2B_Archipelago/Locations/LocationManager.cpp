@@ -536,11 +536,6 @@ void LocationManager::SetPipesEnabled(bool pipesEnabled)
 void LocationManager::SetGoldBeetlesEnabled(bool goldBeetlesEnabled)
 {
 	this->_goldBeetlesEnabled = goldBeetlesEnabled;
-
-	if (this->_goldBeetlesEnabled)
-	{
-		MessageQueue::GetInstance().AddMessage("Beetles Enabled");
-	}
 }
 
 void LocationManager::SetRacesPacked(bool racesPacked)
