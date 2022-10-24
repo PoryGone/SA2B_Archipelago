@@ -310,11 +310,19 @@ void SA2_SetPipes(int pipes)
         return;
     }
 
-    if (pipes > 0)
+    LocationManager* locationManager = &LocationManager::getInstance();
+    if (pipes == 1)
     {
-        LocationManager* locationManager = &LocationManager::getInstance();
-
         locationManager->SetPipesEnabled(true);
+    }
+    else if (pipes == 2)
+    {
+        locationManager->SetHiddensEnabled(true);
+    }
+    else if (pipes == 3)
+    {
+        locationManager->SetPipesEnabled(true);
+        locationManager->SetHiddensEnabled(true);
     }
 }
 
@@ -375,7 +383,7 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_RegisterSlotDataIntCallback("IncludeMissions", &SA2_SetMissionCount);
     AP_RegisterSlotDataIntCallback("RequiredRank", &SA2_SetRequiredRank);
     AP_RegisterSlotDataIntCallback("ChaoKeys", &SA2_SetChaoKeys);
-    AP_RegisterSlotDataIntCallback("Pipes", &SA2_SetPipes);
+    AP_RegisterSlotDataIntCallback("Whistlesanity", &SA2_SetPipes);
     AP_RegisterSlotDataIntCallback("GoldBeetles", &SA2_SetGoldBeetles);
     AP_RegisterSlotDataIntCallback("ChaoRaceChecks", &SA2_SetChaoPacks);
     AP_RegisterSlotDataIntCallback("ChaoGardenDifficulty", &SA2_SetChaoDifficulty);

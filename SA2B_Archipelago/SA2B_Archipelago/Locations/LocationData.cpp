@@ -482,6 +482,56 @@ void InitializePipeChecks(std::map<int, PipeCheckData>& outPipeChecks)
     outPipeChecks[PipeCheck::PC_MadSpace_Pipe_4] = PipeCheckData(0x01DEE9D0, LevelIDs_MadSpace, { 530, 4098, -426 });
 }
 
+void InitializeHiddenChecks(std::map<int, HiddenCheckData>& outHiddenChecks)
+{
+    outHiddenChecks.clear();
+
+    outHiddenChecks[HiddenCheck::HC_GreenForest_Hidden_1] = HiddenCheckData(0x01DEE9D1, LevelIDs_GreenForest, { 4537, -850, 5156 });
+    outHiddenChecks[HiddenCheck::HC_GreenForest_Hidden_2] = HiddenCheckData(0x01DEE9D2, LevelIDs_GreenForest, { 6040, -1884, 7530 });
+    outHiddenChecks[HiddenCheck::HC_GreenForest_Hidden_3] = HiddenCheckData(0x01DEE9D3, LevelIDs_GreenForest, { 6209, -1729, 7482 });
+    outHiddenChecks[HiddenCheck::HC_GreenForest_Hidden_4] = HiddenCheckData(0x01DEE9D4, LevelIDs_GreenForest, { 8253, -1797, 7933 });
+
+    outHiddenChecks[HiddenCheck::HC_WhiteJungle_Hidden_1] = HiddenCheckData(0x01DEE9D5, LevelIDs_WhiteJungle, { 160, -1704, 1517 });
+    outHiddenChecks[HiddenCheck::HC_WhiteJungle_Hidden_2] = HiddenCheckData(0x01DEE9D6, LevelIDs_WhiteJungle, { 5703, -2212, -1518 });
+    outHiddenChecks[HiddenCheck::HC_WhiteJungle_Hidden_3] = HiddenCheckData(0x01DEE9D7, LevelIDs_WhiteJungle, { 13430, -3587, -6092 });
+
+    outHiddenChecks[HiddenCheck::HC_PumpkinHill_Hidden_1] = HiddenCheckData(0x01DEE9D8, LevelIDs_PumpkinHill, { 901, -1000, -700 });
+
+    outHiddenChecks[HiddenCheck::HC_SecurityHall_Hidden_1] = HiddenCheckData(0x01DEE9D9, LevelIDs_SecurityHall, { -320, 264, -215 });
+
+    outHiddenChecks[HiddenCheck::HC_PrisonLane_Hidden_1] = HiddenCheckData(0x01DEE9DA, LevelIDs_PrisonLane, { -2483, 630, -527 });
+    outHiddenChecks[HiddenCheck::HC_PrisonLane_Hidden_2] = HiddenCheckData(0x01DEE9DB, LevelIDs_PrisonLane, { -3450, 729, 40 });
+    outHiddenChecks[HiddenCheck::HC_PrisonLane_Hidden_3] = HiddenCheckData(0x01DEE9DC, LevelIDs_PrisonLane, { -4361, 885, -336 });
+
+    outHiddenChecks[HiddenCheck::HC_CityEscape_Hidden_1] = HiddenCheckData(0x01DEE9DD, LevelIDs_CityEscape, { 4702, -10030, 4708 });
+    outHiddenChecks[HiddenCheck::HC_CityEscape_Hidden_2] = HiddenCheckData(0x01DEE9DE, LevelIDs_CityEscape, { 5727, -10740, 4362 });
+    outHiddenChecks[HiddenCheck::HC_CityEscape_Hidden_3] = HiddenCheckData(0x01DEE9DF, LevelIDs_CityEscape, { 7670, -14555, 5615 });
+    outHiddenChecks[HiddenCheck::HC_CityEscape_Hidden_4] = HiddenCheckData(0x01DEE9E0, LevelIDs_CityEscape, { 7709, -14455, 6186 });
+    outHiddenChecks[HiddenCheck::HC_CityEscape_Hidden_5] = HiddenCheckData(0x01DEE9E1, LevelIDs_CityEscape, { 3843, -22175, 16175 });
+
+    outHiddenChecks[HiddenCheck::HC_RadicalHighway_Hidden_1] = HiddenCheckData(0x01DEE9E2, LevelIDs_RadicalHighway, { -69, 0, -1332 });
+    outHiddenChecks[HiddenCheck::HC_RadicalHighway_Hidden_2] = HiddenCheckData(0x01DEE9E3, LevelIDs_RadicalHighway, { -7380, -5115, -11962 });
+    outHiddenChecks[HiddenCheck::HC_RadicalHighway_Hidden_3] = HiddenCheckData(0x01DEE9E4, LevelIDs_RadicalHighway, { -9074, -7008, -15726 });
+
+    outHiddenChecks[HiddenCheck::HC_MissionStreet_Hidden_1] = HiddenCheckData(0x01DEE9E5, LevelIDs_MissionStreet, { 69, -7, -131 });
+    outHiddenChecks[HiddenCheck::HC_MissionStreet_Hidden_2] = HiddenCheckData(0x01DEE9E6, LevelIDs_MissionStreet, { 276, -7, -863 });
+    outHiddenChecks[HiddenCheck::HC_MissionStreet_Hidden_3] = HiddenCheckData(0x01DEE9E7, LevelIDs_MissionStreet, { 5070, 598, -5505 });
+
+    outHiddenChecks[HiddenCheck::HC_DryLagoon_Hidden_1] = HiddenCheckData(0x01DEE9E8, LevelIDs_DryLagoon, { 210, 211, 1312 });
+
+    outHiddenChecks[HiddenCheck::HC_CrazyGadget_Hidden_1] = HiddenCheckData(0x01DEE9E9, LevelIDs_CrazyGadget, { -6009, -1238, -3258 });
+
+    outHiddenChecks[HiddenCheck::HC_DeathChamber_Hidden_1] = HiddenCheckData(0x01DEE9EA, LevelIDs_DeathChamber, { 1024, -31, -564 });
+    outHiddenChecks[HiddenCheck::HC_DeathChamber_Hidden_2] = HiddenCheckData(0x01DEE9EB, LevelIDs_DeathChamber, { -661, -31, 935 });
+
+    outHiddenChecks[HiddenCheck::HC_EggQuarters_Hidden_1] = HiddenCheckData(0x01DEE9EC, LevelIDs_EggQuarters, { 980, -31, 605 });
+    outHiddenChecks[HiddenCheck::HC_EggQuarters_Hidden_2] = HiddenCheckData(0x01DEE9ED, LevelIDs_EggQuarters, { -1000, -1, 1001 });
+
+    outHiddenChecks[HiddenCheck::HC_LostColony_Hidden_1] = HiddenCheckData(0x01DEE9EE, LevelIDs_LostColony, { -1518, -784, -1383 });
+
+    outHiddenChecks[HiddenCheck::HC_CannonCore_Hidden_1] = HiddenCheckData(0x01DEE9EF, LevelIDs_CannonsCoreR, { 0, -61, -991 });
+}
+
 void InitializeGoldBeetleChecks(std::map<int, GoldBeetleCheckData>& outGoldBeetleChecks)
 {
     outGoldBeetleChecks.clear();

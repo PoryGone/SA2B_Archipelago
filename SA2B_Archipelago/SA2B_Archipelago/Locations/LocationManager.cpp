@@ -55,6 +55,7 @@ void LocationManager::OnInitFunction(const char* path, const HelperFunctions& he
 	InitializeLevelClearChecks(this->_LevelClearData);
 	InitializeChaoKeyChecks(this->_ChaoKeyData);
 	InitializePipeChecks(this->_PipeData);
+	InitializeHiddenChecks(this->_HiddenData);
 	InitializeGoldBeetleChecks(this->_GoldBeetleData);
 	InitializeChaoGardenChecks(this->_ChaoGardenData);
 	InitializeChaoRacePacks(this->_ChaoRacePacks);
@@ -76,6 +77,7 @@ void LocationManager::OnFrameFunction()
 		this->OnFrameLevelClears();
 		this->OnFrameChaoKeys();
 		this->OnFramePipes();
+		this->OnFrameHidden();
 		this->OnFrameGoldBeetles();
 	}
 
@@ -145,6 +147,11 @@ void LocationManager::OnFrameLevelClears()
 
 void LocationManager::OnFrameChaoKeys()
 {
+	if (!this->_chaoKeysEnabled)
+	{
+		return;
+	}
+
 	for (int i = ChaoKeyCheck::CKC_BEGIN; i < ChaoKeyCheck::CKC_NUM_CHECKS; i++)
 	{
 		if (this->_ChaoKeyData.find(i) != this->_ChaoKeyData.end())
@@ -190,12 +197,18 @@ void LocationManager::OnFrameWhistle()
 		{
 			this->_whistleTimer = WHISTLE_CHECK_TIME;
 			this->SendPipeLocationCheck();
+			this->SendHiddenLocationCheck();
 		}
 	}
 }
 
 void LocationManager::OnFramePipes()
 {
+	if (!this->_pipesEnabled)
+	{
+		return;
+	}
+
 	for (int i = PipeCheck::PC_BEGIN; i < PipeCheck::PC_NUM_CHECKS; i++)
 	{
 		if (this->_PipeData.find(i) != this->_PipeData.end())
@@ -231,8 +244,55 @@ void LocationManager::OnFramePipes()
 	}
 }
 
+void LocationManager::OnFrameHidden()
+{
+	if (!this->_hiddensEnabled)
+	{
+		return;
+	}
+
+	for (int i = HiddenCheck::HC_BEGIN; i < HiddenCheck::HC_NUM_CHECKS; i++)
+	{
+		if (this->_HiddenData.find(i) != this->_HiddenData.end())
+		{
+			HiddenCheckData& checkData = this->_HiddenData[i];
+
+			if (!checkData.CheckSent)
+			{
+				// DataPointer macro creates a static field, which doesn't work for this case
+				char dataValue = *(char*)checkData.Address;
+
+				if (dataValue == 0x01)
+				{
+					if (this->_archipelagoManager)
+					{
+						this->_archipelagoManager->SendItem(i);
+
+						checkData.CheckSent = true;
+					}
+				}
+			}
+			else
+			{
+				// Capture offline collects
+				char dataValue = *(char*)checkData.Address;
+
+				if (dataValue != 0x01)
+				{
+					WriteData<1>((void*)checkData.Address, 0x01);
+				}
+			}
+		}
+	}
+}
+
 void LocationManager::OnFrameGoldBeetles()
 {
+	if (!this->_goldBeetlesEnabled)
+	{
+		return;
+	}
+
 	for (int i = GoldBeetleCheck::GBC_BEGIN; i < GoldBeetleCheck::GBC_NUM_CHECKS; i++)
 	{
 		if (this->_GoldBeetleData.find(i) != this->_GoldBeetleData.end())
@@ -533,6 +593,11 @@ void LocationManager::SetPipesEnabled(bool pipesEnabled)
 	this->_pipesEnabled = pipesEnabled;
 }
 
+void LocationManager::SetHiddensEnabled(bool hiddenEnabled)
+{
+	this->_hiddensEnabled = hiddenEnabled;
+}
+
 void LocationManager::SetGoldBeetlesEnabled(bool goldBeetlesEnabled)
 {
 	this->_goldBeetlesEnabled = goldBeetlesEnabled;
@@ -620,6 +685,42 @@ void LocationManager::SendPipeLocationCheck()
 		if (this->_PipeData.find(i) != this->_PipeData.end())
 		{
 			PipeCheckData& checkData = this->_PipeData[i];
+
+			if (checkData.LevelID == CurrentLevel)
+			{
+				if (dist(checkData.Position, MainCharObj1[0]->Position) < checkData.Range)
+				{
+					char dataValue = *(char*)checkData.Address;
+
+					if (dataValue != 0x01)
+					{
+						WriteData<1>((void*)checkData.Address, 0x01);
+					}
+
+					return;
+				}
+			}
+		}
+	}
+}
+
+void LocationManager::SendHiddenLocationCheck()
+{
+	if (!this->_hiddensEnabled)
+	{
+		return;
+	}
+
+	if (MainCharObj1[0] == NULL)
+	{
+		return;
+	}
+
+	for (int i = HiddenCheck::HC_BEGIN; i < HiddenCheck::HC_NUM_CHECKS; i++)
+	{
+		if (this->_HiddenData.find(i) != this->_HiddenData.end())
+		{
+			HiddenCheckData& checkData = this->_HiddenData[i];
 
 			if (checkData.LevelID == CurrentLevel)
 			{

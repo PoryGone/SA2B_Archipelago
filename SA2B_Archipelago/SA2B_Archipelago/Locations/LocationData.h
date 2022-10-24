@@ -427,7 +427,6 @@ struct ChaoKeyCheckData
     NJS_VECTOR Position = { 0, 0, 0 };
     float Range = 300.0f;
     bool CheckSent = false;
-    char PrevValue = 0;
 };
 
 void InitializeChaoKeyChecks(std::map<int, ChaoKeyCheckData>& outChaoKeyChecks);
@@ -640,10 +639,189 @@ struct PipeCheckData
     NJS_VECTOR Position = { 0, 0, 0 };
     float Range = 30.0f;
     bool CheckSent = false;
-    char PrevValue = 0;
 };
 
 void InitializePipeChecks(std::map<int, PipeCheckData>& outPipeChecks);
+
+enum HiddenCheck
+{
+    HC_BEGIN = 0x700,
+    HC_CityEscape_Hidden_1 = 0x700,
+    HC_WildCanyon_Hidden_1,
+    HC_PrisonLane_Hidden_1,
+    HC_MetalHarbor_Hidden_1,
+    HC_GreenForest_Hidden_1,
+    HC_PumpkinHill_Hidden_1,
+    HC_MissionStreet_Hidden_1,
+    HC_AquaticMine_Hidden_1,
+    HC_Route101_Hidden_1,
+    HC_HiddenBase_Hidden_1,
+    HC_PyramidCave_Hidden_1,
+    HC_DeathChamber_Hidden_1,
+    HC_EternalEngine_Hidden_1,
+    HC_MeteorHerd_Hidden_1,
+    HC_CrazyGadget_Hidden_1,
+    HC_FinalRush_Hidden_1,
+    HC_IronGate_Hidden_1,
+    HC_DryLagoon_Hidden_1,
+    HC_SandOcean_Hidden_1,
+    HC_RadicalHighway_Hidden_1,
+    HC_EggQuarters_Hidden_1,
+    HC_LostColony_Hidden_1,
+    HC_WeaponsBed_Hidden_1,
+    HC_SecurityHall_Hidden_1,
+    HC_WhiteJungle_Hidden_1,
+    HC_Route280_Hidden_1,
+    HC_SkyRail_Hidden_1,
+    HC_MadSpace_Hidden_1,
+    HC_CosmicWall_Hidden_1,
+    HC_FinalChase_Hidden_1,
+    HC_CannonCore_Hidden_1,
+
+    HC_CityEscape_Hidden_2 = 0x720,
+    HC_WildCanyon_Hidden_2,
+    HC_PrisonLane_Hidden_2,
+    HC_MetalHarbor_Hidden_2,
+    HC_GreenForest_Hidden_2,
+    HC_PumpkinHill_Hidden_2,
+    HC_MissionStreet_Hidden_2,
+    HC_AquaticMine_Hidden_2,
+    HC_Route101_Hidden_2,
+    HC_HiddenBase_Hidden_2,
+    HC_PyramidCave_Hidden_2,
+    HC_DeathChamber_Hidden_2,
+    HC_EternalEngine_Hidden_2,
+    HC_MeteorHerd_Hidden_2,
+    HC_CrazyGadget_Hidden_2,
+    HC_FinalRush_Hidden_2,
+    HC_IronGate_Hidden_2,
+    HC_DryLagoon_Hidden_2,
+    HC_SandOcean_Hidden_2,
+    HC_RadicalHighway_Hidden_2,
+    HC_EggQuarters_Hidden_2,
+    HC_LostColony_Hidden_2,
+    HC_WeaponsBed_Hidden_2,
+    HC_SecurityHall_Hidden_2,
+    HC_WhiteJungle_Hidden_2,
+    HC_Route280_Hidden_2,
+    HC_SkyRail_Hidden_2,
+    HC_MadSpace_Hidden_2,
+    HC_CosmicWall_Hidden_2,
+    HC_FinalChase_Hidden_2,
+    HC_CannonCore_Hidden_2,
+
+    HC_CityEscape_Hidden_3 = 0x740,
+    HC_WildCanyon_Hidden_3,
+    HC_PrisonLane_Hidden_3,
+    HC_MetalHarbor_Hidden_3,
+    HC_GreenForest_Hidden_3,
+    HC_PumpkinHill_Hidden_3,
+    HC_MissionStreet_Hidden_3,
+    HC_AquaticMine_Hidden_3,
+    HC_Route101_Hidden_3,
+    HC_HiddenBase_Hidden_3,
+    HC_PyramidCave_Hidden_3,
+    HC_DeathChamber_Hidden_3,
+    HC_EternalEngine_Hidden_3,
+    HC_MeteorHerd_Hidden_3,
+    HC_CrazyGadget_Hidden_3,
+    HC_FinalRush_Hidden_3,
+    HC_IronGate_Hidden_3,
+    HC_DryLagoon_Hidden_3,
+    HC_SandOcean_Hidden_3,
+    HC_RadicalHighway_Hidden_3,
+    HC_EggQuarters_Hidden_3,
+    HC_LostColony_Hidden_3,
+    HC_WeaponsBed_Hidden_3,
+    HC_SecurityHall_Hidden_3,
+    HC_WhiteJungle_Hidden_3,
+    HC_Route280_Hidden_3,
+    HC_SkyRail_Hidden_3,
+    HC_MadSpace_Hidden_3,
+    HC_CosmicWall_Hidden_3,
+    HC_FinalChase_Hidden_3,
+    HC_CannonCore_Hidden_3,
+
+    HC_CityEscape_Hidden_4 = 0x760,
+    HC_WildCanyon_Hidden_4,
+    HC_PrisonLane_Hidden_4,
+    HC_MetalHarbor_Hidden_4,
+    HC_GreenForest_Hidden_4,
+    HC_PumpkinHill_Hidden_4,
+    HC_MissionStreet_Hidden_4,
+    HC_AquaticMine_Hidden_4,
+    HC_Route101_Hidden_4,
+    HC_HiddenBase_Hidden_4,
+    HC_PyramidCave_Hidden_4,
+    HC_DeathChamber_Hidden_4,
+    HC_EternalEngine_Hidden_4,
+    HC_MeteorHerd_Hidden_4,
+    HC_CrazyGadget_Hidden_4,
+    HC_FinalRush_Hidden_4,
+    HC_IronGate_Hidden_4,
+    HC_DryLagoon_Hidden_4,
+    HC_SandOcean_Hidden_4,
+    HC_RadicalHighway_Hidden_4,
+    HC_EggQuarters_Hidden_4,
+    HC_LostColony_Hidden_4,
+    HC_WeaponsBed_Hidden_4,
+    HC_SecurityHall_Hidden_4,
+    HC_WhiteJungle_Hidden_4,
+    HC_Route280_Hidden_4,
+    HC_SkyRail_Hidden_4,
+    HC_MadSpace_Hidden_4,
+    HC_CosmicWall_Hidden_4,
+    HC_FinalChase_Hidden_4,
+    HC_CannonCore_Hidden_4,
+
+    HC_CityEscape_Hidden_5 = 0x780,
+    HC_WildCanyon_Hidden_5,
+    HC_PrisonLane_Hidden_5,
+    HC_MetalHarbor_Hidden_5,
+    HC_GreenForest_Hidden_5,
+    HC_PumpkinHill_Hidden_5,
+    HC_MissionStreet_Hidden_5,
+    HC_AquaticMine_Hidden_5,
+    HC_Route101_Hidden_5,
+    HC_HiddenBase_Hidden_5,
+    HC_PyramidCave_Hidden_5,
+    HC_DeathChamber_Hidden_5,
+    HC_EternalEngine_Hidden_5,
+    HC_MeteorHerd_Hidden_5,
+    HC_CrazyGadget_Hidden_5,
+    HC_FinalRush_Hidden_5,
+    HC_IronGate_Hidden_5,
+    HC_DryLagoon_Hidden_5,
+    HC_SandOcean_Hidden_5,
+    HC_RadicalHighway_Hidden_5,
+    HC_EggQuarters_Hidden_5,
+    HC_LostColony_Hidden_5,
+    HC_WeaponsBed_Hidden_5,
+    HC_SecurityHall_Hidden_5,
+    HC_WhiteJungle_Hidden_5,
+    HC_Route280_Hidden_5,
+    HC_SkyRail_Hidden_5,
+    HC_MadSpace_Hidden_5,
+    HC_CosmicWall_Hidden_5,
+    HC_FinalChase_Hidden_5,
+    HC_CannonCore_Hidden_5,
+
+    HC_NUM_CHECKS
+};
+
+struct HiddenCheckData
+{
+    HiddenCheckData() : Address(0x00) {}
+    HiddenCheckData(int address, int levelID, NJS_VECTOR position) : Address(address), LevelID(levelID), Position(position) {}
+
+    int Address;
+    int LevelID = 0x00;
+    NJS_VECTOR Position = { 0, 0, 0 };
+    float Range = 60.0f;
+    bool CheckSent = false;
+};
+
+void InitializeHiddenChecks(std::map<int, HiddenCheckData>& outHiddenChecks);
 
 enum GoldBeetleCheck
 {
@@ -691,7 +869,6 @@ struct GoldBeetleCheckData
     int Address;
     int LevelID = 0x00;
     bool CheckSent = false;
-    char PrevValue = 0;
 };
 
 void InitializeGoldBeetleChecks(std::map<int, GoldBeetleCheckData>& outGoldBeetleChecks);
