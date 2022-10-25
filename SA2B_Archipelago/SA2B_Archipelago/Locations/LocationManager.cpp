@@ -3,12 +3,60 @@
 #include "LocationData.h"
 #include "../Utilities/MessageQueue.h"
 
+
+static Trampoline* sub_6E9C00_trampoline; // Chao Key
+
+// Chao Key Trampoline
+void sub_6E9C00_original()
+{
+	void* target = sub_6E9C00_trampoline->Target();
+	__asm
+	{
+		call target
+	}
+}
+
+static void __cdecl sub_6E9C00_cpp()
+{
+	LocationManager::getInstance().SendChaoKeyLocationCheck();
+
+	sub_6E9C00_original();
+}
+// End Chao Key Trampoline
+
+// Gold Beetle "Trampoline"
+static void __cdecl GoldBeetleDestroyed()
+{
+	LocationManager::getInstance().SendGoldBeetleLocationCheck();
+	if (MainCharObj2[0] && (MainCharObj2[0]->Powerups & Powerups_Invincibility) != 0)
+	{
+		AddScore(2000);
+	}
+	else
+	{
+		AddScore(2000);
+	}
+}
+// End Gold Beetle "Trampoline"
+
 void LocationManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
 {
 	this->_helperFunctions = &helperFunctions;
 	this->_archipelagoManager = &ArchipelagoManager::getInstance();
 
+	// Chao Key Trampoline
+	sub_6E9C00_trampoline = new Trampoline(reinterpret_cast<intptr_t>((void*)0x006E9C00),
+										   static_cast<intptr_t>(0x006E9C05),
+										   &sub_6E9C00_cpp);
+
+	// Gold Beetle "Trampoline"
+	WriteCall(static_cast<void*>((void*)0x00505F48), &GoldBeetleDestroyed);
+
 	InitializeLevelClearChecks(this->_LevelClearData);
+	InitializeChaoKeyChecks(this->_ChaoKeyData);
+	InitializePipeChecks(this->_PipeData);
+	InitializeHiddenChecks(this->_HiddenData);
+	InitializeGoldBeetleChecks(this->_GoldBeetleData);
 	InitializeChaoGardenChecks(this->_ChaoGardenData);
 	InitializeChaoRacePacks(this->_ChaoRacePacks);
 }
@@ -26,65 +74,258 @@ void LocationManager::OnFrameFunction()
 	{
 		this->_timer = 0;
 
-		for (int i = 0; i < LevelClearCheck::LCC_NUM_CHECKS; i++)
+		this->OnFrameLevelClears();
+		this->OnFrameChaoKeys();
+		this->OnFramePipes();
+		this->OnFrameHidden();
+		this->OnFrameGoldBeetles();
+	}
+
+	this->OnFrameWhistle();
+	this->OnFrameChaoGarden();
+}
+
+void LocationManager::OnFrameLevelClears()
+{
+	for (int i = 0; i < LevelClearCheck::LCC_NUM_CHECKS; i++)
+	{
+		if (this->_LevelClearData.find(i) != this->_LevelClearData.end())
 		{
-			if (this->_LevelClearData.find(i) != this->_LevelClearData.end())
+			LevelClearCheckData& checkData = this->_LevelClearData[i];
+
+			if (!checkData.CheckSent)
 			{
-				LevelClearCheckData& checkData = this->_LevelClearData[i];
+				// DataPointer macro creates a static field, which doesn't work for this case
+				char dataValue = *(char*)checkData.Address;
 
-				if (!checkData.CheckSent)
+				int requiredValue = 0;
+
+				if (i <= LevelClearCheck::LCC_CannonCore_5)
 				{
-					// DataPointer macro creates a static field, which doesn't work for this case
-					char dataValue = *(char*)checkData.Address;
+					requiredValue = this->_requiredRank;
+				}
 
-					int requiredValue = 0;
-
-					if (i <= LevelClearCheck::LCC_CannonCore_5)
+				if (dataValue > requiredValue)
+				{
+					if (this->_archipelagoManager)
 					{
-						requiredValue = this->_requiredRank;
-					}
+						this->_archipelagoManager->SendItem(i);
 
-					if (dataValue > requiredValue)
-					{
-						if (this->_archipelagoManager)
-						{
-							this->_archipelagoManager->SendItem(i);
-
-							checkData.CheckSent = true;
-						}
-					}
-					else if (dataValue > checkData.PrevValue)
-					{
-						checkData.PrevValue = dataValue;
-
-						if (GameState != GameStates_Inactive)
-						{
-							MessageQueue::GetInstance().AddMessage("Mission Rank too low");
-						}
+						checkData.CheckSent = true;
 					}
 				}
-				else
+				else if (dataValue > checkData.PrevValue)
 				{
-					// Capture offline collects, show the proper Rank for them
-					char dataValue = *(char*)checkData.Address;
+					checkData.PrevValue = dataValue;
 
-					int requiredValue = 0;
-
-					if (i <= LevelClearCheck::LCC_CannonCore_5)
+					if (GameState != GameStates_Inactive)
 					{
-						requiredValue = this->_requiredRank;
+						MessageQueue::GetInstance().AddMessage("Mission Rank too low");
 					}
+				}
+			}
+			else
+			{
+				// Capture offline collects, show the proper Rank for them
+				char dataValue = *(char*)checkData.Address;
 
-					if (dataValue <= requiredValue)
-					{
-						WriteData<1>((void*)checkData.Address, requiredValue + 1);
-					}
+				int requiredValue = 0;
+
+				if (i <= LevelClearCheck::LCC_CannonCore_5)
+				{
+					requiredValue = this->_requiredRank;
+				}
+
+				if (dataValue <= requiredValue)
+				{
+					WriteData<1>((void*)checkData.Address, requiredValue + 1);
 				}
 			}
 		}
 	}
+}
 
-	this->OnFrameChaoGarden();
+void LocationManager::OnFrameChaoKeys()
+{
+	if (!this->_chaoKeysEnabled)
+	{
+		return;
+	}
+
+	for (int i = ChaoKeyCheck::CKC_BEGIN; i < ChaoKeyCheck::CKC_NUM_CHECKS; i++)
+	{
+		if (this->_ChaoKeyData.find(i) != this->_ChaoKeyData.end())
+		{
+			ChaoKeyCheckData& checkData = this->_ChaoKeyData[i];
+
+			if (!checkData.CheckSent)
+			{
+				// DataPointer macro creates a static field, which doesn't work for this case
+				char dataValue = *(char*)checkData.Address;
+
+				if (dataValue == 0x01)
+				{
+					if (this->_archipelagoManager)
+					{
+						this->_archipelagoManager->SendItem(i);
+
+						checkData.CheckSent = true;
+					}
+				}
+			}
+			else
+			{
+				// Capture offline collects
+				char dataValue = *(char*)checkData.Address;
+
+				if (dataValue != 0x01)
+				{
+					WriteData<1>((void*)checkData.Address, 0x01);
+				}
+			}
+		}
+	}
+}
+
+void LocationManager::OnFrameWhistle()
+{
+	this->_whistleTimer = this->_whistleTimer > 0 ? this->_whistleTimer - 1 : 0;
+
+	if (MainCharObj1[0] && MainCharObj1[0]->Action == Actions::Action_Whistle)
+	{
+		if (this->_whistleTimer <= 0)
+		{
+			this->_whistleTimer = WHISTLE_CHECK_TIME;
+			this->SendPipeLocationCheck();
+			this->SendHiddenLocationCheck();
+		}
+	}
+}
+
+void LocationManager::OnFramePipes()
+{
+	if (!this->_pipesEnabled)
+	{
+		return;
+	}
+
+	for (int i = PipeCheck::PC_BEGIN; i < PipeCheck::PC_NUM_CHECKS; i++)
+	{
+		if (this->_PipeData.find(i) != this->_PipeData.end())
+		{
+			PipeCheckData& checkData = this->_PipeData[i];
+
+			if (!checkData.CheckSent)
+			{
+				// DataPointer macro creates a static field, which doesn't work for this case
+				char dataValue = *(char*)checkData.Address;
+
+				if (dataValue == 0x01)
+				{
+					if (this->_archipelagoManager)
+					{
+						this->_archipelagoManager->SendItem(i);
+
+						checkData.CheckSent = true;
+					}
+				}
+			}
+			else
+			{
+				// Capture offline collects
+				char dataValue = *(char*)checkData.Address;
+
+				if (dataValue != 0x01)
+				{
+					WriteData<1>((void*)checkData.Address, 0x01);
+				}
+			}
+		}
+	}
+}
+
+void LocationManager::OnFrameHidden()
+{
+	if (!this->_hiddensEnabled)
+	{
+		return;
+	}
+
+	for (int i = HiddenCheck::HC_BEGIN; i < HiddenCheck::HC_NUM_CHECKS; i++)
+	{
+		if (this->_HiddenData.find(i) != this->_HiddenData.end())
+		{
+			HiddenCheckData& checkData = this->_HiddenData[i];
+
+			if (!checkData.CheckSent)
+			{
+				// DataPointer macro creates a static field, which doesn't work for this case
+				char dataValue = *(char*)checkData.Address;
+
+				if (dataValue == 0x01)
+				{
+					if (this->_archipelagoManager)
+					{
+						this->_archipelagoManager->SendItem(i);
+
+						checkData.CheckSent = true;
+					}
+				}
+			}
+			else
+			{
+				// Capture offline collects
+				char dataValue = *(char*)checkData.Address;
+
+				if (dataValue != 0x01)
+				{
+					WriteData<1>((void*)checkData.Address, 0x01);
+				}
+			}
+		}
+	}
+}
+
+void LocationManager::OnFrameGoldBeetles()
+{
+	if (!this->_goldBeetlesEnabled)
+	{
+		return;
+	}
+
+	for (int i = GoldBeetleCheck::GBC_BEGIN; i < GoldBeetleCheck::GBC_NUM_CHECKS; i++)
+	{
+		if (this->_GoldBeetleData.find(i) != this->_GoldBeetleData.end())
+		{
+			GoldBeetleCheckData& checkData = this->_GoldBeetleData[i];
+
+			if (!checkData.CheckSent)
+			{
+				// DataPointer macro creates a static field, which doesn't work for this case
+				char dataValue = *(char*)checkData.Address;
+
+				if (dataValue == 0x01)
+				{
+					if (this->_archipelagoManager)
+					{
+						this->_archipelagoManager->SendItem(i);
+
+						checkData.CheckSent = true;
+					}
+				}
+			}
+			else
+			{
+				// Capture offline collects
+				char dataValue = *(char*)checkData.Address;
+
+				if (dataValue != 0x01)
+				{
+					WriteData<1>((void*)checkData.Address, 0x01);
+				}
+			}
+		}
+	}
 }
 
 void LocationManager::OnFrameChaoGarden()
@@ -306,11 +547,60 @@ void LocationManager::CheckLocation(int location_id)
 			}
 		}
 	}
+	else if (this->_ChaoKeyData.find(location_id) != this->_ChaoKeyData.end())
+	{
+		ChaoKeyCheckData& checkData = this->_ChaoKeyData[location_id];
+
+		checkData.CheckSent = true;
+
+		WriteData<1>((void*)checkData.Address, 0x01);
+	}
 }
 
 void LocationManager::SetRequiredRank(int requiredRank)
 {
 	this->_requiredRank = requiredRank;
+}
+
+void LocationManager::SetChaoKeysEnabled(bool chaoKeysEnabled)
+{
+	this->_chaoKeysEnabled = chaoKeysEnabled;
+
+	if (this->_chaoKeysEnabled)
+	{
+		// Overwrite vanilla Chao Key Behavior
+		WriteData<7>((void*)0x006E9C05, '\x90');
+
+		WriteData<1>((void*)0x006E9C31, '\x04');
+		WriteData<1>((void*)0x006E9C32, '\xB0');
+		WriteData<1>((void*)0x006E9C33, '\x74');
+
+		WriteData<1>((void*)0x006E9C36, '\x94');
+
+		WriteData<6>((void*)0x006E9C4A, '\x90');
+
+		WriteData<1>((void*)0x006E9C52, '\x04');
+		WriteData<1>((void*)0x006E9C53, '\xB0');
+		WriteData<1>((void*)0x006E9C54, '\x74');
+		WriteData<1>((void*)0x006E9C56, '\x01');
+
+		WriteData<1>((void*)0x006E9C58, '\x84');
+	}
+}
+
+void LocationManager::SetPipesEnabled(bool pipesEnabled)
+{
+	this->_pipesEnabled = pipesEnabled;
+}
+
+void LocationManager::SetHiddensEnabled(bool hiddenEnabled)
+{
+	this->_hiddensEnabled = hiddenEnabled;
+}
+
+void LocationManager::SetGoldBeetlesEnabled(bool goldBeetlesEnabled)
+{
+	this->_goldBeetlesEnabled = goldBeetlesEnabled;
 }
 
 void LocationManager::SetRacesPacked(bool racesPacked)
@@ -333,5 +623,147 @@ void LocationManager::ResetLocations()
 	for (auto& pair : this->_ChaoGardenData)
 	{
 		pair.second.CheckSent = false;
+	}
+}
+
+
+float dist(NJS_POINT3 a, NJS_POINT3 b)
+{
+	return sqrt(pow((b.x - a.x), 2) + pow((b.y - a.y), 2) + pow((b.z - a.z), 2));
+}
+
+void LocationManager::SendChaoKeyLocationCheck()
+{
+	if (!this->_chaoKeysEnabled)
+	{
+		return;
+	}
+
+	if (MainCharObj1[0] == NULL)
+	{
+		return;
+	}
+
+	for (int i = ChaoKeyCheck::CKC_BEGIN; i < ChaoKeyCheck::CKC_NUM_CHECKS; i++)
+	{
+		if (this->_ChaoKeyData.find(i) != this->_ChaoKeyData.end())
+		{
+			ChaoKeyCheckData& checkData = this->_ChaoKeyData[i];
+
+			if (checkData.LevelID == CurrentLevel)
+			{
+				if (dist(checkData.Position, MainCharObj1[0]->Position) < checkData.Range)
+				{
+					char dataValue = *(char*)checkData.Address;
+
+					if (dataValue != 0x01)
+					{
+						WriteData<1>((void*)checkData.Address, 0x01);
+					}
+
+					return;
+				}
+			}
+		}
+	}
+}
+
+void LocationManager::SendPipeLocationCheck()
+{
+	if (!this->_pipesEnabled)
+	{
+		return;
+	}
+
+	if (MainCharObj1[0] == NULL)
+	{
+		return;
+	}
+
+	for (int i = PipeCheck::PC_BEGIN; i < PipeCheck::PC_NUM_CHECKS; i++)
+	{
+		if (this->_PipeData.find(i) != this->_PipeData.end())
+		{
+			PipeCheckData& checkData = this->_PipeData[i];
+
+			if (checkData.LevelID == CurrentLevel)
+			{
+				if (dist(checkData.Position, MainCharObj1[0]->Position) < checkData.Range)
+				{
+					char dataValue = *(char*)checkData.Address;
+
+					if (dataValue != 0x01)
+					{
+						WriteData<1>((void*)checkData.Address, 0x01);
+					}
+
+					return;
+				}
+			}
+		}
+	}
+}
+
+void LocationManager::SendHiddenLocationCheck()
+{
+	if (!this->_hiddensEnabled)
+	{
+		return;
+	}
+
+	if (MainCharObj1[0] == NULL)
+	{
+		return;
+	}
+
+	for (int i = HiddenCheck::HC_BEGIN; i < HiddenCheck::HC_NUM_CHECKS; i++)
+	{
+		if (this->_HiddenData.find(i) != this->_HiddenData.end())
+		{
+			HiddenCheckData& checkData = this->_HiddenData[i];
+
+			if (checkData.LevelID == CurrentLevel)
+			{
+				if (dist(checkData.Position, MainCharObj1[0]->Position) < checkData.Range)
+				{
+					char dataValue = *(char*)checkData.Address;
+
+					if (dataValue != 0x01)
+					{
+						WriteData<1>((void*)checkData.Address, 0x01);
+					}
+
+					return;
+				}
+			}
+		}
+	}
+}
+
+void LocationManager::SendGoldBeetleLocationCheck()
+{
+	if (!this->_goldBeetlesEnabled)
+	{
+		return;
+	}
+
+	for (int i = GoldBeetleCheck::GBC_BEGIN; i < GoldBeetleCheck::GBC_NUM_CHECKS; i++)
+	{
+		if (this->_GoldBeetleData.find(i) != this->_GoldBeetleData.end())
+		{
+			GoldBeetleCheckData& checkData = this->_GoldBeetleData[i];
+
+			if (checkData.LevelID == CurrentLevel)
+			{
+				char dataValue = *(char*)checkData.Address;
+
+				if (dataValue != 0x01)
+				{
+					WriteData<1>((void*)checkData.Address, 0x01);
+				}
+
+				return;
+			}
+		}
 	}
 }

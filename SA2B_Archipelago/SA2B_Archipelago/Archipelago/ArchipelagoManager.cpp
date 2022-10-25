@@ -159,6 +159,7 @@ void ArchipelagoManager::OnFrameFunction()
     this->OnFrameDeathLink();
 
     this->OnFrameMessageQueue();
+    this->OnFrameDebug();
 }
 
 
@@ -287,6 +288,59 @@ void SA2_SetChaoDifficulty(int chaoDifficulty)
     }
 }
 
+void SA2_SetChaoKeys(int chaoKeys)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    if (chaoKeys != 0)
+    {
+        LocationManager* locationManager = &LocationManager::getInstance();
+
+        locationManager->SetChaoKeysEnabled(true);
+    }
+}
+
+void SA2_SetPipes(int pipes)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    LocationManager* locationManager = &LocationManager::getInstance();
+    if (pipes == 1)
+    {
+        locationManager->SetPipesEnabled(true);
+    }
+    else if (pipes == 2)
+    {
+        locationManager->SetHiddensEnabled(true);
+    }
+    else if (pipes == 3)
+    {
+        locationManager->SetPipesEnabled(true);
+        locationManager->SetHiddensEnabled(true);
+    }
+}
+
+void SA2_SetGoldBeetles(int goldBeetles)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    if (goldBeetles > 0)
+    {
+        LocationManager* locationManager = &LocationManager::getInstance();
+
+        locationManager->SetGoldBeetlesEnabled(true);
+    }
+}
+
 void SA2_SetRegionEmblemMap(std::map<int, int> map)
 {
     if (!ArchipelagoManager::getInstance().IsInit())
@@ -328,6 +382,9 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_RegisterSlotDataIntCallback("EmblemsForCannonsCore", &SA2_SetEmblemsForCannonsCore);
     AP_RegisterSlotDataIntCallback("IncludeMissions", &SA2_SetMissionCount);
     AP_RegisterSlotDataIntCallback("RequiredRank", &SA2_SetRequiredRank);
+    AP_RegisterSlotDataIntCallback("ChaoKeys", &SA2_SetChaoKeys);
+    AP_RegisterSlotDataIntCallback("Whistlesanity", &SA2_SetPipes);
+    AP_RegisterSlotDataIntCallback("GoldBeetles", &SA2_SetGoldBeetles);
     AP_RegisterSlotDataIntCallback("ChaoRaceChecks", &SA2_SetChaoPacks);
     AP_RegisterSlotDataIntCallback("ChaoGardenDifficulty", &SA2_SetChaoDifficulty);
     AP_RegisterSlotDataMapIntIntCallback("RegionEmblemMap", &SA2_SetRegionEmblemMap);
@@ -365,6 +422,26 @@ void ArchipelagoManager::OnFrameMessageQueue()
         messageQueue->AddMessage(msg.at(i));
     }
     AP_ClearLatestMessage();
+}
+
+void ArchipelagoManager::OnFrameDebug()
+{
+    if (!this->_settingsINI || !this->_settingsINI->getBool("AP", "DebugDisplayPositionXYZ", false))
+    {
+        return;
+    }
+
+    if (MainCharObj1[0])
+    {
+        std::string message = "X: ";
+        message.append(std::to_string((int)floor(MainCharObj1[0]->Position.x)));
+        message.append(" | Y: ");
+        message.append(std::to_string((int)floor(MainCharObj1[0]->Position.y)));
+        message.append(" | Z: ");
+        message.append(std::to_string((int)floor(MainCharObj1[0]->Position.z)));
+        int missionCountMessageXPos = ((HorizontalResolution / MessageQueue::GetInstance().GetFontSize()) - message.length());
+        _helperFunctions->DisplayDebugString(NJM_LOCATION(missionCountMessageXPos, 1), message.c_str());
+    }
 }
 
 // DeathLink Functions
