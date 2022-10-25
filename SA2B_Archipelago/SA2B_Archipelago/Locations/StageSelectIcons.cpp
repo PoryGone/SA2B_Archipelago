@@ -174,7 +174,6 @@ void StageSelectIcons::OnFrame()
 	{
 		LoadTextures(&TexPack);
 		LoadTextures(&TexPack_Inactive);
-		MessageQueue::GetInstance().AddMessage(std::to_string(UpgradeIconsTex.textures[0].texaddr));
 		DrawIconObj = LoadObject(0, "UpgradeIcon", DrawUpgradeIconMain, LoadObj_Data1 | LoadObj_Data2);
 		DrawIconObj->DeleteSub = DeleteUpgradeIcon;
 		DrawIconObj->MainSub = DrawUpgradeIconMain;
