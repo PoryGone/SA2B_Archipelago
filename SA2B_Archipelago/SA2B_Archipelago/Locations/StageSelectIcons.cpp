@@ -3,7 +3,6 @@
 #include "StageSelectIcons.h"
 #include "StageSelectManager.h"
 #include "../Utilities/MessageQueue.h"
-//#define USE_ARRAY
 
 FunctionPointer(void, ReleaseTextureList, (NJS_TEXLIST* a1), 0x77F9F0);
 
@@ -52,7 +51,7 @@ std::array<int, 33> TileIDtoStageIndex = {
 		SSS_MadSpace
 };
 
-static const int Anim_Length = 28;
+static const int Anim_Length = 29;
 
 static NJS_TEXNAME UpgradeIconsTexName[Anim_Length];
 static NJS_TEXNAME UpgradeIconsTexName_Inactive[Anim_Length];
@@ -63,10 +62,8 @@ static NJS_TEXANIM UpgradeIconsAnim_Inactive[Anim_Length];
 static NJS_TEXLIST UpgradeIconsTex = { UpgradeIconsTexName, Anim_Length };
 static TexPackInfo TexPack = { "AP_UPGRADEICONS", &UpgradeIconsTex };
 
-//static NJS_TEXLIST UpgradeIconsTex_Inactive = { arrayptrandlength(UpgradeIconsTexName_Inactive, Uint32) };
 static NJS_TEXLIST UpgradeIconsTex_Inactive = { UpgradeIconsTexName_Inactive, Anim_Length };
 static TexPackInfo TexPack_Inactive = { "AP_UPGRADEICONS_GREY", &UpgradeIconsTex_Inactive };
-//This being an array seems to break things.... not sure why
 static NJS_SPRITE Sprite = { { -32.0f, 0.0f, 0.0f }, 1.0f, 1.0f, 0, &UpgradeIconsTex, &UpgradeIconsAnim[0] };
 static NJS_SPRITE Sprite_2 = { { -32.0f, 0.0f, 0.0f }, 1.0f, 1.0f, 0, &UpgradeIconsTex_Inactive, &UpgradeIconsAnim_Inactive[0] };
 static int Counter = 0;
@@ -84,7 +81,7 @@ CharacterItemRange GetItemRangeForCharacter(char character)
 	return CharacterItemRange();
 }
 
-void UpdateIcons()
+void UpdateUpgradeIcons()
 {
 	if (SS_SelectedTile < TileIDtoStageIndex.size())
 	{
@@ -125,17 +122,14 @@ void DeleteUpgradeIcon(ObjectMaster* obj)
 {
 	ReleaseTextureList(&UpgradeIconsTex);
 	ReleaseTextureList(&UpgradeIconsTex_Inactive);
-	MessageQueue::GetInstance().AddMessage(std::to_string((int)StageSelectManager::GetInstance().DrawIconObj).c_str());
 	StageSelectManager::GetInstance().DrawIconObj = nullptr;
-	MessageQueue::GetInstance().AddMessage(std::to_string((int)StageSelectManager::GetInstance().DrawIconObj).c_str());
-	MessageQueue::GetInstance().AddMessage("Delete Upgrade Icon");
 }
 
 void DrawUpgradeIcon(ObjectMaster* obj)
 {
 	if (CurrentMenu == Menus::Menus_StageSelect && GameMode == GameMode::GameMode_Advertise)
 	{
-		UpdateIcons();
+		UpdateUpgradeIcons();
 	}
 }
 
@@ -152,7 +146,6 @@ void DrawUpgradeIconMain(ObjectMaster* obj)
 		obj->DeleteSub = DeleteUpgradeIcon;
 		obj->DisplaySub_Delayed3 = DrawUpgradeIcon;
 		obj->Data1.Entity->Action = 1;
-		MessageQueue::GetInstance().AddMessage("Draw OBJ Setup");
 	}
 }
 
