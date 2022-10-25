@@ -41,10 +41,13 @@ void StageSelectManager::OnInitFunction(const char* path, const HelperFunctions&
 	InitializeItemData(this->_itemData);
 	InitializeCharacterItemRanges(this->_characterItemRanges);
 	UpdateTitleHeaderArrays();
+	StageSelectIcons::GetInstance().OnInit(&_stageSelectDataMap);
 }
 
 void StageSelectManager::OnFrameFunction()
 {
+	StageSelectIcons::GetInstance().OnFrame();
+	
 	if (CurrentMenu == Menus::Menus_Main)
 	{
 		SS_SelectedTile = this->_firstStageIndex;
@@ -58,6 +61,12 @@ void StageSelectManager::OnFrameFunction()
 	HandleStageSelectCamera();
 
 	DrawStageSelectText();
+}
+
+void StageSelectManager::DrawDebugText(int location, const char* message)
+{
+	GetInstance()._helperFunctions->SetDebugFontColor(0xFFF542C8);
+	GetInstance()._helperFunctions->DisplayDebugString(location, message);
 }
 
 void StageSelectManager::SetEmblemsForCannonsCore(int emblemsRequired)

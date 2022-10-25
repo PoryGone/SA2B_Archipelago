@@ -1,6 +1,7 @@
 #include "../pch.h"
 #include "../Items/ItemData.h"
 #include "StageSelectData.h"
+#include "StageSelectIcons.h"
 #include <map>
 #include <array>
 #include <vector>
@@ -46,6 +47,7 @@ public:
 		static StageSelectManager instance;
 		return instance;
 	}
+    static void DrawDebugText(int location, const char* message);
 	void OnInitFunction(const char* path, const HelperFunctions& helperFunctions);
 	void OnFrameFunction();
 	void SetEmblemsForCannonsCore(int emblemsRequired);
