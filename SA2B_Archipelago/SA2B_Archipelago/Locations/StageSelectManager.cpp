@@ -47,14 +47,6 @@ void StageSelectManager::OnInitFunction(const char* path, const HelperFunctions&
 
 void StageSelectManager::OnFrameFunction()
 {
-	/*
-	std::string stateString = "";
-	stateString.append(std::to_string(GameState));
-	stateString.append(", ");
-	stateString.append(std::to_string(CurrentMenu));
-	_helperFunctions->SetDebugFontColor(0xFFF542C8);
-	_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 8), stateString.c_str());
-	*/
 	_stageSelectIcons.OnFrame();
 	
 	if (CurrentMenu == Menus::Menus_Main)
