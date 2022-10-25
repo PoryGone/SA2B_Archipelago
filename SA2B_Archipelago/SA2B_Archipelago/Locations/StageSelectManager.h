@@ -55,7 +55,6 @@ public:
     void SetRequiredRank(int requiredRank);
 	void SetRegionEmblemMap(std::map<int, int> map);
     void SetBossGates(std::map<int, int> map);
-    ObjectMaster* DrawIconObj;
 
 private:
 	const HelperFunctions* _helperFunctions;
@@ -70,7 +69,6 @@ private:
     std::map<int, ItemData> _itemData;
     std::vector<CharacterItemRange> _characterItemRanges;
     std::vector<GateBossLayout> _gateBossLayoutData;
-    StageSelectIcons _stageSelectIcons;
 
     __int8 _firstStageIndex = 0x17;
     __int8 _previousSettingsSelection = 0x02;

@@ -41,13 +41,12 @@ void StageSelectManager::OnInitFunction(const char* path, const HelperFunctions&
 	InitializeItemData(this->_itemData);
 	InitializeCharacterItemRanges(this->_characterItemRanges);
 	UpdateTitleHeaderArrays();
-	_stageSelectIcons = StageSelectIcons();
-	_stageSelectIcons.OnInit(&_stageSelectDataMap);
+	StageSelectIcons::GetInstance().OnInit(&_stageSelectDataMap);
 }
 
 void StageSelectManager::OnFrameFunction()
 {
-	_stageSelectIcons.OnFrame();
+	StageSelectIcons::GetInstance().OnFrame();
 	
 	if (CurrentMenu == Menus::Menus_Main)
 	{

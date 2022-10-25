@@ -8,9 +8,14 @@
 class StageSelectIcons
 {
 public:
+	static StageSelectIcons& GetInstance()
+	{
+		static StageSelectIcons instance;
+		return instance;
+	}
 	void OnFrame();
 	void OnInit(std::map<int, StageSelectStageData>* stageSelectDataMap);
-	ObjectMaster* DrawIconObj;
 	std::map<int, ItemData> ItemData;
 	std::vector<CharacterItemRange> CharacterItemRanges;
+	ObjectMaster* DrawIconObj;
 };

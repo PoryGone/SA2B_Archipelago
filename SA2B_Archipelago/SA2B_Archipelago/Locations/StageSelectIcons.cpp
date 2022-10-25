@@ -122,7 +122,7 @@ void DeleteUpgradeIcon(ObjectMaster* obj)
 {
 	ReleaseTextureList(&UpgradeIconsTex);
 	ReleaseTextureList(&UpgradeIconsTex_Inactive);
-	StageSelectManager::GetInstance().DrawIconObj = nullptr;
+	StageSelectIcons::GetInstance().DrawIconObj = nullptr;
 }
 
 void DrawUpgradeIcon(ObjectMaster* obj)
@@ -135,10 +135,6 @@ void DrawUpgradeIcon(ObjectMaster* obj)
 
 void DrawUpgradeIconMain(ObjectMaster* obj)
 {
-	std::string str = "Update Icon Main ";
-	str.append(std::to_string(GameState));
-	StageSelectManager::DrawDebugText(NJM_LOCATION(0, 5), str.c_str());
-
 	if (GameState != GameStates_LoadFinished)
 		return;
 
