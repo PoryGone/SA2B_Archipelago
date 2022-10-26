@@ -10,7 +10,7 @@
 //#include <math.h>
 
 
-DataPointer(char, SavedChecksReceived, 0x1DEF5D9);
+DataPointer(int, SavedChecksReceived, 0x1DEE414);
 
 void* endLevelSave_ptr = (void*)0x4457df;
 void* updateSettingsSave_ptr = (void*)0x44390C;
@@ -126,7 +126,7 @@ void ItemManager::ReceiveItem(int item_id, bool notify)
 			ItemData& receivedItem = this->_ItemData[item_id];
 
 			// DataPointer macro creates a static field, which doesn't work for this case
-			char dataValue = *(char*)receivedItem.Address;
+			unsigned char dataValue = *(unsigned char*)receivedItem.Address;
 
 			this->_EmblemsReceived++;
 			dataValue = this->_EmblemsReceived;
@@ -139,7 +139,7 @@ void ItemManager::ReceiveItem(int item_id, bool notify)
 					SavedChecksReceived = this->_thisSessionChecksReceived;
 
 					std::string message = std::string("New Emblem Count: ");
-					message += std::to_string((int)dataValue);
+					message += std::to_string((unsigned int)dataValue);
 					messageQueue->AddMessage(message);
 				}
 
@@ -320,14 +320,14 @@ void ItemManager::OnFrameJunkQueue()
 		return;
 	}
 
-	if (this->_JunkQueue.size() == 0)
-	{
-		return;
-	}
-
 	if (this->_JunkCooldownTimer > 0)
 	{
 		this->_JunkCooldownTimer--;
+		return;
+	}
+
+	if (this->_JunkQueue.size() == 0)
+	{
 		return;
 	}
 

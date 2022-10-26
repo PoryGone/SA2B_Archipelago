@@ -40,8 +40,8 @@ private:
 	const HelperFunctions* _helperFunctions;
 
 	std::map<int, ItemData> _ItemData;
-	__int8 _thisSessionChecksReceived = 0;
-	__int8 _EmblemsReceived = 0;
+	int _thisSessionChecksReceived = 0;
+	unsigned __int8 _EmblemsReceived = 0;
 
 	std::queue<int> _JunkQueue;
 	std::queue<int> _TrapQueue;
@@ -49,7 +49,7 @@ private:
 	int _ActiveTrap = 0;
 	int _ActiveTrapTimer = 0;
 	int _TrapCooldownTimer = TRAP_COOLDOWN;
-	int _JunkCooldownTimer = JUNK_COOLDOWN;
+	int _JunkCooldownTimer = 0;
 
 	NJS_VECTOR _TimeStopPos;
 
