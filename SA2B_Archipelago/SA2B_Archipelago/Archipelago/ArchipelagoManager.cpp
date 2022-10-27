@@ -14,6 +14,7 @@
 
 
 DataPointer(unsigned int, SeedHash, 0x1DEC6FC);
+DataPointer(unsigned int, PlayerNameHash, 0x1DEC700);
 DataPointer(char, LastStoryComplete, 0x1DEFA95);
 
 void ArchipelagoManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
@@ -29,7 +30,7 @@ void ArchipelagoManager::OnInitFunction(const char* path, const HelperFunctions&
 
 void ArchipelagoManager::OnFrameFunction()
 {
-    if (this->_badSaveFile)
+    if (this->_badSaveFile || this->_badSaveName)
     {
         std::string msg1 = "Incorrect Save File Loaded.";
         std::string msg2 = "Relaunch game and load the correct save.";
@@ -138,6 +139,31 @@ void ArchipelagoManager::OnFrameFunction()
                         this->_badSaveFile = true;
 
                         return;
+                    }
+                }
+            }
+
+            if (this->_settingsINI)
+            {
+                std::string playerName = this->_settingsINI->getString("AP", "PlayerName");
+                std::size_t playerNameHash = std::hash<std::string>{}(playerName);
+
+                if (PlayerNameHash == 0)
+                {
+                    PlayerNameHash = playerNameHash;
+
+                    ProbablySavesSaveFile();
+                }
+                else
+                {
+                    if (PlayerNameHash != playerNameHash)
+                    {
+                        if (!this->_settingsINI->getBool("AP", "IgnoreFileSafety", false))
+                        {
+                            this->_badSaveName = true;
+
+                            return;
+                        }
                     }
                 }
             }
@@ -394,7 +420,7 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
 
 bool ArchipelagoManager::IsInit()
 {
-    return (AP_IsInit() && !this->_badSaveFile && !this->_badModVersion);
+    return (AP_IsInit() && !this->_badSaveFile && !this->_badSaveName && !this->_badModVersion);
 }
 
 bool ArchipelagoManager::IsAuth()

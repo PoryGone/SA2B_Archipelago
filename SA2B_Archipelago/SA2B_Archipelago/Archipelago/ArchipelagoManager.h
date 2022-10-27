@@ -53,6 +53,7 @@ private:
 
 	bool _authFailed = false;
 	bool _badSaveFile = false;
+	bool _badSaveName = false;
 	bool _badModVersion = false;
 
 	int _serverModVersion = 0;
