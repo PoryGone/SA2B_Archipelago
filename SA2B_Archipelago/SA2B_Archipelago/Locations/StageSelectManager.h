@@ -51,6 +51,7 @@ public:
 	void OnInitFunction(const char* path, const HelperFunctions& helperFunctions);
 	void OnFrameFunction();
 	void SetEmblemsForCannonsCore(int emblemsRequired);
+	void SetRequiredCannonsCoreMissions(bool requireAllCannonsCoreMissions);
     void SetMissionCount(int missionCount);
     void SetRequiredRank(int requiredRank);
 	void SetRegionEmblemMap(std::map<int, int> map);
@@ -61,6 +62,7 @@ private:
 	std::map<int, StageSelectStageData> _stageSelectDataMap;
     std::map<int, StageSelectBossData> _stageSelectBossDataMap;
 	int _emblemsForCannonsCore = 200;
+	bool _requireAllCannonsCoreMissions = false;
 	int _missionCount = 1;
 	int _requiredRank = 0;
 	std::map<int, int> _regionEmblemMap;

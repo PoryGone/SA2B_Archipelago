@@ -36,6 +36,7 @@ public:
 	void SetGoldBeetlesEnabled(bool goldBeetlesEnabled);
 	void SetRacesPacked(bool racesPacked);
 	void SetChaoEnabled(bool chaoEnabled);
+	void SetRequiredCannonsCoreMissions(bool requireAllCannonsCoreMissions);
 	void ResetLocations();
 
 	void SendChaoKeyLocationCheck();
@@ -51,6 +52,7 @@ private:
 	unsigned int _chaoTimer = 0;
 	unsigned int _whistleTimer = 0;
 	int _requiredRank = 0;
+	bool _requireAllCannonsCoreMissions = false;
 	bool _chaoKeysEnabled = false;
 	bool _pipesEnabled = false;
 	bool _hiddensEnabled = false;

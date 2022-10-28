@@ -72,3 +72,8 @@ void MusicManager::SetMusicShuffle(int shuffleType)
 {
     this->_ShuffleType = (MusicShuffleType)shuffleType;
 }
+
+void MusicManager::SetNarrator(int narrator)
+{
+    CurrentTheme = (char)narrator;
+}

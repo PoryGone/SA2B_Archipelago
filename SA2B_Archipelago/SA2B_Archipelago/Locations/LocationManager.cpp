@@ -474,9 +474,20 @@ void LocationManager::CheckLocation(int location_id)
 	{
 		LevelClearCheckData& checkData = this->_LevelClearData[location_id];
 
-		if (location_id == LCC_CannonCore_1 || location_id >= LCC_Boss_1)
+		if (location_id >= LCC_Boss_1)
 		{
-			// Don't Collect Cannon's Core 1 or Bosses
+			// Don't Collect Bosses
+			return;
+		}
+
+		if (!this->_requireAllCannonsCoreMissions && location_id == LCC_CannonCore_1)
+		{
+			// Don't Collect Cannon's Core 1 (First Required)
+			return;
+		}
+		else if (this->_requireAllCannonsCoreMissions && (location_id >= LCC_CannonCore_1 && location_id <= LCC_CannonCore_5))
+		{
+			// Don't Collect any Cannon's Core Missions (All Active Required)
 			return;
 		}
 
@@ -611,6 +622,11 @@ void LocationManager::SetRacesPacked(bool racesPacked)
 void LocationManager::SetChaoEnabled(bool chaoEnabled)
 {
 	this->_chaoEnabled = chaoEnabled;
+}
+
+void LocationManager::SetRequiredCannonsCoreMissions(bool allMissionsRequired)
+{
+	this->_requireAllCannonsCoreMissions = allMissionsRequired;
 }
 
 void LocationManager::ResetLocations()

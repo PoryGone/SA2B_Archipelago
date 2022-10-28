@@ -35,6 +35,7 @@ public:
 
 	void SetMusicMap(std::map<int, int> map);
 	void SetMusicShuffle(int shuffleType);
+	void SetNarrator(int narrator);
 	void SetDeathLink(bool deathLinkActive);
 	void VerfyModVersion(int modVersion);
 

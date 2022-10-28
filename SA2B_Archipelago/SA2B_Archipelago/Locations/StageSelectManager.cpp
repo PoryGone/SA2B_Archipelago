@@ -74,6 +74,11 @@ void StageSelectManager::SetEmblemsForCannonsCore(int emblemsRequired)
 	_emblemsForCannonsCore = emblemsRequired;
 }
 
+void StageSelectManager::SetRequiredCannonsCoreMissions(bool allMissionsRequired)
+{
+	this->_requireAllCannonsCoreMissions = allMissionsRequired;
+}
+
 void StageSelectManager::SetMissionCount(int missionCount)
 {
 	this->_missionCount = missionCount;
@@ -468,7 +473,29 @@ void StageSelectManager::HandleBossStage()
 
 void StageSelectManager::HandleBiolizard()
 {
-	if (CannonCore1_Rank > this->_requiredRank)
+	bool bCannonCoreComplete = true;
+
+	if (this->_requireAllCannonsCoreMissions)
+	{
+		// TODO: Adjust this when Mission Order changes go in
+		for (int i = 0; i < this->_missionCount; i++)
+		{
+			char dataValue = *(char*)(0x01DEE040 + i);
+
+			if (dataValue <= this->_requiredRank)
+			{
+				bCannonCoreComplete = false;
+
+				break;
+			}
+		}
+	}
+	else if (CannonCore1_Rank <= this->_requiredRank)
+	{
+		bCannonCoreComplete = false;
+	}
+
+	if (bCannonCoreComplete)
 	{
 		// Biolizard Tile
 		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_GreenHill].TileIDAddress, 0x41);

@@ -26,6 +26,8 @@ public:
 	void SetMusicMap(std::map<int, int> map);
 	void SetMusicShuffle(int shuffleType);
 
+	void SetNarrator(int narrator);
+
 //private:
 	const HelperFunctions* _helperFunctions;
 
