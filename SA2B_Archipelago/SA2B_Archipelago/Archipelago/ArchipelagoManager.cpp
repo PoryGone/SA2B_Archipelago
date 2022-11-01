@@ -14,6 +14,7 @@
 
 
 DataPointer(unsigned int, SeedHash, 0x1DEC6FC);
+DataPointer(unsigned int, PlayerNameHash, 0x1DEC700);
 DataPointer(char, LastStoryComplete, 0x1DEFA95);
 
 void ArchipelagoManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
@@ -29,7 +30,7 @@ void ArchipelagoManager::OnInitFunction(const char* path, const HelperFunctions&
 
 void ArchipelagoManager::OnFrameFunction()
 {
-    if (this->_badSaveFile)
+    if (this->_badSaveFile || this->_badSaveName)
     {
         std::string msg1 = "Incorrect Save File Loaded.";
         std::string msg2 = "Relaunch game and load the correct save.";
@@ -141,6 +142,31 @@ void ArchipelagoManager::OnFrameFunction()
                     }
                 }
             }
+
+            if (this->_settingsINI)
+            {
+                std::string playerName = this->_settingsINI->getString("AP", "PlayerName");
+                std::size_t playerNameHash = std::hash<std::string>{}(playerName);
+
+                if (PlayerNameHash == 0)
+                {
+                    PlayerNameHash = playerNameHash;
+
+                    ProbablySavesSaveFile();
+                }
+                else
+                {
+                    if (PlayerNameHash != playerNameHash)
+                    {
+                        if (!this->_settingsINI->getBool("AP", "IgnoreFileSafety", false))
+                        {
+                            this->_badSaveName = true;
+
+                            return;
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -218,6 +244,13 @@ void SA2_SetMusicShuffle(int shuffleType)
     apm->SetMusicShuffle(shuffleType);
 }
 
+void SA2_SetNarrator(int narrator)
+{
+    ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
+
+    apm->SetNarrator(narrator);
+}
+
 void SA2_SetEmblemsForCannonsCore(int emblemsRequired)
 {
     if (!ArchipelagoManager::getInstance().IsInit())
@@ -228,6 +261,22 @@ void SA2_SetEmblemsForCannonsCore(int emblemsRequired)
     StageSelectManager* ssm = &StageSelectManager::GetInstance();
 
     ssm->SetEmblemsForCannonsCore(emblemsRequired);
+}
+
+void SA2_SetRequiredCannonsCoreMissions(int requirement)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    StageSelectManager* ssm = &StageSelectManager::GetInstance();
+
+    ssm->SetRequiredCannonsCoreMissions(requirement != 0);
+
+    LocationManager* locationManager = &LocationManager::getInstance();
+
+    locationManager->SetRequiredCannonsCoreMissions(requirement != 0);
 }
 
 void SA2_SetMissionCount(int missionCount)
@@ -379,7 +428,9 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_RegisterSlotDataIntCallback("ModVersion", &SA2_CompareModVersion);
     AP_RegisterSlotDataMapIntIntCallback("MusicMap", &SA2_SetMusicMap);
     AP_RegisterSlotDataIntCallback("MusicShuffle", &SA2_SetMusicShuffle);
+    AP_RegisterSlotDataIntCallback("Narrator", &SA2_SetNarrator);
     AP_RegisterSlotDataIntCallback("EmblemsForCannonsCore", &SA2_SetEmblemsForCannonsCore);
+    AP_RegisterSlotDataIntCallback("RequiredCannonsCoreMissions", &SA2_SetRequiredCannonsCoreMissions);
     AP_RegisterSlotDataIntCallback("IncludeMissions", &SA2_SetMissionCount);
     AP_RegisterSlotDataIntCallback("RequiredRank", &SA2_SetRequiredRank);
     AP_RegisterSlotDataIntCallback("ChaoKeys", &SA2_SetChaoKeys);
@@ -394,7 +445,7 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
 
 bool ArchipelagoManager::IsInit()
 {
-    return (AP_IsInit() && !this->_badSaveFile && !this->_badModVersion);
+    return (AP_IsInit() && !this->_badSaveFile && !this->_badSaveName && !this->_badModVersion);
 }
 
 bool ArchipelagoManager::IsAuth()
@@ -607,6 +658,18 @@ void ArchipelagoManager::SetMusicShuffle(int shuffleType)
     MusicManager* musicManager = &MusicManager::getInstance();
 
     musicManager->SetMusicShuffle(shuffleType);
+}
+
+void ArchipelagoManager::SetNarrator(int narrator)
+{
+    if (!this->IsInit())
+    {
+        return;
+    }
+
+    MusicManager* musicManager = &MusicManager::getInstance();
+
+    musicManager->SetNarrator(narrator);
 }
 
 void ArchipelagoManager::SetDeathLink(bool deathLinkActive)

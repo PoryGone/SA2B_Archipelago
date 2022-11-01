@@ -474,9 +474,20 @@ void LocationManager::CheckLocation(int location_id)
 	{
 		LevelClearCheckData& checkData = this->_LevelClearData[location_id];
 
-		if (location_id == LCC_CannonCore_1 || location_id >= LCC_Boss_1)
+		if (location_id >= LCC_Boss_1)
 		{
-			// Don't Collect Cannon's Core 1 or Bosses
+			// Don't Collect Bosses
+			return;
+		}
+
+		if (!this->_requireAllCannonsCoreMissions && location_id == LCC_CannonCore_1)
+		{
+			// Don't Collect Cannon's Core 1 (First Required)
+			return;
+		}
+		else if (this->_requireAllCannonsCoreMissions && (location_id >= LCC_CannonCore_1 && location_id <= LCC_CannonCore_5))
+		{
+			// Don't Collect any Cannon's Core Missions (All Active Required)
 			return;
 		}
 
@@ -555,6 +566,30 @@ void LocationManager::CheckLocation(int location_id)
 
 		WriteData<1>((void*)checkData.Address, 0x01);
 	}
+	else if (this->_PipeData.find(location_id) != this->_PipeData.end())
+	{
+		PipeCheckData& checkData = this->_PipeData[location_id];
+
+		checkData.CheckSent = true;
+
+		WriteData<1>((void*)checkData.Address, 0x01);
+	}
+	else if (this->_HiddenData.find(location_id) != this->_HiddenData.end())
+	{
+		HiddenCheckData& checkData = this->_HiddenData[location_id];
+
+		checkData.CheckSent = true;
+
+		WriteData<1>((void*)checkData.Address, 0x01);
+	}
+	else if (this->_GoldBeetleData.find(location_id) != this->_GoldBeetleData.end())
+	{
+		GoldBeetleCheckData& checkData = this->_GoldBeetleData[location_id];
+
+		checkData.CheckSent = true;
+
+		WriteData<1>((void*)checkData.Address, 0x01);
+	}
 }
 
 void LocationManager::SetRequiredRank(int requiredRank)
@@ -613,6 +648,11 @@ void LocationManager::SetChaoEnabled(bool chaoEnabled)
 	this->_chaoEnabled = chaoEnabled;
 }
 
+void LocationManager::SetRequiredCannonsCoreMissions(bool allMissionsRequired)
+{
+	this->_requireAllCannonsCoreMissions = allMissionsRequired;
+}
+
 void LocationManager::ResetLocations()
 {
 	for (auto& pair : this->_LevelClearData)
@@ -621,6 +661,26 @@ void LocationManager::ResetLocations()
 	}
 
 	for (auto& pair : this->_ChaoGardenData)
+	{
+		pair.second.CheckSent = false;
+	}
+
+	for (auto& pair : this->_ChaoKeyData)
+	{
+		pair.second.CheckSent = false;
+	}
+
+	for (auto& pair : this->_PipeData)
+	{
+		pair.second.CheckSent = false;
+	}
+
+	for (auto& pair : this->_HiddenData)
+	{
+		pair.second.CheckSent = false;
+	}
+
+	for (auto& pair : this->_GoldBeetleData)
 	{
 		pair.second.CheckSent = false;
 	}
