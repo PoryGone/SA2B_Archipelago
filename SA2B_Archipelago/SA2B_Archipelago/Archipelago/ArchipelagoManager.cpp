@@ -170,18 +170,6 @@ void ArchipelagoManager::OnFrameFunction()
         }
     }
 
-    if (CurrentLevel == LevelIDs_FinalHazard)
-    {
-        if (GameState == GameStates_GoToNextLevel)
-        {
-            MessageQueue* messageQueue = &MessageQueue::GetInstance();
-            std::string msg = "Victory!";
-            messageQueue->AddMessage(msg);
-
-            this->SendStoryComplete();
-        }
-    }
-
     this->OnFrameDeathLink();
 
     this->OnFrameMessageQueue();
@@ -228,6 +216,13 @@ void SA2_SetDeathLink(int deathLinkActive)
     StatsManager* stats = &StatsManager::GetInstance();
 
     stats->DeathLinkActive(deathLinkActive != 0);
+}
+
+void SA2_SetGoal(int goal)
+{
+    StageSelectManager* ssm = &StageSelectManager::GetInstance();
+
+    ssm->SetGoal(goal);
 }
 
 void SA2_CompareModVersion(int modVersion)
@@ -425,6 +420,7 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_SetLocationCheckedCallback(&SA2_CheckLocation);
     AP_SetDeathLinkRecvCallback(&noop);
     AP_RegisterSlotDataIntCallback("DeathLink", &SA2_SetDeathLink);
+    AP_RegisterSlotDataIntCallback("Goal", &SA2_SetGoal);
     AP_RegisterSlotDataIntCallback("ModVersion", &SA2_CompareModVersion);
     AP_RegisterSlotDataMapIntIntCallback("MusicMap", &SA2_SetMusicMap);
     AP_RegisterSlotDataIntCallback("MusicShuffle", &SA2_SetMusicShuffle);

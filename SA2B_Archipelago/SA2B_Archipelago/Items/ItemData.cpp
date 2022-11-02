@@ -56,4 +56,12 @@ void InitializeItemData(std::map<int, ItemData> &outItemData)
     outItemData[ItemValue::IV_TimeStopTrap] = ItemData(0x0000000, std::string("Chaos Control Trap"), std::string(), 0);
     outItemData[ItemValue::IV_ConfuseTrap]  = ItemData(0x0000000, std::string("Confusion Trap"), std::string(), 0);
     outItemData[ItemValue::IV_TinyTrap]     = ItemData(0x0000000, std::string("Tiny Trap"), std::string(), 0);
+
+    outItemData[ItemValue::IV_WhiteChaosEmerald]  = ItemData(0x01DEEAF8, std::string("White Chaos Emerald"), std::string(), 0);
+    outItemData[ItemValue::IV_RedChaosEmerald]    = ItemData(0x01DEEAF9, std::string("Red Chaos Emerald"), std::string(), 0);
+    outItemData[ItemValue::IV_CyanChaosEmerald]   = ItemData(0x01DEEAFA, std::string("Cyan Chaos Emerald"), std::string(), 0);
+    outItemData[ItemValue::IV_PurpleChaosEmerald] = ItemData(0x01DEEAFB, std::string("Purple Chaos Emerald"), std::string(), 0);
+    outItemData[ItemValue::IV_GreenChaosEmerald]  = ItemData(0x01DEEAFC, std::string("Green Chaos Emerald"), std::string(), 0);
+    outItemData[ItemValue::IV_YellowChaosEmerald] = ItemData(0x01DEEAFD, std::string("Yellow Chaos Emerald"), std::string(), 0);
+    outItemData[ItemValue::IV_BlueChaosEmerald]   = ItemData(0x01DEEAFE, std::string("Blue Chaos Emerald"), std::string(), 0);
 }

@@ -106,6 +106,15 @@ void ItemManager::ResetItems()
 	this->_thisSessionChecksReceived = 0;
 	this->_EmblemsReceived = 0;
 	EmblemCount = 0;
+
+	for (int itemID = ItemValue::IV_WhiteChaosEmerald; itemID <= ItemValue::IV_BlueChaosEmerald; itemID++)
+	{
+		if (this->_ItemData.find(itemID) != this->_ItemData.end())
+		{
+			ItemData& itemToReset = this->_ItemData[itemID];
+			WriteData<1>((void*)itemToReset.Address, 0x00);
+		}
+	}
 }
 
 void ItemManager::ReceiveItem(int item_id, bool notify)
@@ -208,6 +217,21 @@ void ItemManager::ReceiveItem(int item_id, bool notify)
 			this->HandleTrap(item_id);
 
 			SavedChecksReceived = this->_thisSessionChecksReceived;
+		}
+	}
+	else if (item_id <= ItemValue::IV_BlueChaosEmerald) // Chaos Emerald
+	{
+		ItemData& receivedItem = this->_ItemData[item_id];
+
+		bool success = WriteData<1>((void*)receivedItem.Address, 0x1);
+
+		if (this->_thisSessionChecksReceived > SavedChecksReceived)
+		{
+			SavedChecksReceived = this->_thisSessionChecksReceived;
+
+			std::string message = std::string("Received ");
+			message += receivedItem.DisplayName;
+			messageQueue->AddMessage(message);
 		}
 	}
 	else
