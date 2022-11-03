@@ -349,6 +349,8 @@ void InitializeChaoKeyChecks(std::map<int, ChaoKeyCheckData>& outChaoKeyChecks)
     outChaoKeyChecks[ChaoKeyCheck::CKC_MadSpace_Chao_Key_1] = ChaoKeyCheckData(0x01DEE8FF, LevelIDs_MadSpace, { 140, 327, -80 });
     outChaoKeyChecks[ChaoKeyCheck::CKC_MadSpace_Chao_Key_2] = ChaoKeyCheckData(0x01DEE900, LevelIDs_MadSpace, { -620, 1699, 185 });
     outChaoKeyChecks[ChaoKeyCheck::CKC_MadSpace_Chao_Key_3] = ChaoKeyCheckData(0x01DEE901, LevelIDs_MadSpace, { 100, 4099, -60 });
+
+    outChaoKeyChecks[ChaoKeyCheck::CKC_GreenHill_Chao_Key_1] = ChaoKeyCheckData(0x01DEE902, LevelIDs_GreenHill, { -790, -70, -2715 });
 }
 
 void InitializePipeChecks(std::map<int, PipeCheckData>& outPipeChecks)

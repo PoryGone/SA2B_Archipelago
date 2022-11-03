@@ -350,6 +350,8 @@ enum ChaoKeyCheck
     CKC_FinalChase_Chao_Key_1,
     CKC_CannonCore_Chao_Key_1,
 
+    CKC_GreenHill_Chao_Key_1,
+
     CKC_CityEscape_Chao_Key_2 = 0x420,
     CKC_WildCanyon_Chao_Key_2,
     CKC_PrisonLane_Chao_Key_2,
