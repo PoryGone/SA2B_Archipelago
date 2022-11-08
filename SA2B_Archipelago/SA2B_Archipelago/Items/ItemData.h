@@ -56,6 +56,14 @@ enum ItemValue
     IV_ConfuseTrap,
     IV_TinyTrap,
 
+    IV_WhiteChaosEmerald = 0x40,
+    IV_RedChaosEmerald,
+    IV_CyanChaosEmerald,
+    IV_PurpleChaosEmerald,
+    IV_GreenChaosEmerald,
+    IV_YellowChaosEmerald,
+    IV_BlueChaosEmerald,
+
     IV_NUM_ITEMS
 };
 

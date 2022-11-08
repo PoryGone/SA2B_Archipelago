@@ -23,7 +23,7 @@ void InitializeItemData(std::map<int, ItemData> &outItemData)
     outItemData[ItemValue::IV_TailsBazooka]      = ItemData(0x01DEB307, std::string("Tails - Bazooka"), std::string("Bazooka"), 24);
 
     outItemData[ItemValue::IV_KnucklesMysticMelody] = ItemData(0x01DEB30E, std::string("Knuckles - Mystic Melody"), std::string("Mystic Melody"), 7);
-    outItemData[ItemValue::IV_KnucklesShovelClaw]   = ItemData(0x01DEB30A, std::string("Knuckles - Shovel Claw"), std::string("Shovel Claw"), 8);
+    outItemData[ItemValue::IV_KnucklesShovelClaw]   = ItemData(0x01DEB30A, std::string("Knuckles - Shovel Claws"), std::string("Shovel Claws"), 8);
     outItemData[ItemValue::IV_KnucklesAirNecklace]  = ItemData(0x01DEB30D, std::string("Knuckles - Air Necklace"), std::string("Air Necklace"), 5);
     outItemData[ItemValue::IV_KnucklesHammerGloves] = ItemData(0x01DEB30C, std::string("Knuckles - Hammer Gloves"), std::string("Hammer Gloves"), 6);
     outItemData[ItemValue::IV_KnucklesSunglasses]   = ItemData(0x01DEB30B, std::string("Knuckles - Sunglasses"), std::string("Sunglasses"), 9);
@@ -56,4 +56,12 @@ void InitializeItemData(std::map<int, ItemData> &outItemData)
     outItemData[ItemValue::IV_TimeStopTrap] = ItemData(0x0000000, std::string("Chaos Control Trap"), std::string(), 0);
     outItemData[ItemValue::IV_ConfuseTrap]  = ItemData(0x0000000, std::string("Confusion Trap"), std::string(), 0);
     outItemData[ItemValue::IV_TinyTrap]     = ItemData(0x0000000, std::string("Tiny Trap"), std::string(), 0);
+
+    outItemData[ItemValue::IV_WhiteChaosEmerald]  = ItemData(0x01DEEAF8, std::string("White Chaos Emerald"), std::string(), 0);
+    outItemData[ItemValue::IV_RedChaosEmerald]    = ItemData(0x01DEEAF9, std::string("Red Chaos Emerald"), std::string(), 0);
+    outItemData[ItemValue::IV_CyanChaosEmerald]   = ItemData(0x01DEEAFA, std::string("Cyan Chaos Emerald"), std::string(), 0);
+    outItemData[ItemValue::IV_PurpleChaosEmerald] = ItemData(0x01DEEAFB, std::string("Purple Chaos Emerald"), std::string(), 0);
+    outItemData[ItemValue::IV_GreenChaosEmerald]  = ItemData(0x01DEEAFC, std::string("Green Chaos Emerald"), std::string(), 0);
+    outItemData[ItemValue::IV_YellowChaosEmerald] = ItemData(0x01DEEAFD, std::string("Yellow Chaos Emerald"), std::string(), 0);
+    outItemData[ItemValue::IV_BlueChaosEmerald]   = ItemData(0x01DEEAFE, std::string("Blue Chaos Emerald"), std::string(), 0);
 }

@@ -54,7 +54,7 @@ void StageSelectManager::OnFrameFunction()
 	}
 
 	HideMenuButtons();
-	HandleBiolizard();
+	HandleGoal();
 	HandleBossStage();
 	SetLevelsLockState();
 	LayoutBossGates();
@@ -67,6 +67,11 @@ void StageSelectManager::DrawDebugText(int location, const char* message)
 {
 	GetInstance()._helperFunctions->SetDebugFontColor(0xFFF542C8);
 	GetInstance()._helperFunctions->DisplayDebugString(location, message);
+}
+
+void StageSelectManager::SetGoal(int goal)
+{
+	this->_goal = goal;
 }
 
 void StageSelectManager::SetEmblemsForCannonsCore(int emblemsRequired)
@@ -175,6 +180,12 @@ void StageSelectManager::LayoutLevels()
 		}
 		col += 2;
 		row = 3;
+	}
+
+	if (this->_goal == 1 || this->_goal == 2)
+	{
+		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_GreenHill].TileColumnAddress, col);
+		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_GreenHill].TileRowAddress, 4);
 	}
 }
 
@@ -471,6 +482,18 @@ void StageSelectManager::HandleBossStage()
 	}
 }
 
+void StageSelectManager::HandleGoal()
+{
+	if (this->_goal == 0)
+	{
+		HandleBiolizard();
+	}
+	else if (this->_goal == 1 || this->_goal == 2)
+	{
+		HandleGreenHill();
+	}
+}
+
 void StageSelectManager::HandleBiolizard()
 {
 	bool bCannonCoreComplete = true;
@@ -528,6 +551,117 @@ void StageSelectManager::HandleBiolizard()
 			WriteData<1>((void*)0x1DEB320, 0x03);
 
 			WriteData<1>((void*)0x174B044, 0x0C);
+		}
+	}
+
+	if (CurrentLevel == LevelIDs_FinalHazard)
+	{
+		if (GameState == GameStates_GoToNextLevel)
+		{
+			MessageQueue* messageQueue = &MessageQueue::GetInstance();
+			std::string msg = "Victory!";
+			messageQueue->AddMessage(msg);
+
+			ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
+			apm->SendStoryComplete();
+		}
+	}
+}
+
+void StageSelectManager::HandleGreenHill()
+{
+	bool bHaveChaosEmeralds = true;
+
+	for (int i = 0; i < 7; i++)
+	{
+		unsigned char dataValue = *(unsigned char*)(0x01DEEAF8 + i);
+
+		if (dataValue == 0)
+		{
+			bHaveChaosEmeralds = false;
+		}
+	}
+
+	if (bHaveChaosEmeralds)
+	{
+		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_GreenHill].UnlockMemAddress, unlockByteData);
+	}
+	else
+	{
+		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_GreenHill].UnlockMemAddress, lockByteData);
+	}
+
+	if (CurrentLevel == LevelIDs_GreenHill)
+	{
+		if (TimerMinutes == 0 && TimerSeconds < 5)
+		{
+			if (this->_goal == 1)
+			{
+				WriteData<1>((void*)0x1DEB060, 0xCE);
+				WriteData<1>((void*)0x1DEB061, 0x00);
+				WriteData<1>((void*)0x1DEB062, 0x00);
+				WriteData<1>((void*)0x1DEB063, 0x00);
+				WriteData<1>((void*)0x1DEB064, 0xCF);
+				WriteData<1>((void*)0x1DEB065, 0x00);
+				WriteData<1>((void*)0x1DEB066, 0x00);
+				WriteData<1>((void*)0x1DEB067, 0x00);
+
+				WriteData<1>((void*)0x1DEB31E, 0x05);
+				WriteData<1>((void*)0x1DEB31F, 0x05);
+				WriteData<1>((void*)0x1DEB320, 0x03);
+
+				WriteData<1>((void*)0x174B044, 0x0C);
+			}
+			else if (this->_goal == 2)
+			{
+				WriteData<1>((void*)0x1DEB060, 0xCC);
+				WriteData<1>((void*)0x1DEB061, 0x00);
+				WriteData<1>((void*)0x1DEB062, 0x00);
+				WriteData<1>((void*)0x1DEB063, 0x00);
+				WriteData<1>((void*)0x1DEB064, 0xCD);
+				WriteData<1>((void*)0x1DEB065, 0x00);
+				WriteData<1>((void*)0x1DEB066, 0x00);
+				WriteData<1>((void*)0x1DEB067, 0x00);
+
+				WriteData<1>((void*)0x1DEB31E, 0x03);
+				WriteData<1>((void*)0x1DEB31F, 0x03);
+				WriteData<1>((void*)0x1DEB320, 0x03);
+
+				WriteData<1>((void*)0x174B044, 0x0C);
+			}
+		}
+	}
+
+	if (CurrentLevel == LevelIDs_GreenHill)
+	{
+		if (GameState == GameStates_GoToNextLevel)
+		{
+			if (this->_goal == 1)
+			{
+				MessageQueue* messageQueue = &MessageQueue::GetInstance();
+				std::string msg = "Victory!";
+				messageQueue->AddMessage(msg);
+
+				ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
+				apm->SendStoryComplete();
+			}
+			else if (this->_goal == 2)
+			{
+				WriteData<1>((void*)0x01DEDDF4, 0x01);
+			}
+		}
+	}
+
+	if (this->_goal == 2 && CurrentLevel == LevelIDs_FinalHazard)
+	{
+		if (GameState == GameStates_GoToNextLevel)
+		{
+			MessageQueue* messageQueue = &MessageQueue::GetInstance();
+			std::string msg = "Victory!";
+			messageQueue->AddMessage(msg);
+
+			ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
+			apm->SendStoryComplete();
 		}
 	}
 }

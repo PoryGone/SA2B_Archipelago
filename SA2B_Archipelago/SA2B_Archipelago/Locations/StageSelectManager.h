@@ -50,6 +50,7 @@ public:
     static void DrawDebugText(int location, const char* message);
 	void OnInitFunction(const char* path, const HelperFunctions& helperFunctions);
 	void OnFrameFunction();
+	void SetGoal(int goal);
 	void SetEmblemsForCannonsCore(int emblemsRequired);
 	void SetRequiredCannonsCoreMissions(bool requireAllCannonsCoreMissions);
     void SetMissionCount(int missionCount);
@@ -63,6 +64,7 @@ private:
     std::map<int, StageSelectBossData> _stageSelectBossDataMap;
 	int _emblemsForCannonsCore = 200;
 	bool _requireAllCannonsCoreMissions = false;
+	int _goal = 0;
 	int _missionCount = 1;
 	int _requiredRank = 0;
 	std::map<int, int> _regionEmblemMap;
@@ -82,7 +84,9 @@ private:
     void LayoutBossGates();
 	void UnlockAllLevels();
 	void HideMenuButtons();
+	void HandleGoal();
 	void HandleBiolizard();
+	void HandleGreenHill();
     void HandleBossStage();
 	void HandleStageSelectCamera();
     void DrawStageSelectText();
