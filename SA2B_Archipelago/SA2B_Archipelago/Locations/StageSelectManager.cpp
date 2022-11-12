@@ -23,6 +23,9 @@ DataPointer(__int8, Settings_SelectedOption, 0x1D7BAA0);
 DataPointer(char, SS_CameraPos, 0x1D1BEC0);
 DataPointer(char, SS_SelectedTile, 0x1D1BF08);
 
+DataPointer(char, SS_SelectedMission, 0x1D1BF05);
+DataPointer(char, ActiveMission, 0x174AFE3);
+
 DataPointer(char, CannonCore1_Rank, 0x01DEE040);
 
 DataArray(char, GateBossSaveData, 0x01DEE59C, 5);
@@ -59,6 +62,7 @@ void StageSelectManager::OnFrameFunction()
 	SetLevelsLockState();
 	LayoutBossGates();
 	HandleStageSelectCamera();
+	HandleMissionOrder();
 
 	DrawStageSelectText();
 }
@@ -98,6 +102,11 @@ void StageSelectManager::SetRegionEmblemMap(std::map<int, int> map)
 {
 	_regionEmblemMap = map;
 	LayoutLevels();
+}
+
+void StageSelectManager::SetChosenMissionsMap(std::map<int, int> map)
+{
+	this->_chosenMissionsMap = map;
 }
 
 void StageSelectManager::SetBossGates(std::map<int, int> map)
@@ -717,6 +726,22 @@ void StageSelectManager::HandleStageSelectCamera()
 			{
 				SS_CameraPos = 0x00;
 			}
+		}
+	}
+}
+
+void StageSelectManager::HandleMissionOrder()
+{
+	int currentTileStageIndex = this->TileIDtoStageIndex[SS_SelectedTile];
+	if (currentTileStageIndex < this->_chosenMissionsMap.size())
+	{
+		int missionOrderIndex = this->_chosenMissionsMap.at(currentTileStageIndex);
+
+		if (missionOrderIndex < this->_potentialMissionOrders.size())
+		{
+			std::array<int, 5> chosenMissionOrder = this->_potentialMissionOrders.at(missionOrderIndex);
+
+			ActiveMission = chosenMissionOrder[SS_SelectedMission] - 1;
 		}
 	}
 }
