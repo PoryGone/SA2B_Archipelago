@@ -20,8 +20,6 @@ DataPointer(char, EmblemResultsButton, 0x1D1BC3B);
 
 DataPointer(__int8, Settings_SelectedOption, 0x1D7BAA0);
 
-DataPointer(char, SS_EmblemDisplay, 0x67675C);
-
 DataPointer(char, SS_CameraPos, 0x1D1BEC0);
 DataPointer(char, SS_SelectedTile, 0x1D1BF08);
 
@@ -133,7 +131,7 @@ void StageSelectManager::SetMissionCount(int missionCount)
 void StageSelectManager::SetRequiredRank(int requiredRank)
 {
 	this->_requiredRank = requiredRank;
-	//SS_EmblemDisplay = (char)requiredRank;
+	WriteData<1>((void*)0x67675C, (char)requiredRank);
 }
 
 void StageSelectManager::SetRegionEmblemMap(std::map<int, int> map)
