@@ -57,6 +57,7 @@ public:
     void SetRequiredRank(int requiredRank);
 	void SetRegionEmblemMap(std::map<int, int> map);
 	void SetChosenMissionsMap(std::map<int, int> map);
+	void SetMissionCountMap(std::map<int, int> map);
     void SetBossGates(std::map<int, int> map);
 
 private:
@@ -72,6 +73,7 @@ private:
     std::map<int, int> _bossGates;
     std::vector<int> _gateRequirements;
     std::map<int, int> _chosenMissionsMap;
+    std::map<int, int> _missionCountMap;
     std::map<int, ItemData> _itemData;
     std::vector<CharacterItemRange> _characterItemRanges;
     std::vector<GateBossLayout> _gateBossLayoutData;

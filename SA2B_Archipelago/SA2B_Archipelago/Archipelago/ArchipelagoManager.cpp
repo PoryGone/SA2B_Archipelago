@@ -409,6 +409,18 @@ void SA2_SetChosenMissionsMap(std::map<int, int> map)
     ssm->SetChosenMissionsMap(map);
 }
 
+void SA2_SetMissionCountMap(std::map<int, int> map)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    StageSelectManager* ssm = &StageSelectManager::GetInstance();
+
+    ssm->SetMissionCountMap(map);
+}
+
 void SA2_SetGateBosses(std::map<int, int> map)
 {
     if (!ArchipelagoManager::getInstance().IsInit())
@@ -448,6 +460,7 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_RegisterSlotDataIntCallback("ChaoGardenDifficulty", &SA2_SetChaoDifficulty);
     AP_RegisterSlotDataMapIntIntCallback("RegionEmblemMap", &SA2_SetRegionEmblemMap);
     AP_RegisterSlotDataMapIntIntCallback("MissionMap", &SA2_SetChosenMissionsMap);
+    AP_RegisterSlotDataMapIntIntCallback("MissionCountMap", &SA2_SetMissionCountMap);
     AP_RegisterSlotDataMapIntIntCallback("GateBosses", &SA2_SetGateBosses);
     AP_Start();
 }

@@ -36,6 +36,7 @@ DataArray(int, EnglishStageHeaders, 0x8A0560, 45);
 
 const void* const loc_Mission_1 = (void*)0x1DEEBBC;
 const void* const loc_esi_backup = (void*)0x1DEEBD0;
+const void* const loc_mission_count = (void*)0x1DEEBD4;
 
 const void* const loc_6766C8 = (void*)0x6766C8;
 void __cdecl MissionDisplay_Begin_ASM()
@@ -57,7 +58,7 @@ void __cdecl MissionDisplay_End_ASM()
 		mov esi, dword ptr ds:[0x1DEEBD0]
 		inc esi
 		add esp, 8
-		cmp esi, 5
+		cmp esi, dword ptr ds : [0x1DEEBD4]
 		jmp loc_6767F5
 	}
 }
@@ -143,6 +144,11 @@ void StageSelectManager::SetRegionEmblemMap(std::map<int, int> map)
 void StageSelectManager::SetChosenMissionsMap(std::map<int, int> map)
 {
 	this->_chosenMissionsMap = map;
+}
+
+void StageSelectManager::SetMissionCountMap(std::map<int, int> map)
+{
+	this->_missionCountMap = map;
 }
 
 void StageSelectManager::SetBossGates(std::map<int, int> map)
@@ -783,6 +789,8 @@ void StageSelectManager::HandleMissionOrder()
 			{
 				WriteData<1>((void*)((int)(loc_Mission_1) + i*4), (char)(chosenMissionOrder[i] - 1));
 			}
+
+			WriteData<1>((void*)((int)(loc_mission_count)), this->_missionCountMap[currentTileStageIndex]);
 		}
 	}
 }
