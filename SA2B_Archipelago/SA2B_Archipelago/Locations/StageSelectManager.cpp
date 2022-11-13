@@ -20,6 +20,8 @@ DataPointer(char, EmblemResultsButton, 0x1D1BC3B);
 
 DataPointer(__int8, Settings_SelectedOption, 0x1D7BAA0);
 
+DataPointer(char, SS_EmblemDisplay, 0x67675C);
+
 DataPointer(char, SS_CameraPos, 0x1D1BEC0);
 DataPointer(char, SS_SelectedTile, 0x1D1BF08);
 
@@ -34,10 +36,45 @@ DataArray(int, JapanesseStageHeaders, 0x008A0470, 68);
 DataArray(int, EnglishStageHeaders, 0x8A0560, 45);
 
 
+const void* const loc_Mission_1 = (void*)0x1DEEBBC;
+const void* const loc_esi_backup = (void*)0x1DEEBD0;
+
+const void* const loc_6766C8 = (void*)0x6766C8;
+void __cdecl MissionDisplay_Begin_ASM()
+{
+	__asm
+	{
+		mov dword ptr ds:[0x1DEEBD0], esi
+		movzx esi, dword ptr[0x1DEEBBC + esi*4]
+		fld dword ptr ds:[0x12D4694]
+		jmp loc_6766C8
+	}
+}
+
+const void* const loc_6767F5 = (void*)0x6767F5;
+void __cdecl MissionDisplay_End_ASM()
+{
+	__asm
+	{
+		mov esi, dword ptr ds:[0x1DEEBD0]
+		inc esi
+		add esp, 8
+		cmp esi, 5
+		jmp loc_6767F5
+	}
+}
+
+
 void StageSelectManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
 {
 	_helperFunctions = &helperFunctions;
 	WriteData<1>(saveLevelDataReadOffset_ptr, saveLevelDataReadOffset);
+
+	WriteJump(static_cast<void*>((void*)0x6766C2), (void*)((int)(&MissionDisplay_Begin_ASM) + 0x4));
+	WriteData<1>((void*)0x6766C7, nullop);
+
+	WriteJump(static_cast<void*>((void*)0x6767ee), (void*)((int)(&MissionDisplay_End_ASM) + 0x4));
+	WriteData<2>((void*)0x6767F3, nullop);
 
 	InitializeStageSelectData(this->_stageSelectDataMap);
 	InitializeStageSelectBossData(this->_stageSelectBossDataMap);
@@ -96,6 +133,7 @@ void StageSelectManager::SetMissionCount(int missionCount)
 void StageSelectManager::SetRequiredRank(int requiredRank)
 {
 	this->_requiredRank = requiredRank;
+	//SS_EmblemDisplay = (char)requiredRank;
 }
 
 void StageSelectManager::SetRegionEmblemMap(std::map<int, int> map)
@@ -742,6 +780,11 @@ void StageSelectManager::HandleMissionOrder()
 			std::array<int, 5> chosenMissionOrder = this->_potentialMissionOrders.at(missionOrderIndex);
 
 			ActiveMission = chosenMissionOrder[SS_SelectedMission] - 1;
+
+			for (int i = 0; i < 5; i++)
+			{
+				WriteData<1>((void*)((int)(loc_Mission_1) + i*4), (char)(chosenMissionOrder[i] - 1));
+			}
 		}
 	}
 }
