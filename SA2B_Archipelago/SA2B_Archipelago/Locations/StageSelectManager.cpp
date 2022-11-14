@@ -50,6 +50,17 @@ void __cdecl MissionDisplay_Begin_ASM()
 	}
 }
 
+const void* const loc_678504 = (void*)0x678504;
+void __cdecl Mission_Enter_ASM()
+{
+	__asm
+	{
+		movzx ecx, dword ptr[0x1DEEBBC + ecx*4 - 4]
+		cmp byte ptr[edi + ecx + 0x1DEC638], al
+		jmp loc_678504
+	}
+}
+
 const void* const loc_6767F5 = (void*)0x6767F5;
 void __cdecl MissionDisplay_End_ASM()
 {
@@ -71,6 +82,9 @@ void StageSelectManager::OnInitFunction(const char* path, const HelperFunctions&
 
 	WriteJump(static_cast<void*>((void*)0x6766C2), (void*)((int)(&MissionDisplay_Begin_ASM) + 0x4));
 	WriteData<1>((void*)0x6766C7, nullop);
+
+	WriteJump(static_cast<void*>((void*)0x6784FD), (void*)((int)(&Mission_Enter_ASM) + 0x3));
+	WriteData<2>((void*)0x678502, nullop);
 
 	WriteJump(static_cast<void*>((void*)0x6767ee), (void*)((int)(&MissionDisplay_End_ASM) + 0x4));
 	WriteData<2>((void*)0x6767F3, nullop);
