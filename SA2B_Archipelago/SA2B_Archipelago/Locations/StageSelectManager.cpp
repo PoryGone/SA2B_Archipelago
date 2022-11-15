@@ -50,6 +50,20 @@ void __cdecl MissionDisplay_Begin_ASM()
 	}
 }
 
+//67670b
+const void* const loc_676712 = (void*)0x676712;
+void __cdecl MissionDisplay_CompareActive_ASM() 
+{
+	__asm
+	{
+		mov edx, dword ptr [ecx + 4]
+		mov eax, dword ptr ds:[0x1DEEBD0]
+		movzx eax, dword ptr[0x1DEEBBC + eax * 4 - 4]
+		cmp byte ptr[edx + eax], 0
+		jmp loc_676712
+	}
+}
+
 const void* const loc_678504 = (void*)0x678504;
 void __cdecl Mission_Enter_ASM()
 {
@@ -82,6 +96,9 @@ void StageSelectManager::OnInitFunction(const char* path, const HelperFunctions&
 
 	WriteJump(static_cast<void*>((void*)0x6766C2), (void*)((int)(&MissionDisplay_Begin_ASM) + 0x4));
 	WriteData<1>((void*)0x6766C7, nullop);
+
+	WriteJump(static_cast<void*>((void*)0x67670B), (void*)((int)(&MissionDisplay_CompareActive_ASM) + 0x3));
+	WriteData<2>((void*)0x676710, nullop);
 
 	WriteJump(static_cast<void*>((void*)0x6784FD), (void*)((int)(&Mission_Enter_ASM) + 0x3));
 	WriteData<2>((void*)0x678502, nullop);
@@ -788,6 +805,9 @@ void StageSelectManager::HandleStageSelectCamera()
 
 void StageSelectManager::HandleMissionOrder()
 {
+	//Make sure first mission displays as active
+	WriteData<1>((void*)0x1DEEBB8, 0x30);
+
 	int currentTileStageIndex = this->TileIDtoStageIndex[SS_SelectedTile];
 	if (currentTileStageIndex < this->_chosenMissionsMap.size())
 	{
@@ -802,6 +822,34 @@ void StageSelectManager::HandleMissionOrder()
 			for (int i = 0; i < 5; i++)
 			{
 				WriteData<1>((void*)((int)(loc_Mission_1) + i*4), (char)(chosenMissionOrder[i] - 1));
+
+				//Update 1st mission anim atlas position
+				if (chosenMissionOrder[i] == 1 && i > 0 ) 
+				{
+					int prevMission = chosenMissionOrder[i - 1];
+					char value = *(char*)(this->_stageSelectDataMap.at(currentTileStageIndex).UnlockMemAddress - 6 + prevMission);
+					if (value == 0x00) 
+					{
+						WriteData<1>((void*)(0xC69218 + 8), 0x96);
+						WriteData<1>((void*)(0xC69218 + 10), 0x98);
+						WriteData<1>((void*)(0xC69218 + 12), 0xC7);
+						WriteData<1>((void*)(0xC69218 + 14), 0xCA);
+					} 
+					else
+					{
+						WriteData<1>((void*)(0xC69218 + 8), 0x00);
+						WriteData<1>((void*)(0xC69218 + 10), 0x00);
+						WriteData<1>((void*)(0xC69218 + 12), 0x32);
+						WriteData<1>((void*)(0xC69218 + 14), 0x33);
+					}
+				}
+				else if (chosenMissionOrder[i] == 1)
+				{
+					WriteData<1>((void*)(0xC69218 + 8), 0x00);
+					WriteData<1>((void*)(0xC69218 + 10), 0x00);
+					WriteData<1>((void*)(0xC69218 + 12), 0x32);
+					WriteData<1>((void*)(0xC69218 + 14), 0x33);
+				}
 			}
 
 			WriteData<1>((void*)((int)(loc_mission_count)), this->_missionCountMap[currentTileStageIndex]);
