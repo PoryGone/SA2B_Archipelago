@@ -831,9 +831,9 @@ void StageSelectManager::HandleMissionOrder()
 					if (value == 0x00) 
 					{
 						WriteData<1>((void*)(0xC69218 + 8), 0x96);
-						WriteData<1>((void*)(0xC69218 + 10), 0x98);
+						WriteData<1>((void*)(0xC69218 + 10), 0x96);
 						WriteData<1>((void*)(0xC69218 + 12), 0xC7);
-						WriteData<1>((void*)(0xC69218 + 14), 0xCA);
+						WriteData<1>((void*)(0xC69218 + 14), 0xC8);
 					} 
 					else
 					{
