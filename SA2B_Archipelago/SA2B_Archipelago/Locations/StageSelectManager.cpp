@@ -155,11 +155,6 @@ void StageSelectManager::SetRequiredCannonsCoreMissions(bool allMissionsRequired
 	this->_requireAllCannonsCoreMissions = allMissionsRequired;
 }
 
-void StageSelectManager::SetMissionCount(int missionCount)
-{
-	this->_missionCount = missionCount;
-}
-
 void StageSelectManager::SetRequiredRank(int requiredRank)
 {
 	this->_requiredRank = requiredRank;
@@ -383,10 +378,6 @@ void StageSelectManager::DrawStageSelectText()
 		cannonsCoreMessage.append("/");
 		cannonsCoreMessage.append(std::to_string(_emblemsForCannonsCore));
 		_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 3), cannonsCoreMessage.c_str());
-
-		std::string missionCountMessage = "Missions Active: ";
-		missionCountMessage.append(std::to_string(this->_missionCount));
-		_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 2), missionCountMessage.c_str());
 
 		DrawCurrentLevelUpgrade();
 		DrawCurrentCharacterUpgrades();

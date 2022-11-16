@@ -274,18 +274,6 @@ void SA2_SetRequiredCannonsCoreMissions(int requirement)
     locationManager->SetRequiredCannonsCoreMissions(requirement != 0);
 }
 
-void SA2_SetMissionCount(int missionCount)
-{
-    if (!ArchipelagoManager::getInstance().IsInit())
-    {
-        return;
-    }
-
-    StageSelectManager* ssm = &StageSelectManager::GetInstance();
-
-    ssm->SetMissionCount(missionCount);
-}
-
 void SA2_SetRequiredRank(int requiredRank)
 {
     if (!ArchipelagoManager::getInstance().IsInit())
@@ -451,7 +439,6 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_RegisterSlotDataIntCallback("Narrator", &SA2_SetNarrator);
     AP_RegisterSlotDataIntCallback("EmblemsForCannonsCore", &SA2_SetEmblemsForCannonsCore);
     AP_RegisterSlotDataIntCallback("RequiredCannonsCoreMissions", &SA2_SetRequiredCannonsCoreMissions);
-    AP_RegisterSlotDataIntCallback("IncludeMissions", &SA2_SetMissionCount);
     AP_RegisterSlotDataIntCallback("RequiredRank", &SA2_SetRequiredRank);
     AP_RegisterSlotDataIntCallback("ChaoKeys", &SA2_SetChaoKeys);
     AP_RegisterSlotDataIntCallback("Whistlesanity", &SA2_SetPipes);

@@ -53,7 +53,6 @@ public:
 	void SetGoal(int goal);
 	void SetEmblemsForCannonsCore(int emblemsRequired);
 	void SetRequiredCannonsCoreMissions(bool requireAllCannonsCoreMissions);
-    void SetMissionCount(int missionCount);
     void SetRequiredRank(int requiredRank);
 	void SetRegionEmblemMap(std::map<int, int> map);
 	void SetChosenMissionsMap(std::map<int, int> map);
@@ -67,7 +66,6 @@ private:
 	int _emblemsForCannonsCore = 200;
 	bool _requireAllCannonsCoreMissions = false;
 	int _goal = 0;
-	int _missionCount = 1;
 	int _requiredRank = 0;
 	std::map<int, int> _regionEmblemMap;
     std::map<int, int> _bossGates;
