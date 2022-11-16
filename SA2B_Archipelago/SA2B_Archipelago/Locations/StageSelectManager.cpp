@@ -582,8 +582,9 @@ void StageSelectManager::HandleBiolizard()
 
 	if (this->_requireAllCannonsCoreMissions)
 	{
+		int missionCount = this->_missionCountMap[StageSelectStage::SSS_CannonCore];
 		// TODO: Adjust this when Mission Order changes go in
-		for (int i = 0; i < this->_missionCount; i++)
+		for (int i = 0; i < missionCount; i++)
 		{
 			char dataValue = *(char*)(0x01DEE040 + i);
 
