@@ -274,18 +274,6 @@ void SA2_SetRequiredCannonsCoreMissions(int requirement)
     locationManager->SetRequiredCannonsCoreMissions(requirement != 0);
 }
 
-void SA2_SetMissionCount(int missionCount)
-{
-    if (!ArchipelagoManager::getInstance().IsInit())
-    {
-        return;
-    }
-
-    StageSelectManager* ssm = &StageSelectManager::GetInstance();
-
-    ssm->SetMissionCount(missionCount);
-}
-
 void SA2_SetRequiredRank(int requiredRank)
 {
     if (!ArchipelagoManager::getInstance().IsInit())
@@ -397,6 +385,30 @@ void SA2_SetRegionEmblemMap(std::map<int, int> map)
     ssm->SetRegionEmblemMap(map);
 }
 
+void SA2_SetChosenMissionsMap(std::map<int, int> map)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    StageSelectManager* ssm = &StageSelectManager::GetInstance();
+
+    ssm->SetChosenMissionsMap(map);
+}
+
+void SA2_SetMissionCountMap(std::map<int, int> map)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    StageSelectManager* ssm = &StageSelectManager::GetInstance();
+
+    ssm->SetMissionCountMap(map);
+}
+
 void SA2_SetGateBosses(std::map<int, int> map)
 {
     if (!ArchipelagoManager::getInstance().IsInit())
@@ -427,7 +439,6 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_RegisterSlotDataIntCallback("Narrator", &SA2_SetNarrator);
     AP_RegisterSlotDataIntCallback("EmblemsForCannonsCore", &SA2_SetEmblemsForCannonsCore);
     AP_RegisterSlotDataIntCallback("RequiredCannonsCoreMissions", &SA2_SetRequiredCannonsCoreMissions);
-    AP_RegisterSlotDataIntCallback("IncludeMissions", &SA2_SetMissionCount);
     AP_RegisterSlotDataIntCallback("RequiredRank", &SA2_SetRequiredRank);
     AP_RegisterSlotDataIntCallback("ChaoKeys", &SA2_SetChaoKeys);
     AP_RegisterSlotDataIntCallback("Whistlesanity", &SA2_SetPipes);
@@ -435,6 +446,8 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_RegisterSlotDataIntCallback("ChaoRaceChecks", &SA2_SetChaoPacks);
     AP_RegisterSlotDataIntCallback("ChaoGardenDifficulty", &SA2_SetChaoDifficulty);
     AP_RegisterSlotDataMapIntIntCallback("RegionEmblemMap", &SA2_SetRegionEmblemMap);
+    AP_RegisterSlotDataMapIntIntCallback("MissionMap", &SA2_SetChosenMissionsMap);
+    AP_RegisterSlotDataMapIntIntCallback("MissionCountMap", &SA2_SetMissionCountMap);
     AP_RegisterSlotDataMapIntIntCallback("GateBosses", &SA2_SetGateBosses);
     AP_Start();
 }
