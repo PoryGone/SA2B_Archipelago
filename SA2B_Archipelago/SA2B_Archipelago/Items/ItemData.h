@@ -1,5 +1,6 @@
 #include "../pch.h"
 #pragma once
+#include <array>
 #include <map>
 #include <string>
 
@@ -55,6 +56,9 @@ enum ItemValue
     IV_TimeStopTrap,
     IV_ConfuseTrap,
     IV_TinyTrap,
+    IV_GravityTrap,
+    IV_ExpositionTrap,
+    IV_DarknessTrap,
 
     IV_WhiteChaosEmerald = 0x40,
     IV_RedChaosEmerald,
@@ -82,3 +86,13 @@ struct ItemData
 
 
 void InitializeItemData(std::map<int, ItemData>& outItemData);
+
+
+struct DialogueData
+{
+    DialogueData() : VoiceID(0), Duration(0) {}
+    DialogueData(int voiceID, int duration) : VoiceID(voiceID), Duration(duration) {}
+
+    int VoiceID = 0;
+    int Duration = 0;
+};
