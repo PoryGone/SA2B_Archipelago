@@ -471,6 +471,9 @@ void ItemManager::ResetTrapData()
 		MainCharObj1[0]->Scale.z = 1.0f;
 	}
 	this->_StoredFogData = FogData();
+	Gravity.x = 0.0f;
+	Gravity.y = -1.0f;
+	Gravity.z = 0.0f;
 	return;
 }
 
