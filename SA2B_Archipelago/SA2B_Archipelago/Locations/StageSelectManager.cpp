@@ -1,5 +1,6 @@
 #include "../pch.h"
 #include "StageSelectManager.h"
+#include "LocationManager.h"
 #include "../Utilities/MessageQueue.h"
 #include "../Archipelago/ArchipelagoManager.h"
 #include "../Aesthetics/StatsManager.h"
@@ -397,6 +398,31 @@ void StageSelectManager::DrawStageSelectText()
 
 		DrawCurrentLevelUpgrade();
 		DrawCurrentCharacterUpgrades();
+
+		// Feel free to move this stuff to your satisfaction :)
+		// These vectors are lists of Memory Addresses which you can check to determine whether that location has been checked
+		if (SS_SelectedTile < TileIDtoStageIndex.size())
+		{
+			int currentTileStageIndex = this->TileIDtoStageIndex[SS_SelectedTile];
+			LocationManager* locMan = &LocationManager::getInstance();
+			std::vector<int> chaoKeys = locMan->GetChaoKeyLocationsForLevel(currentTileStageIndex);
+			std::vector<int> pipes    = locMan->GetPipeLocationsForLevel(currentTileStageIndex);
+			std::vector<int> hiddens  = locMan->GetHiddenLocationsForLevel(currentTileStageIndex);
+			std::vector<int> beetles  = locMan->GetGoldBeetleLocationsForLevel(currentTileStageIndex);
+
+			std::string message = "Chao Key Count: ";
+			message.append(std::to_string(chaoKeys.size()));
+			_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 4), message.c_str());
+			message = "Pipe Count: ";
+			message.append(std::to_string(pipes.size()));
+			_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 5), message.c_str());
+			message = "Hidden Count: ";
+			message.append(std::to_string(hiddens.size()));
+			_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 6), message.c_str());
+			message = "Gold Beetle Count: ";
+			message.append(std::to_string(beetles.size()));
+			_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 7), message.c_str());
+		}
 	}
 }
 
