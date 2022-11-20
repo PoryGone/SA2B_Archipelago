@@ -480,14 +480,9 @@ void LocationManager::CheckLocation(int location_id)
 			return;
 		}
 
-		if (!this->_requireAllCannonsCoreMissions && location_id == LCC_CannonCore_1)
+		if (location_id >= LCC_CannonCore_1 && location_id <= LCC_CannonCore_5)
 		{
-			// Don't Collect Cannon's Core 1 (First Required)
-			return;
-		}
-		else if (this->_requireAllCannonsCoreMissions && (location_id >= LCC_CannonCore_1 && location_id <= LCC_CannonCore_5))
-		{
-			// Don't Collect any Cannon's Core Missions (All Active Required)
+			// Don't Collect any Cannon's Core Missions
 			return;
 		}
 

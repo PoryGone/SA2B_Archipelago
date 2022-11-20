@@ -75,6 +75,17 @@ void __cdecl Mission_Enter_ASM()
 	}
 }
 
+const void* const loc_6784DD = (void*)0x6784DD;
+void __cdecl Mission_Enter_101_ASM()
+{
+	__asm
+	{
+		movzx edx, dword ptr[0x1DEEBBC + edx * 4 - 4]
+		cmp byte ptr[ecx + edx + 0x1DEF428], al
+		jmp loc_6784DD
+	}
+}
+
 const void* const loc_6767F5 = (void*)0x6767F5;
 void __cdecl MissionDisplay_End_ASM()
 {
@@ -100,8 +111,13 @@ void StageSelectManager::OnInitFunction(const char* path, const HelperFunctions&
 	WriteJump(static_cast<void*>((void*)0x67670B), (void*)((int)(&MissionDisplay_CompareActive_ASM) + 0x3));
 	WriteData<2>((void*)0x676710, nullop);
 
+	// Most Stages
 	WriteJump(static_cast<void*>((void*)0x6784FD), (void*)((int)(&Mission_Enter_ASM) + 0x3));
 	WriteData<2>((void*)0x678502, nullop);
+
+	// Route 101
+	WriteJump(static_cast<void*>((void*)0x6784D6), (void*)((int)(&Mission_Enter_101_ASM) + 0x3));
+	WriteData<2>((void*)0x6784DB, nullop);
 
 	WriteJump(static_cast<void*>((void*)0x6767ee), (void*)((int)(&MissionDisplay_End_ASM) + 0x4));
 	WriteData<2>((void*)0x6767F3, nullop);
@@ -569,15 +585,36 @@ void StageSelectManager::HandleGoal()
 
 void StageSelectManager::HandleBiolizard()
 {
+	ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
+	if (!apm || !apm->IsInit() || !apm->IsAuth())
+	{
+		return;
+	}
+
+	if (this->_chosenMissionsMap.find(StageSelectStage::SSS_CannonCore) == this->_chosenMissionsMap.end())
+	{
+		return;
+	}
+
+	if (this->_missionCountMap.find(StageSelectStage::SSS_CannonCore) == this->_missionCountMap.end())
+	{
+		return;
+	}
+
 	bool bCannonCoreComplete = true;
+
+	int missionOrderIndex = this->_chosenMissionsMap.at(StageSelectStage::SSS_CannonCore);
+
+	std::array<int, 5> chosenMissionOrder = this->_potentialMissionOrders.at(missionOrderIndex);
 
 	if (this->_requireAllCannonsCoreMissions)
 	{
-		int missionCount = this->_missionCountMap[StageSelectStage::SSS_CannonCore];
-		// TODO: Adjust this when Mission Order changes go in
+		int missionCount = this->_missionCountMap.at(StageSelectStage::SSS_CannonCore);
+
 		for (int i = 0; i < missionCount; i++)
 		{
-			char dataValue = *(char*)(0x01DEE040 + i);
+			int missionIdx = chosenMissionOrder[i] - 1;
+			char dataValue = *(char*)(0x01DEE040 + missionIdx);
 
 			if (dataValue <= this->_requiredRank)
 			{
@@ -587,9 +624,15 @@ void StageSelectManager::HandleBiolizard()
 			}
 		}
 	}
-	else if (CannonCore1_Rank <= this->_requiredRank)
+	else
 	{
-		bCannonCoreComplete = false;
+		int missionIdx = chosenMissionOrder[0] - 1;
+		char dataValue = *(char*)(0x01DEE040 + missionIdx);
+
+		if (dataValue <= this->_requiredRank)
+		{
+			bCannonCoreComplete = false;
+		}
 	}
 
 	if (bCannonCoreComplete)
