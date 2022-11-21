@@ -918,4 +918,12 @@ void StageSelectManager::HandleMissionOrder()
 			WriteData<1>((void*)(0x676E47), this->_missionCountMap[currentTileStageIndex]);
 		}
 	}
+	else
+	{
+		for (int i = 0; i < 5; i++)
+		{
+			WriteData<1>((void*)((int)(loc_Mission_1)+i * 4), (char)(i));
+		}
+		WriteData<1>((void*)((int)(loc_mission_count)), 5);
+	}
 }
