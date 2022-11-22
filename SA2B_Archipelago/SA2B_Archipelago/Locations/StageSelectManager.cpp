@@ -162,6 +162,11 @@ void StageSelectManager::SetGoal(int goal)
 	this->_goal = goal;
 }
 
+int StageSelectManager::GetGoal()
+{
+	return this->_goal;
+}
+
 void StageSelectManager::SetEmblemsForCannonsCore(int emblemsRequired)
 {
 	_emblemsForCannonsCore = emblemsRequired;
@@ -396,11 +401,12 @@ void StageSelectManager::DrawStageSelectText()
 		cannonsCoreMessage.append(std::to_string(_emblemsForCannonsCore));
 		_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 3), cannonsCoreMessage.c_str());
 
-		DrawCurrentLevelUpgrade();
-		DrawCurrentCharacterUpgrades();
+		//DrawCurrentLevelUpgrade();
+		//DrawCurrentCharacterUpgrades();
 
 		// Feel free to move this stuff to your satisfaction :)
 		// These vectors are lists of Memory Addresses which you can check to determine whether that location has been checked
+		/*
 		if (SS_SelectedTile < TileIDtoStageIndex.size())
 		{
 			int currentTileStageIndex = this->TileIDtoStageIndex[SS_SelectedTile];
@@ -423,6 +429,7 @@ void StageSelectManager::DrawStageSelectText()
 			message.append(std::to_string(beetles.size()));
 			_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 7), message.c_str());
 		}
+		*/
 	}
 }
 

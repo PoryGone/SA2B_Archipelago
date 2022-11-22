@@ -58,6 +58,7 @@ public:
 	void SetChosenMissionsMap(std::map<int, int> map);
 	void SetMissionCountMap(std::map<int, int> map);
     void SetBossGates(std::map<int, int> map);
+    int GetGoal();
 
 private:
 	const HelperFunctions* _helperFunctions;
