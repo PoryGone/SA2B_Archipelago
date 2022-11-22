@@ -3,6 +3,7 @@
 
 #include <map>
 #include <queue>
+#include <vector>
 #include "ItemData.h"
 #include "../ModLoaderCommon/Trampoline.h"
 
@@ -28,6 +29,8 @@ public:
 	// Item Functions
 	void ResetItems();
 	void ReceiveItem(int item_id, bool notify);
+
+	std::vector<int> GetChaosEmeraldAddresses();
 
 	int _TimeStopTimer;
 
