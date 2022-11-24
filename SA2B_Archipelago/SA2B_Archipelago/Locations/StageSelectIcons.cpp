@@ -115,12 +115,12 @@ static NJS_SPRITE StageSelectSprite = { { -32.0f, 0.0f, 0.0f }, 1.0f, 1.0f, 0, &
 static NJS_SPRITE NumSprite = { { -32.0f, 0.0f, 0.0f }, 1.0f, 1.0f, 0, &NumTex, &NumAnim[0] };
 static NJS_SPRITE EmeraldSprites[] = { 
 	{ { 208.0f, 0.0f, 0.0f }, 0.25f, 0.25f, 0, &StageSelectTex, &StageSelectAnim[0] },
-	{ { 208.0f, 0.0f, 0.0f }, 0.25f, 0.25f, 0,& StageSelectTex,& StageSelectAnim[0] },
-	{ { 208.0f, 0.0f, 0.0f }, 0.25f, 0.25f, 0,& StageSelectTex,& StageSelectAnim[0] },
-	{ { 208.0f, 0.0f, 0.0f }, 0.25f, 0.25f, 0,& StageSelectTex,& StageSelectAnim[0] },
-	{ { 208.0f, 0.0f, 0.0f }, 0.25f, 0.25f, 0,& StageSelectTex,& StageSelectAnim[0] },
-	{ { 208.0f, 0.0f, 0.0f }, 0.25f, 0.25f, 0,& StageSelectTex,& StageSelectAnim[0] },
-	{ { 208.0f, 0.0f, 0.0f }, 0.25f, 0.25f, 0,& StageSelectTex,& StageSelectAnim[0] },
+	{ { 208.0f, 0.0f, 0.0f }, 0.25f, 0.25f, 0, &StageSelectTex, &StageSelectAnim[0] },
+	{ { 208.0f, 0.0f, 0.0f }, 0.25f, 0.25f, 0, &StageSelectTex, &StageSelectAnim[0] },
+	{ { 208.0f, 0.0f, 0.0f }, 0.25f, 0.25f, 0, &StageSelectTex, &StageSelectAnim[0] },
+	{ { 208.0f, 0.0f, 0.0f }, 0.25f, 0.25f, 0, &StageSelectTex, &StageSelectAnim[0] },
+	{ { 208.0f, 0.0f, 0.0f }, 0.25f, 0.25f, 0, &StageSelectTex, &StageSelectAnim[0] },
+	{ { 208.0f, 0.0f, 0.0f }, 0.25f, 0.25f, 0, &StageSelectTex, &StageSelectAnim[0] },
 };
 
 CharacterItemRange GetItemRangeForCharacter(char character)
@@ -261,9 +261,8 @@ void UpdateChaosEmeraldIcons()
 			float x = 208.0f + (i * 32.0f);
 			EmeraldSprites[i].tanim = &StageSelectAnim[emeraldIcon];
 			EmeraldSprites[i].p = { x, 380.0f, 0.0f };
-			//NJS_SPRITE sprite = { { x, 380.0f, 0.0f }, 0.25f, 0.25f, 0, &StageSelectTex, &StageSelectAnim[emeraldIcon] };
 			njDrawSprite2D(&EmeraldSprites[i], 1, 1, NJD_SPRITE_ALPHA);
-			StageSelectManager::DrawDebugText(NJM_LOCATION(0, 0), "");
+			//StageSelectManager::DrawDebugText(NJM_LOCATION(0, 0), "");
 		}
 	}
 }
