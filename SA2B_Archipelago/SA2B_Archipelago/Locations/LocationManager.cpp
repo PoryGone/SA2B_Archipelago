@@ -832,7 +832,7 @@ std::vector<int> LocationManager::GetChaoKeyLocationsForLevel(int levelID)
 {
 	std::vector<int> result;
 
-	if (this->_chaoKeysEnabled)
+	/*if (this->_chaoKeysEnabled)
 	{
 		int checkOffset = 0x400;
 
@@ -845,6 +845,18 @@ std::vector<int> LocationManager::GetChaoKeyLocationsForLevel(int levelID)
 				result.push_back(checkData.Address);
 			}
 		}
+	}*/
+
+	int checkOffset = 0x400;
+
+	for (int j = 0; j < 6; j++)
+	{
+		int locationID = checkOffset + (j * 0x20) + levelID;
+		if (this->_ChaoKeyData.find(locationID) != this->_ChaoKeyData.end())
+		{
+			ChaoKeyCheckData& checkData = this->_ChaoKeyData[locationID];
+			result.push_back(checkData.Address);
+		}
 	}
 
 	return result;
@@ -854,7 +866,7 @@ std::vector<int> LocationManager::GetPipeLocationsForLevel(int levelID)
 {
 	std::vector<int> result;
 
-	if (this->_pipesEnabled)
+	/*if (this->_pipesEnabled)
 	{
 		int checkOffset = 0x500;
 
@@ -867,6 +879,18 @@ std::vector<int> LocationManager::GetPipeLocationsForLevel(int levelID)
 				result.push_back(checkData.Address);
 			}
 		}
+	}*/
+
+	int checkOffset = 0x500;
+
+	for (int j = 0; j < 6; j++)
+	{
+		int locationID = checkOffset + (j * 0x20) + levelID;
+		if (this->_PipeData.find(locationID) != this->_PipeData.end())
+		{
+			PipeCheckData& checkData = this->_PipeData[locationID];
+			result.push_back(checkData.Address);
+		}
 	}
 
 	return result;
@@ -876,7 +900,7 @@ std::vector<int> LocationManager::GetHiddenLocationsForLevel(int levelID)
 {
 	std::vector<int> result;
 
-	if (this->_hiddensEnabled)
+	/*if (this->_hiddensEnabled)
 	{
 		int checkOffset = 0x700;
 
@@ -889,6 +913,18 @@ std::vector<int> LocationManager::GetHiddenLocationsForLevel(int levelID)
 				result.push_back(checkData.Address);
 			}
 		}
+	}*/
+
+	int checkOffset = 0x700;
+
+	for (int j = 0; j < 5; j++)
+	{
+		int locationID = checkOffset + (j * 0x20) + levelID;
+		if (this->_HiddenData.find(locationID) != this->_HiddenData.end())
+		{
+			HiddenCheckData& checkData = this->_HiddenData[locationID];
+			result.push_back(checkData.Address);
+		}
 	}
 
 	return result;
@@ -898,7 +934,7 @@ std::vector<int> LocationManager::GetGoldBeetleLocationsForLevel(int levelID)
 {
 	std::vector<int> result;
 
-	if (this->_goldBeetlesEnabled)
+	/*if (this->_goldBeetlesEnabled)
 	{
 		int checkOffset = 0x600;
 
@@ -908,6 +944,15 @@ std::vector<int> LocationManager::GetGoldBeetleLocationsForLevel(int levelID)
 			GoldBeetleCheckData& checkData = this->_GoldBeetleData[locationID];
 			result.push_back(checkData.Address);
 		}
+	}*/
+
+	int checkOffset = 0x600;
+
+	int locationID = checkOffset + levelID;
+	if (this->_GoldBeetleData.find(locationID) != this->_GoldBeetleData.end())
+	{
+		GoldBeetleCheckData& checkData = this->_GoldBeetleData[locationID];
+		result.push_back(checkData.Address);
 	}
 
 	return result;

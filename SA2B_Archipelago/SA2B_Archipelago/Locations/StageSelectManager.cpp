@@ -164,7 +164,7 @@ void StageSelectManager::SetGoal(int goal)
 
 int StageSelectManager::GetGoal()
 {
-	return this->_goal;
+	return 1; //this->_goal;
 }
 
 void StageSelectManager::SetEmblemsForCannonsCore(int emblemsRequired)

@@ -6,7 +6,7 @@
 #include "../Aesthetics/MusicManager.h"
 
 #include "../Utilities/MessageQueue.h"
-#include "../../lib/APCpp/Archipelago.h"
+//#include "../../lib/APCpp/Archipelago.h"
 
 #include <functional>
 #include "../Locations/StageSelectManager.h"
@@ -89,6 +89,7 @@ void ArchipelagoManager::OnFrameFunction()
             return;
         }
     }
+    /*
     else if (AP_GetConnectionStatus() != AP_ConnectionStatus::Authenticated)
     {
         std::string msg1 = "Connection to Archipelago lost.";
@@ -101,6 +102,7 @@ void ArchipelagoManager::OnFrameFunction()
 
         return;
     }
+    */
 
     this->_authFailed = false;
 
@@ -110,12 +112,13 @@ void ArchipelagoManager::OnFrameFunction()
     {
         this->_keepAliveTimer = 0;
 
-        AP_KeepAlive();
+        //AP_KeepAlive();
     }
 
-    AP_RoomInfo RoomInfo;
-    AP_GetRoomInfo(&RoomInfo);
+    //AP_RoomInfo RoomInfo;
+    //AP_GetRoomInfo(&RoomInfo);
 
+    /*
     if (this->_seedName.length() == 0)
     {
         if (RoomInfo.seed_name.length() != 0)
@@ -169,6 +172,7 @@ void ArchipelagoManager::OnFrameFunction()
             }
         }
     }
+    */
 
     this->OnFrameDeathLink();
 
@@ -423,6 +427,7 @@ void SA2_SetGateBosses(std::map<int, int> map)
 
 void ArchipelagoManager::Init(const char* ip, const char* playerName, const char* password)
 {
+    /*
     AP_Init(ip, "Sonic Adventure 2 Battle", playerName, password);
 
     AP_SetDeathLinkSupported(true);
@@ -450,11 +455,12 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_RegisterSlotDataMapIntIntCallback("MissionCountMap", &SA2_SetMissionCountMap);
     AP_RegisterSlotDataMapIntIntCallback("GateBosses", &SA2_SetGateBosses);
     AP_Start();
+    */
 }
 
 bool ArchipelagoManager::IsInit()
 {
-    return (AP_IsInit() && !this->_badSaveFile && !this->_badSaveName && !this->_badModVersion);
+    return (/*AP_IsInit() &&*/ !this->_badSaveFile && !this->_badSaveName && !this->_badModVersion);
 }
 
 bool ArchipelagoManager::IsAuth()
@@ -465,11 +471,12 @@ bool ArchipelagoManager::IsAuth()
 void ArchipelagoManager::SendStoryComplete()
 {
     StatsManager::GetInstance().Victory();
-    AP_StoryComplete();
+    //AP_StoryComplete();
 }
 
 void ArchipelagoManager::OnFrameMessageQueue()
 {
+    /*
     if (!AP_IsMessagePending())
     {
         return;
@@ -482,6 +489,7 @@ void ArchipelagoManager::OnFrameMessageQueue()
         messageQueue->AddMessage(msg.at(i));
     }
     AP_ClearLatestMessage();
+    */
 }
 
 void ArchipelagoManager::OnFrameDebug()
@@ -578,19 +586,19 @@ void ArchipelagoManager::DeathLinkSend()
     {
         return;
     }
-    AP_DeathLinkSend();
+    //AP_DeathLinkSend();
     MessageQueue::GetInstance().AddMessage(std::string("Death Sent"));
 }
 
 bool ArchipelagoManager::DeathLinkPending() 
 {
-    return AP_DeathLinkPending();
+    return false;//AP_DeathLinkPending();
 }
 
 void ArchipelagoManager::DeathLinkClear() 
 {
     StatsManager::GetInstance().DeathLinkReceived();
-    AP_DeathLinkClear();
+    //AP_DeathLinkClear();
 }
 
 // Item Functions
@@ -602,7 +610,7 @@ void ArchipelagoManager::SendItem(int index)
     }
 
     int ap_index = index + AP_ID_OFFSET;
-    AP_SendItem(ap_index);
+    //AP_SendItem(ap_index);
 }
 
 void ArchipelagoManager::ResetItems()
