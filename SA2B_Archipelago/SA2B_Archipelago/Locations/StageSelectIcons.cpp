@@ -113,15 +113,6 @@ static NJS_SPRITE Sprite = { { -32.0f, 0.0f, 0.0f }, 1.0f, 1.0f, 0, &UpgradeIcon
 static NJS_SPRITE Sprite_2 = { { -32.0f, 0.0f, 0.0f }, 1.0f, 1.0f, 0, &UpgradeIconsTex_Inactive, &UpgradeIconsAnim_Inactive[0] };
 static NJS_SPRITE StageSelectSprite = { { -32.0f, 0.0f, 0.0f }, 1.0f, 1.0f, 0, &StageSelectTex, &StageSelectAnim[0] };
 static NJS_SPRITE NumSprite = { { -32.0f, 0.0f, 0.0f }, 1.0f, 1.0f, 0, &NumTex, &NumAnim[0] };
-static NJS_SPRITE EmeraldSprites[] = { 
-	{ { 208.0f, 0.0f, 0.0f }, 0.25f, 0.25f, 0, &StageSelectTex, &StageSelectAnim[0] },
-	{ { 208.0f, 0.0f, 0.0f }, 0.25f, 0.25f, 0,& StageSelectTex,& StageSelectAnim[0] },
-	{ { 208.0f, 0.0f, 0.0f }, 0.25f, 0.25f, 0,& StageSelectTex,& StageSelectAnim[0] },
-	{ { 208.0f, 0.0f, 0.0f }, 0.25f, 0.25f, 0,& StageSelectTex,& StageSelectAnim[0] },
-	{ { 208.0f, 0.0f, 0.0f }, 0.25f, 0.25f, 0,& StageSelectTex,& StageSelectAnim[0] },
-	{ { 208.0f, 0.0f, 0.0f }, 0.25f, 0.25f, 0,& StageSelectTex,& StageSelectAnim[0] },
-	{ { 208.0f, 0.0f, 0.0f }, 0.25f, 0.25f, 0,& StageSelectTex,& StageSelectAnim[0] },
-};
 
 CharacterItemRange GetItemRangeForCharacter(char character)
 {
@@ -135,6 +126,11 @@ CharacterItemRange GetItemRangeForCharacter(char character)
 	return CharacterItemRange();
 }
 
+__declspec(noinline) void DrawSprite2D(NJS_SPRITE* _sp, Int n, Float pri, char attr)
+{
+	njDrawSprite2D(_sp, n, pri, attr);
+}
+
 void DrawString(std::string string, float xPos, float yPos, float scale = 1.0f) 
 {
 	for (std::string::iterator it = string.begin(); it != string.end(); ++it) 
@@ -146,7 +142,7 @@ void DrawString(std::string string, float xPos, float yPos, float scale = 1.0f)
 		NumSprite.sx = scale;
 		NumSprite.sy = scale;
 		xPos += data.width * 0.5f * scale;
-		njDrawSprite2D(&NumSprite, 1, 1, NJD_SPRITE_ALPHA);
+		DrawSprite2D(&NumSprite, 1, 1, NJD_SPRITE_ALPHA);
 	}
 }
 
@@ -169,7 +165,7 @@ void UpdateLevelCheckIcons()
 		int icon = *(char*)(*StageSelectDataMap_ptr).at(currentTileStageIndex).UpgradeAddress > 0x00 ? SSI_Upgrade : SSI_UpgradeDisabled;
 		StageSelectSprite.tanim = &StageSelectAnim[icon];
 		StageSelectSprite.p = { maxXPos - ((xCount + 1) * 32.0f), yPos, 0.0f };
-		njDrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+		DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
 		xCount++;
 	}
 	if (beetles.size() > 0) 
@@ -179,7 +175,7 @@ void UpdateLevelCheckIcons()
 			int beetleIcon = *(char*)beetles[i] == 0x01 ? SSI_GoldBeetle : SSI_GoldBeetleDisabled;
 			StageSelectSprite.tanim = &StageSelectAnim[beetleIcon];
 			StageSelectSprite.p = { maxXPos - ((xCount + 1) * 32.0f), yPos, 0.0f };
-			njDrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+			DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
 			xCount++;
 		}
 	}
@@ -192,10 +188,10 @@ void UpdateLevelCheckIcons()
 			float x = maxXPos - ((xCount + 1) * 32.0f);
 			StageSelectSprite.tanim = &StageSelectAnim[chaoIcon];
 			StageSelectSprite.p = { x, yPos, 0.0f };
-			njDrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+			DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
 			StageSelectManager::DrawDebugText(NJM_LOCATION(0, 0), "");
-			//x += 4;
-			DrawString(std::to_string(itemCount), (maxXPos - ((xCount + 1) * 32.0f)) + 4.0f, yPos + 24.0f, 0.25f);
+			x += 4;
+			DrawString(std::to_string(itemCount), x, yPos + 24.0f, 0.25f);
 			xCount++;
 			itemCount--;
 		}
@@ -216,10 +212,9 @@ void UpdateLevelCheckIcons()
 			float x = maxXPos - ((xCount + 1) * 24.0f);
 			StageSelectSprite.tanim = &StageSelectAnim[pipeIcon];
 			StageSelectSprite.p = { x, yPos, 0.0f };
-			njDrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
-			StageSelectManager::DrawDebugText(NJM_LOCATION(0, 0), "");
-			//x += 2;
-			DrawString(std::to_string(itemCount), (maxXPos - ((xCount + 1) * 24.0f)) + 2.0f, yPos + 18.0f, 0.1875f);
+			DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+			x += 2;
+			DrawString(std::to_string(itemCount), x, yPos + 18.0f, 0.1875f);
 			xCount++;
 			itemCount--;
 		}
@@ -235,10 +230,9 @@ void UpdateLevelCheckIcons()
 			float x = maxXPos - ((xCount + 1) * 24.0f);
 			StageSelectSprite.tanim = &StageSelectAnim[hiddenIcon];
 			StageSelectSprite.p = { x, yPos, 0.0f };
-			njDrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
-			StageSelectManager::DrawDebugText(NJM_LOCATION(0, 0), "");
-			//x += 2;
-			DrawString(std::to_string(itemCount), (maxXPos - ((xCount + 1) * 24.0f)) + 2.0f, yPos + 18.0f, 0.1875f);
+			DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+			x += 2;
+			DrawString(std::to_string(itemCount), x, yPos + 18.0f, 0.1875f);
 			xCount++;
 			itemCount--;
 		}
@@ -254,16 +248,13 @@ void UpdateChaosEmeraldIcons()
 		std::vector<int> chaosEmeralds = itemMan->GetChaosEmeraldAddresses();
 		StageSelectSprite.sx = 0.25f;
 		StageSelectSprite.sy = 0.25f;
-		//float xStart = 208.0f;
 		for (int i = 0; i < chaosEmeralds.size(); i++)
 		{
 			int emeraldIcon = *(char*)chaosEmeralds[i] == 0x01 ? SSI_Emerald_White + i : SSI_Emerald_None;
 			float x = 208.0f + (i * 32.0f);
-			EmeraldSprites[i].tanim = &StageSelectAnim[emeraldIcon];
-			EmeraldSprites[i].p = { x, 380.0f, 0.0f };
-			//NJS_SPRITE sprite = { { x, 380.0f, 0.0f }, 0.25f, 0.25f, 0, &StageSelectTex, &StageSelectAnim[emeraldIcon] };
-			njDrawSprite2D(&EmeraldSprites[i], 1, 1, NJD_SPRITE_ALPHA);
-			StageSelectManager::DrawDebugText(NJM_LOCATION(0, 0), "");
+			StageSelectSprite.tanim = &StageSelectAnim[emeraldIcon];
+			StageSelectSprite.p = { x, 380.0f, 0.0f };
+			DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
 		}
 	}
 }
@@ -288,13 +279,13 @@ void UpdateUpgradeIcons()
 				{
 					Sprite.tanim = &UpgradeIconsAnim[(*ItemData_ptr).at(i).IconIndex];
 					Sprite.p = { maxXPos - ((iconPos + 1) * 28.0f), 414.0f, 0.0f };
-					njDrawSprite2D(&Sprite, 1, 1, NJD_SPRITE_ALPHA);
+					DrawSprite2D(&Sprite, 1, 1, NJD_SPRITE_ALPHA);
 				}
 				else
 				{
 					Sprite_2.tanim = &UpgradeIconsAnim_Inactive[(*ItemData_ptr).at(i).IconIndex];
 					Sprite_2.p = { maxXPos - ((iconPos + 1) * 28.0f), 414.0f, 0.0f };
-					njDrawSprite2D(&Sprite_2, 1, 1, NJD_SPRITE_ALPHA);
+					DrawSprite2D(&Sprite_2, 1, 1, NJD_SPRITE_ALPHA);
 				}			
 				iconPos++;
 			}
