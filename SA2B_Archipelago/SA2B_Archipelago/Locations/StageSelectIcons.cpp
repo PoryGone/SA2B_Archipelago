@@ -404,9 +404,6 @@ void StageSelectIcons::OnFrame()
 	if (!DrawIconObj && CurrentMenu == Menus::Menus_StageSelect && GameMode == GameMode::GameMode_Advertise) //GameState == GameStates_LoadItems)
 	{
 		LoadTextures(&TexPacks[0]);
-		LoadTextures(&TexPacks[1]);
-		LoadTextures(&TexPacks[2]);
-		LoadTextures(&TexPacks[3]);
 		DrawIconObj = LoadObject(0, "UpgradeIcon", DrawUpgradeIconMain, LoadObj_Data1 | LoadObj_Data2);
 		DrawIconObj->DeleteSub = DeleteUpgradeIcon;
 		DrawIconObj->MainSub = DrawUpgradeIconMain;
