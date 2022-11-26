@@ -59,6 +59,8 @@ public:
 	void SetMissionCountMap(std::map<int, int> map);
     void SetBossGates(std::map<int, int> map);
     int GetGoal();
+    int GetCannonsCoreEmblemCount();
+    std::vector<int> GetGateRequirements();
 
 private:
 	const HelperFunctions* _helperFunctions;

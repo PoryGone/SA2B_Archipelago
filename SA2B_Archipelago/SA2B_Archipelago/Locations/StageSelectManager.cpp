@@ -148,7 +148,7 @@ void StageSelectManager::OnFrameFunction()
 	HandleStageSelectCamera();
 	HandleMissionOrder();
 
-	DrawStageSelectText();
+	//DrawStageSelectText();
 }
 
 void StageSelectManager::DrawDebugText(int location, const char* message)
@@ -172,6 +172,11 @@ void StageSelectManager::SetEmblemsForCannonsCore(int emblemsRequired)
 	_emblemsForCannonsCore = emblemsRequired;
 }
 
+int StageSelectManager::GetCannonsCoreEmblemCount() 
+{
+	return this->_emblemsForCannonsCore;
+}
+
 void StageSelectManager::SetRequiredCannonsCoreMissions(bool allMissionsRequired)
 {
 	this->_requireAllCannonsCoreMissions = allMissionsRequired;
@@ -187,6 +192,11 @@ void StageSelectManager::SetRegionEmblemMap(std::map<int, int> map)
 {
 	_regionEmblemMap = map;
 	LayoutLevels();
+}
+
+std::vector<int> StageSelectManager::GetGateRequirements() 
+{
+	return this->_gateRequirements;
 }
 
 void StageSelectManager::SetChosenMissionsMap(std::map<int, int> map)

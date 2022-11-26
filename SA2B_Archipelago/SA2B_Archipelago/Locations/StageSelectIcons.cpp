@@ -70,7 +70,7 @@ std::map<char, NumberDisplayData> NumberMap = {
 };
 
 static const int Anim_Length = 29;
-static const int Stage_Anim_Length = 24;
+static const int Stage_Anim_Length = 25;
 static const int Num_Anim_Length = 13;
 
 static NJS_TEXNAME UpgradeIconsTexName[Anim_Length];
@@ -293,6 +293,48 @@ void UpdateUpgradeIcons()
 	}
 }
 
+void UpdateEmblemRequirements()
+{
+	int emblemsForCannonsCore = StageSelectManager::GetInstance().GetCannonsCoreEmblemCount();
+	std::vector<int> gateRequirements = StageSelectManager::GetInstance().GetGateRequirements();
+	StageSelectSprite.sx = 0.4f;
+	StageSelectSprite.sy = 0.4f;
+	if (gateRequirements.size() > 1)
+	{
+		if (EmblemCount < gateRequirements[gateRequirements.size() - 1])
+		{
+			std::string gateRequirementMessage = "";
+			gateRequirementMessage.append(std::to_string(EmblemCount));
+			gateRequirementMessage.append("/");
+			for (int g = 0; g < gateRequirements.size(); g++)
+			{
+				if (gateRequirements[g] > EmblemCount || g == gateRequirements.size() - 1)
+				{
+					gateRequirementMessage.append(std::to_string(gateRequirements[g]));
+					int gateIcon = SSI_Gate1 + g - 1;
+					float gateX = minXPos;
+					StageSelectSprite.tanim = &StageSelectAnim[gateIcon];
+					StageSelectSprite.p = { gateX, 32.0f, 0.0f };
+					DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+					DrawString(gateRequirementMessage, gateX + 51.2f, 54.4f, 0.8f);
+					break;
+				}
+			}
+		}
+	}
+
+	float coreX = minXPos;
+	StageSelectSprite.tanim = &StageSelectAnim[SSI_CannonsCore];
+	StageSelectSprite.p = { coreX, -6.4f, 0.0f };
+	DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+
+	std::string cannonsCoreMessage = "";
+	cannonsCoreMessage.append(std::to_string(EmblemCount));
+	cannonsCoreMessage.append("/");
+	cannonsCoreMessage.append(std::to_string(emblemsForCannonsCore));
+	DrawString(cannonsCoreMessage, coreX + 51.2f, 16.0f, 0.8f);
+}
+
 void DeleteUpgradeIcon(ObjectMaster* obj)
 {
 	ReleaseTextureList(&UpgradeIconsTex);
@@ -309,6 +351,7 @@ void DrawUpgradeIcon(ObjectMaster* obj)
 		UpdateChaosEmeraldIcons();
 		UpdateUpgradeIcons();
 		UpdateLevelCheckIcons();
+		UpdateEmblemRequirements();
 	}
 }
 
