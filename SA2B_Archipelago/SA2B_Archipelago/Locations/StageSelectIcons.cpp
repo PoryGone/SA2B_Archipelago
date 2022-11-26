@@ -98,16 +98,20 @@ static NJS_TEXANIM NumAnim[] = {
 };
 
 static NJS_TEXLIST UpgradeIconsTex = { UpgradeIconsTexName, Anim_Length };
-static TexPackInfo TexPack = { "AP_UPGRADEICONS", &UpgradeIconsTex };
 
 static NJS_TEXLIST UpgradeIconsTex_Inactive = { UpgradeIconsTexName_Inactive, Anim_Length };
-static TexPackInfo TexPack_Inactive = { "AP_UPGRADEICONS_GREY", &UpgradeIconsTex_Inactive };
 
 static NJS_TEXLIST StageSelectTex = { StageSelectTexName, Stage_Anim_Length };
-static TexPackInfo StageSelectPack = { "AP_STAGESELECT", &StageSelectTex };
 
 static NJS_TEXLIST NumTex = { NumTexName, Num_Anim_Length };
-static TexPackInfo NumPack = { "AP_Numbers", &NumTex };
+
+static TexPackInfo TexPacks[] = {
+	{ "AP_UPGRADEICONS", &UpgradeIconsTex },
+	{ "AP_UPGRADEICONS_GREY", &UpgradeIconsTex_Inactive },
+	{ "AP_STAGESELECT", &StageSelectTex },
+	{ "AP_Numbers", &NumTex },
+	{ nullptr, nullptr }, //Needs to end in a null entry to prevent the LoadTextures call from iterating past the packs
+};
 
 static NJS_SPRITE Sprite = { { -32.0f, 0.0f, 0.0f }, 1.0f, 1.0f, 0, &UpgradeIconsTex, &UpgradeIconsAnim[0] };
 static NJS_SPRITE Sprite_2 = { { -32.0f, 0.0f, 0.0f }, 1.0f, 1.0f, 0, &UpgradeIconsTex_Inactive, &UpgradeIconsAnim_Inactive[0] };
@@ -399,10 +403,10 @@ void StageSelectIcons::OnFrame()
 {
 	if (!DrawIconObj && CurrentMenu == Menus::Menus_StageSelect && GameMode == GameMode::GameMode_Advertise) //GameState == GameStates_LoadItems)
 	{
-		LoadTextures(&TexPack);
-		LoadTextures(&TexPack_Inactive);
-		LoadTextures(&StageSelectPack);
-		LoadTextures(&NumPack);
+		LoadTextures(&TexPacks[0]);
+		LoadTextures(&TexPacks[1]);
+		LoadTextures(&TexPacks[2]);
+		LoadTextures(&TexPacks[3]);
 		DrawIconObj = LoadObject(0, "UpgradeIcon", DrawUpgradeIconMain, LoadObj_Data1 | LoadObj_Data2);
 		DrawIconObj->DeleteSub = DeleteUpgradeIcon;
 		DrawIconObj->MainSub = DrawUpgradeIconMain;

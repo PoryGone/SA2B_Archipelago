@@ -133,7 +133,6 @@ void StageSelectManager::OnInitFunction(const char* path, const HelperFunctions&
 
 void StageSelectManager::OnFrameFunction()
 {
-	StageSelectIcons::GetInstance().OnFrame();
 	
 	if (CurrentMenu == Menus::Menus_Main)
 	{
@@ -147,6 +146,8 @@ void StageSelectManager::OnFrameFunction()
 	LayoutBossGates();
 	HandleStageSelectCamera();
 	HandleMissionOrder();
+
+	StageSelectIcons::GetInstance().OnFrame();
 
 	//DrawStageSelectText();
 }
