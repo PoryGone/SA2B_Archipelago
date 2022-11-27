@@ -320,7 +320,7 @@ void UpdateEmblemRequirements()
 					StageSelectSprite.tanim = &StageSelectAnim[gateIcon];
 					StageSelectSprite.p = { gateX, 32.0f, 0.0f };
 					DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
-					DrawString(gateRequirementMessage, gateX + 51.2f, 54.4f, 0.8f);
+					DrawString(gateRequirementMessage, gateX + 53.0f, 54.4f, 0.75f);
 					break;
 				}
 			}
@@ -336,7 +336,7 @@ void UpdateEmblemRequirements()
 	cannonsCoreMessage.append(std::to_string(EmblemCount));
 	cannonsCoreMessage.append("/");
 	cannonsCoreMessage.append(std::to_string(emblemsForCannonsCore));
-	DrawString(cannonsCoreMessage, coreX + 51.2f, 16.0f, 0.8f);
+	DrawString(cannonsCoreMessage, coreX + 53.0f, 16.0f, 0.75f);
 }
 
 void DeleteUpgradeIcon(ObjectMaster* obj)
@@ -367,6 +367,41 @@ void DrawUpgradeIconMain(ObjectMaster* obj)
 	if (obj->Data1.Entity->Action == 0) {
 		obj->DeleteSub = DeleteUpgradeIcon;
 		obj->DisplaySub_Delayed3 = DrawUpgradeIcon;
+		obj->Data1.Entity->Action = 1;
+	}
+}
+
+void DeleteUpgradeIcon_IL(ObjectMaster* obj)
+{
+	ReleaseTextureList(&UpgradeIconsTex);
+	ReleaseTextureList(&UpgradeIconsTex_Inactive);
+	ReleaseTextureList(&StageSelectTex);
+	ReleaseTextureList(&NumTex);
+	StageSelectIcons::GetInstance().InLevelIconObj = nullptr;
+}
+
+void DrawUpgradeIcon_IL(ObjectMaster* obj)
+{
+	if (CurrentLevel == LevelIDs_ChaoWorld) {
+		return;
+	}
+	if (GameState == GameStates::GameStates_Pause && GameMode == GameMode::GameMode_Level)
+	{
+		//UpdateChaosEmeraldIcons();
+		UpdateUpgradeIcons();
+		UpdateLevelCheckIcons();
+		//UpdateEmblemRequirements();
+	}
+}
+
+void DrawUpgradeIconMain_IL(ObjectMaster* obj)
+{
+	if (GameState != GameStates_LoadFinished)
+		return;
+
+	if (obj->Data1.Entity->Action == 0) {
+		obj->DeleteSub = DeleteUpgradeIcon_IL;
+		obj->DisplaySub_Delayed3 = DrawUpgradeIcon_IL;
 		obj->Data1.Entity->Action = 1;
 	}
 }
@@ -408,5 +443,14 @@ void StageSelectIcons::OnFrame()
 		DrawIconObj->DeleteSub = DeleteUpgradeIcon;
 		DrawIconObj->MainSub = DrawUpgradeIconMain;
 		DrawIconObj->DisplaySub_Delayed3 = DrawUpgradeIcon;
+	}
+
+	if (!InLevelIconObj && GameState == GameStates_LoadItems)
+	{
+		LoadTextures(&TexPacks[0]);
+		InLevelIconObj = LoadObject(0, "UpgradeIcon_IL", DrawUpgradeIconMain, LoadObj_Data1 | LoadObj_Data2);
+		InLevelIconObj->DeleteSub = DeleteUpgradeIcon_IL;
+		InLevelIconObj->MainSub = DrawUpgradeIconMain_IL;
+		InLevelIconObj->DisplaySub_Delayed3 = DrawUpgradeIcon_IL;
 	}
 }

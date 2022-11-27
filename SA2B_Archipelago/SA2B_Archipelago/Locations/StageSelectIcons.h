@@ -18,6 +18,7 @@ public:
 	std::map<int, ItemData> ItemData;
 	std::vector<CharacterItemRange> CharacterItemRanges;
 	ObjectMaster* DrawIconObj;
+	ObjectMaster* InLevelIconObj;
 };
 
 struct NumberDisplayData 
