@@ -104,15 +104,6 @@ void ArchipelagoManager::OnFrameFunction()
 
     this->_authFailed = false;
 
-    //this->_keepAliveTimer++;
-    //
-    //if (this->_keepAliveTimer >= KEEP_ALIVE)
-    //{
-    //    this->_keepAliveTimer = 0;
-    //
-    //    AP_KeepAlive();
-    //}
-
     AP_RoomInfo RoomInfo;
     AP_GetRoomInfo(&RoomInfo);
 
@@ -476,11 +467,7 @@ void ArchipelagoManager::OnFrameMessageQueue()
     }
 
     MessageQueue* messageQueue = &MessageQueue::GetInstance();
-    //std::vector<std::string> msg = AP_GetLatestMessage();
-    //for (unsigned int i = 0; i < msg.size(); i++)
-    //{
-    //    messageQueue->AddMessage(msg.at(i));
-    //}
+
     AP_Message* msg = AP_GetLatestMessage();
     std::vector<std::string> outMsgs;
     if (msg)
