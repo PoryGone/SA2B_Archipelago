@@ -10,6 +10,7 @@
 FunctionPointer(void, ReleaseTextureList, (NJS_TEXLIST* a1), 0x77F9F0);
 
 DataPointer(char, SS_SelectedTile, 0x1D1BF08);
+DataPointer(char, ActiveMission, 0x174AFE3);
 
 static std::map<int, ItemData>* ItemData_ptr;
 static std::vector<CharacterItemRange>* CharacterItemRanges_ptr;
@@ -82,6 +83,7 @@ static NJS_TEXANIM UpgradeIconsAnim[Anim_Length];
 static NJS_TEXANIM UpgradeIconsAnim_Inactive[Anim_Length];
 static NJS_TEXANIM StageSelectAnim[Stage_Anim_Length];
 static NJS_TEXANIM NumAnim[] = {
+	//Numbers
 	{40, 32, 20, 16, 0x0A, 0x10, 0x34, 0x30, 0, 0},
 	{18, 32, 9, 16, 0x57, 0x10, 0x68, 0x30, 0, 0},
 	{40, 32, 20, 16, 0x8A, 0x10, 0xB3, 0x30, 0, 0},
@@ -94,7 +96,14 @@ static NJS_TEXANIM NumAnim[] = {
 	{40, 32, 20, 16, 0x4A, 0x90, 0x74, 0xB0, 0, 0},
 	{32, 32, 16, 16, 0x90, 0x88, 0xAF, 0xB7, 0, 0},
 	{16, 32, 8, 16, 0xD8, 0x90, 0xE7, 0xB0, 0, 0},
-	{40, 32, 20, 16, 0x0A, 0x10, 0x34, 0x30, 0, 0},
+	//Missions
+	{0x31, 0x19, 0x18, 0x0C, 0x00, 0x00, 0x31, 0x32, 1, 0},
+	{0x31, 0x19, 0x18, 0x0C, 0x32, 0x00, 0x63, 0x32, 1, 0},
+	{0x31, 0x19, 0x18, 0x0C, 0x64, 0x00, 0x95, 0x32, 1, 0},
+	{0x31, 0x19, 0x18, 0x0C, 0x96, 0x00, 0xC7, 0x32, 1, 0},
+	{0x31, 0x19, 0x18, 0x0C, 0xC8, 0x00, 0xF9, 0x32, 1, 0},
+	//Padding
+	{40, 32, 20, 16, 0x0A, 0x10, 0x34, 0x30, 1, 0},
 };
 
 static NJS_TEXLIST UpgradeIconsTex = { UpgradeIconsTexName, Anim_Length };
@@ -193,7 +202,6 @@ void UpdateLevelCheckIcons()
 			StageSelectSprite.tanim = &StageSelectAnim[chaoIcon];
 			StageSelectSprite.p = { x, yPos, 0.0f };
 			DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
-			StageSelectManager::DrawDebugText(NJM_LOCATION(0, 0), "");
 			x += 4;
 			DrawString(std::to_string(itemCount), x, yPos + 24.0f, 0.25f);
 			xCount++;
@@ -339,6 +347,15 @@ void UpdateEmblemRequirements()
 	DrawString(cannonsCoreMessage, coreX + 53.0f, 16.0f, 0.75f);
 }
 
+void UpdateMissionInLevel() 
+{
+	NumSprite.tanim = &NumAnim[11 + ActiveMission];
+	NumSprite.p = { 320.0f, 12.0f, 0.0f };
+	NumSprite.sx = 1.0f;
+	NumSprite.sy = 1.0f;
+	DrawSprite2D(&NumSprite, 1, 1, NJD_SPRITE_ALPHA);
+}
+
 void DeleteUpgradeIcon(ObjectMaster* obj)
 {
 	ReleaseTextureList(&UpgradeIconsTex);
@@ -390,6 +407,7 @@ void DrawUpgradeIcon_IL(ObjectMaster* obj)
 		//UpdateChaosEmeraldIcons();
 		UpdateUpgradeIcons();
 		UpdateLevelCheckIcons();
+		UpdateMissionInLevel();
 		//UpdateEmblemRequirements();
 	}
 }
@@ -436,7 +454,7 @@ void StageSelectIcons::OnInit(std::map<int, StageSelectStageData>* stageSelectDa
 
 void StageSelectIcons::OnFrame() 
 {
-	if (!DrawIconObj && CurrentMenu == Menus::Menus_StageSelect && GameMode == GameMode::GameMode_Advertise) //GameState == GameStates_LoadItems)
+	if (!DrawIconObj && CurrentMenu == Menus::Menus_StageSelect && GameMode == GameMode::GameMode_Advertise)
 	{
 		LoadTextures(&TexPacks[0]);
 		DrawIconObj = LoadObject(0, "UpgradeIcon", DrawUpgradeIconMain, LoadObj_Data1 | LoadObj_Data2);
