@@ -271,7 +271,7 @@ void UpdateChaosEmeraldIcons()
 	}
 }
 
-void UpdateUpgradeIcons()
+void UpdateUpgradeIcons(bool inLevel)
 {
 	if (SS_SelectedTile < TileIDtoStageIndex.size())
 	{
@@ -287,16 +287,17 @@ void UpdateUpgradeIcons()
 			Sprite_2.sy = 0.21875f;
 			for (int i = range.End; i >= range.Start; i--)
 			{
+				float yPos = inLevel ? 452.0f : 414.0f;
 				if (*(char*)(*ItemData_ptr).at(i).Address > 0x00)
 				{
 					Sprite.tanim = &UpgradeIconsAnim[(*ItemData_ptr).at(i).IconIndex];
-					Sprite.p = { maxXPos - ((iconPos + 1) * 28.0f), 414.0f, 0.0f };
+					Sprite.p = { maxXPos - ((iconPos + 1) * 28.0f), yPos, 0.0f };
 					DrawSprite2D(&Sprite, 1, 1, NJD_SPRITE_ALPHA);
 				}
 				else
 				{
 					Sprite_2.tanim = &UpgradeIconsAnim_Inactive[(*ItemData_ptr).at(i).IconIndex];
-					Sprite_2.p = { maxXPos - ((iconPos + 1) * 28.0f), 414.0f, 0.0f };
+					Sprite_2.p = { maxXPos - ((iconPos + 1) * 28.0f), yPos, 0.0f };
 					DrawSprite2D(&Sprite_2, 1, 1, NJD_SPRITE_ALPHA);
 				}			
 				iconPos++;
@@ -370,7 +371,7 @@ void DrawUpgradeIcon(ObjectMaster* obj)
 	if (CurrentMenu == Menus::Menus_StageSelect && GameMode == GameMode::GameMode_Advertise)
 	{
 		UpdateChaosEmeraldIcons();
-		UpdateUpgradeIcons();
+		UpdateUpgradeIcons(false);
 		UpdateLevelCheckIcons();
 		UpdateEmblemRequirements();
 	}
@@ -404,11 +405,9 @@ void DrawUpgradeIcon_IL(ObjectMaster* obj)
 	}
 	if (GameState == GameStates::GameStates_Pause && GameMode == GameMode::GameMode_Level)
 	{
-		//UpdateChaosEmeraldIcons();
-		UpdateUpgradeIcons();
+		UpdateUpgradeIcons(true);
 		UpdateLevelCheckIcons();
 		UpdateMissionInLevel();
-		//UpdateEmblemRequirements();
 	}
 }
 
