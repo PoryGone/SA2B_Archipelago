@@ -95,7 +95,6 @@ private:
     void HandleBossStage();
 	void HandleStageSelectCamera();
 	void HandleMissionOrder();
-    void DrawStageSelectText();
     void DrawDebugTextOnScreenRight(std::string text, int row);
     void DrawCurrentLevelUpgrade();
     void DrawCurrentCharacterUpgrades();

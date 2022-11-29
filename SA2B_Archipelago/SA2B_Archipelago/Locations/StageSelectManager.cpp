@@ -149,7 +149,6 @@ void StageSelectManager::OnFrameFunction()
 
 	StageSelectIcons::GetInstance().OnFrame();
 
-	//DrawStageSelectText();
 }
 
 void StageSelectManager::DrawDebugText(int location, const char* message)
@@ -376,72 +375,6 @@ void StageSelectManager::SetLevelsLockState()
     {
         WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_CannonCore].UnlockMemAddress, lockByteData);
     }
-}
-
-void StageSelectManager::DrawStageSelectText()
-{
-	if (CurrentMenu == Menus::Menus_StageSelect && GameMode == GameMode::GameMode_Advertise)
-	{
-		_helperFunctions->SetDebugFontColor(0xFFF542C8);
-		if (_gateRequirements.size() > 1)
-		{
-			if (EmblemCount >= _gateRequirements[_gateRequirements.size() - 1])
-			{
-				_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 4), "All Gates Unlocked");
-			}
-			else
-			{
-				std::string gateRequirementMessage = "Next Gate Emblems: ";
-				gateRequirementMessage.append(std::to_string(EmblemCount));
-				gateRequirementMessage.append("/");
-				for (int g = 0; g < _gateRequirements.size(); g++)
-				{
-					if (_gateRequirements[g] > EmblemCount || g == _gateRequirements.size() - 1)
-					{
-						gateRequirementMessage.append(std::to_string(_gateRequirements[g]));
-						break;
-					}
-				}
-				_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 4), gateRequirementMessage.c_str());
-			}
-		}
-
-		std::string cannonsCoreMessage = "Cannons Core Emblems: ";
-		cannonsCoreMessage.append(std::to_string(EmblemCount));
-		cannonsCoreMessage.append("/");
-		cannonsCoreMessage.append(std::to_string(_emblemsForCannonsCore));
-		_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 3), cannonsCoreMessage.c_str());
-
-		//DrawCurrentLevelUpgrade();
-		//DrawCurrentCharacterUpgrades();
-
-		// Feel free to move this stuff to your satisfaction :)
-		// These vectors are lists of Memory Addresses which you can check to determine whether that location has been checked
-		/*
-		if (SS_SelectedTile < TileIDtoStageIndex.size())
-		{
-			int currentTileStageIndex = this->TileIDtoStageIndex[SS_SelectedTile];
-			LocationManager* locMan = &LocationManager::getInstance();
-			std::vector<int> chaoKeys = locMan->GetChaoKeyLocationsForLevel(currentTileStageIndex);
-			std::vector<int> pipes    = locMan->GetPipeLocationsForLevel(currentTileStageIndex);
-			std::vector<int> hiddens  = locMan->GetHiddenLocationsForLevel(currentTileStageIndex);
-			std::vector<int> beetles  = locMan->GetGoldBeetleLocationsForLevel(currentTileStageIndex);
-
-			std::string message = "Chao Key Count: ";
-			message.append(std::to_string(chaoKeys.size()));
-			_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 4), message.c_str());
-			message = "Pipe Count: ";
-			message.append(std::to_string(pipes.size()));
-			_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 5), message.c_str());
-			message = "Hidden Count: ";
-			message.append(std::to_string(hiddens.size()));
-			_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 6), message.c_str());
-			message = "Gold Beetle Count: ";
-			message.append(std::to_string(beetles.size()));
-			_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 7), message.c_str());
-		}
-		*/
-	}
 }
 
 void StageSelectManager::DrawDebugTextOnScreenRight(std::string text, int row)
