@@ -58,6 +58,9 @@ public:
 	void SetChosenMissionsMap(std::map<int, int> map);
 	void SetMissionCountMap(std::map<int, int> map);
     void SetBossGates(std::map<int, int> map);
+    int GetGoal();
+    int GetCannonsCoreEmblemCount();
+    std::vector<int> GetGateRequirements();
 
 private:
 	const HelperFunctions* _helperFunctions;
@@ -92,7 +95,6 @@ private:
     void HandleBossStage();
 	void HandleStageSelectCamera();
 	void HandleMissionOrder();
-    void DrawStageSelectText();
     void DrawDebugTextOnScreenRight(std::string text, int row);
     void DrawCurrentLevelUpgrade();
     void DrawCurrentCharacterUpgrades();

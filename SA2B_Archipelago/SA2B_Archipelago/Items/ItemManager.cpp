@@ -808,3 +808,19 @@ void ItemManager::OnFrameDialogueQueue()
 	PlayVoice(2, data.VoiceID);
 	this->_ActiveDialogueTimer = data.Duration * 60;
 }
+
+std::vector<int> ItemManager::GetChaosEmeraldAddresses()
+{
+	std::vector<int> result;
+
+	for (int i = IV_WhiteChaosEmerald; i <= IV_BlueChaosEmerald; i++)
+	{
+		if (this->_ItemData.find(i) != this->_ItemData.end())
+		{
+			ItemData& itemData = this->_ItemData[i];
+			result.push_back(itemData.Address);
+		}
+	}
+
+	return result;
+}

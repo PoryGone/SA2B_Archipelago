@@ -1,5 +1,6 @@
 #include "../pch.h"
 #include "StageSelectManager.h"
+#include "LocationManager.h"
 #include "../Utilities/MessageQueue.h"
 #include "../Archipelago/ArchipelagoManager.h"
 #include "../Aesthetics/StatsManager.h"
@@ -132,7 +133,6 @@ void StageSelectManager::OnInitFunction(const char* path, const HelperFunctions&
 
 void StageSelectManager::OnFrameFunction()
 {
-	StageSelectIcons::GetInstance().OnFrame();
 	
 	if (CurrentMenu == Menus::Menus_Main)
 	{
@@ -147,7 +147,8 @@ void StageSelectManager::OnFrameFunction()
 	HandleStageSelectCamera();
 	HandleMissionOrder();
 
-	DrawStageSelectText();
+	StageSelectIcons::GetInstance().OnFrame();
+
 }
 
 void StageSelectManager::DrawDebugText(int location, const char* message)
@@ -161,9 +162,19 @@ void StageSelectManager::SetGoal(int goal)
 	this->_goal = goal;
 }
 
+int StageSelectManager::GetGoal()
+{
+	return this->_goal;
+}
+
 void StageSelectManager::SetEmblemsForCannonsCore(int emblemsRequired)
 {
 	_emblemsForCannonsCore = emblemsRequired;
+}
+
+int StageSelectManager::GetCannonsCoreEmblemCount() 
+{
+	return this->_emblemsForCannonsCore;
 }
 
 void StageSelectManager::SetRequiredCannonsCoreMissions(bool allMissionsRequired)
@@ -181,6 +192,11 @@ void StageSelectManager::SetRegionEmblemMap(std::map<int, int> map)
 {
 	_regionEmblemMap = map;
 	LayoutLevels();
+}
+
+std::vector<int> StageSelectManager::GetGateRequirements() 
+{
+	return this->_gateRequirements;
 }
 
 void StageSelectManager::SetChosenMissionsMap(std::map<int, int> map)
@@ -324,8 +340,8 @@ void StageSelectManager::LayoutBossGates()
 void StageSelectManager::SetLevelsLockState()
 {
     //Make Route 101 and 280 available
-    WriteData<1>((void*)0x6773D0, 0x3A);
-    WriteData<1>((void*)0x6773C9, 0xFE);
+    WriteData<1>((void*)0x6773D0, 0x2D);
+    WriteData<1>((void*)0x6773C9, 0xF1);
 
 	//Lock levels behind an uncleared boss gate
 	int lastUnlockedGateEmblemCount = 0;
@@ -359,45 +375,6 @@ void StageSelectManager::SetLevelsLockState()
     {
         WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_CannonCore].UnlockMemAddress, lockByteData);
     }
-}
-
-void StageSelectManager::DrawStageSelectText()
-{
-	if (CurrentMenu == Menus::Menus_StageSelect && GameMode == GameMode::GameMode_Advertise)
-	{
-		_helperFunctions->SetDebugFontColor(0xFFF542C8);
-		if (_gateRequirements.size() > 1)
-		{
-			if (EmblemCount >= _gateRequirements[_gateRequirements.size() - 1])
-			{
-				_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 4), "All Gates Unlocked");
-			}
-			else
-			{
-				std::string gateRequirementMessage = "Next Gate Emblems: ";
-				gateRequirementMessage.append(std::to_string(EmblemCount));
-				gateRequirementMessage.append("/");
-				for (int g = 0; g < _gateRequirements.size(); g++)
-				{
-					if (_gateRequirements[g] > EmblemCount || g == _gateRequirements.size() - 1)
-					{
-						gateRequirementMessage.append(std::to_string(_gateRequirements[g]));
-						break;
-					}
-				}
-				_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 4), gateRequirementMessage.c_str());
-			}
-		}
-
-		std::string cannonsCoreMessage = "Cannons Core Emblems: ";
-		cannonsCoreMessage.append(std::to_string(EmblemCount));
-		cannonsCoreMessage.append("/");
-		cannonsCoreMessage.append(std::to_string(_emblemsForCannonsCore));
-		_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 3), cannonsCoreMessage.c_str());
-
-		DrawCurrentLevelUpgrade();
-		DrawCurrentCharacterUpgrades();
-	}
 }
 
 void StageSelectManager::DrawDebugTextOnScreenRight(std::string text, int row)

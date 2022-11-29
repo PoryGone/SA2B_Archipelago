@@ -2,6 +2,7 @@
 #pragma once
 
 #include <map>
+#include <vector>
 #include "LocationData.h"
 #include "../Archipelago/ArchipelagoManager.h"
 #include "../ModLoaderCommon/Trampoline.h"
@@ -43,6 +44,11 @@ public:
 	void SendPipeLocationCheck();
 	void SendHiddenLocationCheck();
 	void SendGoldBeetleLocationCheck();
+
+	std::vector<int> GetChaoKeyLocationsForLevel(int levelID);
+	std::vector<int> GetPipeLocationsForLevel(int levelID);
+	std::vector<int> GetHiddenLocationsForLevel(int levelID);
+	std::vector<int> GetGoldBeetleLocationsForLevel(int levelID);
 
 private:
 	const HelperFunctions* _helperFunctions;
