@@ -341,8 +341,8 @@ void StageSelectManager::LayoutBossGates()
 void StageSelectManager::SetLevelsLockState()
 {
     //Make Route 101 and 280 available
-    WriteData<1>((void*)0x6773D0, 0x3A);
-    WriteData<1>((void*)0x6773C9, 0xFE);
+    WriteData<1>((void*)0x6773D0, 0x2D);
+    WriteData<1>((void*)0x6773C9, 0xF1);
 
 	//Lock levels behind an uncleared boss gate
 	int lastUnlockedGateEmblemCount = 0;
