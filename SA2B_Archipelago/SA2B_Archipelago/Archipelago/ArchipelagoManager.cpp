@@ -26,6 +26,13 @@ void ArchipelagoManager::OnInitFunction(const char* path, const HelperFunctions&
     MessageQueue::GetInstance().SetFontSize(this->_settingsINI->getInt("General", "MessageFontSize"));
     MessageQueue::GetInstance().SetDisplayCount(this->_settingsINI->getInt("General", "MessageDisplayCount"));
     MessageQueue::GetInstance().SetDisplayDuration(this->_settingsINI->getFloat("General", "MessageDisplayDuration"));
+
+    int textRed   = this->_settingsINI->getInt("General", "MessageColorR");
+    int textGreen = this->_settingsINI->getInt("General", "MessageColorG");
+    int textBlue  = this->_settingsINI->getInt("General", "MessageColorB");
+
+    int textColor = 0xFF000000 + (textRed * 0x10000) + (textGreen * 0x100) + (textBlue * 0x1);
+    MessageQueue::GetInstance().SetDisplayColor(textColor);
 }
 
 void ArchipelagoManager::OnFrameFunction()

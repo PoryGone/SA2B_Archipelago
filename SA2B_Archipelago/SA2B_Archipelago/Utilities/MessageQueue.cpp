@@ -81,6 +81,16 @@ void MessageQueue::SetDisplayCount(int newDisplayCount)
 	this->_startLine = ((VerticalResolution / this->_debugFontSize) - this->_displayCount);
 }
 
+void MessageQueue::SetDisplayColor(int newDisplayColor)
+{
+	if (newDisplayColor == 0xFF000000)
+	{
+		return;
+	}
+
+	this->_displayColor = newDisplayColor;
+}
+
 void MessageQueue::SetDisplayDuration(float newDisplayDuration)
 {
 	if (newDisplayDuration == 0)
@@ -93,5 +103,10 @@ void MessageQueue::SetDisplayDuration(float newDisplayDuration)
 
 void MessageQueue::AddMessage(std::string message, int color)
 {
+	if (color == 0)
+	{
+		color = this->_displayColor;
+	}
+
 	messages.push(TimeStampedMessage(message, color));
 }
