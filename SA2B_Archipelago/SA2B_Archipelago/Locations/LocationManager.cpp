@@ -331,6 +331,9 @@ void LocationManager::OnFrameGoldBeetles()
 
 void LocationManager::OnFrameChaoGarden()
 {
+	//Make All Characters have Chao Garden Access
+	WriteData<8>((void*)0x1DEF829, 0x01);
+
 	if (!this->_chaoEnabled)
 	{
 		// Don't do any Chao stuff if no Chao checks are on
@@ -339,9 +342,6 @@ void LocationManager::OnFrameChaoGarden()
 
 	// Make sure Hero/Dark Gardens are always unlocked
 	ChaoGardensUnlocked = 0x56;
-
-	//Make All Characters have Chao Garden Access
-	WriteData<8>((void*)0x1DEF829, 0x01);
 
 	// Handle Separate Chao Saves
 	std::string chaoFileName = ArchipelagoManager::getInstance().GetSeedName().substr(0, 11);
