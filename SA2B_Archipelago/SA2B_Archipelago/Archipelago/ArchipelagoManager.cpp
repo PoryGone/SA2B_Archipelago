@@ -65,7 +65,7 @@ void ArchipelagoManager::OnFrameFunction()
         _helperFunctions->SetDebugFontColor(0xFFF542C8);
         _helperFunctions->DisplayDebugString(NJM_LOCATION(0, 0), msg.c_str());
 
-        if (*(char*)0x1DEC600 != 0)
+        if (*(int*)0x1DEC600 != 0)
         {
             if (this->_settingsINI)
             {
