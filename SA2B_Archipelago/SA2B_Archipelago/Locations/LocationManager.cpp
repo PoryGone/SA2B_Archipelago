@@ -712,7 +712,8 @@ void LocationManager::SendChaoKeyLocationCheck()
 
 			if (checkData.LevelID == CurrentLevel)
 			{
-				if (dist(checkData.Position, MainCharObj1[0]->Position) < checkData.Range)
+				if (dist(checkData.Position, MainCharObj1[0]->Position) < checkData.Range ||
+					(checkData.AltPosition.x != 0 && dist(checkData.AltPosition, MainCharObj1[0]->Position) < checkData.Range))
 				{
 					char dataValue = *(char*)checkData.Address;
 
