@@ -370,9 +370,13 @@ void DrawUpgradeIcon(ObjectMaster* obj)
 {
 	if (CurrentMenu == Menus::Menus_StageSelect && GameMode == GameMode::GameMode_Advertise)
 	{
+		int currentTileStageIndex = TileIDtoStageIndex[SS_SelectedTile];
+		if (currentTileStageIndex != SSS_ChaoGarden)
+		{
+			UpdateLevelCheckIcons();
+			UpdateUpgradeIcons(false);
+		}
 		UpdateChaosEmeraldIcons();
-		UpdateUpgradeIcons(false);
-		UpdateLevelCheckIcons();
 		UpdateEmblemRequirements();
 	}
 }
@@ -413,7 +417,7 @@ void DrawUpgradeIcon_IL(ObjectMaster* obj)
 
 void DrawUpgradeIconMain_IL(ObjectMaster* obj)
 {
-	if (GameState != GameStates_LoadFinished)
+	if (GameState != GameStates_LoadFinished && GameState != GameStates_LoadLevel)
 		return;
 
 	if (obj->Data1.Entity->Action == 0) {
@@ -462,12 +466,13 @@ void StageSelectIcons::OnFrame()
 		DrawIconObj->DisplaySub_Delayed3 = DrawUpgradeIcon;
 	}
 
-	if (!InLevelIconObj && GameState == GameStates_LoadItems)
+	if (!InLevelIconObj && GameState == GameStates_Ingame) //GameState == GameStates_LoadItems)
 	{
 		LoadTextures(&TexPacks[0]);
 		InLevelIconObj = LoadObject(0, "UpgradeIcon_IL", DrawUpgradeIconMain, LoadObj_Data1 | LoadObj_Data2);
 		InLevelIconObj->DeleteSub = DeleteUpgradeIcon_IL;
 		InLevelIconObj->MainSub = DrawUpgradeIconMain_IL;
 		InLevelIconObj->DisplaySub_Delayed3 = DrawUpgradeIcon_IL;
+		InLevelIconObj->Data1.Entity->Action = 1;
 	}
 }
