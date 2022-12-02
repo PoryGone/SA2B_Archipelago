@@ -26,6 +26,13 @@ void ArchipelagoManager::OnInitFunction(const char* path, const HelperFunctions&
     MessageQueue::GetInstance().SetFontSize(this->_settingsINI->getInt("General", "MessageFontSize"));
     MessageQueue::GetInstance().SetDisplayCount(this->_settingsINI->getInt("General", "MessageDisplayCount"));
     MessageQueue::GetInstance().SetDisplayDuration(this->_settingsINI->getFloat("General", "MessageDisplayDuration"));
+
+    int textRed   = this->_settingsINI->getInt("General", "MessageColorR");
+    int textGreen = this->_settingsINI->getInt("General", "MessageColorG");
+    int textBlue  = this->_settingsINI->getInt("General", "MessageColorB");
+
+    int textColor = 0xFF000000 + (textRed * 0x10000) + (textGreen * 0x100) + (textBlue * 0x1);
+    MessageQueue::GetInstance().SetDisplayColor(textColor);
 }
 
 void ArchipelagoManager::OnFrameFunction()
@@ -65,7 +72,7 @@ void ArchipelagoManager::OnFrameFunction()
         _helperFunctions->SetDebugFontColor(0xFFF542C8);
         _helperFunctions->DisplayDebugString(NJM_LOCATION(0, 0), msg.c_str());
 
-        if (*(char*)0x1DEC600 != 0)
+        if (*(int*)0x1DEC600 != 0)
         {
             if (this->_settingsINI)
             {
@@ -103,15 +110,6 @@ void ArchipelagoManager::OnFrameFunction()
     }
 
     this->_authFailed = false;
-
-    this->_keepAliveTimer++;
-
-    if (this->_keepAliveTimer >= KEEP_ALIVE)
-    {
-        this->_keepAliveTimer = 0;
-
-        AP_KeepAlive();
-    }
 
     AP_RoomInfo RoomInfo;
     AP_GetRoomInfo(&RoomInfo);
@@ -186,14 +184,14 @@ void SA2_ResetItems()
     apm->ResetItems();
 }
 
-void SA2_RecvItem(int item_id, bool notify)
+void SA2_RecvItem(int64_t item_id, bool notify)
 {
     ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
 
     apm->ReceiveItem(item_id, notify);
 }
 
-void SA2_CheckLocation(int loc_id)
+void SA2_CheckLocation(int64_t loc_id)
 {
     ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
 
@@ -476,10 +474,59 @@ void ArchipelagoManager::OnFrameMessageQueue()
     }
 
     MessageQueue* messageQueue = &MessageQueue::GetInstance();
-    std::vector<std::string> msg = AP_GetLatestMessage();
-    for (unsigned int i = 0; i < msg.size(); i++)
+
+    AP_Message* msg = AP_GetLatestMessage();
+    std::vector<std::string> outMsgs;
+    if (msg)
     {
-        messageQueue->AddMessage(msg.at(i));
+        switch (msg->type)
+        {
+        case (AP_MessageType::ItemSend):
+        {
+            AP_ItemSendMessage* sendMsg = static_cast<AP_ItemSendMessage*>(msg);
+
+            if (sendMsg)
+            {
+                std::string outMsg = "Sent " + sendMsg->item + " to " + sendMsg->recvPlayer;
+                outMsgs.push_back(outMsg);
+            }
+            break;
+        }
+        case (AP_MessageType::ItemRecv):
+        {
+            AP_ItemRecvMessage* recvMsg = static_cast<AP_ItemRecvMessage*>(msg);
+
+            if (recvMsg)
+            {
+                std::string outMsg = "Received " + recvMsg->item + " from " + recvMsg->sendPlayer;
+                outMsgs.push_back(outMsg);
+            }
+            break;
+        }
+        case (AP_MessageType::Hint):
+        {
+            AP_HintMessage* hintMsg = static_cast<AP_HintMessage*>(msg);
+
+            if (hintMsg)
+            {
+                std::string foundText = hintMsg->checked ? " (found)" : " (not found)";
+                std::string outMsg1 = hintMsg->recvPlayer + "'s " + hintMsg->item + " can be found at";
+                std::string outMsg2 = "  " + hintMsg->location + " in " + hintMsg->sendPlayer + "'s world." + foundText;
+                outMsgs.push_back(outMsg1);
+                outMsgs.push_back(outMsg2);
+            }
+            break;
+        }
+        default:
+        {
+            std::string outMsg = msg->text;
+        }
+        }
+
+        for (unsigned int i = 0; i < outMsgs.size(); i++)
+        {
+            messageQueue->AddMessage(outMsgs.at(i).c_str());
+        }
     }
     AP_ClearLatestMessage();
 }

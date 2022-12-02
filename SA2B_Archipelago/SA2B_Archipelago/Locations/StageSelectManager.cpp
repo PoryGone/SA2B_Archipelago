@@ -366,6 +366,10 @@ void StageSelectManager::SetLevelsLockState()
                 WriteData<1>((void*)this->_stageSelectDataMap.at(i).UnlockMemAddress, lockByteData);
             }
         }
+		else
+		{
+			WriteData<1>((void*)this->_stageSelectDataMap.at(i).UnlockMemAddress, lockByteData);
+		}
     }
     if (EmblemCount >= _emblemsForCannonsCore)
     {

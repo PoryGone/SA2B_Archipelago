@@ -423,10 +423,12 @@ struct ChaoKeyCheckData
 {
     ChaoKeyCheckData() : Address(0x00) {}
     ChaoKeyCheckData(int address, int levelID, NJS_VECTOR position) : Address(address), LevelID(levelID), Position(position) {}
+    ChaoKeyCheckData(int address, int levelID, NJS_VECTOR position, NJS_VECTOR altPosition) : Address(address), LevelID(levelID), Position(position), AltPosition(altPosition) {}
 
     int Address;
     int LevelID = 0x00;
     NJS_VECTOR Position = { 0, 0, 0 };
+    NJS_VECTOR AltPosition = { 0, 0, 0 };
     float Range = 300.0f;
     bool CheckSent = false;
 };
