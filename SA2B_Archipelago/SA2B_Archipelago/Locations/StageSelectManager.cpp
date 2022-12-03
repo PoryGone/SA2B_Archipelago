@@ -140,9 +140,9 @@ void StageSelectManager::OnFrameFunction()
 	}
 
 	HideMenuButtons();
+	SetLevelsLockState();
 	HandleGoal();
 	HandleBossStage();
-	SetLevelsLockState();
 	LayoutBossGates();
 	HandleStageSelectCamera();
 	HandleMissionOrder();
