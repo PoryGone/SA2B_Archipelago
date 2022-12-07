@@ -5,23 +5,21 @@
 #include "../Utilities/MessageQueue.h"
 
 
-static Trampoline* sub_6E9C00_trampoline; // Chao Key
-
-// Chao Key Trampoline
-void sub_6E9C00_original()
+static void __cdecl PickedUpChaoKey()
 {
-	void* target = sub_6E9C00_trampoline->Target();
 	__asm
 	{
-		call target
+		push ecx
 	}
-}
 
-static void __cdecl sub_6E9C00_cpp()
-{
 	LocationManager::getInstance().SendChaoKeyLocationCheck();
 
-	sub_6E9C00_original();
+	__asm
+	{
+		pop ecx
+		mov byte ptr[ecx], 0
+		add ecx, 14h
+	}
 }
 // End Chao Key Trampoline
 
@@ -44,11 +42,6 @@ void LocationManager::OnInitFunction(const char* path, const HelperFunctions& he
 {
 	this->_helperFunctions = &helperFunctions;
 	this->_archipelagoManager = &ArchipelagoManager::getInstance();
-
-	// Chao Key Trampoline
-	sub_6E9C00_trampoline = new Trampoline(reinterpret_cast<intptr_t>((void*)0x006E9C00),
-										   static_cast<intptr_t>(0x006E9C05),
-										   &sub_6E9C00_cpp);
 
 	// Gold Beetle "Trampoline"
 	WriteCall(static_cast<void*>((void*)0x00505F48), &GoldBeetleDestroyed);
@@ -603,7 +596,13 @@ void LocationManager::SetChaoKeysEnabled(bool chaoKeysEnabled)
 
 	if (this->_chaoKeysEnabled)
 	{
+		// Handle Picking Up Chao Key
+		WriteCall(static_cast<void*>((void*)0x006E99E0), &PickedUpChaoKey);
+		WriteData<1>((void*)0x006E99E5, '\x90');
+
 		// Overwrite vanilla Chao Key Behavior
+		WriteData<7>((void*)0x006E9AD6, '\x90');
+		WriteData<7>((void*)0x006E9B70, '\x90');
 		WriteData<7>((void*)0x006E9C05, '\x90');
 
 		WriteData<1>((void*)0x006E9C31, '\x04');
