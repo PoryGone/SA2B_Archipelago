@@ -340,8 +340,8 @@ void StageSelectManager::LayoutBossGates()
 void StageSelectManager::SetLevelsLockState()
 {
     //Make Route 101 and 280 available
-    WriteData<1>((void*)0x6773D0, 0x2D);
-    WriteData<1>((void*)0x6773C9, 0xF1);
+    WriteData<1>((void*)0x6773D0, 0x3A);
+    WriteData<1>((void*)0x6773C9, 0xFE);
 
 	//Lock levels behind an uncleared boss gate
 	int lastUnlockedGateEmblemCount = 0;
@@ -844,6 +844,12 @@ void StageSelectManager::HandleMissionOrder()
 				{
 					int prevMission = chosenMissionOrder[i - 1];
 					char value = *(char*)(this->_stageSelectDataMap.at(currentTileStageIndex).UnlockMemAddress - 6 + prevMission);
+
+					if (currentTileStageIndex == SSS_Route101 || currentTileStageIndex == SSS_Route280)
+					{
+						value = *(char*)(this->_stageSelectDataMap.at(currentTileStageIndex).UnlockMemAddress - 0x13 + prevMission);
+					}
+
 					if (value == 0x00) 
 					{
 						WriteData<1>((void*)(0xC69218 + 8), 0x96);

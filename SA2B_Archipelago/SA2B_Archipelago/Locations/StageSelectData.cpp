@@ -13,7 +13,7 @@ void InitializeStageSelectData(std::map<int, StageSelectStageData>& outStageSele
 	outStageSelectData[StageSelectStage::SSS_PumpkinHill]   = StageSelectStageData(0x01DECA11, 0x00C75168, 0x01DEC642, Characters::Characters_Knuckles);
 	outStageSelectData[StageSelectStage::SSS_MissionStreet] = StageSelectStageData(0x01DED341, 0x00C751C8, 0x01DEC63E, Characters::Characters_MechTails);
 	outStageSelectData[StageSelectStage::SSS_AquaticMine]   = StageSelectStageData(0x01DECB99, 0x00C75178, 0x01DEC645, Characters::Characters_Knuckles);
-	outStageSelectData[StageSelectStage::SSS_Route101]      = StageSelectStageData(0x01DEF42D, 0x00C751B8, 0x00, Characters::Characters_MechTails);
+	outStageSelectData[StageSelectStage::SSS_Route101]      = StageSelectStageData(0x01DEF43A, 0x00C751B8, 0x00, Characters::Characters_MechTails);
 	outStageSelectData[StageSelectStage::SSS_HiddenBase]    = StageSelectStageData(0x01DED7D9, 0x00C75078, 0x01DEC641, Characters::Characters_MechTails);
 	outStageSelectData[StageSelectStage::SSS_PyramidCave]   = StageSelectStageData(0x01DEDBAD, 0x00C75088, 0x01DEC63C, Characters::Characters_Sonic);
 	outStageSelectData[StageSelectStage::SSS_DeathChamber]  = StageSelectStageData(0x01DED961, 0x00C75098, 0x01DEC644, Characters::Characters_Knuckles);
@@ -31,7 +31,7 @@ void InitializeStageSelectData(std::map<int, StageSelectStageData>& outStageSele
 	outStageSelectData[StageSelectStage::SSS_WeaponsBed]     = StageSelectStageData(0x01DECF6D, 0x00C750D8, 0x01DEC64D, Characters::Characters_MechEggman);
 	outStageSelectData[StageSelectStage::SSS_SecurityHall]   = StageSelectStageData(0x01DECC5D, 0x00C75118, 0x01DEC652, Characters::Characters_Rouge);
 	outStageSelectData[StageSelectStage::SSS_WhiteJungle]    = StageSelectStageData(0x01DEC94D, 0x00C75148, 0x01DEC648, Characters::Characters_Shadow);
-	outStageSelectData[StageSelectStage::SSS_Route280]       = StageSelectStageData(0x01DEF4F1, 0x00C75198, 0x00, Characters::Characters_Rouge);
+	outStageSelectData[StageSelectStage::SSS_Route280]       = StageSelectStageData(0x01DEF4FE, 0x00C75198, 0x00, Characters::Characters_Rouge);
 	outStageSelectData[StageSelectStage::SSS_SkyRail]        = StageSelectStageData(0x01DECAD5, 0x00C75138, 0x01DEC649, Characters::Characters_Shadow);
 	outStageSelectData[StageSelectStage::SSS_MadSpace]       = StageSelectStageData(0x01DEE7ED, 0x00C75278, 0x01DEC653, Characters::Characters_Rouge);
 	outStageSelectData[StageSelectStage::SSS_CosmicWall]     = StageSelectStageData(0x01DEE729, 0x00C75218, 0x01DEC64F, Characters::Characters_MechEggman);
