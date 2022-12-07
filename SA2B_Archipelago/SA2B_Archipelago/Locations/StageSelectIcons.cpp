@@ -273,12 +273,36 @@ void UpdateChaosEmeraldIcons()
 
 void UpdateUpgradeIcons(bool inLevel)
 {
+	char overrideCharacter = -1;
+	if (inLevel) 
+	{
+		switch (CurrentLevel)
+		{
+		case LevelIDs_CannonsCoreE:
+			overrideCharacter = Characters_MechEggman;
+			break;
+		case LevelIDs_CannonsCoreK:
+			overrideCharacter = Characters_Knuckles;
+			break;
+		case LevelIDs_CannonsCoreR:
+			overrideCharacter = Characters_Rouge;
+			break;
+		case LevelIDs_CannonsCoreT:
+			overrideCharacter = Characters_MechTails;
+			break;
+		case LevelIDs_CannonsCoreS:
+			overrideCharacter = Characters_Sonic;
+			break;
+
+		}
+	}
 	if (SS_SelectedTile < TileIDtoStageIndex.size())
 	{
 		int currentTileStageIndex = TileIDtoStageIndex[SS_SelectedTile];
 		if (currentTileStageIndex < (*StageSelectDataMap_ptr).size())
 		{
 			char character = *(char*)(*StageSelectDataMap_ptr).at(currentTileStageIndex).TileCharacterAddress;
+			character = overrideCharacter < 0 ? character : overrideCharacter;
 			CharacterItemRange range = GetItemRangeForCharacter(character);
 			int iconPos = 0;
 			Sprite.sx = 0.21875f;
