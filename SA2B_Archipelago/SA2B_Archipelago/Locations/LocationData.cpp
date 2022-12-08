@@ -517,7 +517,8 @@ void InitializeHiddenChecks(std::map<int, HiddenCheckData>& outHiddenChecks)
 
     outHiddenChecks[HiddenCheck::HC_MissionStreet_Hidden_1] = HiddenCheckData(0x01DEE9E5, LevelIDs_MissionStreet, { 69, -7, -131 });
     outHiddenChecks[HiddenCheck::HC_MissionStreet_Hidden_2] = HiddenCheckData(0x01DEE9E6, LevelIDs_MissionStreet, { 276, -7, -863 });
-    outHiddenChecks[HiddenCheck::HC_MissionStreet_Hidden_3] = HiddenCheckData(0x01DEE9E7, LevelIDs_MissionStreet, { 5070, 598, -5505 });
+    outHiddenChecks[HiddenCheck::HC_MissionStreet_Hidden_3] = HiddenCheckData(0x01DEE9E7, LevelIDs_MissionStreet, { 5010, 598, -5505 });
+    outHiddenChecks[HiddenCheck::HC_MissionStreet_Hidden_4] = HiddenCheckData(0x01DEE9F0, LevelIDs_MissionStreet, { 5993, 598, -6198 });
 
     outHiddenChecks[HiddenCheck::HC_DryLagoon_Hidden_1] = HiddenCheckData(0x01DEE9E8, LevelIDs_DryLagoon, { 210, 211, 1312 });
 
