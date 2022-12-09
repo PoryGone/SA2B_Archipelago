@@ -1,5 +1,6 @@
 #include "../pch.h"
 #include "StageSelectManager.h"
+#include "LocationManager.h"
 #include "../Utilities/MessageQueue.h"
 #include "../Archipelago/ArchipelagoManager.h"
 #include "../Aesthetics/StatsManager.h"
@@ -23,6 +24,9 @@ DataPointer(__int8, Settings_SelectedOption, 0x1D7BAA0);
 DataPointer(char, SS_CameraPos, 0x1D1BEC0);
 DataPointer(char, SS_SelectedTile, 0x1D1BF08);
 
+DataPointer(char, SS_SelectedMission, 0x1D1BF05);
+DataPointer(char, ActiveMission, 0x174AFE3);
+
 DataPointer(char, CannonCore1_Rank, 0x01DEE040);
 
 DataArray(char, GateBossSaveData, 0x01DEE59C, 5);
@@ -31,33 +35,136 @@ DataArray(int, JapanesseStageHeaders, 0x008A0470, 68);
 DataArray(int, EnglishStageHeaders, 0x8A0560, 45);
 
 
+const void* const loc_Mission_1 = (void*)0x1DEEBBC;
+const void* const loc_esi_backup = (void*)0x1DEEBD0;
+const void* const loc_mission_count = (void*)0x1DEEBD4;
+
+const void* const loc_6766C8 = (void*)0x6766C8;
+void __cdecl MissionDisplay_Begin_ASM()
+{
+	__asm
+	{
+		mov dword ptr ds:[0x1DEEBD0], esi
+		movzx esi, dword ptr[0x1DEEBBC + esi*4]
+		fld dword ptr ds:[0x12D4694]
+		jmp loc_6766C8
+	}
+}
+
+//67670b
+const void* const loc_676712 = (void*)0x676712;
+void __cdecl MissionDisplay_CompareActive_ASM() 
+{
+	__asm
+	{
+		mov edx, dword ptr [ecx + 4]
+		mov eax, dword ptr ds:[0x1DEEBD0]
+		movzx eax, dword ptr[0x1DEEBBC + eax * 4 - 4]
+		cmp byte ptr[edx + eax], 0
+		jmp loc_676712
+	}
+}
+
+const void* const loc_678504 = (void*)0x678504;
+void __cdecl Mission_Enter_ASM()
+{
+	__asm
+	{
+		movzx ecx, dword ptr[0x1DEEBBC + ecx*4 - 4]
+		cmp byte ptr[edi + ecx + 0x1DEC638], al
+		jmp loc_678504
+	}
+}
+
+const void* const loc_6784DD = (void*)0x6784DD;
+void __cdecl Mission_Enter_101_ASM()
+{
+	__asm
+	{
+		movzx edx, dword ptr[0x1DEEBBC + edx * 4 - 4]
+		cmp byte ptr[ecx + edx + 0x1DEF428], al
+		jmp loc_6784DD
+	}
+}
+
+const void* const loc_6767F5 = (void*)0x6767F5;
+void __cdecl MissionDisplay_End_ASM()
+{
+	__asm
+	{
+		mov esi, dword ptr ds:[0x1DEEBD0]
+		inc esi
+		add esp, 8
+		cmp esi, dword ptr ds : [0x1DEEBD4]
+		jmp loc_6767F5
+	}
+}
+
+
 void StageSelectManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
 {
 	_helperFunctions = &helperFunctions;
 	WriteData<1>(saveLevelDataReadOffset_ptr, saveLevelDataReadOffset);
+
+	WriteJump(static_cast<void*>((void*)0x6766C2), (void*)((int)(&MissionDisplay_Begin_ASM) + 0x4));
+	WriteData<1>((void*)0x6766C7, nullop);
+
+	WriteJump(static_cast<void*>((void*)0x67670B), (void*)((int)(&MissionDisplay_CompareActive_ASM) + 0x3));
+	WriteData<2>((void*)0x676710, nullop);
+
+	// Most Stages
+	WriteJump(static_cast<void*>((void*)0x6784FD), (void*)((int)(&Mission_Enter_ASM) + 0x3));
+	WriteData<2>((void*)0x678502, nullop);
+
+	// Route 101
+	WriteJump(static_cast<void*>((void*)0x6784D6), (void*)((int)(&Mission_Enter_101_ASM) + 0x3));
+	WriteData<2>((void*)0x6784DB, nullop);
+
+	WriteJump(static_cast<void*>((void*)0x6767ee), (void*)((int)(&MissionDisplay_End_ASM) + 0x4));
+	WriteData<2>((void*)0x6767F3, nullop);
 
 	InitializeStageSelectData(this->_stageSelectDataMap);
 	InitializeStageSelectBossData(this->_stageSelectBossDataMap);
 	InitializeItemData(this->_itemData);
 	InitializeCharacterItemRanges(this->_characterItemRanges);
 	UpdateTitleHeaderArrays();
+	StageSelectIcons::GetInstance().OnInit(&_stageSelectDataMap);
 }
 
 void StageSelectManager::OnFrameFunction()
 {
+	
 	if (CurrentMenu == Menus::Menus_Main)
 	{
 		SS_SelectedTile = this->_firstStageIndex;
 	}
 
 	HideMenuButtons();
-	HandleBiolizard();
-	HandleBossStage();
 	SetLevelsLockState();
+	HandleGoal();
+	HandleBossStage();
 	LayoutBossGates();
 	HandleStageSelectCamera();
+	HandleMissionOrder();
 
-	DrawStageSelectText();
+	StageSelectIcons::GetInstance().OnFrame();
+
+}
+
+void StageSelectManager::DrawDebugText(int location, const char* message)
+{
+	GetInstance()._helperFunctions->SetDebugFontColor(0xFFF542C8);
+	GetInstance()._helperFunctions->DisplayDebugString(location, message);
+}
+
+void StageSelectManager::SetGoal(int goal)
+{
+	this->_goal = goal;
+}
+
+int StageSelectManager::GetGoal()
+{
+	return this->_goal;
 }
 
 void StageSelectManager::SetEmblemsForCannonsCore(int emblemsRequired)
@@ -65,20 +172,41 @@ void StageSelectManager::SetEmblemsForCannonsCore(int emblemsRequired)
 	_emblemsForCannonsCore = emblemsRequired;
 }
 
-void StageSelectManager::SetMissionCount(int missionCount)
+int StageSelectManager::GetCannonsCoreEmblemCount() 
 {
-	this->_missionCount = missionCount;
+	return this->_emblemsForCannonsCore;
+}
+
+void StageSelectManager::SetRequiredCannonsCoreMissions(bool allMissionsRequired)
+{
+	this->_requireAllCannonsCoreMissions = allMissionsRequired;
 }
 
 void StageSelectManager::SetRequiredRank(int requiredRank)
 {
 	this->_requiredRank = requiredRank;
+	WriteData<1>((void*)0x67675C, (char)requiredRank);
 }
 
 void StageSelectManager::SetRegionEmblemMap(std::map<int, int> map)
 {
 	_regionEmblemMap = map;
 	LayoutLevels();
+}
+
+std::vector<int> StageSelectManager::GetGateRequirements() 
+{
+	return this->_gateRequirements;
+}
+
+void StageSelectManager::SetChosenMissionsMap(std::map<int, int> map)
+{
+	this->_chosenMissionsMap = map;
+}
+
+void StageSelectManager::SetMissionCountMap(std::map<int, int> map)
+{
+	this->_missionCountMap = map;
 }
 
 void StageSelectManager::SetBossGates(std::map<int, int> map)
@@ -162,6 +290,12 @@ void StageSelectManager::LayoutLevels()
 		col += 2;
 		row = 3;
 	}
+
+	if (this->_goal == 1 || this->_goal == 2)
+	{
+		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_GreenHill].TileColumnAddress, col);
+		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_GreenHill].TileRowAddress, 4);
+	}
 }
 
 void StageSelectManager::LayoutBossGates()
@@ -232,6 +366,10 @@ void StageSelectManager::SetLevelsLockState()
                 WriteData<1>((void*)this->_stageSelectDataMap.at(i).UnlockMemAddress, lockByteData);
             }
         }
+		else
+		{
+			WriteData<1>((void*)this->_stageSelectDataMap.at(i).UnlockMemAddress, lockByteData);
+		}
     }
     if (EmblemCount >= _emblemsForCannonsCore)
     {
@@ -241,49 +379,6 @@ void StageSelectManager::SetLevelsLockState()
     {
         WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_CannonCore].UnlockMemAddress, lockByteData);
     }
-}
-
-void StageSelectManager::DrawStageSelectText()
-{
-	if (CurrentMenu == Menus::Menus_StageSelect && GameMode == GameMode::GameMode_Advertise)
-	{
-		_helperFunctions->SetDebugFontColor(0xFFF542C8);
-		if (_gateRequirements.size() > 1)
-		{
-			if (EmblemCount >= _gateRequirements[_gateRequirements.size() - 1])
-			{
-				_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 4), "All Gates Unlocked");
-			}
-			else
-			{
-				std::string gateRequirementMessage = "Next Gate Emblems: ";
-				gateRequirementMessage.append(std::to_string(EmblemCount));
-				gateRequirementMessage.append("/");
-				for (int g = 0; g < _gateRequirements.size(); g++)
-				{
-					if (_gateRequirements[g] > EmblemCount || g == _gateRequirements.size() - 1)
-					{
-						gateRequirementMessage.append(std::to_string(_gateRequirements[g]));
-						break;
-					}
-				}
-				_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 4), gateRequirementMessage.c_str());
-			}
-		}
-
-		std::string cannonsCoreMessage = "Cannons Core Emblems: ";
-		cannonsCoreMessage.append(std::to_string(EmblemCount));
-		cannonsCoreMessage.append("/");
-		cannonsCoreMessage.append(std::to_string(_emblemsForCannonsCore));
-		_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 3), cannonsCoreMessage.c_str());
-
-		std::string missionCountMessage = "Missions Active: ";
-		missionCountMessage.append(std::to_string(this->_missionCount));
-		_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 2), missionCountMessage.c_str());
-
-		DrawCurrentLevelUpgrade();
-		DrawCurrentCharacterUpgrades();
-	}
 }
 
 void StageSelectManager::DrawDebugTextOnScreenRight(std::string text, int row)
@@ -457,9 +552,71 @@ void StageSelectManager::HandleBossStage()
 	}
 }
 
+void StageSelectManager::HandleGoal()
+{
+	if (this->_goal == 0)
+	{
+		HandleBiolizard();
+	}
+	else if (this->_goal == 1 || this->_goal == 2)
+	{
+		HandleGreenHill();
+	}
+}
+
 void StageSelectManager::HandleBiolizard()
 {
-	if (CannonCore1_Rank > this->_requiredRank)
+	ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
+	if (!apm || !apm->IsInit() || !apm->IsAuth())
+	{
+		return;
+	}
+
+	if (this->_chosenMissionsMap.find(StageSelectStage::SSS_CannonCore) == this->_chosenMissionsMap.end())
+	{
+		return;
+	}
+
+	if (this->_missionCountMap.find(StageSelectStage::SSS_CannonCore) == this->_missionCountMap.end())
+	{
+		return;
+	}
+
+	bool bCannonCoreComplete = true;
+
+	int missionOrderIndex = this->_chosenMissionsMap.at(StageSelectStage::SSS_CannonCore);
+
+	std::array<int, 5> chosenMissionOrder = this->_potentialMissionOrders.at(missionOrderIndex);
+
+	if (this->_requireAllCannonsCoreMissions)
+	{
+		int missionCount = this->_missionCountMap.at(StageSelectStage::SSS_CannonCore);
+
+		for (int i = 0; i < missionCount; i++)
+		{
+			int missionIdx = chosenMissionOrder[i] - 1;
+			char dataValue = *(char*)(0x01DEE040 + missionIdx);
+
+			if (dataValue <= this->_requiredRank)
+			{
+				bCannonCoreComplete = false;
+
+				break;
+			}
+		}
+	}
+	else
+	{
+		int missionIdx = chosenMissionOrder[0] - 1;
+		char dataValue = *(char*)(0x01DEE040 + missionIdx);
+
+		if (dataValue <= this->_requiredRank)
+		{
+			bCannonCoreComplete = false;
+		}
+	}
+
+	if (bCannonCoreComplete)
 	{
 		// Biolizard Tile
 		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_GreenHill].TileIDAddress, 0x41);
@@ -492,6 +649,117 @@ void StageSelectManager::HandleBiolizard()
 			WriteData<1>((void*)0x1DEB320, 0x03);
 
 			WriteData<1>((void*)0x174B044, 0x0C);
+		}
+	}
+
+	if (CurrentLevel == LevelIDs_FinalHazard)
+	{
+		if (GameState == GameStates_GoToNextLevel)
+		{
+			MessageQueue* messageQueue = &MessageQueue::GetInstance();
+			std::string msg = "Victory!";
+			messageQueue->AddMessage(msg);
+
+			ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
+			apm->SendStoryComplete();
+		}
+	}
+}
+
+void StageSelectManager::HandleGreenHill()
+{
+	bool bHaveChaosEmeralds = true;
+
+	for (int i = 0; i < 7; i++)
+	{
+		unsigned char dataValue = *(unsigned char*)(0x01DEEAF8 + i);
+
+		if (dataValue == 0)
+		{
+			bHaveChaosEmeralds = false;
+		}
+	}
+
+	if (bHaveChaosEmeralds)
+	{
+		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_GreenHill].UnlockMemAddress, unlockByteData);
+	}
+	else
+	{
+		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_GreenHill].UnlockMemAddress, lockByteData);
+	}
+
+	if (CurrentLevel == LevelIDs_GreenHill)
+	{
+		if (TimerMinutes == 0 && TimerSeconds < 5)
+		{
+			if (this->_goal == 1)
+			{
+				WriteData<1>((void*)0x1DEB060, 0xCE);
+				WriteData<1>((void*)0x1DEB061, 0x00);
+				WriteData<1>((void*)0x1DEB062, 0x00);
+				WriteData<1>((void*)0x1DEB063, 0x00);
+				WriteData<1>((void*)0x1DEB064, 0xCF);
+				WriteData<1>((void*)0x1DEB065, 0x00);
+				WriteData<1>((void*)0x1DEB066, 0x00);
+				WriteData<1>((void*)0x1DEB067, 0x00);
+
+				WriteData<1>((void*)0x1DEB31E, 0x05);
+				WriteData<1>((void*)0x1DEB31F, 0x05);
+				WriteData<1>((void*)0x1DEB320, 0x03);
+
+				WriteData<1>((void*)0x174B044, 0x0C);
+			}
+			else if (this->_goal == 2)
+			{
+				WriteData<1>((void*)0x1DEB060, 0xCC);
+				WriteData<1>((void*)0x1DEB061, 0x00);
+				WriteData<1>((void*)0x1DEB062, 0x00);
+				WriteData<1>((void*)0x1DEB063, 0x00);
+				WriteData<1>((void*)0x1DEB064, 0xCD);
+				WriteData<1>((void*)0x1DEB065, 0x00);
+				WriteData<1>((void*)0x1DEB066, 0x00);
+				WriteData<1>((void*)0x1DEB067, 0x00);
+
+				WriteData<1>((void*)0x1DEB31E, 0x03);
+				WriteData<1>((void*)0x1DEB31F, 0x03);
+				WriteData<1>((void*)0x1DEB320, 0x03);
+
+				WriteData<1>((void*)0x174B044, 0x0C);
+			}
+		}
+	}
+
+	if (CurrentLevel == LevelIDs_GreenHill)
+	{
+		if (GameState == GameStates_GoToNextLevel)
+		{
+			if (this->_goal == 1)
+			{
+				MessageQueue* messageQueue = &MessageQueue::GetInstance();
+				std::string msg = "Victory!";
+				messageQueue->AddMessage(msg);
+
+				ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
+				apm->SendStoryComplete();
+			}
+			else if (this->_goal == 2)
+			{
+				WriteData<1>((void*)0x01DEDDF4, 0x01);
+			}
+		}
+	}
+
+	if (this->_goal == 2 && CurrentLevel == LevelIDs_FinalHazard)
+	{
+		if (GameState == GameStates_GoToNextLevel)
+		{
+			MessageQueue* messageQueue = &MessageQueue::GetInstance();
+			std::string msg = "Victory!";
+			messageQueue->AddMessage(msg);
+
+			ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
+			apm->SendStoryComplete();
 		}
 	}
 }
@@ -548,5 +816,75 @@ void StageSelectManager::HandleStageSelectCamera()
 				SS_CameraPos = 0x00;
 			}
 		}
+	}
+}
+
+void StageSelectManager::HandleMissionOrder()
+{
+	//Make sure first mission displays as active
+	WriteData<1>((void*)0x1DEEBB8, 0x30);
+
+	int currentTileStageIndex = this->TileIDtoStageIndex[SS_SelectedTile];
+	if (currentTileStageIndex < this->_chosenMissionsMap.size())
+	{
+		int missionOrderIndex = this->_chosenMissionsMap.at(currentTileStageIndex);
+
+		if (missionOrderIndex < this->_potentialMissionOrders.size())
+		{
+			std::array<int, 5> chosenMissionOrder = this->_potentialMissionOrders.at(missionOrderIndex);
+
+			ActiveMission = chosenMissionOrder[SS_SelectedMission] - 1;
+
+			for (int i = 0; i < 5; i++)
+			{
+				WriteData<1>((void*)((int)(loc_Mission_1) + i*4), (char)(chosenMissionOrder[i] - 1));
+
+				//Update 1st mission anim atlas position
+				if (chosenMissionOrder[i] == 1 && i > 0 ) 
+				{
+					int prevMission = chosenMissionOrder[i - 1];
+					char value = *(char*)(this->_stageSelectDataMap.at(currentTileStageIndex).UnlockMemAddress - 6 + prevMission);
+
+					if (currentTileStageIndex == SSS_Route101 || currentTileStageIndex == SSS_Route280)
+					{
+						value = *(char*)(this->_stageSelectDataMap.at(currentTileStageIndex).UnlockMemAddress - 0x13 + prevMission);
+					}
+
+					if (value == 0x00) 
+					{
+						WriteData<1>((void*)(0xC69218 + 8), 0x96);
+						WriteData<1>((void*)(0xC69218 + 10), 0x96);
+						WriteData<1>((void*)(0xC69218 + 12), 0xC7);
+						WriteData<1>((void*)(0xC69218 + 14), 0xC8);
+					} 
+					else
+					{
+						WriteData<1>((void*)(0xC69218 + 8), 0x00);
+						WriteData<1>((void*)(0xC69218 + 10), 0x00);
+						WriteData<1>((void*)(0xC69218 + 12), 0x32);
+						WriteData<1>((void*)(0xC69218 + 14), 0x33);
+					}
+				}
+				else if (chosenMissionOrder[i] == 1)
+				{
+					WriteData<1>((void*)(0xC69218 + 8), 0x00);
+					WriteData<1>((void*)(0xC69218 + 10), 0x00);
+					WriteData<1>((void*)(0xC69218 + 12), 0x32);
+					WriteData<1>((void*)(0xC69218 + 14), 0x33);
+				}
+			}
+
+			WriteData<1>((void*)((int)(loc_mission_count)), this->_missionCountMap[currentTileStageIndex]);
+			WriteData<1>((void*)(0x677025), this->_missionCountMap[currentTileStageIndex]);
+			WriteData<1>((void*)(0x676E47), this->_missionCountMap[currentTileStageIndex]);
+		}
+	}
+	else
+	{
+		for (int i = 0; i < 5; i++)
+		{
+			WriteData<1>((void*)((int)(loc_Mission_1)+i * 4), (char)(i));
+		}
+		WriteData<1>((void*)((int)(loc_mission_count)), 5);
 	}
 }

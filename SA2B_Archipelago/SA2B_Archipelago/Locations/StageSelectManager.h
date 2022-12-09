@@ -1,6 +1,7 @@
 #include "../pch.h"
 #include "../Items/ItemData.h"
 #include "StageSelectData.h"
+#include "StageSelectIcons.h"
 #include <map>
 #include <array>
 #include <vector>
@@ -46,24 +47,34 @@ public:
 		static StageSelectManager instance;
 		return instance;
 	}
+    static void DrawDebugText(int location, const char* message);
 	void OnInitFunction(const char* path, const HelperFunctions& helperFunctions);
 	void OnFrameFunction();
+	void SetGoal(int goal);
 	void SetEmblemsForCannonsCore(int emblemsRequired);
-    void SetMissionCount(int missionCount);
+	void SetRequiredCannonsCoreMissions(bool requireAllCannonsCoreMissions);
     void SetRequiredRank(int requiredRank);
 	void SetRegionEmblemMap(std::map<int, int> map);
+	void SetChosenMissionsMap(std::map<int, int> map);
+	void SetMissionCountMap(std::map<int, int> map);
     void SetBossGates(std::map<int, int> map);
+    int GetGoal();
+    int GetCannonsCoreEmblemCount();
+    std::vector<int> GetGateRequirements();
 
 private:
 	const HelperFunctions* _helperFunctions;
 	std::map<int, StageSelectStageData> _stageSelectDataMap;
     std::map<int, StageSelectBossData> _stageSelectBossDataMap;
 	int _emblemsForCannonsCore = 200;
-	int _missionCount = 1;
+	bool _requireAllCannonsCoreMissions = false;
+	int _goal = 0;
 	int _requiredRank = 0;
 	std::map<int, int> _regionEmblemMap;
     std::map<int, int> _bossGates;
     std::vector<int> _gateRequirements;
+    std::map<int, int> _chosenMissionsMap;
+    std::map<int, int> _missionCountMap;
     std::map<int, ItemData> _itemData;
     std::vector<CharacterItemRange> _characterItemRanges;
     std::vector<GateBossLayout> _gateBossLayoutData;
@@ -78,10 +89,12 @@ private:
     void LayoutBossGates();
 	void UnlockAllLevels();
 	void HideMenuButtons();
+	void HandleGoal();
 	void HandleBiolizard();
+	void HandleGreenHill();
     void HandleBossStage();
 	void HandleStageSelectCamera();
-    void DrawStageSelectText();
+	void HandleMissionOrder();
     void DrawDebugTextOnScreenRight(std::string text, int row);
     void DrawCurrentLevelUpgrade();
     void DrawCurrentCharacterUpgrades();
@@ -122,5 +135,119 @@ private:
         SSS_FinalRush,
         SSS_MadSpace
     };
+
+    std::array<std::array<int, 5>, 96> _potentialMissionOrders = { {
+        {1, 2, 3, 4, 5},
+        {1, 2, 3, 5, 4},
+        {1, 2, 4, 3, 5},
+        {1, 2, 4, 5, 3},
+        {1, 2, 5, 3, 4},
+        {1, 2, 5, 4, 3},
+
+        {1, 3, 2, 4, 5},
+        {1, 3, 2, 5, 4},
+        {1, 3, 4, 2, 5},
+        {1, 3, 4, 5, 2},
+        {1, 3, 5, 2, 4},
+        {1, 3, 5, 4, 2},
+
+        {1, 4, 2, 3, 5},
+        {1, 4, 2, 5, 3},
+        {1, 4, 3, 2, 5},
+        {1, 4, 3, 5, 2},
+        {1, 4, 5, 2, 3},
+        {1, 4, 5, 3, 2},
+
+        {1, 5, 2, 3, 4},
+        {1, 5, 2, 4, 3},
+        {1, 5, 3, 2, 4},
+        {1, 5, 3, 4, 2},
+        {1, 5, 4, 2, 3},
+        {1, 5, 4, 3, 2},
+
+        {2, 1, 3, 4, 5},
+        {2, 1, 3, 5, 4},
+        {2, 1, 4, 3, 5},
+        {2, 1, 4, 5, 3},
+        {2, 1, 5, 3, 4},
+        {2, 1, 5, 4, 3},
+
+        {2, 3, 1, 4, 5},
+        {2, 3, 1, 5, 4},
+        {2, 3, 4, 1, 5},
+        {2, 3, 4, 5, 1},
+        {2, 3, 5, 1, 4},
+        {2, 3, 5, 4, 1},
+
+        {2, 4, 1, 3, 5},
+        {2, 4, 1, 5, 3},
+        {2, 4, 3, 1, 5},
+        {2, 4, 3, 5, 1},
+        {2, 4, 5, 1, 3},
+        {2, 4, 5, 3, 1},
+
+        {2, 5, 1, 3, 4},
+        {2, 5, 1, 4, 3},
+        {2, 5, 3, 1, 4},
+        {2, 5, 3, 4, 1},
+        {2, 5, 4, 1, 3},
+        {2, 5, 4, 3, 1},
+
+        {3, 1, 2, 4, 5},
+        {3, 1, 2, 5, 4},
+        {3, 1, 4, 2, 5},
+        {3, 1, 4, 5, 2},
+        {3, 1, 5, 4, 2},
+        {3, 1, 5, 2, 4},
+
+        {3, 2, 1, 4, 5},
+        {3, 2, 1, 5, 4},
+        {3, 2, 4, 1, 5},
+        {3, 2, 4, 5, 1},
+        {3, 2, 5, 1, 4},
+        {3, 2, 5, 4, 1},
+
+        {3, 4, 1, 2, 5},
+        {3, 4, 1, 5, 2},
+        {3, 4, 2, 1, 5},
+        {3, 4, 2, 5, 1},
+        {3, 4, 5, 1, 2},
+        {3, 4, 5, 2, 1},
+
+        {3, 5, 1, 4, 2},
+        {3, 5, 1, 2, 4},
+        {3, 5, 2, 1, 4},
+        {3, 5, 2, 4, 1},
+        {3, 5, 4, 1, 2},
+        {3, 5, 4, 2, 1},
+
+        {4, 1, 2, 3, 5},
+        {4, 1, 2, 5, 3},
+        {4, 1, 3, 2, 5},
+        {4, 1, 3, 5, 2},
+        {4, 1, 5, 3, 2},
+        {4, 1, 5, 2, 3},
+
+        {4, 2, 1, 3, 5},
+        {4, 2, 1, 5, 3},
+        {4, 2, 3, 1, 5},
+        {4, 2, 3, 5, 1},
+        {4, 2, 5, 1, 3},
+        {4, 2, 5, 3, 1},
+
+        {4, 3, 1, 2, 5},
+        {4, 3, 1, 5, 2},
+        {4, 3, 2, 1, 5},
+        {4, 3, 2, 5, 1},
+        {4, 3, 5, 1, 2},
+        {4, 3, 5, 2, 1},
+
+        {4, 5, 1, 3, 2},
+        {4, 5, 1, 2, 3},
+        {4, 5, 2, 1, 3},
+        {4, 5, 2, 3, 1},
+        {4, 5, 3, 1, 2},
+        {4, 5, 3, 2, 1},
+    } };
 
 };

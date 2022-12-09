@@ -102,6 +102,9 @@
     <ClInclude Include="ModLoaderCommon\Trampoline.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Locations\StageSelectIcons.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -156,6 +159,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ModLoaderCommon\Trampoline.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Locations\StageSelectIcons.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

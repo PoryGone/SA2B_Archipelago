@@ -43,7 +43,6 @@ extern "C"
 		_locationManager->OnInitFunction(path, helperFunctions);
 
 		_statsManager.OnInitFunction(path, helperFunctions);
-
 	}
 
 	__declspec(dllexport) void __cdecl OnFrame()

@@ -1,5 +1,6 @@
 #include "../pch.h"
 #pragma once
+#include <array>
 #include <map>
 #include <string>
 
@@ -55,6 +56,17 @@ enum ItemValue
     IV_TimeStopTrap,
     IV_ConfuseTrap,
     IV_TinyTrap,
+    IV_GravityTrap,
+    IV_ExpositionTrap,
+    IV_DarknessTrap,
+
+    IV_WhiteChaosEmerald = 0x40,
+    IV_RedChaosEmerald,
+    IV_CyanChaosEmerald,
+    IV_PurpleChaosEmerald,
+    IV_GreenChaosEmerald,
+    IV_YellowChaosEmerald,
+    IV_BlueChaosEmerald,
 
     IV_NUM_ITEMS
 };
@@ -62,13 +74,25 @@ enum ItemValue
 struct ItemData
 {
     ItemData() : Address(0x00), DisplayName(std::string("Unknown")) {}
-    ItemData(int address, std::string displayName, std::string displayNameShort) : Address(address), DisplayName(displayName), DisplayNameShort(displayNameShort) {}
+    ItemData(int address, std::string displayName, std::string displayNameShort, int iconIndex) : Address(address), DisplayName(displayName), DisplayNameShort(displayNameShort), IconIndex(iconIndex) {}
 
     int Address;
     int AmountObtained = 0;
     std::string DisplayName;
     std::string DisplayNameShort;
+    //For character upgrades
+    int IconIndex = 0;
 };
 
 
 void InitializeItemData(std::map<int, ItemData>& outItemData);
+
+
+struct DialogueData
+{
+    DialogueData() : VoiceID(0), Duration(0) {}
+    DialogueData(int voiceID, int duration) : VoiceID(voiceID), Duration(duration) {}
+
+    int VoiceID = 0;
+    int Duration = 0;
+};

@@ -14,6 +14,7 @@
 
 
 DataPointer(unsigned int, SeedHash, 0x1DEC6FC);
+DataPointer(unsigned int, PlayerNameHash, 0x1DEC700);
 DataPointer(char, LastStoryComplete, 0x1DEFA95);
 
 void ArchipelagoManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
@@ -25,11 +26,18 @@ void ArchipelagoManager::OnInitFunction(const char* path, const HelperFunctions&
     MessageQueue::GetInstance().SetFontSize(this->_settingsINI->getInt("General", "MessageFontSize"));
     MessageQueue::GetInstance().SetDisplayCount(this->_settingsINI->getInt("General", "MessageDisplayCount"));
     MessageQueue::GetInstance().SetDisplayDuration(this->_settingsINI->getFloat("General", "MessageDisplayDuration"));
+
+    int textRed   = this->_settingsINI->getInt("General", "MessageColorR");
+    int textGreen = this->_settingsINI->getInt("General", "MessageColorG");
+    int textBlue  = this->_settingsINI->getInt("General", "MessageColorB");
+
+    int textColor = 0xFF000000 + (textRed * 0x10000) + (textGreen * 0x100) + (textBlue * 0x1);
+    MessageQueue::GetInstance().SetDisplayColor(textColor);
 }
 
 void ArchipelagoManager::OnFrameFunction()
 {
-    if (this->_badSaveFile)
+    if (this->_badSaveFile || this->_badSaveName)
     {
         std::string msg1 = "Incorrect Save File Loaded.";
         std::string msg2 = "Relaunch game and load the correct save.";
@@ -64,7 +72,7 @@ void ArchipelagoManager::OnFrameFunction()
         _helperFunctions->SetDebugFontColor(0xFFF542C8);
         _helperFunctions->DisplayDebugString(NJM_LOCATION(0, 0), msg.c_str());
 
-        if (*(char*)0x1DEC600 != 0)
+        if (*(int*)0x1DEC600 != 0)
         {
             if (this->_settingsINI)
             {
@@ -103,15 +111,6 @@ void ArchipelagoManager::OnFrameFunction()
 
     this->_authFailed = false;
 
-    this->_keepAliveTimer++;
-
-    if (this->_keepAliveTimer >= KEEP_ALIVE)
-    {
-        this->_keepAliveTimer = 0;
-
-        AP_KeepAlive();
-    }
-
     AP_RoomInfo RoomInfo;
     AP_GetRoomInfo(&RoomInfo);
 
@@ -141,24 +140,38 @@ void ArchipelagoManager::OnFrameFunction()
                     }
                 }
             }
-        }
-    }
 
-    if (CurrentLevel == LevelIDs_FinalHazard)
-    {
-        if (GameState == GameStates_GoToNextLevel)
-        {
-            MessageQueue* messageQueue = &MessageQueue::GetInstance();
-            std::string msg = "Victory!";
-            messageQueue->AddMessage(msg);
+            if (this->_settingsINI)
+            {
+                std::string playerName = this->_settingsINI->getString("AP", "PlayerName");
+                std::size_t playerNameHash = std::hash<std::string>{}(playerName);
 
-            this->SendStoryComplete();
+                if (PlayerNameHash == 0)
+                {
+                    PlayerNameHash = playerNameHash;
+
+                    ProbablySavesSaveFile();
+                }
+                else
+                {
+                    if (PlayerNameHash != playerNameHash)
+                    {
+                        if (!this->_settingsINI->getBool("AP", "IgnoreFileSafety", false))
+                        {
+                            this->_badSaveName = true;
+
+                            return;
+                        }
+                    }
+                }
+            }
         }
     }
 
     this->OnFrameDeathLink();
 
     this->OnFrameMessageQueue();
+    this->OnFrameDebug();
 }
 
 
@@ -171,14 +184,14 @@ void SA2_ResetItems()
     apm->ResetItems();
 }
 
-void SA2_RecvItem(int item_id, bool notify)
+void SA2_RecvItem(int64_t item_id, bool notify)
 {
     ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
 
     apm->ReceiveItem(item_id, notify);
 }
 
-void SA2_CheckLocation(int loc_id)
+void SA2_CheckLocation(int64_t loc_id)
 {
     ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
 
@@ -203,6 +216,13 @@ void SA2_SetDeathLink(int deathLinkActive)
     stats->DeathLinkActive(deathLinkActive != 0);
 }
 
+void SA2_SetGoal(int goal)
+{
+    StageSelectManager* ssm = &StageSelectManager::GetInstance();
+
+    ssm->SetGoal(goal);
+}
+
 void SA2_CompareModVersion(int modVersion)
 {
     ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
@@ -217,6 +237,13 @@ void SA2_SetMusicShuffle(int shuffleType)
     apm->SetMusicShuffle(shuffleType);
 }
 
+void SA2_SetNarrator(int narrator)
+{
+    ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
+
+    apm->SetNarrator(narrator);
+}
+
 void SA2_SetEmblemsForCannonsCore(int emblemsRequired)
 {
     if (!ArchipelagoManager::getInstance().IsInit())
@@ -229,7 +256,7 @@ void SA2_SetEmblemsForCannonsCore(int emblemsRequired)
     ssm->SetEmblemsForCannonsCore(emblemsRequired);
 }
 
-void SA2_SetMissionCount(int missionCount)
+void SA2_SetRequiredCannonsCoreMissions(int requirement)
 {
     if (!ArchipelagoManager::getInstance().IsInit())
     {
@@ -238,7 +265,11 @@ void SA2_SetMissionCount(int missionCount)
 
     StageSelectManager* ssm = &StageSelectManager::GetInstance();
 
-    ssm->SetMissionCount(missionCount);
+    ssm->SetRequiredCannonsCoreMissions(requirement != 0);
+
+    LocationManager* locationManager = &LocationManager::getInstance();
+
+    locationManager->SetRequiredCannonsCoreMissions(requirement != 0);
 }
 
 void SA2_SetRequiredRank(int requiredRank)
@@ -287,6 +318,59 @@ void SA2_SetChaoDifficulty(int chaoDifficulty)
     }
 }
 
+void SA2_SetChaoKeys(int chaoKeys)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    if (chaoKeys != 0)
+    {
+        LocationManager* locationManager = &LocationManager::getInstance();
+
+        locationManager->SetChaoKeysEnabled(true);
+    }
+}
+
+void SA2_SetPipes(int pipes)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    LocationManager* locationManager = &LocationManager::getInstance();
+    if (pipes == 1)
+    {
+        locationManager->SetPipesEnabled(true);
+    }
+    else if (pipes == 2)
+    {
+        locationManager->SetHiddensEnabled(true);
+    }
+    else if (pipes == 3)
+    {
+        locationManager->SetPipesEnabled(true);
+        locationManager->SetHiddensEnabled(true);
+    }
+}
+
+void SA2_SetGoldBeetles(int goldBeetles)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    if (goldBeetles > 0)
+    {
+        LocationManager* locationManager = &LocationManager::getInstance();
+
+        locationManager->SetGoldBeetlesEnabled(true);
+    }
+}
+
 void SA2_SetRegionEmblemMap(std::map<int, int> map)
 {
     if (!ArchipelagoManager::getInstance().IsInit())
@@ -297,6 +381,30 @@ void SA2_SetRegionEmblemMap(std::map<int, int> map)
     StageSelectManager* ssm = &StageSelectManager::GetInstance();
 
     ssm->SetRegionEmblemMap(map);
+}
+
+void SA2_SetChosenMissionsMap(std::map<int, int> map)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    StageSelectManager* ssm = &StageSelectManager::GetInstance();
+
+    ssm->SetChosenMissionsMap(map);
+}
+
+void SA2_SetMissionCountMap(std::map<int, int> map)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    StageSelectManager* ssm = &StageSelectManager::GetInstance();
+
+    ssm->SetMissionCountMap(map);
 }
 
 void SA2_SetGateBosses(std::map<int, int> map)
@@ -315,29 +423,42 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
 {
     AP_Init(ip, "Sonic Adventure 2 Battle", playerName, password);
 
+    AP_NetworkVersion net_ver;
+    net_ver.major = 0;
+    net_ver.minor = 3;
+    net_ver.build = 7;
+
     AP_SetDeathLinkSupported(true);
+    AP_SetClientVersion(&net_ver);
     AP_EnableQueueItemRecvMsgs(false);
     AP_SetItemClearCallback(&SA2_ResetItems);
     AP_SetItemRecvCallback(&SA2_RecvItem);
     AP_SetLocationCheckedCallback(&SA2_CheckLocation);
     AP_SetDeathLinkRecvCallback(&noop);
     AP_RegisterSlotDataIntCallback("DeathLink", &SA2_SetDeathLink);
+    AP_RegisterSlotDataIntCallback("Goal", &SA2_SetGoal);
     AP_RegisterSlotDataIntCallback("ModVersion", &SA2_CompareModVersion);
     AP_RegisterSlotDataMapIntIntCallback("MusicMap", &SA2_SetMusicMap);
     AP_RegisterSlotDataIntCallback("MusicShuffle", &SA2_SetMusicShuffle);
+    AP_RegisterSlotDataIntCallback("Narrator", &SA2_SetNarrator);
     AP_RegisterSlotDataIntCallback("EmblemsForCannonsCore", &SA2_SetEmblemsForCannonsCore);
-    AP_RegisterSlotDataIntCallback("IncludeMissions", &SA2_SetMissionCount);
+    AP_RegisterSlotDataIntCallback("RequiredCannonsCoreMissions", &SA2_SetRequiredCannonsCoreMissions);
     AP_RegisterSlotDataIntCallback("RequiredRank", &SA2_SetRequiredRank);
+    AP_RegisterSlotDataIntCallback("ChaoKeys", &SA2_SetChaoKeys);
+    AP_RegisterSlotDataIntCallback("Whistlesanity", &SA2_SetPipes);
+    AP_RegisterSlotDataIntCallback("GoldBeetles", &SA2_SetGoldBeetles);
     AP_RegisterSlotDataIntCallback("ChaoRaceChecks", &SA2_SetChaoPacks);
     AP_RegisterSlotDataIntCallback("ChaoGardenDifficulty", &SA2_SetChaoDifficulty);
     AP_RegisterSlotDataMapIntIntCallback("RegionEmblemMap", &SA2_SetRegionEmblemMap);
+    AP_RegisterSlotDataMapIntIntCallback("MissionMap", &SA2_SetChosenMissionsMap);
+    AP_RegisterSlotDataMapIntIntCallback("MissionCountMap", &SA2_SetMissionCountMap);
     AP_RegisterSlotDataMapIntIntCallback("GateBosses", &SA2_SetGateBosses);
     AP_Start();
 }
 
 bool ArchipelagoManager::IsInit()
 {
-    return (AP_IsInit() && !this->_badSaveFile && !this->_badModVersion);
+    return (AP_IsInit() && !this->_badSaveFile && !this->_badSaveName && !this->_badModVersion);
 }
 
 bool ArchipelagoManager::IsAuth()
@@ -359,12 +480,81 @@ void ArchipelagoManager::OnFrameMessageQueue()
     }
 
     MessageQueue* messageQueue = &MessageQueue::GetInstance();
-    std::vector<std::string> msg = AP_GetLatestMessage();
-    for (unsigned int i = 0; i < msg.size(); i++)
+
+    AP_Message* msg = AP_GetLatestMessage();
+    std::vector<std::string> outMsgs;
+    if (msg)
     {
-        messageQueue->AddMessage(msg.at(i));
+        switch (msg->type)
+        {
+        case (AP_MessageType::ItemSend):
+        {
+            AP_ItemSendMessage* sendMsg = static_cast<AP_ItemSendMessage*>(msg);
+
+            if (sendMsg)
+            {
+                std::string outMsg = "Sent " + sendMsg->item + " to " + sendMsg->recvPlayer;
+                outMsgs.push_back(outMsg);
+            }
+            break;
+        }
+        case (AP_MessageType::ItemRecv):
+        {
+            AP_ItemRecvMessage* recvMsg = static_cast<AP_ItemRecvMessage*>(msg);
+
+            if (recvMsg)
+            {
+                std::string outMsg = "Received " + recvMsg->item + " from " + recvMsg->sendPlayer;
+                outMsgs.push_back(outMsg);
+            }
+            break;
+        }
+        case (AP_MessageType::Hint):
+        {
+            AP_HintMessage* hintMsg = static_cast<AP_HintMessage*>(msg);
+
+            if (hintMsg)
+            {
+                std::string foundText = hintMsg->checked ? " (found)" : " (not found)";
+                std::string outMsg1 = hintMsg->recvPlayer + "'s " + hintMsg->item + " can be found at";
+                std::string outMsg2 = "  " + hintMsg->location + " in " + hintMsg->sendPlayer + "'s world." + foundText;
+                outMsgs.push_back(outMsg1);
+                outMsgs.push_back(outMsg2);
+            }
+            break;
+        }
+        default:
+        {
+            std::string outMsg = msg->text;
+        }
+        }
+
+        for (unsigned int i = 0; i < outMsgs.size(); i++)
+        {
+            messageQueue->AddMessage(outMsgs.at(i).c_str());
+        }
     }
     AP_ClearLatestMessage();
+}
+
+void ArchipelagoManager::OnFrameDebug()
+{
+    if (!this->_settingsINI || !this->_settingsINI->getBool("AP", "DebugDisplayPositionXYZ", false))
+    {
+        return;
+    }
+
+    if (MainCharObj1[0])
+    {
+        std::string message = "X: ";
+        message.append(std::to_string((int)floor(MainCharObj1[0]->Position.x)));
+        message.append(" | Y: ");
+        message.append(std::to_string((int)floor(MainCharObj1[0]->Position.y)));
+        message.append(" | Z: ");
+        message.append(std::to_string((int)floor(MainCharObj1[0]->Position.z)));
+        int missionCountMessageXPos = ((HorizontalResolution / MessageQueue::GetInstance().GetFontSize()) - message.length());
+        _helperFunctions->DisplayDebugString(NJM_LOCATION(missionCountMessageXPos, 1), message.c_str());
+    }
 }
 
 // DeathLink Functions
@@ -530,6 +720,18 @@ void ArchipelagoManager::SetMusicShuffle(int shuffleType)
     MusicManager* musicManager = &MusicManager::getInstance();
 
     musicManager->SetMusicShuffle(shuffleType);
+}
+
+void ArchipelagoManager::SetNarrator(int narrator)
+{
+    if (!this->IsInit())
+    {
+        return;
+    }
+
+    MusicManager* musicManager = &MusicManager::getInstance();
+
+    musicManager->SetNarrator(narrator);
 }
 
 void ArchipelagoManager::SetDeathLink(bool deathLinkActive)

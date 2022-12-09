@@ -167,6 +167,7 @@
     <ClInclude Include="Locations\LocationData.h" />
     <ClInclude Include="Locations\LocationManager.h" />
     <ClInclude Include="Locations\StageSelectData.h" />
+    <ClInclude Include="Locations\StageSelectIcons.h" />
     <ClInclude Include="Locations\StageSelectManager.h" />
     <ClInclude Include="ModLoaderCommon\IniFile.hpp" />
     <ClInclude Include="ModLoaderCommon\stdafx.h" />
@@ -227,6 +228,12 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="Locations\StageSelectData.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="Locations\StageSelectIcons.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../pch.h</PrecompiledHeaderFile>

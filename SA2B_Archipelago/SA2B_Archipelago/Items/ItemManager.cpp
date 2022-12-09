@@ -5,6 +5,7 @@
 #include "../Utilities/MessageQueue.h"
 
 #include "../ModLoader/MemAccess.h"
+#include <array>
 #include <map>
 #include <random>
 //#include <math.h>
@@ -106,6 +107,15 @@ void ItemManager::ResetItems()
 	this->_thisSessionChecksReceived = 0;
 	this->_EmblemsReceived = 0;
 	EmblemCount = 0;
+
+	for (int itemID = ItemValue::IV_WhiteChaosEmerald; itemID <= ItemValue::IV_BlueChaosEmerald; itemID++)
+	{
+		if (this->_ItemData.find(itemID) != this->_ItemData.end())
+		{
+			ItemData& itemToReset = this->_ItemData[itemID];
+			WriteData<1>((void*)itemToReset.Address, 0x00);
+		}
+	}
 }
 
 void ItemManager::ReceiveItem(int item_id, bool notify)
@@ -200,7 +210,7 @@ void ItemManager::ReceiveItem(int item_id, bool notify)
 			messageQueue->AddMessage(message);
 		}
 	}
-	else if (item_id <= ItemValue::IV_TinyTrap) // Trap
+	else if (item_id <= ItemValue::IV_DarknessTrap) // Trap
 	{
 		if (this->_thisSessionChecksReceived > SavedChecksReceived)
 		{
@@ -208,6 +218,21 @@ void ItemManager::ReceiveItem(int item_id, bool notify)
 			this->HandleTrap(item_id);
 
 			SavedChecksReceived = this->_thisSessionChecksReceived;
+		}
+	}
+	else if (item_id <= ItemValue::IV_BlueChaosEmerald) // Chaos Emerald
+	{
+		ItemData& receivedItem = this->_ItemData[item_id];
+
+		bool success = WriteData<1>((void*)receivedItem.Address, 0x1);
+
+		if (this->_thisSessionChecksReceived > SavedChecksReceived)
+		{
+			SavedChecksReceived = this->_thisSessionChecksReceived;
+
+			std::string message = std::string("Received ");
+			message += receivedItem.DisplayName;
+			messageQueue->AddMessage(message);
 		}
 	}
 	else
@@ -435,18 +460,36 @@ void ItemManager::HandleTrap(int item_id)
 	this->_TrapQueue.push(item_id);
 }
 
+void ItemManager::ResetTrapData()
+{
+	this->_ActiveTrap = 0;
+	this->_TimeStopPos = NJS_VECTOR();
+	if (MainCharObj1[0])
+	{
+		MainCharObj1[0]->Scale.x = 1.0f;
+		MainCharObj1[0]->Scale.y = 1.0f;
+		MainCharObj1[0]->Scale.z = 1.0f;
+	}
+	this->_StoredFogData = FogData();
+
+	if (!(CurrentLevel == LevelIDs_CrazyGadget || CurrentLevel == LevelIDs_MadSpace || CurrentLevel == LevelIDs_FinalChase))
+	{
+		Gravity.x = 0.0f;
+		Gravity.y = -1.0f;
+		Gravity.z = 0.0f;
+	}
+}
+
 void ItemManager::OnFrameTrapQueue()
 {
+	if (GameState == GameStates::GameStates_Pause)
+	{
+		return;
+	}
+
 	if (!(GameState == GameStates::GameStates_Ingame))
 	{
-		this->_ActiveTrap = 0;
-		this->_TimeStopPos = NJS_VECTOR();
-		if (MainCharObj1[0])
-		{
-			MainCharObj1[0]->Scale.x = 1.0f;
-			MainCharObj1[0]->Scale.y = 1.0f;
-			MainCharObj1[0]->Scale.z = 1.0f;
-		}
+		ResetTrapData();
 		return;
 	}
 
@@ -465,14 +508,7 @@ void ItemManager::OnFrameTrapQueue()
 
 	if (MainCharObj2[0] && (MainCharObj2[0]->Powerups & Powerups_Dead))
 	{
-		this->_ActiveTrap = 0;
-		this->_TimeStopPos = NJS_VECTOR();
-		if (MainCharObj1[0])
-		{
-			MainCharObj1[0]->Scale.x = 1.0f;
-			MainCharObj1[0]->Scale.y = 1.0f;
-			MainCharObj1[0]->Scale.z = 1.0f;
-		}
+		ResetTrapData();
 		return;
 	}
 
@@ -480,16 +516,11 @@ void ItemManager::OnFrameTrapQueue()
 		MainCharObj1[0]->Action == Action_Drown ||
 		(MainCharObj1[0]->Action == Action_Quicksand && CurrentLevel != LevelIDs_EggGolemS)))
 	{
-		this->_ActiveTrap = 0;
-		this->_TimeStopPos = NJS_VECTOR();
-		if (MainCharObj1[0])
-		{
-			MainCharObj1[0]->Scale.x = 1.0f;
-			MainCharObj1[0]->Scale.y = 1.0f;
-			MainCharObj1[0]->Scale.z = 1.0f;
-		}
+		ResetTrapData();
 		return;
 	}
+
+	OnFrameDialogueQueue();
 
 	// Active Trap
 	if (this->_ActiveTrap == ItemValue::IV_OmochaoTrap)
@@ -522,23 +553,67 @@ void ItemManager::OnFrameTrapQueue()
 	{
 		if (MainCharObj1[0])
 		{
-			if (this->_ActiveTrapTimer <= 0)
-			{
-				MainCharObj1[0]->Scale.x = 1.0f;
-				MainCharObj1[0]->Scale.y = 1.0f;
-				MainCharObj1[0]->Scale.z = 1.0f;
-			}
-			else if (this->_ActiveTrapTimer > (TRAP_DURATION * 0.9f))
+			if (this->_ActiveTrapTimer > (TRAP_DURATION * 0.9f))
 			{
 				MainCharObj1[0]->Scale.x -= 0.012f;
 				MainCharObj1[0]->Scale.y -= 0.012f;
 				MainCharObj1[0]->Scale.z -= 0.012f;
 			}
-			else if (this->_ActiveTrapTimer < (TRAP_DURATION * 0.1f))
+		}
+	}
+	else if (this->_ActiveTrap == ItemValue::IV_GravityTrap)
+	{
+		if (this->_ActiveTrapTimer > (TRAP_DURATION * 0.9f))
+		{
+			Gravity.x *= 1.005f;
+			Gravity.y *= 1.005f;
+			Gravity.z *= 1.005f;
+			ArbitraryGravity.x *= 1.005f;
+			ArbitraryGravity.y *= 1.005f;
+			ArbitraryGravity.z *= 1.005f;
+		}
+		else if (this->_ActiveTrapTimer < (TRAP_DURATION * 0.1f))
+		{
+			Gravity.x *= (1.0f / 1.005f);
+			Gravity.y *= (1.0f / 1.005f);
+			Gravity.z *= (1.0f / 1.005f);
+			ArbitraryGravity.x *= (1.0f / 1.005f);
+			ArbitraryGravity.y *= (1.0f / 1.005f);
+			ArbitraryGravity.z *= (1.0f / 1.005f);
+		}
+	}
+	else if (this->_ActiveTrap == ItemValue::IV_ExpositionTrap)
+	{
+		// Nothing
+	}
+	else if (this->_ActiveTrap == ItemValue::IV_DarknessTrap)
+	{
+		if (this->_ActiveTrapTimer <= 0)
+		{
+			if (FogDataPtr)
 			{
-				MainCharObj1[0]->Scale.x += 0.012f;
-				MainCharObj1[0]->Scale.y += 0.012f;
-				MainCharObj1[0]->Scale.z += 0.012f;
+				FogDataPtr->color = this->_StoredFogData.color;
+				FogDataPtr->far_ = this->_StoredFogData.far_;
+			}
+		}
+		else if (this->_ActiveTrapTimer > (TRAP_DURATION * 0.9f))
+		{
+			if (FogDataPtr)
+			{
+				_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 0), "Fog Loaded");
+				FogDataPtr->color = 0xff000000;
+				float fogLerp = (FogDataPtr->far_ - 250.0f) * 0.9f + 250.0f;
+				FogDataPtr->far_ = fogLerp;
+			}
+		}
+		else if (this->_ActiveTrapTimer < (TRAP_DURATION * 0.1f))
+		{
+			if (FogDataPtr)
+			{
+				FogDataPtr->color = 0xff000000;
+				float frac = 1.0f - (float)this->_ActiveTrapTimer / (TRAP_DURATION * 0.1f);
+				float fogLerp = FogDataPtr->far_ + (this->_StoredFogData.far_ - FogDataPtr->far_) * frac / (TRAP_DURATION * 0.1f);
+				FogDataPtr->far_ = fogLerp;
 			}
 		}
 	}
@@ -551,12 +626,6 @@ void ItemManager::OnFrameTrapQueue()
 
 	this->_ActiveTrap = 0;
 	this->_TimeStopPos = NJS_VECTOR();
-	if (MainCharObj1[0])
-	{
-		MainCharObj1[0]->Scale.x = 1.0f;
-		MainCharObj1[0]->Scale.y = 1.0f;
-		MainCharObj1[0]->Scale.z = 1.0f;
-	}
 
 	if (TimerStopped)
 	{
@@ -575,16 +644,8 @@ void ItemManager::OnFrameTrapQueue()
 	}
 
 	// Next Trap
-	this->_ActiveTrapTimer = TRAP_DURATION;
-	this->_TrapCooldownTimer = TRAP_COOLDOWN;
-
 	this->_ActiveTrap = this->_TrapQueue.front();
 	this->_TrapQueue.pop();
-	ItemData& receivedItem = this->_ItemData[this->_ActiveTrap];
-
-	std::string message = std::string("Received ");
-	message += receivedItem.DisplayName;
-	MessageQueue::GetInstance().AddMessage(message);
 
 	switch (this->_ActiveTrap)
 	{
@@ -608,12 +669,161 @@ void ItemManager::OnFrameTrapQueue()
 		{
 			MainCharObj2[0]->ConfuseTime = TRAP_DURATION;
 			ConfuStar_Load(0);
-			PlayVoice(2, 671);
+			PlayVoice(2, 1413);
 		}
 		break;
 	case ItemValue::IV_TinyTrap:
-		// Nothing
+		if (!MainCharObj1[0] || MainCharObj1[0]->Scale.x < 1.0f)
+		{
+			// Don't take a Tiny Trap when already Tiny
+			// Add back to the end of the queue and grab another trap next frame
+			this->_TrapQueue.push(this->_ActiveTrap);
+			this->_ActiveTrap = 0;
+
+			return;
+		}
 		PlayVoice(2, 1374);
 		break;
+	case ItemValue::IV_GravityTrap:
+		if (CurrentLevel == LevelIDs_CrazyGadget || CurrentLevel == LevelIDs_MadSpace || CurrentLevel == LevelIDs_FinalChase)
+		{
+			// These stages do too much weird stuff with gravity
+			// Add back to the end of the queue and grab another trap next frame
+			this->_TrapQueue.push(this->_ActiveTrap);
+			this->_ActiveTrap = 0;
+
+			return;
+		}
+		PlayVoice(2, 671);
+		break;
+	case ItemValue::IV_ExpositionTrap:
+		if (this->_DialogueQueue.size() > 0 || this->_ActiveDialogueTimer > 0)
+		{
+			// Add back to the end of the queue and grab another trap next frame
+			this->_TrapQueue.push(this->_ActiveTrap);
+			this->_ActiveTrap = 0;
+
+			return;
+		}
+		AddRandomDialogueToQueue();
+		break;
+	case ItemValue::IV_DarknessTrap:
+		if (CurrentLevel == LevelIDs_WildCanyon || //
+			CurrentLevel == LevelIDs_DeathChamber || //
+			CurrentLevel == LevelIDs_IronGate || //
+			CurrentLevel == LevelIDs_DryLagoon || //
+			CurrentLevel == LevelIDs_RadicalHighway ||
+			CurrentLevel == LevelIDs_EggQuarters || //
+			CurrentLevel == LevelIDs_LostColony ||
+			CurrentLevel == LevelIDs_WhiteJungle ||
+			CurrentLevel == LevelIDs_SkyRail ||
+			CurrentLevel == LevelIDs_MadSpace ||
+			CurrentLevel == LevelIDs_CosmicWall || //
+			CurrentLevel == LevelIDs_FinalChase || //
+			CurrentLevel == LevelIDs_CannonsCoreT || //
+			CurrentLevel == LevelIDs_CannonsCoreE || //
+			CurrentLevel == LevelIDs_CannonsCoreR || //
+			CurrentLevel == LevelIDs_CannonsCoreS || //
+			CurrentLevel == LevelIDs_GreenHill || //
+			CurrentLevel == LevelIDs_BigFoot || //
+			CurrentLevel == LevelIDs_HotShot || //
+			CurrentLevel == LevelIDs_EggGolemS || //
+			CurrentLevel == LevelIDs_EggGolemE || //
+			CurrentLevel == LevelIDs_KingBoomBoo || //
+			CurrentLevel == LevelIDs_Biolizard)
+		{
+			// These stages don't work correctly with the fog
+			// Add back to the end of the queue and grab another trap next frame
+			this->_TrapQueue.push(this->_ActiveTrap);
+			this->_ActiveTrap = 0;
+
+			return;
+		}
+
+		if (FogDataPtr)
+		{
+			this->_StoredFogData.color = FogDataPtr->color;
+			this->_StoredFogData.far_ = FogDataPtr->far_;
+
+			PlayVoice(2, 1416);
+		}
+		//else
+		//{
+		//	//this->_StoredFogData.color = 0x00000000;
+		//	//this->_StoredFogData.far_ = 15000.0f;
+		//	//
+		//	//LoadFogData_Fogtask("stg13_fog.bin", (FogData*)0x19EEF28);
+		//	////LoadFogData_Fogtask("stg10_fog.bin", FogDataPtr);
+		//	PlayVoice(2, 1374);
+		//}
+		break;
 	}
+
+	this->_ActiveTrapTimer = TRAP_DURATION;
+	this->_TrapCooldownTimer = TRAP_COOLDOWN;
+
+	ItemData& receivedItem = this->_ItemData[this->_ActiveTrap];
+
+	std::string message = std::string("Received ");
+	message += receivedItem.DisplayName;
+	MessageQueue::GetInstance().AddMessage(message);
+}
+
+void ItemManager::AddRandomDialogueToQueue()
+{
+	int nextDialogue = rng() % this->_dialogueOptions.size();
+	int dialogueSetLength = this->_dialogueOptions[nextDialogue].size();
+
+	for (int i = 0; i < dialogueSetLength; i++)
+	{
+		DialogueData data = this->_dialogueOptions[nextDialogue][i];
+
+		if (data.Duration == 0.0f)
+		{
+			break;
+		}
+
+		this->_DialogueQueue.push(data);
+	}
+}
+
+void ItemManager::OnFrameDialogueQueue()
+{
+	if (this->_ActiveDialogueTimer > 0)
+	{
+		this->_ActiveDialogueTimer--;
+		return;
+	}
+
+	if (TimerStopped)
+	{
+		return;
+	}
+
+	if (this->_DialogueQueue.size() == 0)
+	{
+		return;
+	}
+
+	DialogueData data = this->_DialogueQueue.front();
+	this->_DialogueQueue.pop();
+
+	PlayVoice(2, data.VoiceID);
+	this->_ActiveDialogueTimer = data.Duration * 60;
+}
+
+std::vector<int> ItemManager::GetChaosEmeraldAddresses()
+{
+	std::vector<int> result;
+
+	for (int i = IV_WhiteChaosEmerald; i <= IV_BlueChaosEmerald; i++)
+	{
+		if (this->_ItemData.find(i) != this->_ItemData.end())
+		{
+			ItemData& itemData = this->_ItemData[i];
+			result.push_back(itemData.Address);
+		}
+	}
+
+	return result;
 }

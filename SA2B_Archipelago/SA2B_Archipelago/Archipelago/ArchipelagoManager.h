@@ -6,7 +6,7 @@
 #include <map>
 
 constexpr unsigned int AP_ID_OFFSET = 0xFF0000;
-constexpr int MOD_VERSION = 101;
+constexpr int MOD_VERSION = 200;
 
 constexpr int KEEP_ALIVE = 3600;
 
@@ -35,6 +35,7 @@ public:
 
 	void SetMusicMap(std::map<int, int> map);
 	void SetMusicShuffle(int shuffleType);
+	void SetNarrator(int narrator);
 	void SetDeathLink(bool deathLinkActive);
 	void VerfyModVersion(int modVersion);
 
@@ -53,6 +54,7 @@ private:
 
 	bool _authFailed = false;
 	bool _badSaveFile = false;
+	bool _badSaveName = false;
 	bool _badModVersion = false;
 
 	int _serverModVersion = 0;
@@ -61,6 +63,7 @@ private:
 
 	void Init(const char* ip, const char* playerName, const char* password);
 	void OnFrameMessageQueue();
+	void OnFrameDebug();
 
 	// DeathLink functions
 	void OnFrameDeathLink();
