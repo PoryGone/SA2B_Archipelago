@@ -342,6 +342,7 @@ void ItemManager::OnFrameJunkQueue()
 
 	if (TimerStopped)
 	{
+		this->_JunkCooldownTimer = 60;
 		return;
 	}
 
