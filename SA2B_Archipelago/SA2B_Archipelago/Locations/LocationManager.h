@@ -28,6 +28,7 @@ public:
 	void OnFramePipes();
 	void OnFrameHidden();
 	void OnFrameGoldBeetles();
+	void OnFrameOmochao();
 	void OnFrameChaoGarden();
 	void CheckLocation(int location_id);
 	void SetRequiredRank(int requiredRank);
@@ -35,6 +36,7 @@ public:
 	void SetPipesEnabled(bool pipesEnabled);
 	void SetHiddensEnabled(bool hiddenEnabled);
 	void SetGoldBeetlesEnabled(bool goldBeetlesEnabled);
+	void SetOmochaoEnabled(bool omochaoEnabled);
 	void SetRacesPacked(bool racesPacked);
 	void SetChaoEnabled(bool chaoEnabled);
 	void SetRequiredCannonsCoreMissions(bool requireAllCannonsCoreMissions);
@@ -44,11 +46,13 @@ public:
 	void SendPipeLocationCheck();
 	void SendHiddenLocationCheck();
 	void SendGoldBeetleLocationCheck();
+	void SendOmochaoLocationCheck();
 
 	std::vector<int> GetChaoKeyLocationsForLevel(int levelID);
 	std::vector<int> GetPipeLocationsForLevel(int levelID);
 	std::vector<int> GetHiddenLocationsForLevel(int levelID);
 	std::vector<int> GetGoldBeetleLocationsForLevel(int levelID);
+	std::vector<int> GetOmochaoLocationsForLevel(int levelID);
 
 private:
 	const HelperFunctions* _helperFunctions;
@@ -63,6 +67,7 @@ private:
 	bool _pipesEnabled = false;
 	bool _hiddensEnabled = false;
 	bool _goldBeetlesEnabled = false;
+	bool _omochaoEnabled = false;
 	bool _racesPacked = false;
 	bool _chaoEnabled = false;
 
@@ -72,6 +77,7 @@ private:
 	std::map<int, PipeCheckData> _PipeData;
 	std::map<int, HiddenCheckData> _HiddenData;
 	std::map<int, GoldBeetleCheckData> _GoldBeetleData;
+	std::map<int, OmochaoCheckData> _OmochaoData;
 
 	std::map<int, std::vector<int>> _ChaoRacePacks;
 };

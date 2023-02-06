@@ -371,6 +371,21 @@ void SA2_SetGoldBeetles(int goldBeetles)
     }
 }
 
+void SA2_SetOmochaoChecks(int omochaoChecks)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    if (omochaoChecks > 0)
+    {
+        LocationManager* locationManager = &LocationManager::getInstance();
+
+        locationManager->SetOmochaoEnabled(true);
+    }
+}
+
 void SA2_SetRegionEmblemMap(std::map<int, int> map)
 {
     if (!ArchipelagoManager::getInstance().IsInit())
@@ -447,6 +462,7 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_RegisterSlotDataIntCallback("ChaoKeys", &SA2_SetChaoKeys);
     AP_RegisterSlotDataIntCallback("Whistlesanity", &SA2_SetPipes);
     AP_RegisterSlotDataIntCallback("GoldBeetles", &SA2_SetGoldBeetles);
+    AP_RegisterSlotDataIntCallback("OmochaoChecks", &SA2_SetOmochaoChecks);
     AP_RegisterSlotDataIntCallback("ChaoRaceChecks", &SA2_SetChaoPacks);
     AP_RegisterSlotDataIntCallback("ChaoGardenDifficulty", &SA2_SetChaoDifficulty);
     AP_RegisterSlotDataMapIntIntCallback("RegionEmblemMap", &SA2_SetRegionEmblemMap);

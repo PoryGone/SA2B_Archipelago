@@ -245,6 +245,11 @@ void ItemManager::ReceiveItem(int item_id, bool notify)
 	}
 }
 
+bool ItemManager::IsOmotrapActive()
+{
+	return (this->_ActiveTrap == ItemValue::IV_OmochaoTrap);
+}
+
 int APItemIDtoSA2ItemID(int APID)
 {
 	switch (APID)

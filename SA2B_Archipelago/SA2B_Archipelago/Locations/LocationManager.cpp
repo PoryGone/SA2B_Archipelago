@@ -2,9 +2,11 @@
 #include "LocationManager.h"
 #include "LocationData.h"
 #include "StageSelectData.h"
+#include "../Items/ItemManager.h"
 #include "../Utilities/MessageQueue.h"
 
 
+// Chao Key "Trampoline"
 static void __cdecl PickedUpChaoKey()
 {
 	__asm
@@ -22,6 +24,19 @@ static void __cdecl PickedUpChaoKey()
 	}
 }
 // End Chao Key Trampoline
+
+// Omochao "Trampoline"
+static void __cdecl ActivatedOmochao()
+{
+	__asm
+	{
+		fadd qword ptr ds:[0x908348]
+		fstp dword ptr[eax + 4]
+	}
+
+	LocationManager::getInstance().SendOmochaoLocationCheck();
+}
+// End Omochao "Trampoline"
 
 // Gold Beetle "Trampoline"
 static void __cdecl GoldBeetleDestroyed()
@@ -45,12 +60,15 @@ void LocationManager::OnInitFunction(const char* path, const HelperFunctions& he
 
 	// Gold Beetle "Trampoline"
 	WriteCall(static_cast<void*>((void*)0x00505F48), &GoldBeetleDestroyed);
+	WriteCall(static_cast<void*>((void*)0x006BE973), &ActivatedOmochao);
+	WriteData<4>((void*)0x006BE978, '\x90');
 
 	InitializeLevelClearChecks(this->_LevelClearData);
 	InitializeChaoKeyChecks(this->_ChaoKeyData);
 	InitializePipeChecks(this->_PipeData);
 	InitializeHiddenChecks(this->_HiddenData);
 	InitializeGoldBeetleChecks(this->_GoldBeetleData);
+	InitializeOmochaoChecks(this->_OmochaoData);
 	InitializeChaoGardenChecks(this->_ChaoGardenData);
 	InitializeChaoRacePacks(this->_ChaoRacePacks);
 }
@@ -73,6 +91,7 @@ void LocationManager::OnFrameFunction()
 		this->OnFramePipes();
 		this->OnFrameHidden();
 		this->OnFrameGoldBeetles();
+		this->OnFrameOmochao();
 	}
 
 	this->OnFrameWhistle();
@@ -292,6 +311,48 @@ void LocationManager::OnFrameGoldBeetles()
 		if (this->_GoldBeetleData.find(i) != this->_GoldBeetleData.end())
 		{
 			GoldBeetleCheckData& checkData = this->_GoldBeetleData[i];
+
+			if (!checkData.CheckSent)
+			{
+				// DataPointer macro creates a static field, which doesn't work for this case
+				char dataValue = *(char*)checkData.Address;
+
+				if (dataValue == 0x01)
+				{
+					if (this->_archipelagoManager)
+					{
+						this->_archipelagoManager->SendItem(i);
+
+						checkData.CheckSent = true;
+					}
+				}
+			}
+			else
+			{
+				// Capture offline collects
+				char dataValue = *(char*)checkData.Address;
+
+				if (dataValue != 0x01)
+				{
+					WriteData<1>((void*)checkData.Address, 0x01);
+				}
+			}
+		}
+	}
+}
+
+void LocationManager::OnFrameOmochao()
+{
+	if (!this->_omochaoEnabled)
+	{
+		return;
+	}
+
+	for (int i = OmochaoCheck::OC_BEGIN; i < OmochaoCheck::OC_NUM_CHECKS; i++)
+	{
+		if (this->_OmochaoData.find(i) != this->_OmochaoData.end())
+		{
+			OmochaoCheckData& checkData = this->_OmochaoData[i];
 
 			if (!checkData.CheckSent)
 			{
@@ -583,6 +644,14 @@ void LocationManager::CheckLocation(int location_id)
 
 		WriteData<1>((void*)checkData.Address, 0x01);
 	}
+	else if (this->_OmochaoData.find(location_id) != this->_OmochaoData.end())
+	{
+		OmochaoCheckData& checkData = this->_OmochaoData[location_id];
+
+		checkData.CheckSent = true;
+
+		WriteData<1>((void*)checkData.Address, 0x01);
+	}
 }
 
 void LocationManager::SetRequiredRank(int requiredRank)
@@ -637,6 +706,17 @@ void LocationManager::SetGoldBeetlesEnabled(bool goldBeetlesEnabled)
 	this->_goldBeetlesEnabled = goldBeetlesEnabled;
 }
 
+void LocationManager::SetOmochaoEnabled(bool omochaoEnabled)
+{
+	this->_omochaoEnabled = omochaoEnabled;
+
+	if (this->_omochaoEnabled)
+	{
+		// Handle activating Omochao
+		//WriteCall(static_cast<void*>((void*)0x006BEA45), &ActivatedOmochao);
+	}
+}
+
 void LocationManager::SetRacesPacked(bool racesPacked)
 {
 	this->_racesPacked = racesPacked;
@@ -680,6 +760,11 @@ void LocationManager::ResetLocations()
 	}
 
 	for (auto& pair : this->_GoldBeetleData)
+	{
+		pair.second.CheckSent = false;
+	}
+
+	for (auto& pair : this->_OmochaoData)
 	{
 		pair.second.CheckSent = false;
 	}
@@ -828,6 +913,49 @@ void LocationManager::SendGoldBeetleLocationCheck()
 	}
 }
 
+void LocationManager::SendOmochaoLocationCheck()
+{
+	if (!this->_omochaoEnabled)
+	{
+		return;
+	}
+
+	if (ItemManager::getInstance().IsOmotrapActive())
+	{
+		return;
+	}
+
+	if (MainCharObj1[0] == NULL)
+	{
+		return;
+	}
+
+	for (int i = OmochaoCheck::OC_BEGIN; i < OmochaoCheck::OC_NUM_CHECKS; i++)
+	{
+		if (this->_OmochaoData.find(i) != this->_OmochaoData.end())
+		{
+			OmochaoCheckData& checkData = this->_OmochaoData[i];
+
+			if (checkData.LevelID == CurrentLevel)
+			{
+				if (dist(checkData.Position, MainCharObj1[0]->Position) < checkData.Range)
+				{
+					char dataValue = *(char*)checkData.Address;
+
+					if (dataValue != 0x01)
+					{
+
+						MessageQueue::GetInstance().AddMessage("Sending Omochao Check");
+						WriteData<1>((void*)checkData.Address, 0x01);
+					}
+
+					return;
+				}
+			}
+		}
+	}
+}
+
 std::vector<int> LocationManager::GetChaoKeyLocationsForLevel(int levelID)
 {
 	std::vector<int> result;
@@ -907,6 +1035,28 @@ std::vector<int> LocationManager::GetGoldBeetleLocationsForLevel(int levelID)
 		{
 			GoldBeetleCheckData& checkData = this->_GoldBeetleData[locationID];
 			result.push_back(checkData.Address);
+		}
+	}
+
+	return result;
+}
+
+std::vector<int> LocationManager::GetOmochaoLocationsForLevel(int levelID)
+{
+	std::vector<int> result;
+
+	if (this->_omochaoEnabled)
+	{
+		int checkOffset = 0x800;
+
+		for (int j = 0; j < 14; j++)
+		{
+			int locationID = checkOffset + (j * 0x20) + levelID;
+			if (this->_OmochaoData.find(locationID) != this->_OmochaoData.end())
+			{
+				OmochaoCheckData& checkData = this->_OmochaoData[locationID];
+				result.push_back(checkData.Address);
+			}
 		}
 	}
 

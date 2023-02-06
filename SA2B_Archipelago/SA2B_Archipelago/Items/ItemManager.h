@@ -29,6 +29,7 @@ public:
 	// Item Functions
 	void ResetItems();
 	void ReceiveItem(int item_id, bool notify);
+	bool IsOmotrapActive();
 
 	std::vector<int> GetChaosEmeraldAddresses();
 
