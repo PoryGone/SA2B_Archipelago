@@ -57,4 +57,6 @@ enum StageSelectIcon {
 	SSI_Emerald_Yellow			= 21,
 	SSI_Emerald_Blue			= 22,
 	SSI_CannonsCore				= 23,
+	SSI_Omochao					= 24,
+	SSI_OmochaoDisabled			= 25,
 };

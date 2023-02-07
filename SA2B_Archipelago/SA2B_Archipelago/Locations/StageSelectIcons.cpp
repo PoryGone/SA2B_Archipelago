@@ -71,7 +71,7 @@ std::map<char, NumberDisplayData> NumberMap = {
 };
 
 static const int Anim_Length = 29;
-static const int Stage_Anim_Length = 25;
+static const int Stage_Anim_Length = 27;
 static const int Num_Anim_Length = 13;
 
 static NJS_TEXNAME UpgradeIconsTexName[Anim_Length];
@@ -127,6 +127,8 @@ static NJS_SPRITE Sprite_2 = { { -32.0f, 0.0f, 0.0f }, 1.0f, 1.0f, 0, &UpgradeIc
 static NJS_SPRITE StageSelectSprite = { { -32.0f, 0.0f, 0.0f }, 1.0f, 1.0f, 0, &StageSelectTex, &StageSelectAnim[0] };
 static NJS_SPRITE NumSprite = { { -32.0f, 0.0f, 0.0f }, 1.0f, 1.0f, 0, &NumTex, &NumAnim[0] };
 
+static int omochaoIconsPerRow = 14;
+
 CharacterItemRange GetItemRangeForCharacter(char character)
 {
 	for (int i = 0; i < (*CharacterItemRanges_ptr).size(); i++)
@@ -167,6 +169,7 @@ void UpdateLevelCheckIcons()
 	std::vector<int> pipes = locMan->GetPipeLocationsForLevel(currentTileStageIndex);
 	std::vector<int> hiddens = locMan->GetHiddenLocationsForLevel(currentTileStageIndex);
 	std::vector<int> beetles = locMan->GetGoldBeetleLocationsForLevel(currentTileStageIndex);
+	std::vector<int> omochao = locMan->GetOmochaoLocationsForLevel(currentTileStageIndex);
 	StageSelectSprite.sx = 0.25f;
 	StageSelectSprite.sy = 0.25f;
 	int xCount = 0;
@@ -221,7 +224,7 @@ void UpdateLevelCheckIcons()
 		for (int i = pipes.size() - 1; i >= 0; i--)
 		{
 			int pipeIcon = *(char*)pipes[i] == 0x01 ? SSI_Pipe : SSI_PipeDisabled;
-			float x = maxXPos - ((xCount + 1) * 24.0f);
+			float x = maxXPos - ((xCount + 1 + hiddens.size()) * 24.0f);
 			StageSelectSprite.tanim = &StageSelectAnim[pipeIcon];
 			StageSelectSprite.p = { x, yPos, 0.0f };
 			DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
@@ -230,7 +233,6 @@ void UpdateLevelCheckIcons()
 			xCount++;
 			itemCount--;
 		}
-		yPos += 24.0f;
 		xCount = 0;
 	}
 	if (hiddens.size() > 0)
@@ -247,6 +249,42 @@ void UpdateLevelCheckIcons()
 			DrawString(std::to_string(itemCount), x, yPos + 18.0f, 0.1875f);
 			xCount++;
 			itemCount--;
+		}
+	}
+	if (pipes.size() > 0 || hiddens.size() > 0) 
+	{
+		yPos += 24.0f;
+		xCount = 0;
+	}
+	if (omochao.size() > 0)
+	{
+		itemCount = omochao.size();
+		int rows = 0;
+		for (int i = itemCount; i > 0; i -= omochaoIconsPerRow)
+		{
+			rows++;
+		}
+		int numInRow = itemCount % omochaoIconsPerRow;
+		numInRow = numInRow == 0 ? omochaoIconsPerRow : numInRow;
+		yPos += (rows - 1) * 24.0f;
+		while (itemCount > 0) 
+		{
+			int omochaoIcon = *(char*)omochao[itemCount - 1] == 0x01 ? SSI_Omochao : SSI_OmochaoDisabled;
+			float x = maxXPos - ((xCount + 1) * 24.0f);
+			StageSelectSprite.tanim = &StageSelectAnim[omochaoIcon];
+			StageSelectSprite.p = { x, yPos, 0.0f };
+			DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+			x += 2;
+			DrawString(std::to_string(itemCount), x, yPos + 18.0f, 0.1875f);
+			xCount++;
+			itemCount--;
+			numInRow--;
+			if (numInRow <= 0) 
+			{
+				xCount = 0;
+				yPos -= 24.0f;
+				numInRow = omochaoIconsPerRow;
+			}
 		}
 	}
 }
