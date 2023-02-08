@@ -609,15 +609,16 @@ void InitializeOmochaoChecks(std::map<int, OmochaoCheckData>& outOmochaoChecks)
     outOmochaoChecks[OmochaoCheck::OC_SecurityHall_Omochao_10] = OmochaoCheckData(memoryAddress++, LevelIDs_SecurityHall, { 0, 0, 0 });
     outOmochaoChecks[OmochaoCheck::OC_SecurityHall_Omochao_11] = OmochaoCheckData(memoryAddress++, LevelIDs_SecurityHall, { 0, 0, 0 });
 
-    outOmochaoChecks[OmochaoCheck::OC_PrisonLane_Omochao_1] = OmochaoCheckData(memoryAddress++, LevelIDs_PrisonLane, { 0, 0, 0 });
-    outOmochaoChecks[OmochaoCheck::OC_PrisonLane_Omochao_2] = OmochaoCheckData(memoryAddress++, LevelIDs_PrisonLane, { 0, 0, 0 });
-    outOmochaoChecks[OmochaoCheck::OC_PrisonLane_Omochao_3] = OmochaoCheckData(memoryAddress++, LevelIDs_PrisonLane, { 0, 0, 0 });
-    outOmochaoChecks[OmochaoCheck::OC_PrisonLane_Omochao_4] = OmochaoCheckData(memoryAddress++, LevelIDs_PrisonLane, { 0, 0, 0 });
-    outOmochaoChecks[OmochaoCheck::OC_PrisonLane_Omochao_5] = OmochaoCheckData(memoryAddress++, LevelIDs_PrisonLane, { 0, 0, 0 });
-    outOmochaoChecks[OmochaoCheck::OC_PrisonLane_Omochao_6] = OmochaoCheckData(memoryAddress++, LevelIDs_PrisonLane, { 0, 0, 0 });
-    outOmochaoChecks[OmochaoCheck::OC_PrisonLane_Omochao_7] = OmochaoCheckData(memoryAddress++, LevelIDs_PrisonLane, { 0, 0, 0 });
-    outOmochaoChecks[OmochaoCheck::OC_PrisonLane_Omochao_8] = OmochaoCheckData(memoryAddress++, LevelIDs_PrisonLane, { 0, 0, 0 });
-    outOmochaoChecks[OmochaoCheck::OC_PrisonLane_Omochao_9] = OmochaoCheckData(memoryAddress++, LevelIDs_PrisonLane, { 0, 0, 0 });
+    outOmochaoChecks[OmochaoCheck::OC_PrisonLane_Omochao_1]  = OmochaoCheckData(memoryAddress++, LevelIDs_PrisonLane, { 0, 0, 0 });
+    outOmochaoChecks[OmochaoCheck::OC_PrisonLane_Omochao_2]  = OmochaoCheckData(memoryAddress++, LevelIDs_PrisonLane, { 0, 0, 0 });
+    outOmochaoChecks[OmochaoCheck::OC_PrisonLane_Omochao_3]  = OmochaoCheckData(memoryAddress++, LevelIDs_PrisonLane, { 0, 0, 0 });
+    outOmochaoChecks[OmochaoCheck::OC_PrisonLane_Omochao_4]  = OmochaoCheckData(memoryAddress++, LevelIDs_PrisonLane, { 0, 0, 0 });
+    outOmochaoChecks[OmochaoCheck::OC_PrisonLane_Omochao_5]  = OmochaoCheckData(memoryAddress++, LevelIDs_PrisonLane, { 0, 0, 0 });
+    outOmochaoChecks[OmochaoCheck::OC_PrisonLane_Omochao_6]  = OmochaoCheckData(memoryAddress++, LevelIDs_PrisonLane, { 0, 0, 0 });
+    outOmochaoChecks[OmochaoCheck::OC_PrisonLane_Omochao_7]  = OmochaoCheckData(memoryAddress++, LevelIDs_PrisonLane, { 0, 0, 0 });
+    outOmochaoChecks[OmochaoCheck::OC_PrisonLane_Omochao_8]  = OmochaoCheckData(memoryAddress++, LevelIDs_PrisonLane, { 0, 0, 0 });
+    outOmochaoChecks[OmochaoCheck::OC_PrisonLane_Omochao_9]  = OmochaoCheckData(memoryAddress++, LevelIDs_PrisonLane, { 0, 0, 0 });
+    outOmochaoChecks[OmochaoCheck::OC_PrisonLane_Omochao_10] = OmochaoCheckData(memoryAddress++, LevelIDs_PrisonLane, { 0, 0, 0 });
 
     outOmochaoChecks[OmochaoCheck::OC_MetalHarbor_Omochao_1] = OmochaoCheckData(memoryAddress++, LevelIDs_MetalHarbor, { 0, 0, 0 });
     outOmochaoChecks[OmochaoCheck::OC_MetalHarbor_Omochao_2] = OmochaoCheckData(memoryAddress++, LevelIDs_MetalHarbor, { 0, 0, 0 });
