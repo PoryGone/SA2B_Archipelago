@@ -17,6 +17,57 @@ DataPointer(unsigned int, SeedHash, 0x1DEC6FC);
 DataPointer(unsigned int, PlayerNameHash, 0x1DEC700);
 DataPointer(char, LastStoryComplete, 0x1DEFA95);
 
+static void __cdecl HandleRingLoss()
+{
+    __asm
+    {
+        movzx edx, word ptr[eax * 2 + 174B028h]
+        cmp edx, 14h
+        ja greater
+        ret
+    greater:
+        mov edx, 20
+    }
+}
+
+static void __cdecl HandleOHKO()
+{
+    __asm
+    {
+        push eax
+    }
+
+    if (CurrentLevel == LevelIDs::LevelIDs_Route101280)
+    {
+        if (!TimerStopped)
+        {
+            GameState = GameStates::GameStates_RestartLevel_1;
+        }
+    }
+    else
+    {
+        KillPlayer(0);
+        if (CurrentCharacter == Characters_MechTails || CurrentCharacter == Characters_MechEggman)
+        {
+            if (MainCharObj2[0] != NULL && MainCharObj1[0] != NULL)
+            {
+                MainCharObj2[0]->Powerups = (MainCharObj2[0]->Powerups & ~(1 << PowerupBits::PowerupBits_Barrier));
+                MainCharObj2[0]->Powerups = (MainCharObj2[0]->Powerups & ~(1 << PowerupBits::PowerupBits_MagneticBarrier));
+                MainCharObj2[0]->Powerups = (MainCharObj2[0]->Powerups & ~(1 << PowerupBits::PowerupBits_Invincibility));
+                MainCharObj2[0]->MechHP = 0;
+                MainCharObj1[0]->field_6 = 0; // Invulvnerability Frames
+                MainCharObj1[0]->Status |= Status_Hurt;
+            }
+        }
+    }
+
+    __asm
+    {
+        pop eax
+        movzx edx, word ptr[eax * 2 + 174B028h]
+    }
+}
+
 void ArchipelagoManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
 {
 	_helperFunctions = &helperFunctions;
@@ -244,6 +295,20 @@ void SA2_SetNarrator(int narrator)
     apm->SetNarrator(narrator);
 }
 
+void SA2_SetRingLoss(int ringLoss)
+{
+    if (ringLoss == 1)
+    {
+        WriteCall(static_cast<void*>((void*)0x6C1B0D), &HandleRingLoss);
+        WriteData<3>((void*)0x6C1B12, 0x90);
+    }
+    else if (ringLoss == 2)
+    {
+        WriteCall(static_cast<void*>((void*)0x6C1B0D), &HandleOHKO);
+        WriteData<3>((void*)0x6C1B12, 0x90);
+    }
+}
+
 void SA2_SetEmblemsForCannonsCore(int emblemsRequired)
 {
     if (!ArchipelagoManager::getInstance().IsInit())
@@ -456,6 +521,7 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_RegisterSlotDataMapIntIntCallback("MusicMap", &SA2_SetMusicMap);
     AP_RegisterSlotDataIntCallback("MusicShuffle", &SA2_SetMusicShuffle);
     AP_RegisterSlotDataIntCallback("Narrator", &SA2_SetNarrator);
+    AP_RegisterSlotDataIntCallback("RingLoss", &SA2_SetRingLoss);
     AP_RegisterSlotDataIntCallback("EmblemsForCannonsCore", &SA2_SetEmblemsForCannonsCore);
     AP_RegisterSlotDataIntCallback("RequiredCannonsCoreMissions", &SA2_SetRequiredCannonsCoreMissions);
     AP_RegisterSlotDataIntCallback("RequiredRank", &SA2_SetRequiredRank);
