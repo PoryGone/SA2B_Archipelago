@@ -76,7 +76,7 @@ void MessageQueue::SetDisplayCount(int newDisplayCount)
 		return;
 	}
 
-	this->_displayCount = newDisplayCount;
+	this->_displayCount = max(1, min(newDisplayCount, MAX_MESSAGE_QUEUE_DISPLAY_COUNT));
 
 	this->_startLine = ((VerticalResolution / this->_debugFontSize) - this->_displayCount);
 }
