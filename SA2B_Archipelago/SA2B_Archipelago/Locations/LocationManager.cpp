@@ -48,7 +48,7 @@ static void __cdecl GoldBeetleDestroyed()
 	}
 	else
 	{
-		AddScore(2000);
+		AddScore(1000);
 	}
 }
 // End Gold Beetle "Trampoline"
