@@ -294,11 +294,6 @@ int APItemIDtoSA2ItemID(int APID)
 
 void ItemManager::HandleEquipment(int EquipmentItem)
 {
-	if (!(GameState == GameStates::GameStates_Ingame || GameState == GameStates::GameStates_Pause))
-	{
-		return;
-	}
-
 	if ((CurrentCharacter == Characters_Sonic      && EquipmentItem >= IV_SonicGloves          && EquipmentItem <= IV_SonicMysticMelody) ||
 		(CurrentCharacter == Characters_MechTails  && EquipmentItem >= IV_TailsLaserBlaster    && EquipmentItem <= IV_TailsBazooka) ||
 		(CurrentCharacter == Characters_Knuckles   && EquipmentItem >= IV_KnucklesMysticMelody && EquipmentItem <= IV_KnucklesSunglasses) ||
