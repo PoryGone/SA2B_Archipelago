@@ -1344,3 +1344,41 @@ struct OmochaoCheckData
 };
 
 void InitializeOmochaoChecks(std::map<int, OmochaoCheckData>& outOmochaoChecks);
+
+struct KartRaceCheckData
+{
+    KartRaceCheckData() : Address(0x00) {}
+    KartRaceCheckData(int address) : Address(address) {}
+
+    int Address;
+    bool CheckSent = false;
+};
+
+void InitializeKartRaceChecks(std::map<int, KartRaceCheckData>& outKartRaceChecks);
+
+enum KartRaceCheck
+{
+    KRC_BEGIN = 0xA00,
+    KRC_Beginner_Sonic = 0xA00,
+    KRC_Beginner_Tails,
+    KRC_Beginner_Knuckles,
+    KRC_Beginner_Shadow,
+    KRC_Beginner_Eggman,
+    KRC_Beginner_Rouge,
+
+    KRC_Standard_Sonic,
+    KRC_Standard_Tails,
+    KRC_Standard_Knuckles,
+    KRC_Standard_Shadow,
+    KRC_Standard_Eggman,
+    KRC_Standard_Rouge,
+
+    KRC_Expert_Sonic,
+    KRC_Expert_Tails,
+    KRC_Expert_Knuckles,
+    KRC_Expert_Shadow,
+    KRC_Expert_Eggman,
+    KRC_Expert_Rouge,
+
+    KRC_NUM_CHECKS
+};

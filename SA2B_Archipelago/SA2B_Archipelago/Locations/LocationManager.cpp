@@ -69,6 +69,7 @@ void LocationManager::OnInitFunction(const char* path, const HelperFunctions& he
 	InitializeHiddenChecks(this->_HiddenData);
 	InitializeGoldBeetleChecks(this->_GoldBeetleData);
 	InitializeOmochaoChecks(this->_OmochaoData);
+	InitializeKartRaceChecks(this->_KartRaceData);
 	InitializeChaoGardenChecks(this->_ChaoGardenData);
 	InitializeChaoRacePacks(this->_ChaoRacePacks);
 }
@@ -92,6 +93,7 @@ void LocationManager::OnFrameFunction()
 		this->OnFrameHidden();
 		this->OnFrameGoldBeetles();
 		this->OnFrameOmochao();
+		this->OnFrameKartRace();
 	}
 
 	this->OnFrameWhistle();
@@ -353,6 +355,48 @@ void LocationManager::OnFrameOmochao()
 		if (this->_OmochaoData.find(i) != this->_OmochaoData.end())
 		{
 			OmochaoCheckData& checkData = this->_OmochaoData[i];
+
+			if (!checkData.CheckSent)
+			{
+				// DataPointer macro creates a static field, which doesn't work for this case
+				char dataValue = *(char*)checkData.Address;
+
+				if (dataValue == 0x01)
+				{
+					if (this->_archipelagoManager)
+					{
+						this->_archipelagoManager->SendItem(i);
+
+						checkData.CheckSent = true;
+					}
+				}
+			}
+			else
+			{
+				// Capture offline collects
+				char dataValue = *(char*)checkData.Address;
+
+				if (dataValue != 0x01)
+				{
+					WriteData<1>((void*)checkData.Address, 0x01);
+				}
+			}
+		}
+	}
+}
+
+void LocationManager::OnFrameKartRace()
+{
+	if (!this->_kartRacesEnabled && this->_goal != 3)
+	{
+		return;
+	}
+
+	for (int i = KartRaceCheck::KRC_BEGIN; i < KartRaceCheck::KRC_NUM_CHECKS; i++)
+	{
+		if (this->_KartRaceData.find(i) != this->_KartRaceData.end())
+		{
+			KartRaceCheckData& checkData = this->_KartRaceData[i];
 
 			if (!checkData.CheckSent)
 			{
@@ -652,6 +696,19 @@ void LocationManager::CheckLocation(int location_id)
 
 		WriteData<1>((void*)checkData.Address, 0x01);
 	}
+	else if (this->_KartRaceData.find(location_id) != this->_KartRaceData.end())
+	{
+		KartRaceCheckData& checkData = this->_KartRaceData[location_id];
+
+		checkData.CheckSent = true;
+
+		WriteData<1>((void*)checkData.Address, 0x01);
+	}
+}
+
+void LocationManager::SetGoal(int goal)
+{
+	this->_goal = goal;
 }
 
 void LocationManager::SetRequiredRank(int requiredRank)
@@ -709,12 +766,11 @@ void LocationManager::SetGoldBeetlesEnabled(bool goldBeetlesEnabled)
 void LocationManager::SetOmochaoEnabled(bool omochaoEnabled)
 {
 	this->_omochaoEnabled = omochaoEnabled;
+}
 
-	if (this->_omochaoEnabled)
-	{
-		// Handle activating Omochao
-		//WriteCall(static_cast<void*>((void*)0x006BEA45), &ActivatedOmochao);
-	}
+void LocationManager::SetKartRacesEnabled(bool kartRacesEnabled)
+{
+	this->_kartRacesEnabled = kartRacesEnabled;
 }
 
 void LocationManager::SetRacesPacked(bool racesPacked)
@@ -765,6 +821,11 @@ void LocationManager::ResetLocations()
 	}
 
 	for (auto& pair : this->_OmochaoData)
+	{
+		pair.second.CheckSent = false;
+	}
+
+	for (auto& pair : this->_KartRaceData)
 	{
 		pair.second.CheckSent = false;
 	}
@@ -944,8 +1005,6 @@ void LocationManager::SendOmochaoLocationCheck()
 
 					if (dataValue != 0x01)
 					{
-
-						MessageQueue::GetInstance().AddMessage("Sending Omochao Check");
 						WriteData<1>((void*)checkData.Address, 0x01);
 					}
 
@@ -1061,4 +1120,17 @@ std::vector<int> LocationManager::GetOmochaoLocationsForLevel(int levelID)
 	}
 
 	return result;
+}
+
+bool LocationManager::AreAllRacesComplete()
+{
+	for (auto& pair : this->_KartRaceData)
+	{
+		if (!pair.second.CheckSent)
+		{
+			return false;
+		}
+	}
+
+	return true;
 }

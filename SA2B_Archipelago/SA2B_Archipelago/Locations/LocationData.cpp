@@ -897,3 +897,32 @@ void InitializeChaoRacePacks(std::map<int, std::vector<int>>& outChaoRacePacks)
     outChaoRacePacks[ChaoGardenCheck::CGC_Dark_2] = std::vector<int>{ CGC_Dark_1 };
     outChaoRacePacks[ChaoGardenCheck::CGC_Dark_4] = std::vector<int>{ CGC_Dark_3 };
 }
+
+void InitializeKartRaceChecks(std::map<int, KartRaceCheckData>& outKartRaceChecks)
+{
+    outKartRaceChecks.clear();
+
+    outKartRaceChecks[KartRaceCheck::KRC_Beginner_Sonic]    = KartRaceCheckData(0x01DEF5BC);
+    outKartRaceChecks[KartRaceCheck::KRC_Standard_Sonic]    = KartRaceCheckData(0x01DEF5C9);
+    outKartRaceChecks[KartRaceCheck::KRC_Expert_Sonic]      = KartRaceCheckData(0x01DEF5D6);
+
+    outKartRaceChecks[KartRaceCheck::KRC_Beginner_Tails]    = KartRaceCheckData(0x01DEF5E3);
+    outKartRaceChecks[KartRaceCheck::KRC_Standard_Tails]    = KartRaceCheckData(0x01DEF5F0);
+    outKartRaceChecks[KartRaceCheck::KRC_Expert_Tails]      = KartRaceCheckData(0x01DEF5FD);
+
+    outKartRaceChecks[KartRaceCheck::KRC_Beginner_Knuckles] = KartRaceCheckData(0x01DEF60A);
+    outKartRaceChecks[KartRaceCheck::KRC_Standard_Knuckles] = KartRaceCheckData(0x01DEF617);
+    outKartRaceChecks[KartRaceCheck::KRC_Expert_Knuckles]   = KartRaceCheckData(0x01DEF624);
+
+    outKartRaceChecks[KartRaceCheck::KRC_Beginner_Shadow]   = KartRaceCheckData(0x01DEF631);
+    outKartRaceChecks[KartRaceCheck::KRC_Standard_Shadow]   = KartRaceCheckData(0x01DEF63E);
+    outKartRaceChecks[KartRaceCheck::KRC_Expert_Shadow]     = KartRaceCheckData(0x01DEF64B);
+
+    outKartRaceChecks[KartRaceCheck::KRC_Beginner_Eggman]   = KartRaceCheckData(0x01DEF658);
+    outKartRaceChecks[KartRaceCheck::KRC_Standard_Eggman]   = KartRaceCheckData(0x01DEF665);
+    outKartRaceChecks[KartRaceCheck::KRC_Expert_Eggman]     = KartRaceCheckData(0x01DEF672);
+
+    outKartRaceChecks[KartRaceCheck::KRC_Beginner_Rouge]    = KartRaceCheckData(0x01DEF67F);
+    outKartRaceChecks[KartRaceCheck::KRC_Standard_Rouge]    = KartRaceCheckData(0x01DEF68C);
+    outKartRaceChecks[KartRaceCheck::KRC_Expert_Rouge]      = KartRaceCheckData(0x01DEF699);
+}

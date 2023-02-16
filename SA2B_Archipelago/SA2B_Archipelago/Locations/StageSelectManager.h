@@ -51,6 +51,7 @@ public:
 	void OnInitFunction(const char* path, const HelperFunctions& helperFunctions);
 	void OnFrameFunction();
 	void SetGoal(int goal);
+	void SetKartRacesEnabled(bool kartRacesEnabled);
 	void SetEmblemsForCannonsCore(int emblemsRequired);
 	void SetRequiredCannonsCoreMissions(bool requireAllCannonsCoreMissions);
     void SetRequiredRank(int requiredRank);
@@ -69,6 +70,7 @@ private:
 	int _emblemsForCannonsCore = 200;
 	bool _requireAllCannonsCoreMissions = false;
 	int _goal = 0;
+	bool _kartRacesEnabled = false;
 	int _requiredRank = 0;
 	std::map<int, int> _regionEmblemMap;
     std::map<int, int> _bossGates;
@@ -83,6 +85,8 @@ private:
     __int8 _previousSettingsSelection = 0x02;
     bool _needsSave = false;
 
+    bool _victorySent = false;
+
     void UpdateTitleHeaderArrays();
 	void LayoutLevels();
 	void SetLevelsLockState();
@@ -92,6 +96,7 @@ private:
 	void HandleGoal();
 	void HandleBiolizard();
 	void HandleGreenHill();
+	void HandleGrandPrix();
     void HandleBossStage();
 	void HandleStageSelectCamera();
 	void HandleMissionOrder();

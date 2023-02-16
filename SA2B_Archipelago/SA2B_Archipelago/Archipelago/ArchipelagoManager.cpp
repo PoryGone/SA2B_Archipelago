@@ -269,6 +269,10 @@ void SA2_SetDeathLink(int deathLinkActive)
 
 void SA2_SetGoal(int goal)
 {
+    LocationManager* locationManager = &LocationManager::getInstance();
+
+    locationManager->SetGoal(goal);
+
     StageSelectManager* ssm = &StageSelectManager::GetInstance();
 
     ssm->SetGoal(goal);
@@ -451,6 +455,25 @@ void SA2_SetOmochaoChecks(int omochaoChecks)
     }
 }
 
+void SA2_SetKartRaceChecks(int kartRaceChecks)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    if (kartRaceChecks > 0)
+    {
+        LocationManager* locationManager = &LocationManager::getInstance();
+
+        locationManager->SetKartRacesEnabled(true);
+
+        StageSelectManager* stageSelectManager = &StageSelectManager::GetInstance();
+
+        stageSelectManager->SetKartRacesEnabled(true);
+    }
+}
+
 void SA2_SetRegionEmblemMap(std::map<int, int> map)
 {
     if (!ArchipelagoManager::getInstance().IsInit())
@@ -529,6 +552,7 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_RegisterSlotDataIntCallback("Whistlesanity", &SA2_SetPipes);
     AP_RegisterSlotDataIntCallback("GoldBeetles", &SA2_SetGoldBeetles);
     AP_RegisterSlotDataIntCallback("OmochaoChecks", &SA2_SetOmochaoChecks);
+    AP_RegisterSlotDataIntCallback("KartRaceChecks", &SA2_SetKartRaceChecks);
     AP_RegisterSlotDataIntCallback("ChaoRaceChecks", &SA2_SetChaoPacks);
     AP_RegisterSlotDataIntCallback("ChaoGardenDifficulty", &SA2_SetChaoDifficulty);
     AP_RegisterSlotDataMapIntIntCallback("RegionEmblemMap", &SA2_SetRegionEmblemMap);
