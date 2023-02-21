@@ -83,6 +83,14 @@ void MinigameManager::UpdateCurrentMinigame()
 		if (currentMinigame->currentState == MGS_Victory || currentMinigame->currentState == MGS_Loss)
 		{
 			state = currentMinigame->currentState;
+			if (state == MGS_Victory)
+			{
+				HandleVictory();
+			}
+			else
+			{
+				HandleLoss();
+			}
 			currentMinigame = nullptr;
 		}
 	}
@@ -106,4 +114,14 @@ void MinigameManager::StartMinigame(ItemValue item)
 	case IV_PongTrap:
 		currentMinigame = &pong;
 	}
+}
+
+void MinigameManager::HandleVictory()
+{
+	state = MGS_None;
+}
+
+void MinigameManager::HandleLoss()
+{
+	state = MGS_None;
 }

@@ -20,6 +20,8 @@ public:
 	void UpdateCurrentMinigame();
 	void EndMinigame();
 	void StartMinigame(ItemValue item);
+	void HandleVictory();
+	void HandleLoss();
 	MinigameState state = MGS_None;
 	ObjectMaster* IconObjPtr;
 	MinigameIconData iconData = MinigameIconData();
