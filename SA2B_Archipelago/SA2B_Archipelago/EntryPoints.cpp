@@ -7,6 +7,7 @@
 #include "Aesthetics/MusicManager.h"
 #include "Aesthetics/CreditsManager.h"
 #include "Aesthetics/StatsManager.h"
+#include "Items/Minigames/MinigameManager.h"
 
 
 ItemManager* _itemManager;
@@ -17,6 +18,7 @@ CreditsManager& _creditsManager = CreditsManager::GetInstance();
 StageSelectManager& _stageSelectManager = StageSelectManager::GetInstance();
 MessageQueue& _messageQueue = MessageQueue::GetInstance();
 StatsManager& _statsManager = StatsManager::GetInstance();
+MinigameManager& _minigameManager = MinigameManager::GetInstance();
 
 extern "C"
 {
@@ -43,6 +45,8 @@ extern "C"
 		_locationManager->OnInitFunction(path, helperFunctions);
 
 		_statsManager.OnInitFunction(path, helperFunctions);
+
+		_minigameManager.OnInitFunction(path, helperFunctions);
 	}
 
 	__declspec(dllexport) void __cdecl OnFrame()
@@ -68,11 +72,14 @@ extern "C"
 		_messageQueue.OnFrameFunction();
 
 		_statsManager.OnFrameFunction();
+
+		_minigameManager.OnFrameFunction();
 	}
 
 	__declspec(dllexport) void __cdecl OnInput()
 	{
 		// Executed before the game processes input
+		_minigameManager.OnInputFunction();
 	}
 
 	__declspec(dllexport) void __cdecl OnControl()
