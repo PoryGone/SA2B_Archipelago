@@ -39,6 +39,7 @@ private:
 	void HandleEquipment(int EquipmentItem);
 	void HandleJunk(int item_id);
 	void HandleTrap(int item_id);
+	bool IsActiveTrapValid();
 	void ResetTrapData();
 	void OnFrameJunkQueue();
 	void OnFrameTrapQueue();
