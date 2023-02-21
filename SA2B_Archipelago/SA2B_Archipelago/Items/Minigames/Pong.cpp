@@ -11,11 +11,13 @@ void Pong::OnFrame(MinigameManagerData data)
 {
 	NJS_SPRITE sprite = { { 0.0f, 0.0f, 0.0f }, 1.0f, 1.0f, 0, data.icons->MinigameTex, data.icons->MinigameAnims };
 
-	//ballAngle += rotationDelta;
+	ballAngle += rotationDelta;
+	ballAngle = ballAngle > 360.0f ? ballAngle - 360.0f : ballAngle;
+	sprite.ang = NJM_DEG_ANG(ballAngle);
 	sprite.p.x = data.icons->xCenter;
 	sprite.p.y = data.icons->yCenter;
 	sprite.tanim = data.icons->GetAnim(MGI_Spinball);
-	DrawSprite2D(&sprite);
+	DrawSprite2D(&sprite, 1, 1, NJD_SPRITE_ALPHA | NJD_SPRITE_ANGLE);
 
 	sprite.sx = 0.5f;
 	sprite.sy = 0.5f;

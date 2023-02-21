@@ -8,6 +8,6 @@ public:
 	void OnFrame(MinigameManagerData data) override;
 
 private:
-	Angle ballAngle = 0;
-	int rotationDelta = 1;
+	float ballAngle = 0;
+	float rotationDelta = 2.0f;
 };
