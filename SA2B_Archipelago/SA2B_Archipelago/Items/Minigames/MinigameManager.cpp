@@ -3,13 +3,17 @@
 
 void DeleteUpgradeIcon_MG(ObjectMaster* obj)
 {
+	MinigameManager::GetInstance().EndMinigame();
 	MinigameManager::GetInstance().iconData.ReleaseIcons();
 	MinigameManager::GetInstance().IconObjPtr = nullptr;
 }
 
 void DrawUpgradeIcon_MG(ObjectMaster* obj)
 {
-	MinigameManager::GetInstance().UpdateCurrentMinigame();
+	if (GameState == GameStates_Ingame)
+	{
+		MinigameManager::GetInstance().UpdateCurrentMinigame();
+	}
 }
 
 void DrawUpgradeIconMain_MG(ObjectMaster* obj)
@@ -41,12 +45,12 @@ void MinigameManager::OnFrameFunction()
 		IconObjPtr->DisplaySub_Delayed3 = DrawUpgradeIcon_MG;
 		IconObjPtr->Data1.Entity->Action = 1;
 	}
-	UpdateCurrentMinigame();
 }
 
 void MinigameManager::OnInputFunction()
 {
 	lastInput.input = (RawInputFlags)ControllersRaw->on;
+	//Below is test code
 	if (GameState == GameStates_Ingame && !currentMinigame && lastInput.input & RIF_Down)
 	{
 		state = MGS_None;
@@ -81,5 +85,25 @@ void MinigameManager::UpdateCurrentMinigame()
 			state = currentMinigame->currentState;
 			currentMinigame = nullptr;
 		}
+	}
+}
+
+void MinigameManager::EndMinigame()
+{
+	currentMinigame = nullptr;
+	state = MGS_None;
+}
+
+void MinigameManager::StartMinigame(ItemValue item)
+{
+	if (state != MGS_None)
+	{
+		return;
+	}
+
+	switch (item)
+	{
+	case IV_PongTrap:
+		currentMinigame = &pong;
 	}
 }

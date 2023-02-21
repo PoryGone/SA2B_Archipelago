@@ -10,6 +10,8 @@ void Pong::OnGameStart()
 void Pong::OnFrame(MinigameManagerData data)
 {
 	NJS_SPRITE sprite = { { 0.0f, 0.0f, 0.0f }, 1.0f, 1.0f, 0, data.icons->MinigameTex, data.icons->MinigameAnims };
+
+	//ballAngle += rotationDelta;
 	sprite.p.x = data.icons->xCenter;
 	sprite.p.y = data.icons->yCenter;
 	sprite.tanim = data.icons->GetAnim(MGI_Spinball);
@@ -17,6 +19,7 @@ void Pong::OnFrame(MinigameManagerData data)
 
 	sprite.sx = 0.5f;
 	sprite.sy = 0.5f;
+	sprite.ang = 0;
 
 	sprite.p.x = data.icons->xCenter - 100.0f;
 	sprite.p.y = data.icons->yCenter;

@@ -1,7 +1,10 @@
 #pragma once
 #include "MinigameBase.h"
 #include "Pong.h"
+#include "../ItemData.h"
 #include <ctime>
+
+
 
 class MinigameManager
 {
@@ -15,6 +18,8 @@ public:
 	void OnFrameFunction();
 	void OnInputFunction();
 	void UpdateCurrentMinigame();
+	void EndMinigame();
+	void StartMinigame(ItemValue item);
 	MinigameState state = MGS_None;
 	ObjectMaster* IconObjPtr;
 	MinigameIconData iconData = MinigameIconData();
