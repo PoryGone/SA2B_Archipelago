@@ -19,7 +19,9 @@ void DrawUpgradeIcon_MG(ObjectMaster* obj)
 void DrawUpgradeIconMain_MG(ObjectMaster* obj)
 {
 	if (GameState != GameStates_LoadFinished && GameState != GameStates_LoadLevel)
+	{
 		return;
+	}
 
 	if (obj->Data1.Entity->Action == 0) {
 		obj->DeleteSub = DeleteUpgradeIcon_MG;
@@ -51,11 +53,11 @@ void MinigameManager::OnInputFunction()
 {
 	lastInput.input = (RawInputFlags)ControllersRaw->on;
 	//Below is test code
-	if (GameState == GameStates_Ingame && !currentMinigame && lastInput.input & RIF_Down)
-	{
-		state = MGS_None;
-		currentMinigame = &pong;
-	}
+	//if (GameState == GameStates_Ingame && !currentMinigame && lastInput.input & RIF_Down)
+	//{
+	//	state = MGS_None;
+	//	currentMinigame = &pong;
+	//}
 }
 
 void MinigameManager::UpdateCurrentMinigame()
@@ -113,6 +115,7 @@ void MinigameManager::StartMinigame(ItemValue item)
 	{
 	case IV_PongTrap:
 		currentMinigame = &pong;
+		break;
 	}
 }
 
