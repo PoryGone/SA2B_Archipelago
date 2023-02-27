@@ -49,11 +49,6 @@ void Pong::OnFrame(MinigameManagerData data)
 		this->OnFrameSimulate(data);
 	}
 	this->OnFrameDraw(data);
-
-	if (data.managerState & MinigameState::MGS_InProgress && data.input & RawInputFlags::RIF_Left)
-	{
-		this->currentState = MinigameState::MGS_Victory;
-	}
 }
 
 void Pong::OnFramePlayer(MinigameManagerData data)
