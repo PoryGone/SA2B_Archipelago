@@ -1,5 +1,6 @@
 #include "../../pch.h"
 #include "MinigameManager.h"
+#include "../../Archipelago/ArchipelagoManager.h"
 
 void DeleteUpgradeIcon_MG(ObjectMaster* obj)
 {
@@ -37,61 +38,55 @@ void MinigameManager::OnInitFunction(const char* path, const HelperFunctions& he
 
 void MinigameManager::OnFrameFunction()
 {
-	if (!IconObjPtr && GameState == GameStates_Ingame)
+	if (!this->IconObjPtr && GameState == GameStates_Ingame)
 	{
-		iconData.LoadIcons();
-		lastInput.icons = &iconData;
-		IconObjPtr = LoadObject(0, "MinigameIcons", DrawUpgradeIconMain_MG, LoadObj_Data1 | LoadObj_Data2);
-		IconObjPtr->DeleteSub = DeleteUpgradeIcon_MG;
-		IconObjPtr->MainSub = DrawUpgradeIconMain_MG;
-		IconObjPtr->DisplaySub_Delayed3 = DrawUpgradeIcon_MG;
-		IconObjPtr->Data1.Entity->Action = 1;
+		this->iconData.LoadIcons();
+		this->_data.icons = &this->iconData;
+		this->IconObjPtr = LoadObject(0, "MinigameIcons", DrawUpgradeIconMain_MG, LoadObj_Data1 | LoadObj_Data2);
+		this->IconObjPtr->DeleteSub = DeleteUpgradeIcon_MG;
+		this->IconObjPtr->MainSub = DrawUpgradeIconMain_MG;
+		this->IconObjPtr->DisplaySub_Delayed3 = DrawUpgradeIcon_MG;
+		this->IconObjPtr->Data1.Entity->Action = 1;
 	}
 }
 
 void MinigameManager::OnInputFunction()
 {
-	lastInput.input = (RawInputFlags)ControllersRaw->on;
-	//Below is test code
-	//if (GameState == GameStates_Ingame && !currentMinigame && lastInput.input & RIF_Down)
-	//{
-	//	state = MGS_None;
-	//	currentMinigame = &pong;
-	//}
+	this->_data.input = (RawInputFlags)ControllersRaw->on;
 }
 
 void MinigameManager::UpdateCurrentMinigame()
 {
-	if (currentMinigame)
+	if (this->currentMinigame)
 	{
-		if (state == MGS_None)
+		if (this->state == MinigameState::MGS_None)
 		{
-			currentMinigame->OnGameStart();
-			minigameStart = std::clock();
-			state = MGS_PreGame;
+			this->currentMinigame->OnGameStart(this->_data);
+			this->minigameStart = std::clock();
+			this->state = MinigameState::MGS_PreGame;
 		}
-		if (state == MGS_PreGame)
+		if (this->state == MinigameState::MGS_PreGame)
 		{
-			if (((std::clock() - minigameStart) / (double)CLOCKS_PER_SEC) > currentMinigame->pregameTime)
+			if (((std::clock() - minigameStart) / (double)CLOCKS_PER_SEC) > this->currentMinigame->pregameTime)
 			{
-				state = MGS_InProgress;
+				this->state = MinigameState::MGS_InProgress;
 			}
 		}
-		if (state == MGS_InProgress || state == MGS_PreGame)
+		if (this->state == MinigameState::MGS_InProgress || this->state == MinigameState::MGS_PreGame)
 		{
-			lastInput.managerState = state;
-			currentMinigame->OnFrame(lastInput);
+			this->_data.managerState = this->state;
+			this->currentMinigame->OnFrame(this->_data);
 		}
-		if (currentMinigame->currentState == MGS_Victory || currentMinigame->currentState == MGS_Loss)
+		if (this->currentMinigame->currentState == MinigameState::MGS_Victory || this->currentMinigame->currentState == MinigameState::MGS_Loss)
 		{
-			state = currentMinigame->currentState;
-			if (state == MGS_Victory)
+			this->state = this->currentMinigame->currentState;
+			if (state == MinigameState::MGS_Victory)
 			{
-				HandleVictory();
+				this->HandleVictory();
 			}
 			else
 			{
-				HandleLoss();
+				this->HandleLoss();
 			}
 			currentMinigame = nullptr;
 		}
@@ -100,31 +95,37 @@ void MinigameManager::UpdateCurrentMinigame()
 
 void MinigameManager::EndMinigame()
 {
-	currentMinigame = nullptr;
-	state = MGS_None;
+	this->currentMinigame = nullptr;
+	this->state = MinigameState::MGS_None;
 }
 
 void MinigameManager::StartMinigame(ItemValue item)
 {
-	if (state != MGS_None)
+	if (this->state != MinigameState::MGS_None)
 	{
 		return;
 	}
 
 	switch (item)
 	{
-	case IV_PongTrap:
-		currentMinigame = &pong;
+	case ItemValue::IV_PongTrap:
+		this->currentMinigame = &this->pong;
 		break;
 	}
 }
 
 void MinigameManager::HandleVictory()
 {
-	state = MGS_None;
+	this->state = MinigameState::MGS_None;
 }
-
 void MinigameManager::HandleLoss()
 {
-	state = MGS_None;
+	ArchipelagoManager::getInstance().AP_KillPlayer();
+
+	this->state = MinigameState::MGS_None;
+}
+
+void MinigameManager::SetDifficulty(int difficulty)
+{
+	this->_data.difficulty = (MinigameDifficulty)difficulty;
 }

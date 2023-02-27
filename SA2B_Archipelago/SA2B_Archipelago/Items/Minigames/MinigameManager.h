@@ -14,22 +14,29 @@ public:
 		static MinigameManager instance;
 		return instance;
 	}
+
 	void OnInitFunction(const char* path, const HelperFunctions& helperFunctions);
 	void OnFrameFunction();
 	void OnInputFunction();
+
 	void UpdateCurrentMinigame();
 	void EndMinigame();
 	void StartMinigame(ItemValue item);
+
 	void HandleVictory();
 	void HandleLoss();
-	MinigameState state = MGS_None;
+
+	void SetDifficulty(int difficulty);
+
+	MinigameState state = MinigameState::MGS_None;
 	ObjectMaster* IconObjPtr;
 	MinigameIconData iconData = MinigameIconData();
 
 private:
 	MinigameBase* currentMinigame;
-	MinigameManagerData lastInput = MinigameManagerData();
+	MinigameManagerData _data = MinigameManagerData();
 	std::clock_t minigameStart;
+
 	//Minigames
 	Pong pong = Pong();
 };

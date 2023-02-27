@@ -28,18 +28,26 @@ enum MinigameState
 	MGS_Loss,
 };
 
+enum MinigameDifficulty
+{
+	MGD_Easy,
+	MGD_Medium,
+	MGD_Hard,
+};
+
 struct MinigameManagerData
 {
 public:
 	RawInputFlags input;
 	MinigameState managerState;
 	MinigameIconData* icons;
+	MinigameDifficulty difficulty;
 };
 
 class MinigameBase
 {
 public:
-	virtual void OnGameStart() = 0;
+	virtual void OnGameStart(MinigameManagerData data) = 0;
 	virtual void OnFrame(MinigameManagerData data) = 0;
 	MinigameState currentState;
 	float pregameTime = 1.0f;

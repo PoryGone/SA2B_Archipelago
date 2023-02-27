@@ -47,9 +47,9 @@ void MinigameIconData::LoadIcons()
 	float adjustedMin = (adjustedHorizontal - 640.0f) / 2.0f;
 	float adjustedMax = adjustedHorizontal - adjustedMin;
 	adjustedMin = -adjustedMin;
-	xMin = adjustedMin;
-	xMax = adjustedMax;
-	xCenter = xMax / 2.0f + xMin / 2.0f;
+	this->xMin = adjustedMin;
+	this->xMax = adjustedMax;
+	this->xCenter = this->xMax / 2.0f + this->xMin / 2.0f;
 }
 
 void MinigameIconData::ReleaseIcons()
