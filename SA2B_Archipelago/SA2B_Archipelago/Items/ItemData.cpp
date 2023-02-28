@@ -59,6 +59,7 @@ void InitializeItemData(std::map<int, ItemData> &outItemData)
     outItemData[ItemValue::IV_GravityTrap]    = ItemData(0x0000000, std::string("Gravity Trap"), std::string(), 0);
     outItemData[ItemValue::IV_ExpositionTrap] = ItemData(0x0000000, std::string("Exposition Trap"), std::string(), 0);
     outItemData[ItemValue::IV_DarknessTrap]   = ItemData(0x0000000, std::string("Darkness Trap"), std::string(), 0);
+    outItemData[ItemValue::IV_PongTrap]       = ItemData(0x0000000, std::string("Pong Trap"), std::string(), 0);
 
     outItemData[ItemValue::IV_WhiteChaosEmerald]  = ItemData(0x01DEEAF8, std::string("White Chaos Emerald"), std::string(), 0);
     outItemData[ItemValue::IV_RedChaosEmerald]    = ItemData(0x01DEEAF9, std::string("Red Chaos Emerald"), std::string(), 0);

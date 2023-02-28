@@ -5,6 +5,7 @@
 #include "../Utilities/MessageQueue.h"
 #include "LocationManager.h"
 #include "../Items/ItemManager.h"
+#include "../Utilities/SpriteUtilities.h"
 #include <map>
 
 FunctionPointer(void, ReleaseTextureList, (NJS_TEXLIST* a1), 0x77F9F0);
@@ -139,11 +140,6 @@ CharacterItemRange GetItemRangeForCharacter(char character)
 		}
 	}
 	return CharacterItemRange();
-}
-
-__declspec(noinline) void DrawSprite2D(NJS_SPRITE* _sp, Int n, Float pri, char attr)
-{
-	njDrawSprite2D(_sp, n, pri, attr);
 }
 
 void DrawString(std::string string, float xPos, float yPos, float scale = 1.0f) 

@@ -2,6 +2,7 @@
 #include "ArchipelagoManager.h"
 #include "../Locations/LocationData.h"
 #include "../Items/ItemManager.h"
+#include "../Items/Minigames/MinigameManager.h"
 #include "../Locations/LocationManager.h"
 #include "../Aesthetics/MusicManager.h"
 
@@ -499,6 +500,18 @@ void SA2_SetGateBosses(std::map<int, int> map)
     ssm->SetBossGates(map);
 }
 
+void SA2_SetMinigameDifficulty(int minigameDifficulty)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    MinigameManager* minigameManager = &MinigameManager::GetInstance();
+
+    minigameManager->SetDifficulty(minigameDifficulty);
+}
+
 void ArchipelagoManager::Init(const char* ip, const char* playerName, const char* password)
 {
     AP_Init(ip, "Sonic Adventure 2 Battle", playerName, password);
@@ -654,29 +667,7 @@ void ArchipelagoManager::OnFrameDeathLink()
 
     if (this->DeathLinkPending() && GameState == GameStates::GameStates_Ingame) // They died
     {
-        if (CurrentLevel == LevelIDs::LevelIDs_Route101280)
-        {
-            if (!TimerStopped)
-            {
-                GameState = GameStates::GameStates_RestartLevel_1;
-            }
-        }
-        else
-        {
-            KillPlayer(0);
-            if (CurrentCharacter == Characters_MechTails || CurrentCharacter == Characters_MechEggman)
-            {
-                if (MainCharObj2[0] != NULL && MainCharObj1[0] != NULL)
-                {
-                    MainCharObj2[0]->Powerups = (MainCharObj2[0]->Powerups & ~(1 << PowerupBits::PowerupBits_Barrier));
-                    MainCharObj2[0]->Powerups = (MainCharObj2[0]->Powerups & ~(1 << PowerupBits::PowerupBits_MagneticBarrier));
-                    MainCharObj2[0]->Powerups = (MainCharObj2[0]->Powerups & ~(1 << PowerupBits::PowerupBits_Invincibility));
-                    MainCharObj2[0]->MechHP = 0;
-                    MainCharObj1[0]->field_6 = 0; // Invulvnerability Frames
-                    MainCharObj1[0]->Status |= Status_Hurt;
-                }
-            }
-        }
+        this->AP_KillPlayer();
 
         this->_deathLinkTimer = 420;
 
@@ -827,5 +818,32 @@ void ArchipelagoManager::VerfyModVersion(int modVersion)
     {
         this->_badModVersion = true;
         this->_serverModVersion = modVersion;
+    }
+}
+
+void ArchipelagoManager::AP_KillPlayer()
+{
+    if (CurrentLevel == LevelIDs::LevelIDs_Route101280)
+    {
+        if (!TimerStopped)
+        {
+            GameState = GameStates::GameStates_RestartLevel_1;
+        }
+    }
+    else
+    {
+        KillPlayer(0);
+        if (CurrentCharacter == Characters_MechTails || CurrentCharacter == Characters_MechEggman)
+        {
+            if (MainCharObj2[0] != NULL && MainCharObj1[0] != NULL)
+            {
+                MainCharObj2[0]->Powerups = (MainCharObj2[0]->Powerups & ~(1 << PowerupBits::PowerupBits_Barrier));
+                MainCharObj2[0]->Powerups = (MainCharObj2[0]->Powerups & ~(1 << PowerupBits::PowerupBits_MagneticBarrier));
+                MainCharObj2[0]->Powerups = (MainCharObj2[0]->Powerups & ~(1 << PowerupBits::PowerupBits_Invincibility));
+                MainCharObj2[0]->MechHP = 0;
+                MainCharObj1[0]->field_6 = 0; // Invulvnerability Frames
+                MainCharObj1[0]->Status |= Status_Hurt;
+            }
+        }
     }
 }
