@@ -12,6 +12,7 @@ FunctionPointer(void, ReleaseTextureList, (NJS_TEXLIST* a1), 0x77F9F0);
 
 DataPointer(char, SS_SelectedTile, 0x1D1BF08);
 DataPointer(char, ActiveMission, 0x174AFE3);
+DataPointer(char, SS_CameraPos, 0x1D1BEC0);
 
 static std::map<int, ItemData>* ItemData_ptr;
 static std::vector<CharacterItemRange>* CharacterItemRanges_ptr;
@@ -72,7 +73,7 @@ std::map<char, NumberDisplayData> NumberMap = {
 };
 
 static const int Anim_Length = 29;
-static const int Stage_Anim_Length = 27;
+static const int Stage_Anim_Length = 28;
 static const int Num_Anim_Length = 13;
 
 static NJS_TEXNAME UpgradeIconsTexName[Anim_Length];
@@ -129,6 +130,10 @@ static NJS_SPRITE StageSelectSprite = { { -32.0f, 0.0f, 0.0f }, 1.0f, 1.0f, 0, &
 static NJS_SPRITE NumSprite = { { -32.0f, 0.0f, 0.0f }, 1.0f, 1.0f, 0, &NumTex, &NumAnim[0] };
 
 static int omochaoIconsPerRow = 14;
+
+static const float maxCCUnlockOffset = 5.0f;
+static int currentCCUnlockFrame = 0;
+static const int maxCCUnlockFrames = 100;
 
 CharacterItemRange GetItemRangeForCharacter(char character)
 {
@@ -404,6 +409,18 @@ void UpdateEmblemRequirements()
 	cannonsCoreMessage.append("/");
 	cannonsCoreMessage.append(std::to_string(emblemsForCannonsCore));
 	DrawString(cannonsCoreMessage, coreX + 53.0f, 16.0f, 0.75f);
+	if (EmblemCount >= emblemsForCannonsCore && SS_CameraPos < 3)
+	{
+		currentCCUnlockFrame = currentCCUnlockFrame == maxCCUnlockFrames - 1 ? 0 : currentCCUnlockFrame + 1;
+		float progress = currentCCUnlockFrame / (float)maxCCUnlockFrames;
+		progress = abs(progress * 2.0f - 1.0f);
+		progress = (cos(3.1415f * progress) - 1.0f) * -0.5f;
+		StageSelectSprite.sx = 0.25f;
+		StageSelectSprite.sy = 0.25f;
+		StageSelectSprite.tanim = &StageSelectAnim[SSI_CCUnlocked];
+		StageSelectSprite.p = { maxXPos - 16.0f - (maxCCUnlockOffset * progress), 380.0f, 0.0f };
+		DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+	}
 }
 
 void UpdateMissionInLevel() 
@@ -501,7 +518,14 @@ void StageSelectIcons::OnInit(std::map<int, StageSelectStageData>* stageSelectDa
 
 	for (int i = 0; i < Stage_Anim_Length; i++)
 	{
-		StageSelectAnim[i] = { 0x80, 0x80, 0, 0, 0, 0, 0x100, 0x100, (Sint16)(i - 1), NJD_SPRITE_ALPHA };
+		if (i == SSI_CCUnlocked + 1)
+		{
+			StageSelectAnim[i] = { 128, 256, 64, 128, 0, 0, 0x100, 0x100, (Sint16)(i - 1), NJD_SPRITE_ALPHA };
+		}
+		else
+		{
+			StageSelectAnim[i] = { 0x80, 0x80, 0, 0, 0, 0, 0x100, 0x100, (Sint16)(i - 1), NJD_SPRITE_ALPHA };
+		}
 	}
 
 	float ratio = 480.0f / VerticalResolution;
