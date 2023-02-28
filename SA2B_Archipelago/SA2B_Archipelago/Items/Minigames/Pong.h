@@ -45,6 +45,8 @@ public:
 
 	void HandleCollision(MinigameManagerData data);
 
+	void DrawPaddleBacking(MinigameManagerData data, float xPos);
+
 private:
 	float ballSpeedX = 2.0f;
 	float ballSpeedY = 2.0f;

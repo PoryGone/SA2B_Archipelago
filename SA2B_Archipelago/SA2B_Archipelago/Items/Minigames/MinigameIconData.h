@@ -2,11 +2,15 @@
 
 enum MinigameIcon
 {
-	MGI_RoundedBar			= 0,
-	MGI_RoundedBar_Top		= 1,
-	MGI_RoundedBar_Bottom	= 2,
-	MGI_RoundedBar_Mid		= 3,
-	MGI_Spinball			= 4,
+	MGI_RoundedBar				= 0,
+	MGI_RoundedBar_Top			= 1,
+	MGI_RoundedBar_Bottom		= 2,
+	MGI_RoundedBar_Mid			= 3,
+	MGI_RoundedBarDark			= 4,
+	MGI_RoundedBarDark_Top		= 5,
+	MGI_RoundedBarDark_Bottom	= 6,
+	MGI_RoundedBarDark_Mid		= 7,
+	MGI_Spinball				= 8,
 };
 
 class MinigameIconData

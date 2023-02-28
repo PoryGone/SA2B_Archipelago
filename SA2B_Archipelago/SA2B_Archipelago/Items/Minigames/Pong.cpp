@@ -167,6 +167,24 @@ void Pong::OnFrameDraw(MinigameManagerData data)
 {
 	NJS_SPRITE sprite = { { 0.0f, 0.0f, 0.0f }, 1.0f, 1.0f, 0, data.icons->MinigameTex, data.icons->MinigameAnims };
 
+	// Left Paddle Sprite (Player)
+	sprite.ang = 0;
+	sprite.sx = ((float)(PONG_PADDLE_WIDTH) / (float)(PONG_PADDLE_SPRITE_X));
+	sprite.sy = ((float)(PONG_PLAYER_PADDLE_HALFLENGTH * 2) / (float)(PONG_PADDLE_SPRITE_Y));
+	sprite.p = this->leftPaddlePos;
+	sprite.tanim = data.icons->GetAnim(MinigameIcon::MGI_RoundedBar);
+	DrawPaddleBacking(data, this->leftPaddlePos.x);
+	DrawSprite2D(&sprite);
+
+	// Right Paddle Sprite (AI)
+	sprite.ang = 0;
+	sprite.sx = ((float)(PONG_PADDLE_WIDTH) / (float)(PONG_PADDLE_SPRITE_X));
+	sprite.sy = ((float)(PONG_AI_PADDLE_HALFLENGTH * 2) / (float)(PONG_PADDLE_SPRITE_Y));
+	sprite.p = this->rightPaddlePos;
+	sprite.tanim = data.icons->GetAnim(MinigameIcon::MGI_RoundedBar);
+	DrawPaddleBacking(data, this->rightPaddlePos.x);
+	DrawSprite2D(&sprite);
+
 	// Ball Sprite
 	this->ballAngle += rotationDelta;
 	this->ballAngle = this->ballAngle > 360.0f ? this->ballAngle - 360.0f : this->ballAngle;
@@ -176,20 +194,32 @@ void Pong::OnFrameDraw(MinigameManagerData data)
 	sprite.p = this->ballPos;
 	sprite.tanim = data.icons->GetAnim(MinigameIcon::MGI_Spinball);
 	DrawSprite2D(&sprite, 1, 1, NJD_SPRITE_ALPHA | NJD_SPRITE_ANGLE);
+	
+}
 
-	// Left Paddle Sprite (Player)
-	sprite.ang = 0;
-	sprite.sx = ((float)(PONG_PADDLE_WIDTH) / (float)(PONG_PADDLE_SPRITE_X));
-	sprite.sy = ((float)(PONG_PLAYER_PADDLE_HALFLENGTH * 2) / (float)(PONG_PADDLE_SPRITE_Y));
-	sprite.p = this->leftPaddlePos;
-	sprite.tanim = data.icons->GetAnim(MinigameIcon::MGI_RoundedBar);
-	DrawSprite2D(&sprite);
+void Pong::DrawPaddleBacking(MinigameManagerData data, float xPos)
+{
+	NJS_SPRITE sprite = { { 0.0f, 0.0f, 0.0f }, 1.0f, 1.0f, 0, data.icons->MinigameTex, data.icons->MinigameAnims };
 
-	// Right Paddle Sprite (AI)
-	sprite.ang = 0;
 	sprite.sx = ((float)(PONG_PADDLE_WIDTH) / (float)(PONG_PADDLE_SPRITE_X));
 	sprite.sy = ((float)(PONG_AI_PADDLE_HALFLENGTH * 2) / (float)(PONG_PADDLE_SPRITE_Y));
-	sprite.p = this->rightPaddlePos;
-	sprite.tanim = data.icons->GetAnim(MinigameIcon::MGI_RoundedBar);
+	sprite.p.x = xPos;
+
+	sprite.p.y = PONG_BOTTOM - PONG_PLAYER_PADDLE_HALFLENGTH;
+	sprite.tanim = data.icons->GetAnim(MinigameIcon::MGI_RoundedBarDark_Bottom);
 	DrawSprite2D(&sprite);
+
+	sprite.p.y = PONG_TOP + PONG_PLAYER_PADDLE_HALFLENGTH;
+	sprite.tanim = data.icons->GetAnim(MinigameIcon::MGI_RoundedBarDark_Top);
+	DrawSprite2D(&sprite);
+
+	sprite.p.y += 0.5f;
+	sprite.sy = ((float)(PONG_AI_PADDLE_HALFLENGTH * 2 - 1) / (float)(PONG_PADDLE_SPRITE_Y));
+	sprite.tanim = data.icons->GetAnim(MinigameIcon::MGI_RoundedBarDark_Mid);
+
+	for (int i = 0; i < 4; i++)
+	{
+		sprite.p.y += PONG_PLAYER_PADDLE_HALFLENGTH * 2 - 1;
+		DrawSprite2D(&sprite);
+	}
 }
