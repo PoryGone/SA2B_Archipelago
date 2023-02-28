@@ -1,6 +1,7 @@
 #include "../pch.h"
 #include "ItemManager.h"
 #include "ItemData.h"
+#include "Minigames/MinigameManager.h"
 
 #include "../Utilities/MessageQueue.h"
 
@@ -210,7 +211,7 @@ void ItemManager::ReceiveItem(int item_id, bool notify)
 			messageQueue->AddMessage(message);
 		}
 	}
-	else if (item_id <= ItemValue::IV_DarknessTrap) // Trap
+	else if (item_id <= ItemValue::IV_PongTrap) // Trap
 	{
 		if (this->_thisSessionChecksReceived > SavedChecksReceived)
 		{
@@ -461,6 +462,139 @@ void ItemManager::HandleTrap(int item_id)
 	this->_TrapQueue.push(item_id);
 }
 
+bool ItemManager::IsActiveTrapValid()
+{
+	MinigameManager* minigameManager = &MinigameManager::GetInstance();
+
+	switch (this->_ActiveTrap)
+	{
+	case ItemValue::IV_OmochaoTrap:
+		if (CurrentLevel == LevelIDs_Route101280 ||
+			CurrentLevel == LevelIDs_KartRace ||
+			CurrentLevel == LevelIDs_ChaoWorld ||
+			CurrentLevel == LevelIDs_FinalHazard)
+		{
+			return false;
+		}
+		break;
+	case ItemValue::IV_TimeStopTrap:
+		if (CurrentLevel == LevelIDs_Route101280 ||
+			CurrentLevel == LevelIDs_KartRace ||
+			CurrentLevel == LevelIDs_ChaoWorld ||
+			CurrentLevel == LevelIDs_FinalHazard)
+		{
+			return false;
+		}
+		break;
+	case ItemValue::IV_ConfuseTrap:
+		if (CurrentLevel == LevelIDs_Route101280 ||
+			CurrentLevel == LevelIDs_KartRace ||
+			CurrentLevel == LevelIDs_ChaoWorld ||
+			CurrentLevel == LevelIDs_FinalHazard)
+		{
+			return false;
+		}
+		break;
+	case ItemValue::IV_TinyTrap:
+		if (CurrentLevel == LevelIDs_Route101280 ||
+			CurrentLevel == LevelIDs_KartRace ||
+			CurrentLevel == LevelIDs_ChaoWorld ||
+			CurrentLevel == LevelIDs_FinalHazard)
+		{
+			return false;
+		}
+
+		if (!MainCharObj1[0] || MainCharObj1[0]->Scale.x < 1.0f)
+		{
+			// Don't take a Tiny Trap when already Tiny
+			return false;
+		}
+		break;
+	case ItemValue::IV_GravityTrap:
+		if (CurrentLevel == LevelIDs_Route101280 ||
+			CurrentLevel == LevelIDs_KartRace ||
+			CurrentLevel == LevelIDs_ChaoWorld ||
+			CurrentLevel == LevelIDs_FinalHazard)
+		{
+			return false;
+		}
+
+		if (CurrentLevel == LevelIDs_CrazyGadget ||
+			CurrentLevel == LevelIDs_MadSpace ||
+			CurrentLevel == LevelIDs_FinalChase)
+		{
+			// These stages do too much weird stuff with gravity
+			return false;
+		}
+		break;
+	case ItemValue::IV_ExpositionTrap:
+		if (CurrentLevel == LevelIDs_ChaoWorld ||
+			CurrentLevel == LevelIDs_FinalHazard)
+		{
+			return false;
+		}
+
+		if (this->_DialogueQueue.size() > 0 || this->_ActiveDialogueTimer > 0)
+		{
+			return false;
+		}
+		break;
+	case ItemValue::IV_DarknessTrap:
+		if (CurrentLevel == LevelIDs_Route101280 ||
+			CurrentLevel == LevelIDs_KartRace ||
+			CurrentLevel == LevelIDs_ChaoWorld ||
+			CurrentLevel == LevelIDs_FinalHazard)
+		{
+			return false;
+		}
+
+		if (CurrentLevel == LevelIDs_WildCanyon || //
+			CurrentLevel == LevelIDs_DeathChamber || //
+			CurrentLevel == LevelIDs_IronGate || //
+			CurrentLevel == LevelIDs_DryLagoon || //
+			CurrentLevel == LevelIDs_RadicalHighway ||
+			CurrentLevel == LevelIDs_EggQuarters || //
+			CurrentLevel == LevelIDs_LostColony ||
+			CurrentLevel == LevelIDs_WhiteJungle ||
+			CurrentLevel == LevelIDs_SkyRail ||
+			CurrentLevel == LevelIDs_MadSpace ||
+			CurrentLevel == LevelIDs_CosmicWall || //
+			CurrentLevel == LevelIDs_FinalChase || //
+			CurrentLevel == LevelIDs_CannonsCoreT || //
+			CurrentLevel == LevelIDs_CannonsCoreE || //
+			CurrentLevel == LevelIDs_CannonsCoreR || //
+			CurrentLevel == LevelIDs_CannonsCoreS || //
+			CurrentLevel == LevelIDs_GreenHill || //
+			CurrentLevel == LevelIDs_BigFoot || //
+			CurrentLevel == LevelIDs_HotShot || //
+			CurrentLevel == LevelIDs_EggGolemS || //
+			CurrentLevel == LevelIDs_EggGolemE || //
+			CurrentLevel == LevelIDs_KingBoomBoo || //
+			CurrentLevel == LevelIDs_Biolizard)
+		{
+			// These stages don't work correctly with the fog
+			return false;
+		}
+		break;
+	case ItemValue::IV_PongTrap:
+		if (CurrentLevel == LevelIDs_ChaoWorld ||
+			CurrentLevel == LevelIDs_FinalHazard)
+		{
+			return false;
+		}
+
+		if (minigameManager->state != MinigameState::MGS_None)
+		{
+			// Another minigame is already in-progress
+			return false;
+		}
+
+		break;
+	}
+
+	return true;
+}
+
 void ItemManager::ResetTrapData()
 {
 	this->_ActiveTrap = 0;
@@ -491,19 +625,6 @@ void ItemManager::OnFrameTrapQueue()
 	if (!(GameState == GameStates::GameStates_Ingame))
 	{
 		ResetTrapData();
-		return;
-	}
-
-	if (CurrentLevel == LevelIDs_Route101280 || CurrentLevel == LevelIDs_ChaoWorld || CurrentLevel == LevelIDs_FinalHazard)
-	{
-		this->_ActiveTrap = 0;
-		this->_TimeStopPos = NJS_VECTOR();
-		if (MainCharObj1[0])
-		{
-			MainCharObj1[0]->Scale.x = 1.0f;
-			MainCharObj1[0]->Scale.y = 1.0f;
-			MainCharObj1[0]->Scale.z = 1.0f;
-		}
 		return;
 	}
 
@@ -618,6 +739,10 @@ void ItemManager::OnFrameTrapQueue()
 			}
 		}
 	}
+	else if (this->_ActiveTrap == ItemValue::IV_PongTrap)
+	{
+		// Nothing
+	}
 
 	if (this->_ActiveTrapTimer > 0)
 	{
@@ -648,6 +773,15 @@ void ItemManager::OnFrameTrapQueue()
 	this->_ActiveTrap = this->_TrapQueue.front();
 	this->_TrapQueue.pop();
 
+	if (!this->IsActiveTrapValid())
+	{
+		// Add back to the end of the queue and grab another trap next frame
+		this->_TrapQueue.push(this->_ActiveTrap);
+		this->_ActiveTrap = 0;
+
+		return;
+	}
+
 	switch (this->_ActiveTrap)
 	{
 	case ItemValue::IV_OmochaoTrap:
@@ -674,73 +808,15 @@ void ItemManager::OnFrameTrapQueue()
 		}
 		break;
 	case ItemValue::IV_TinyTrap:
-		if (!MainCharObj1[0] || MainCharObj1[0]->Scale.x < 1.0f)
-		{
-			// Don't take a Tiny Trap when already Tiny
-			// Add back to the end of the queue and grab another trap next frame
-			this->_TrapQueue.push(this->_ActiveTrap);
-			this->_ActiveTrap = 0;
-
-			return;
-		}
 		PlayVoice(2, 1374);
 		break;
 	case ItemValue::IV_GravityTrap:
-		if (CurrentLevel == LevelIDs_CrazyGadget || CurrentLevel == LevelIDs_MadSpace || CurrentLevel == LevelIDs_FinalChase)
-		{
-			// These stages do too much weird stuff with gravity
-			// Add back to the end of the queue and grab another trap next frame
-			this->_TrapQueue.push(this->_ActiveTrap);
-			this->_ActiveTrap = 0;
-
-			return;
-		}
 		PlayVoice(2, 671);
 		break;
 	case ItemValue::IV_ExpositionTrap:
-		if (this->_DialogueQueue.size() > 0 || this->_ActiveDialogueTimer > 0)
-		{
-			// Add back to the end of the queue and grab another trap next frame
-			this->_TrapQueue.push(this->_ActiveTrap);
-			this->_ActiveTrap = 0;
-
-			return;
-		}
 		AddRandomDialogueToQueue();
 		break;
 	case ItemValue::IV_DarknessTrap:
-		if (CurrentLevel == LevelIDs_WildCanyon || //
-			CurrentLevel == LevelIDs_DeathChamber || //
-			CurrentLevel == LevelIDs_IronGate || //
-			CurrentLevel == LevelIDs_DryLagoon || //
-			CurrentLevel == LevelIDs_RadicalHighway ||
-			CurrentLevel == LevelIDs_EggQuarters || //
-			CurrentLevel == LevelIDs_LostColony ||
-			CurrentLevel == LevelIDs_WhiteJungle ||
-			CurrentLevel == LevelIDs_SkyRail ||
-			CurrentLevel == LevelIDs_MadSpace ||
-			CurrentLevel == LevelIDs_CosmicWall || //
-			CurrentLevel == LevelIDs_FinalChase || //
-			CurrentLevel == LevelIDs_CannonsCoreT || //
-			CurrentLevel == LevelIDs_CannonsCoreE || //
-			CurrentLevel == LevelIDs_CannonsCoreR || //
-			CurrentLevel == LevelIDs_CannonsCoreS || //
-			CurrentLevel == LevelIDs_GreenHill || //
-			CurrentLevel == LevelIDs_BigFoot || //
-			CurrentLevel == LevelIDs_HotShot || //
-			CurrentLevel == LevelIDs_EggGolemS || //
-			CurrentLevel == LevelIDs_EggGolemE || //
-			CurrentLevel == LevelIDs_KingBoomBoo || //
-			CurrentLevel == LevelIDs_Biolizard)
-		{
-			// These stages don't work correctly with the fog
-			// Add back to the end of the queue and grab another trap next frame
-			this->_TrapQueue.push(this->_ActiveTrap);
-			this->_ActiveTrap = 0;
-
-			return;
-		}
-
 		if (FogDataPtr)
 		{
 			this->_StoredFogData.color = FogDataPtr->color;
@@ -757,6 +833,10 @@ void ItemManager::OnFrameTrapQueue()
 		//	////LoadFogData_Fogtask("stg10_fog.bin", FogDataPtr);
 		//	PlayVoice(2, 1374);
 		//}
+		break;
+	case ItemValue::IV_PongTrap:
+		MinigameManager* minigameManager = &MinigameManager::GetInstance();
+		minigameManager->StartMinigame(ItemValue::IV_PongTrap);
 		break;
 	}
 

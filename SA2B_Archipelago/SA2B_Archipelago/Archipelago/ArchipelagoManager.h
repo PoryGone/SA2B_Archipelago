@@ -39,6 +39,8 @@ public:
 	void SetDeathLink(bool deathLinkActive);
 	void VerfyModVersion(int modVersion);
 
+	void AP_KillPlayer();
+
 	std::string GetSeedName() { return this->_seedName; };
 
 private:
