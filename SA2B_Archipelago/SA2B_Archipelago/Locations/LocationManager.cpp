@@ -69,9 +69,9 @@ void LocationManager::OnInitFunction(const char* path, const HelperFunctions& he
 	InitializeHiddenChecks(this->_HiddenData);
 	InitializeGoldBeetleChecks(this->_GoldBeetleData);
 	InitializeOmochaoChecks(this->_OmochaoData);
-	InitializeKartRaceChecks(this->_KartRaceData);
 	InitializeChaoGardenChecks(this->_ChaoGardenData);
 	InitializeChaoRacePacks(this->_ChaoRacePacks);
+	InitializeKartRaceChecks(this->_KartRaceData);
 }
 
 void LocationManager::OnFrameFunction()
@@ -387,7 +387,7 @@ void LocationManager::OnFrameOmochao()
 
 void LocationManager::OnFrameKartRace()
 {
-	if (!this->_kartRacesEnabled && this->_goal != 3)
+	if (this->_kartRacesEnabled == 0)
 	{
 		return;
 	}
@@ -768,7 +768,7 @@ void LocationManager::SetOmochaoEnabled(bool omochaoEnabled)
 	this->_omochaoEnabled = omochaoEnabled;
 }
 
-void LocationManager::SetKartRacesEnabled(bool kartRacesEnabled)
+void LocationManager::SetKartRacesEnabled(int kartRacesEnabled)
 {
 	this->_kartRacesEnabled = kartRacesEnabled;
 }

@@ -195,7 +195,7 @@ int StageSelectManager::GetGoal()
 	return this->_goal;
 }
 
-void StageSelectManager::SetKartRacesEnabled(bool kartRacesEnabled)
+void StageSelectManager::SetKartRacesEnabled(int kartRacesEnabled)
 {
 	this->_kartRacesEnabled = kartRacesEnabled;
 }
@@ -525,8 +525,9 @@ void StageSelectManager::HideMenuButtons()
 	KartRaceModeButton = 0x01;
 	BossBattleModeButton = 0x01;
 
-	if (this->_goal == 3 || this->_kartRacesEnabled)
+	if (this->_kartRacesEnabled == 2)
 	{
+		// Full Kart Race
 		KartRaceModeButton = 0x00;
 
 		WriteCall(static_cast<void*>((void*)0x68B56C), &KartRaceEmblem_Display_ASM);
@@ -538,6 +539,11 @@ void StageSelectManager::HideMenuButtons()
 		WriteCall(static_cast<void*>((void*)0x622999), &KartRaceEmblem_Grant_ASM);
 		WriteData<2>((void*)0x62299E, nullop);
 
+		WriteData<2>((void*)0x66542F, nullop); // Make Kart Race button always clickable
+	}
+	else if (this->_kartRacesEnabled == 1)
+	{
+		KartRaceModeButton = 0x00;
 		WriteData<2>((void*)0x66542F, nullop); // Make Kart Race button always clickable
 	}
 

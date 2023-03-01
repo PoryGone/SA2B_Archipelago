@@ -925,4 +925,8 @@ void InitializeKartRaceChecks(std::map<int, KartRaceCheckData>& outKartRaceCheck
     outKartRaceChecks[KartRaceCheck::KRC_Beginner_Rouge]    = KartRaceCheckData(0x01DEF67F);
     outKartRaceChecks[KartRaceCheck::KRC_Standard_Rouge]    = KartRaceCheckData(0x01DEF68C);
     outKartRaceChecks[KartRaceCheck::KRC_Expert_Rouge]      = KartRaceCheckData(0x01DEF699);
+
+    outKartRaceChecks[KartRaceCheck::KRC_Beginner_General] = KartRaceCheckData(0x01DEF5BC);
+    outKartRaceChecks[KartRaceCheck::KRC_Standard_General] = KartRaceCheckData(0x01DEF5C9);
+    outKartRaceChecks[KartRaceCheck::KRC_Expert_General]   = KartRaceCheckData(0x01DEF5D6);
 }

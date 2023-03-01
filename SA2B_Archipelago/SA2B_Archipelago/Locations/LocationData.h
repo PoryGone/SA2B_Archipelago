@@ -1380,5 +1380,9 @@ enum KartRaceCheck
     KRC_Expert_Eggman,
     KRC_Expert_Rouge,
 
+    KRC_Beginner_General,
+    KRC_Standard_General,
+    KRC_Expert_General,
+
     KRC_NUM_CHECKS
 };

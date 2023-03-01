@@ -39,7 +39,7 @@ public:
 	void SetHiddensEnabled(bool hiddenEnabled);
 	void SetGoldBeetlesEnabled(bool goldBeetlesEnabled);
 	void SetOmochaoEnabled(bool omochaoEnabled);
-	void SetKartRacesEnabled(bool kartRacesEnabled);
+	void SetKartRacesEnabled(int kartRacesEnabled);
 	void SetRacesPacked(bool racesPacked);
 	void SetChaoEnabled(bool chaoEnabled);
 	void SetRequiredCannonsCoreMissions(bool requireAllCannonsCoreMissions);
@@ -74,7 +74,7 @@ private:
 	bool _hiddensEnabled = false;
 	bool _goldBeetlesEnabled = false;
 	bool _omochaoEnabled = false;
-	bool _kartRacesEnabled = false;
+	int _kartRacesEnabled = 0;
 	bool _racesPacked = false;
 	bool _chaoEnabled = false;
 

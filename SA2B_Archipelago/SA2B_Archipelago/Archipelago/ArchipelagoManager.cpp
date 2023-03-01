@@ -463,16 +463,13 @@ void SA2_SetKartRaceChecks(int kartRaceChecks)
         return;
     }
 
-    if (kartRaceChecks > 0)
-    {
-        LocationManager* locationManager = &LocationManager::getInstance();
+    LocationManager* locationManager = &LocationManager::getInstance();
 
-        locationManager->SetKartRacesEnabled(true);
+    locationManager->SetKartRacesEnabled(kartRaceChecks);
 
-        StageSelectManager* stageSelectManager = &StageSelectManager::GetInstance();
+    StageSelectManager* stageSelectManager = &StageSelectManager::GetInstance();
 
-        stageSelectManager->SetKartRacesEnabled(true);
-    }
+    stageSelectManager->SetKartRacesEnabled(kartRaceChecks);
 }
 
 void SA2_SetRegionEmblemMap(std::map<int, int> map)
@@ -847,7 +844,7 @@ void ArchipelagoManager::VerfyModVersion(int modVersion)
 
 void ArchipelagoManager::AP_KillPlayer()
 {
-    if (CurrentLevel == LevelIDs::LevelIDs_Route101280)
+    if (CurrentLevel == LevelIDs::LevelIDs_Route101280 || CurrentLevel == LevelIDs::LevelIDs_KartRace)
     {
         if (!TimerStopped)
         {
