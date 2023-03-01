@@ -175,7 +175,10 @@ void StageSelectManager::OnFrameFunction()
 	HandleStageSelectCamera();
 	HandleMissionOrder();
 
-	StageSelectIcons::GetInstance().OnFrame();
+	if (CurrentMenu != Menus::Menus_Kart)
+	{
+		StageSelectIcons::GetInstance().OnFrame();
+	}
 
 }
 
@@ -921,7 +924,7 @@ void StageSelectManager::HandleMissionOrder()
 	WriteData<1>((void*)0x1DEEBB8, 0x30);
 
 	int currentTileStageIndex = this->TileIDtoStageIndex[SS_SelectedTile];
-	if (currentTileStageIndex < this->_chosenMissionsMap.size())
+	if (CurrentMenu == Menus::Menus_StageSelect && currentTileStageIndex < this->_chosenMissionsMap.size())
 	{
 		int missionOrderIndex = this->_chosenMissionsMap.at(currentTileStageIndex);
 

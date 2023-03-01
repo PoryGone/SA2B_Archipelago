@@ -642,6 +642,7 @@ void ArchipelagoManager::OnFrameMessageQueue()
         default:
         {
             std::string outMsg = msg->text;
+            outMsgs.push_back(outMsg);
         }
         }
 
