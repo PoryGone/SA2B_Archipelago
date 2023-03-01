@@ -41,6 +41,7 @@ enum ItemValue
     IV_RougePickNails,
     IV_RougeTreasureScope,
     IV_RougeIronBoots,
+    IV_END_UPGRADES = IV_RougeIronBoots,
 
     IV_Maria,
 
@@ -51,6 +52,7 @@ enum ItemValue
     IV_Shield,
     IV_MagneticShield,
     IV_Invincibility,
+    IV_END_JUNK = IV_Invincibility,
 
     IV_OmochaoTrap = 0x30,
     IV_TimeStopTrap,
@@ -59,7 +61,7 @@ enum ItemValue
     IV_GravityTrap,
     IV_ExpositionTrap,
     IV_DarknessTrap,
-    IV_PongTrap,
+    IV_END_TRAPS = IV_DarknessTrap,
 
     IV_WhiteChaosEmerald = 0x40,
     IV_RedChaosEmerald,
@@ -68,6 +70,10 @@ enum ItemValue
     IV_GreenChaosEmerald,
     IV_YellowChaosEmerald,
     IV_BlueChaosEmerald,
+    IV_END_CHAOS_EMERALDS = IV_BlueChaosEmerald,
+
+    IV_PongTrap = 0x50,
+    IV_END_MINIGAMES = IV_PongTrap,
 
     IV_NUM_ITEMS
 };
