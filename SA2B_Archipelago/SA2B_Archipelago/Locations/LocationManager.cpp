@@ -1005,6 +1005,7 @@ void LocationManager::SendOmochaoLocationCheck()
 
 					if (dataValue != 0x01)
 					{
+						MessageQueue::GetInstance().AddMessage("");
 						WriteData<1>((void*)checkData.Address, 0x01);
 					}
 
