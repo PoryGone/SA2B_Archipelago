@@ -1335,11 +1335,12 @@ struct OmochaoCheckData
 {
     OmochaoCheckData() : Address(0x00) {}
     OmochaoCheckData(int address, int levelID, NJS_VECTOR position) : Address(address), LevelID(levelID), Position(position) {}
+    OmochaoCheckData(int address, int levelID, NJS_VECTOR position, float range) : Address(address), LevelID(levelID), Position(position), Range(range) {}
 
     int Address;
     int LevelID = 0x00;
     NJS_VECTOR Position = { 0, 0, 0 };
-    float Range = 30.0f;
+    float Range = 150.0f;
     bool CheckSent = false;
 };
 

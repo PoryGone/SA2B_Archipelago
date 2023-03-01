@@ -592,8 +592,8 @@ void InitializeOmochaoChecks(std::map<int, OmochaoCheckData>& outOmochaoChecks)
     outOmochaoChecks[OmochaoCheck::OC_PumpkinHill_Omochao_10] = OmochaoCheckData(memoryAddress++, LevelIDs_PumpkinHill, { 14, -830, -1809 });
     outOmochaoChecks[OmochaoCheck::OC_PumpkinHill_Omochao_11] = OmochaoCheckData(memoryAddress++, LevelIDs_PumpkinHill, { 881, -730, -1048 });
 
-    outOmochaoChecks[OmochaoCheck::OC_AquaticMine_Omochao_1] = OmochaoCheckData(memoryAddress++, LevelIDs_AquaticMine, { 26, 130, -365 });
-    outOmochaoChecks[OmochaoCheck::OC_AquaticMine_Omochao_2] = OmochaoCheckData(memoryAddress++, LevelIDs_AquaticMine, { -29, 130, -365 });
+    outOmochaoChecks[OmochaoCheck::OC_AquaticMine_Omochao_1] = OmochaoCheckData(memoryAddress++, LevelIDs_AquaticMine, { 26, 130, -365 }, 30.0f);
+    outOmochaoChecks[OmochaoCheck::OC_AquaticMine_Omochao_2] = OmochaoCheckData(memoryAddress++, LevelIDs_AquaticMine, { -29, 130, -365 }, 30.0f);
     outOmochaoChecks[OmochaoCheck::OC_AquaticMine_Omochao_3] = OmochaoCheckData(memoryAddress++, LevelIDs_AquaticMine, { -4, 310, -79 });
     outOmochaoChecks[OmochaoCheck::OC_AquaticMine_Omochao_4] = OmochaoCheckData(memoryAddress++, LevelIDs_AquaticMine, { 9, -80, 248 });
     outOmochaoChecks[OmochaoCheck::OC_AquaticMine_Omochao_5] = OmochaoCheckData(memoryAddress++, LevelIDs_AquaticMine, { 250, -80, -70 });
