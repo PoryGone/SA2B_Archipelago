@@ -1127,6 +1127,23 @@ bool LocationManager::AreAllRacesComplete()
 {
 	for (auto& pair : this->_KartRaceData)
 	{
+		if (this->_kartRacesEnabled == 1)
+		{
+			// Mini
+			if (pair.first <= KartRaceCheck::KRC_Expert_Rouge)
+			{
+				continue;
+			}
+		}
+		else
+		{
+			// Full
+			if (pair.first > KartRaceCheck::KRC_Expert_Rouge)
+			{
+				continue;
+			}
+		}
+
 		if (!pair.second.CheckSent)
 		{
 			return false;
