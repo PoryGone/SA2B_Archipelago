@@ -270,6 +270,10 @@ void SA2_SetDeathLink(int deathLinkActive)
 
 void SA2_SetGoal(int goal)
 {
+    // Best place to detect we've connected
+    MessageQueue* messageQueue = &MessageQueue::GetInstance();
+    messageQueue->AddMessage("Connected to Archipelago");
+
     LocationManager* locationManager = &LocationManager::getInstance();
 
     locationManager->SetGoal(goal);
@@ -565,6 +569,7 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_RegisterSlotDataIntCallback("KartRaceChecks", &SA2_SetKartRaceChecks);
     AP_RegisterSlotDataIntCallback("ChaoRaceChecks", &SA2_SetChaoPacks);
     AP_RegisterSlotDataIntCallback("ChaoGardenDifficulty", &SA2_SetChaoDifficulty);
+    AP_RegisterSlotDataIntCallback("MinigameTrapDifficulty", &SA2_SetMinigameDifficulty);
     AP_RegisterSlotDataMapIntIntCallback("RegionEmblemMap", &SA2_SetRegionEmblemMap);
     AP_RegisterSlotDataMapIntIntCallback("MissionMap", &SA2_SetChosenMissionsMap);
     AP_RegisterSlotDataMapIntIntCallback("MissionCountMap", &SA2_SetMissionCountMap);
@@ -641,8 +646,9 @@ void ArchipelagoManager::OnFrameMessageQueue()
         }
         default:
         {
-            std::string outMsg = msg->text;
-            outMsgs.push_back(outMsg);
+            // Currently too much spam, maybe more types in future
+            //std::string outMsg = msg->text;
+            //outMsgs.push_back(outMsg);
         }
         }
 

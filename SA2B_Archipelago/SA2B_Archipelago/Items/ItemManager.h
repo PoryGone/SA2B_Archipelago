@@ -30,6 +30,7 @@ public:
 	void ResetItems();
 	void ReceiveItem(int item_id, bool notify);
 	bool IsOmotrapActive();
+	void HandleJunk(int item_id);
 
 	std::vector<int> GetChaosEmeraldAddresses();
 
@@ -37,7 +38,6 @@ public:
 
 private:
 	void HandleEquipment(int EquipmentItem);
-	void HandleJunk(int item_id);
 	void HandleTrap(int item_id);
 	bool IsActiveTrapValid();
 	void ResetTrapData();
