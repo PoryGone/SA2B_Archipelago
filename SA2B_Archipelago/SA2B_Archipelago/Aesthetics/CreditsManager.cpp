@@ -42,7 +42,7 @@ void GenerateAPCredits(std::vector<SA2BCreditsEntry>& apCredits)
 	apCredits.emplace_back();
 	apCredits.push_back(SA2BCreditsEntry(CreditsEntryType::CET_Name, SA2B_AP_Color, "PORYGONE"));
 	apCredits.push_back(SA2BCreditsEntry(CreditsEntryType::CET_Name, SA2B_AP_Color, "RASPBERRYSPACEJAM"));
-	apCredits.emplace_back();
+	apCredits.push_back(SA2BCreditsEntry(CreditsEntryType::CET_Name, SA2B_AP_Color, "MR TATERS"));
 	apCredits.emplace_back();
 	apCredits.push_back(SA2BCreditsEntry(CreditsEntryType::CET_Title, SA2B_AP_Color, "AP Randomizer Special Thanks"));
 	apCredits.emplace_back();
