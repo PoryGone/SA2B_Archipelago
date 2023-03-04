@@ -6,7 +6,7 @@
 #include <map>
 
 constexpr unsigned int AP_ID_OFFSET = 0xFF0000;
-constexpr int MOD_VERSION = 200;
+constexpr int MOD_VERSION = 201;
 
 constexpr int KEEP_ALIVE = 3600;
 
