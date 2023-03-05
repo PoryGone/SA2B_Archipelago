@@ -637,14 +637,14 @@ void InitializeOmochaoChecks(std::map<int, OmochaoCheckData>& outOmochaoChecks)
     outOmochaoChecks[OmochaoCheck::OC_IronGate_Omochao_5] = OmochaoCheckData(memoryAddress++, LevelIDs_IronGate, { 4811, -1366, -770 });
     outOmochaoChecks[OmochaoCheck::OC_IronGate_Omochao_6] = OmochaoCheckData(memoryAddress++, LevelIDs_IronGate, { 5404, -1421, -1202 });
 
-    outOmochaoChecks[OmochaoCheck::OC_WeaponsBed_Omochao_1] = OmochaoCheckData(memoryAddress++, LevelIDs_WeaponsBed, { -41, -160, -1906 });
-    outOmochaoChecks[OmochaoCheck::OC_WeaponsBed_Omochao_2] = OmochaoCheckData(memoryAddress++, LevelIDs_WeaponsBed, { 15, -130, -2033 });
+    outOmochaoChecks[OmochaoCheck::OC_WeaponsBed_Omochao_1] = OmochaoCheckData(memoryAddress++, LevelIDs_WeaponsBed, { -41, -160, -1906 }, 80.0f);
+    outOmochaoChecks[OmochaoCheck::OC_WeaponsBed_Omochao_2] = OmochaoCheckData(memoryAddress++, LevelIDs_WeaponsBed, { 15, -130, -2033 }, 100.0f);
     outOmochaoChecks[OmochaoCheck::OC_WeaponsBed_Omochao_3] = OmochaoCheckData(memoryAddress++, LevelIDs_WeaponsBed, { 898, -220, -3277 });
 
     outOmochaoChecks[OmochaoCheck::OC_CityEscape_Omochao_1]  = OmochaoCheckData(memoryAddress++, LevelIDs_CityEscape, { -1383, -6260, 9362 });
     outOmochaoChecks[OmochaoCheck::OC_CityEscape_Omochao_2]  = OmochaoCheckData(memoryAddress++, LevelIDs_CityEscape, { -767, -6365, 9802 });
-    outOmochaoChecks[OmochaoCheck::OC_CityEscape_Omochao_3]  = OmochaoCheckData(memoryAddress++, LevelIDs_CityEscape, { -546, -6270, 9989 });
-    outOmochaoChecks[OmochaoCheck::OC_CityEscape_Omochao_4]  = OmochaoCheckData(memoryAddress++, LevelIDs_CityEscape, { -410, -6270, 9995 });
+    outOmochaoChecks[OmochaoCheck::OC_CityEscape_Omochao_3]  = OmochaoCheckData(memoryAddress++, LevelIDs_CityEscape, { -546, -6270, 9989 }, 90.0f);
+    outOmochaoChecks[OmochaoCheck::OC_CityEscape_Omochao_4]  = OmochaoCheckData(memoryAddress++, LevelIDs_CityEscape, { -410, -6270, 9995 }, 90.0f);
     outOmochaoChecks[OmochaoCheck::OC_CityEscape_Omochao_5]  = OmochaoCheckData(memoryAddress++, LevelIDs_CityEscape, { 382, -6570, 9963 });
     outOmochaoChecks[OmochaoCheck::OC_CityEscape_Omochao_6]  = OmochaoCheckData(memoryAddress++, LevelIDs_CityEscape, { 349, -6470, 9623 });
     outOmochaoChecks[OmochaoCheck::OC_CityEscape_Omochao_7]  = OmochaoCheckData(memoryAddress++, LevelIDs_CityEscape, { 2048, -9005, 6426 });
@@ -691,8 +691,8 @@ void InitializeOmochaoChecks(std::map<int, OmochaoCheckData>& outOmochaoChecks)
     outOmochaoChecks[OmochaoCheck::OC_DryLagoon_Omochao_4]  = OmochaoCheckData(memoryAddress++, LevelIDs_DryLagoon, { 190, 170, -66 });
     outOmochaoChecks[OmochaoCheck::OC_DryLagoon_Omochao_5]  = OmochaoCheckData(memoryAddress++, LevelIDs_DryLagoon, { -106, 170, -112 });
     outOmochaoChecks[OmochaoCheck::OC_DryLagoon_Omochao_6]  = OmochaoCheckData(memoryAddress++, LevelIDs_DryLagoon, { 193, 457, 307 });
-    outOmochaoChecks[OmochaoCheck::OC_DryLagoon_Omochao_7]  = OmochaoCheckData(memoryAddress++, LevelIDs_DryLagoon, { 72, 203, 1347 });
-    outOmochaoChecks[OmochaoCheck::OC_DryLagoon_Omochao_8]  = OmochaoCheckData(memoryAddress++, LevelIDs_DryLagoon, { 195, 224, 1619 });
+    outOmochaoChecks[OmochaoCheck::OC_DryLagoon_Omochao_7]  = OmochaoCheckData(memoryAddress++, LevelIDs_DryLagoon, { 72, 203, 1347 }, 100.0f);
+    outOmochaoChecks[OmochaoCheck::OC_DryLagoon_Omochao_8]  = OmochaoCheckData(memoryAddress++, LevelIDs_DryLagoon, { 195, 224, 1619 }, 70.0f);
     outOmochaoChecks[OmochaoCheck::OC_DryLagoon_Omochao_9]  = OmochaoCheckData(memoryAddress++, LevelIDs_DryLagoon, { 182, 89, 1665 });
     outOmochaoChecks[OmochaoCheck::OC_DryLagoon_Omochao_10] = OmochaoCheckData(memoryAddress++, LevelIDs_DryLagoon, { 86, 200, 949 });
     outOmochaoChecks[OmochaoCheck::OC_DryLagoon_Omochao_11] = OmochaoCheckData(memoryAddress++, LevelIDs_DryLagoon, { 1069, 310, 1410 });
@@ -743,8 +743,8 @@ void InitializeOmochaoChecks(std::map<int, OmochaoCheckData>& outOmochaoChecks)
     outOmochaoChecks[OmochaoCheck::OC_DeathChamber_Omochao_8] = OmochaoCheckData(memoryAddress++, LevelIDs_DeathChamber, { 251, 150, -278 });
     outOmochaoChecks[OmochaoCheck::OC_DeathChamber_Omochao_9] = OmochaoCheckData(memoryAddress++, LevelIDs_DeathChamber, { -200, -280, -200 });
 
-    outOmochaoChecks[OmochaoCheck::OC_EggQuarters_Omochao_1] = OmochaoCheckData(memoryAddress++, LevelIDs_EggQuarters, { 886, -10, 870 });
-    outOmochaoChecks[OmochaoCheck::OC_EggQuarters_Omochao_2] = OmochaoCheckData(memoryAddress++, LevelIDs_EggQuarters, { 792, 20, 791 });
+    outOmochaoChecks[OmochaoCheck::OC_EggQuarters_Omochao_1] = OmochaoCheckData(memoryAddress++, LevelIDs_EggQuarters, { 886, -10, 870 }, 70.0f);
+    outOmochaoChecks[OmochaoCheck::OC_EggQuarters_Omochao_2] = OmochaoCheckData(memoryAddress++, LevelIDs_EggQuarters, { 792, 20, 791 }, 70.0f);
     outOmochaoChecks[OmochaoCheck::OC_EggQuarters_Omochao_3] = OmochaoCheckData(memoryAddress++, LevelIDs_EggQuarters, { -382, -30, 1295 });
     outOmochaoChecks[OmochaoCheck::OC_EggQuarters_Omochao_4] = OmochaoCheckData(memoryAddress++, LevelIDs_EggQuarters, { -828, 20, 824 });
     outOmochaoChecks[OmochaoCheck::OC_EggQuarters_Omochao_5] = OmochaoCheckData(memoryAddress++, LevelIDs_EggQuarters, { -2, 70, 219 });
@@ -754,8 +754,8 @@ void InitializeOmochaoChecks(std::map<int, OmochaoCheckData>& outOmochaoChecks)
     outOmochaoChecks[OmochaoCheck::OC_LostColony_Omochao_1] = OmochaoCheckData(memoryAddress++, LevelIDs_LostColony, { 30, -35, -194 });
     outOmochaoChecks[OmochaoCheck::OC_LostColony_Omochao_2] = OmochaoCheckData(memoryAddress++, LevelIDs_LostColony, { -1426, -643, -719 });
     outOmochaoChecks[OmochaoCheck::OC_LostColony_Omochao_3] = OmochaoCheckData(memoryAddress++, LevelIDs_LostColony, { -1375, -793, -1471 });
-    outOmochaoChecks[OmochaoCheck::OC_LostColony_Omochao_4] = OmochaoCheckData(memoryAddress++, LevelIDs_LostColony, { -1573, -633, -2031 });
-    outOmochaoChecks[OmochaoCheck::OC_LostColony_Omochao_5] = OmochaoCheckData(memoryAddress++, LevelIDs_LostColony, { -1656, -568, -2142 });
+    outOmochaoChecks[OmochaoCheck::OC_LostColony_Omochao_4] = OmochaoCheckData(memoryAddress++, LevelIDs_LostColony, { -1573, -633, -2031 }, 100.0f);
+    outOmochaoChecks[OmochaoCheck::OC_LostColony_Omochao_5] = OmochaoCheckData(memoryAddress++, LevelIDs_LostColony, { -1656, -568, -2142 }, 100.0f);
     outOmochaoChecks[OmochaoCheck::OC_LostColony_Omochao_6] = OmochaoCheckData(memoryAddress++, LevelIDs_LostColony, { 560, -518, -2290 });
     outOmochaoChecks[OmochaoCheck::OC_LostColony_Omochao_7] = OmochaoCheckData(memoryAddress++, LevelIDs_LostColony, { 3289, 1911, -2374 });
     outOmochaoChecks[OmochaoCheck::OC_LostColony_Omochao_8] = OmochaoCheckData(memoryAddress++, LevelIDs_LostColony, { 4026, 1552, -2442 });
