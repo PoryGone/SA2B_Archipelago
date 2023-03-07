@@ -29,10 +29,18 @@ void MessageQueue::OnFrameFunction()
 	//Move Messages Down
 	for (int i = 1; i < this->_displayCount; i++)
 	{
-		if (currentMessages[i-1].message.empty() && !currentMessages[i].message.empty())
+		if (!currentMessages[i].message.empty())
 		{
-			currentMessages[i - 1] = currentMessages[i];
-			currentMessages[i] = TimeStampedMessage();
+			int b = 1;
+			while (i - b > 1 && currentMessages[i - b - 1].message.empty())
+			{
+				b++;
+			}
+			if (currentMessages[i - b].message.empty())
+			{
+				currentMessages[i - b] = currentMessages[i];
+				currentMessages[i] = TimeStampedMessage();
+			}
 		}
 	}
 	//Add New Messages
