@@ -334,7 +334,7 @@ void ItemManager::OnFrameJunkQueue()
 		return;
 	}
 
-	if (CurrentLevel == LevelIDs_Route101280 || CurrentLevel == LevelIDs_ChaoWorld || CurrentLevel == LevelIDs_FinalHazard)
+	if (CurrentLevel == LevelIDs_Route101280 || CurrentLevel == LevelIDs_KartRace || CurrentLevel == LevelIDs_ChaoWorld || CurrentLevel == LevelIDs_FinalHazard)
 	{
 		return;
 	}
@@ -538,8 +538,7 @@ bool ItemManager::IsActiveTrapValid()
 		}
 		break;
 	case ItemValue::IV_ExpositionTrap:
-		if (CurrentLevel == LevelIDs_ChaoWorld ||
-			CurrentLevel == LevelIDs_FinalHazard)
+		if (CurrentLevel == LevelIDs_ChaoWorld)
 		{
 			return false;
 		}
@@ -587,8 +586,7 @@ bool ItemManager::IsActiveTrapValid()
 		}
 		break;
 	case ItemValue::IV_PongTrap:
-		if (CurrentLevel == LevelIDs_ChaoWorld ||
-			CurrentLevel == LevelIDs_FinalHazard)
+		if (CurrentLevel == LevelIDs_ChaoWorld)
 		{
 			return false;
 		}
