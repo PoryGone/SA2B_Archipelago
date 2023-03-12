@@ -490,8 +490,7 @@ bool ItemManager::IsActiveTrapValid()
 	case ItemValue::IV_TimeStopTrap:
 		if (CurrentLevel == LevelIDs_Route101280 ||
 			CurrentLevel == LevelIDs_KartRace ||
-			CurrentLevel == LevelIDs_ChaoWorld ||
-			CurrentLevel == LevelIDs_FinalHazard)
+			CurrentLevel == LevelIDs_ChaoWorld)
 		{
 			return false;
 		}
@@ -499,8 +498,7 @@ bool ItemManager::IsActiveTrapValid()
 	case ItemValue::IV_ConfuseTrap:
 		if (CurrentLevel == LevelIDs_Route101280 ||
 			CurrentLevel == LevelIDs_KartRace ||
-			CurrentLevel == LevelIDs_ChaoWorld ||
-			CurrentLevel == LevelIDs_FinalHazard)
+			CurrentLevel == LevelIDs_ChaoWorld)
 		{
 			return false;
 		}
