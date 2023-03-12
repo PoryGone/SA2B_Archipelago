@@ -39,6 +39,8 @@ void Pong::OnGameStart(MinigameManagerData data)
 	{
 		this->activeAIChance = PONG_AI_HARD_CHANCE;
 	}
+
+	PlaySoundProbably(PONG_SOUND_BEGIN, 0, 0, 0);
 }
 
 void Pong::OnFrame(MinigameManagerData data)
@@ -104,6 +106,8 @@ void Pong::HandleCollision(MinigameManagerData data)
 
 			this->ballSpeedX = sin(DegToRad(newAngle)) * PONG_BALL_SPEED;
 			this->ballSpeedY = -cos(DegToRad(newAngle)) * PONG_BALL_SPEED;
+
+			PlaySoundProbably(PONG_SOUND_PLAYER_PADDLE, 0, 0, 0);
 		}
 	}
 
@@ -122,6 +126,8 @@ void Pong::HandleCollision(MinigameManagerData data)
 
 			this->ballSpeedX = sin(DegToRad(newAngle)) * PONG_BALL_SPEED;
 			this->ballSpeedY = -cos(DegToRad(newAngle)) * PONG_BALL_SPEED;
+
+			PlaySoundProbably(PONG_SOUND_AI_PADDLE, 0, 0, 0);
 		}
 	}
 
@@ -129,18 +135,24 @@ void Pong::HandleCollision(MinigameManagerData data)
 	if ((this->ballPos.x + PONG_BALL_RADIUS) >= PONG_RIGHT)
 	{
 		this->currentState = MinigameState::MGS_Victory;
+
+		PlaySoundProbably(PONG_SOUND_WIN, 0, 0, 0);
 	}
 
 	// You Lose (past the Player Paddle)
 	if ((this->ballPos.x - PONG_BALL_RADIUS) <= PONG_LEFT)
 	{
 		this->currentState = MinigameState::MGS_Loss;
+
+		PlaySoundProbably(PONG_SOUND_LOSE, 0, 0, 0);
 	}
 
 	// Top/bottom bounce
 	if ((this->ballPos.y - PONG_BALL_RADIUS) <= PONG_TOP || (this->ballPos.y + PONG_BALL_RADIUS) >= PONG_BOTTOM)
 	{
 		this->ballSpeedY = -this->ballSpeedY;
+
+		PlaySoundProbably(PONG_SOUND_BOUNDS, 0, 0, 0);
 	}
 
 	// Paddle Bounding

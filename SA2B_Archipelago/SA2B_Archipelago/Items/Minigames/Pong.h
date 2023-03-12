@@ -32,6 +32,14 @@
 #define PONG_AI_MEDIUM_CHANCE 75
 #define PONG_AI_HARD_CHANCE   95
 
+// Sound Data
+#define PONG_SOUND_BEGIN         0x8019
+#define PONG_SOUND_PLAYER_PADDLE 0x8001
+#define PONG_SOUND_AI_PADDLE     0x8002
+#define PONG_SOUND_BOUNDS        0x8000
+#define PONG_SOUND_WIN           0x8006
+#define PONG_SOUND_LOSE          0x8012
+
 
 class Pong : public MinigameBase
 {
