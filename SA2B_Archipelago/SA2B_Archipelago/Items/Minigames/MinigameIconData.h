@@ -10,7 +10,9 @@ enum MinigameIcon
 	MGI_RoundedBarDark_Top		= 5,
 	MGI_RoundedBarDark_Bottom	= 6,
 	MGI_RoundedBarDark_Mid		= 7,
-	MGI_Spinball				= 8,
+	MGI_DPad_Inactive			= 8,
+	MGI_DPad_Active				= 9,
+	MGI_Spinball				= 10,
 };
 
 class MinigameIconData
