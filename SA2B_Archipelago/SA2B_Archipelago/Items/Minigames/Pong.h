@@ -1,5 +1,6 @@
 #pragma once
 #include "MinigameBase.h"
+#include "MinigameUtilities.h"
 
 
 // Pong Boundaries

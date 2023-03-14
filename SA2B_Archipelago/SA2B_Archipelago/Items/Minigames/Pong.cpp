@@ -177,6 +177,8 @@ void Pong::HandleCollision(MinigameManagerData data)
 
 void Pong::OnFrameDraw(MinigameManagerData data)
 {
+	DrawDPad(RIF_Down | RIF_Up, { 45.0f, 130.0f, 0.0f }, 45.0f, *data.icons);
+
 	NJS_SPRITE sprite = { { 0.0f, 0.0f, 0.0f }, 1.0f, 1.0f, 0, data.icons->MinigameTex, data.icons->MinigameAnims };
 
 	// Left Paddle Sprite (Player)
