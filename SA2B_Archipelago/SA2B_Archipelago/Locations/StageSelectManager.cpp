@@ -13,6 +13,7 @@ const char nullop = '\x90';
 void* japaneseStageTitleAtlas_ptr = (void*)0x676837;
 
 DataPointer(char, StoryModeButton, 0x1D1BC01);
+DataPointer(char, StageSelectModeButton, 0x1D1BC02);
 DataPointer(char, KartRaceModeButton, 0x1D1BC03);
 DataPointer(char, BossBattleModeButton, 0x1D1BC04);
 DataPointer(char, SP_SelectedButton, 0x1D1BC00);
@@ -100,6 +101,34 @@ void __cdecl MissionDisplay_End_ASM()
 	}
 }
 
+void __cdecl KartRaceEmblem_Display_ASM()
+{
+	__asm
+	{
+		push  edx
+		movzx edx, byte ptr ds:[0x1D1B814]
+		imul  edx, edx, 0x03
+		add   ecx, edx
+		pop   edx
+
+		fadd  qword ptr ds : [0x904DC0]
+	}
+}
+
+void __cdecl KartRaceEmblem_Grant_ASM()
+{
+	__asm
+	{
+		push  ecx
+		movzx ecx, byte ptr ds:[0x1D1B814]
+		imul  ecx, ecx, 0x03
+		add   edx, ecx
+		pop   ecx
+
+		movsx eax, byte ptr ds:[0x1D94422]
+	}
+}
+
 
 void StageSelectManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
 {
@@ -133,7 +162,6 @@ void StageSelectManager::OnInitFunction(const char* path, const HelperFunctions&
 
 void StageSelectManager::OnFrameFunction()
 {
-	
 	if (CurrentMenu == Menus::Menus_Main)
 	{
 		SS_SelectedTile = this->_firstStageIndex;
@@ -147,7 +175,10 @@ void StageSelectManager::OnFrameFunction()
 	HandleStageSelectCamera();
 	HandleMissionOrder();
 
-	StageSelectIcons::GetInstance().OnFrame();
+	if (CurrentMenu != Menus::Menus_Kart)
+	{
+		StageSelectIcons::GetInstance().OnFrame();
+	}
 
 }
 
@@ -165,6 +196,11 @@ void StageSelectManager::SetGoal(int goal)
 int StageSelectManager::GetGoal()
 {
 	return this->_goal;
+}
+
+void StageSelectManager::SetKartRacesEnabled(int kartRacesEnabled)
+{
+	this->_kartRacesEnabled = kartRacesEnabled;
 }
 
 void StageSelectManager::SetEmblemsForCannonsCore(int emblemsRequired)
@@ -488,12 +524,50 @@ void StageSelectManager::UpdateTitleHeaderArrays()
 void StageSelectManager::HideMenuButtons()
 {
 	StoryModeButton = 0x01;
-	if (SP_SelectedButton == 0x00)
-	{
-		SP_SelectedButton = 0x01;
-	}
+	StageSelectModeButton = 0x00;
 	KartRaceModeButton = 0x01;
 	BossBattleModeButton = 0x01;
+
+	if (this->_kartRacesEnabled == 2)
+	{
+		// Full Kart Race
+		KartRaceModeButton = 0x00;
+
+		WriteCall(static_cast<void*>((void*)0x68B56C), &KartRaceEmblem_Display_ASM);
+		WriteData<1>((void*)0x68B571, nullop);
+
+		WriteData<1>((void*)0x68B582, '\x01');
+		WriteData<1>((void*)0x68B583, '\x75');
+
+		WriteCall(static_cast<void*>((void*)0x622999), &KartRaceEmblem_Grant_ASM);
+		WriteData<2>((void*)0x62299E, nullop);
+
+		WriteData<2>((void*)0x66542F, nullop); // Make Kart Race button always clickable
+	}
+	else if (this->_kartRacesEnabled == 1)
+	{
+		KartRaceModeButton = 0x00;
+		WriteData<2>((void*)0x66542F, nullop); // Make Kart Race button always clickable
+	}
+
+	if (this->_goal == 3)
+	{
+		if (SP_SelectedButton == 0x00)
+		{
+			SP_SelectedButton = 0x02;
+		}
+
+		WriteData<2>((void*)0x6653C9, nullop); // Make Stage Select button never clickable
+	}
+	else
+	{
+		if (SP_SelectedButton == 0x00)
+		{
+			SP_SelectedButton = 0x01;
+		}
+
+		WriteData<1>((void*)0x6653C9, '\xEB'); // Make Stage Select button always clickable
+	}
 
 	EmblemResultsButton = 0x01;
 	if (Extras_SelectedButton == 0x02)
@@ -561,6 +635,10 @@ void StageSelectManager::HandleGoal()
 	else if (this->_goal == 1 || this->_goal == 2)
 	{
 		HandleGreenHill();
+	}
+	else if (this->_goal == 3)
+	{
+		HandleGrandPrix();
 	}
 }
 
@@ -764,6 +842,27 @@ void StageSelectManager::HandleGreenHill()
 	}
 }
 
+void StageSelectManager::HandleGrandPrix()
+{
+	if (this->_victorySent)
+	{
+		return;
+	}
+
+	LocationManager* locationManager = &LocationManager::getInstance();
+	if (locationManager->AreAllRacesComplete())
+	{
+		MessageQueue* messageQueue = &MessageQueue::GetInstance();
+		std::string msg = "Victory!";
+		messageQueue->AddMessage(msg);
+
+		ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
+		apm->SendStoryComplete();
+
+		this->_victorySent = true;
+	}
+}
+
 void TurnOffVanillaCamera()
 {
 	WriteData<7>((void*)0x677456, nullop);
@@ -825,7 +924,7 @@ void StageSelectManager::HandleMissionOrder()
 	WriteData<1>((void*)0x1DEEBB8, 0x30);
 
 	int currentTileStageIndex = this->TileIDtoStageIndex[SS_SelectedTile];
-	if (currentTileStageIndex < this->_chosenMissionsMap.size())
+	if (CurrentMenu == Menus::Menus_StageSelect && currentTileStageIndex < this->_chosenMissionsMap.size())
 	{
 		int missionOrderIndex = this->_chosenMissionsMap.at(currentTileStageIndex);
 

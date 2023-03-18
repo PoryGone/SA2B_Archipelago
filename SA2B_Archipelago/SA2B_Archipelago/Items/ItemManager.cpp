@@ -164,7 +164,7 @@ void ItemManager::ReceiveItem(int item_id, bool notify)
 			}
 		}
 	}
-	else if (item_id < ItemValue::IV_Maria) // Upgrades
+	else if (item_id <= ItemValue::IV_END_UPGRADES) // Upgrades
 	{
 		ItemData& receivedItem = this->_ItemData[item_id];
 
@@ -195,7 +195,7 @@ void ItemManager::ReceiveItem(int item_id, bool notify)
 			}
 		}
 	}
-	else if (item_id <= ItemValue::IV_Invincibility) // Junk
+	else if (item_id <= ItemValue::IV_END_JUNK) // Junk
 	{
 		if (this->_thisSessionChecksReceived > SavedChecksReceived)
 		{
@@ -211,7 +211,7 @@ void ItemManager::ReceiveItem(int item_id, bool notify)
 			messageQueue->AddMessage(message);
 		}
 	}
-	else if (item_id <= ItemValue::IV_PongTrap) // Trap
+	else if (item_id <= ItemValue::IV_END_TRAPS) // Trap
 	{
 		if (this->_thisSessionChecksReceived > SavedChecksReceived)
 		{
@@ -221,7 +221,7 @@ void ItemManager::ReceiveItem(int item_id, bool notify)
 			SavedChecksReceived = this->_thisSessionChecksReceived;
 		}
 	}
-	else if (item_id <= ItemValue::IV_BlueChaosEmerald) // Chaos Emerald
+	else if (item_id <= ItemValue::IV_END_CHAOS_EMERALDS) // Chaos Emerald
 	{
 		ItemData& receivedItem = this->_ItemData[item_id];
 
@@ -234,6 +234,16 @@ void ItemManager::ReceiveItem(int item_id, bool notify)
 			std::string message = std::string("Received ");
 			message += receivedItem.DisplayName;
 			messageQueue->AddMessage(message);
+		}
+	}
+	else if (item_id <= ItemValue::IV_END_MINIGAMES) // Minigame Trap
+	{
+		if (this->_thisSessionChecksReceived > SavedChecksReceived)
+		{
+			// Don't recollect the trap items
+			this->HandleTrap(item_id);
+
+			SavedChecksReceived = this->_thisSessionChecksReceived;
 		}
 	}
 	else
@@ -324,7 +334,7 @@ void ItemManager::OnFrameJunkQueue()
 		return;
 	}
 
-	if (CurrentLevel == LevelIDs_Route101280 || CurrentLevel == LevelIDs_ChaoWorld || CurrentLevel == LevelIDs_FinalHazard)
+	if (CurrentLevel == LevelIDs_Route101280 || CurrentLevel == LevelIDs_KartRace || CurrentLevel == LevelIDs_ChaoWorld || CurrentLevel == LevelIDs_FinalHazard)
 	{
 		return;
 	}
@@ -480,8 +490,7 @@ bool ItemManager::IsActiveTrapValid()
 	case ItemValue::IV_TimeStopTrap:
 		if (CurrentLevel == LevelIDs_Route101280 ||
 			CurrentLevel == LevelIDs_KartRace ||
-			CurrentLevel == LevelIDs_ChaoWorld ||
-			CurrentLevel == LevelIDs_FinalHazard)
+			CurrentLevel == LevelIDs_ChaoWorld)
 		{
 			return false;
 		}
@@ -489,8 +498,7 @@ bool ItemManager::IsActiveTrapValid()
 	case ItemValue::IV_ConfuseTrap:
 		if (CurrentLevel == LevelIDs_Route101280 ||
 			CurrentLevel == LevelIDs_KartRace ||
-			CurrentLevel == LevelIDs_ChaoWorld ||
-			CurrentLevel == LevelIDs_FinalHazard)
+			CurrentLevel == LevelIDs_ChaoWorld)
 		{
 			return false;
 		}
@@ -528,8 +536,7 @@ bool ItemManager::IsActiveTrapValid()
 		}
 		break;
 	case ItemValue::IV_ExpositionTrap:
-		if (CurrentLevel == LevelIDs_ChaoWorld ||
-			CurrentLevel == LevelIDs_FinalHazard)
+		if (CurrentLevel == LevelIDs_ChaoWorld)
 		{
 			return false;
 		}
@@ -577,8 +584,7 @@ bool ItemManager::IsActiveTrapValid()
 		}
 		break;
 	case ItemValue::IV_PongTrap:
-		if (CurrentLevel == LevelIDs_ChaoWorld ||
-			CurrentLevel == LevelIDs_FinalHazard)
+		if (CurrentLevel == LevelIDs_ChaoWorld)
 		{
 			return false;
 		}

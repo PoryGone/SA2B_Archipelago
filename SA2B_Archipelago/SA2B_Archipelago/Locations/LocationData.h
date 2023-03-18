@@ -1335,12 +1335,55 @@ struct OmochaoCheckData
 {
     OmochaoCheckData() : Address(0x00) {}
     OmochaoCheckData(int address, int levelID, NJS_VECTOR position) : Address(address), LevelID(levelID), Position(position) {}
+    OmochaoCheckData(int address, int levelID, NJS_VECTOR position, float range) : Address(address), LevelID(levelID), Position(position), Range(range) {}
 
     int Address;
     int LevelID = 0x00;
     NJS_VECTOR Position = { 0, 0, 0 };
-    float Range = 30.0f;
+    float Range = 150.0f;
     bool CheckSent = false;
 };
 
 void InitializeOmochaoChecks(std::map<int, OmochaoCheckData>& outOmochaoChecks);
+
+struct KartRaceCheckData
+{
+    KartRaceCheckData() : Address(0x00) {}
+    KartRaceCheckData(int address) : Address(address) {}
+
+    int Address;
+    bool CheckSent = false;
+};
+
+void InitializeKartRaceChecks(std::map<int, KartRaceCheckData>& outKartRaceChecks);
+
+enum KartRaceCheck
+{
+    KRC_BEGIN = 0xA00,
+    KRC_Beginner_Sonic = 0xA00,
+    KRC_Beginner_Tails,
+    KRC_Beginner_Knuckles,
+    KRC_Beginner_Shadow,
+    KRC_Beginner_Eggman,
+    KRC_Beginner_Rouge,
+
+    KRC_Standard_Sonic,
+    KRC_Standard_Tails,
+    KRC_Standard_Knuckles,
+    KRC_Standard_Shadow,
+    KRC_Standard_Eggman,
+    KRC_Standard_Rouge,
+
+    KRC_Expert_Sonic,
+    KRC_Expert_Tails,
+    KRC_Expert_Knuckles,
+    KRC_Expert_Shadow,
+    KRC_Expert_Eggman,
+    KRC_Expert_Rouge,
+
+    KRC_Beginner_General,
+    KRC_Standard_General,
+    KRC_Expert_General,
+
+    KRC_NUM_CHECKS
+};

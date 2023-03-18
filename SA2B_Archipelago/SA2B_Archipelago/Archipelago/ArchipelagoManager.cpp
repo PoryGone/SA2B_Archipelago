@@ -270,6 +270,14 @@ void SA2_SetDeathLink(int deathLinkActive)
 
 void SA2_SetGoal(int goal)
 {
+    // Best place to detect we've connected
+    MessageQueue* messageQueue = &MessageQueue::GetInstance();
+    messageQueue->AddMessage("Connected to Archipelago");
+
+    LocationManager* locationManager = &LocationManager::getInstance();
+
+    locationManager->SetGoal(goal);
+
     StageSelectManager* ssm = &StageSelectManager::GetInstance();
 
     ssm->SetGoal(goal);
@@ -452,6 +460,22 @@ void SA2_SetOmochaoChecks(int omochaoChecks)
     }
 }
 
+void SA2_SetKartRaceChecks(int kartRaceChecks)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    LocationManager* locationManager = &LocationManager::getInstance();
+
+    locationManager->SetKartRacesEnabled(kartRaceChecks);
+
+    StageSelectManager* stageSelectManager = &StageSelectManager::GetInstance();
+
+    stageSelectManager->SetKartRacesEnabled(kartRaceChecks);
+}
+
 void SA2_SetRegionEmblemMap(std::map<int, int> map)
 {
     if (!ArchipelagoManager::getInstance().IsInit())
@@ -542,8 +566,10 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_RegisterSlotDataIntCallback("Whistlesanity", &SA2_SetPipes);
     AP_RegisterSlotDataIntCallback("GoldBeetles", &SA2_SetGoldBeetles);
     AP_RegisterSlotDataIntCallback("OmochaoChecks", &SA2_SetOmochaoChecks);
+    AP_RegisterSlotDataIntCallback("KartRaceChecks", &SA2_SetKartRaceChecks);
     AP_RegisterSlotDataIntCallback("ChaoRaceChecks", &SA2_SetChaoPacks);
     AP_RegisterSlotDataIntCallback("ChaoGardenDifficulty", &SA2_SetChaoDifficulty);
+    AP_RegisterSlotDataIntCallback("MinigameTrapDifficulty", &SA2_SetMinigameDifficulty);
     AP_RegisterSlotDataMapIntIntCallback("RegionEmblemMap", &SA2_SetRegionEmblemMap);
     AP_RegisterSlotDataMapIntIntCallback("MissionMap", &SA2_SetChosenMissionsMap);
     AP_RegisterSlotDataMapIntIntCallback("MissionCountMap", &SA2_SetMissionCountMap);
@@ -620,7 +646,9 @@ void ArchipelagoManager::OnFrameMessageQueue()
         }
         default:
         {
-            std::string outMsg = msg->text;
+            // Currently too much spam, maybe more types in future
+            //std::string outMsg = msg->text;
+            //outMsgs.push_back(outMsg);
         }
         }
 
@@ -823,7 +851,7 @@ void ArchipelagoManager::VerfyModVersion(int modVersion)
 
 void ArchipelagoManager::AP_KillPlayer()
 {
-    if (CurrentLevel == LevelIDs::LevelIDs_Route101280)
+    if (CurrentLevel == LevelIDs::LevelIDs_Route101280 || CurrentLevel == LevelIDs::LevelIDs_KartRace)
     {
         if (!TimerStopped)
         {

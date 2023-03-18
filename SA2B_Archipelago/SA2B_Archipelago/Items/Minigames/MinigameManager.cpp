@@ -1,6 +1,7 @@
 #include "../../pch.h"
 #include "MinigameManager.h"
 #include "../../Archipelago/ArchipelagoManager.h"
+#include "../ItemManager.h"
 
 void DeleteUpgradeIcon_MG(ObjectMaster* obj)
 {
@@ -116,8 +117,22 @@ void MinigameManager::StartMinigame(ItemValue item)
 
 void MinigameManager::HandleVictory()
 {
+	ItemValue itemToSend = ItemValue::IV_FiveRings;
+
+	if (this->_data.difficulty == 1)
+	{
+		itemToSend = ItemValue::IV_TenRings;
+	}
+	else if (this->_data.difficulty == 2)
+	{
+		itemToSend = ItemValue::IV_TwentyRings;
+	}
+
+	ItemManager::getInstance().HandleJunk(itemToSend);
+
 	this->state = MinigameState::MGS_None;
 }
+
 void MinigameManager::HandleLoss()
 {
 	ArchipelagoManager::getInstance().AP_KillPlayer();
