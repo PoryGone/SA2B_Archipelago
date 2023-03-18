@@ -6,8 +6,8 @@
 // Pong Boundaries
 #define PONG_TOP    100
 #define PONG_BOTTOM 480
-#define PONG_LEFT   0
-#define PONG_RIGHT  640
+#define PONG_LEFT   20
+#define PONG_RIGHT  620
 
 // Sprite Data
 #define PONG_PADDLE_SPRITE_X 64
