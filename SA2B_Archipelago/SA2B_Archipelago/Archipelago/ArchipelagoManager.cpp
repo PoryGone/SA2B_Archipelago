@@ -38,29 +38,40 @@ static void __cdecl HandleOHKO()
         push eax
     }
 
-    if (CurrentLevel == LevelIDs::LevelIDs_Route101280)
+    if (CurrentLevel == LevelIDs::LevelIDs_SonicVsShadow1 ||
+        CurrentLevel == LevelIDs::LevelIDs_SonicVsShadow2 ||
+        CurrentLevel == LevelIDs::LevelIDs_TailsVsEggman1 ||
+        CurrentLevel == LevelIDs::LevelIDs_TailsVsEggman2 ||
+        CurrentLevel == LevelIDs::LevelIDs_KnucklesVsRouge)
     {
-        if (!TimerStopped)
-        {
-            GameState = GameStates::GameStates_RestartLevel_1;
-        }
+        // Hitting them kills you lol
     }
     else
     {
-        KillPlayer(0);
-        if (CurrentCharacter == Characters_MechTails || CurrentCharacter == Characters_MechEggman)
+        if (CurrentLevel == LevelIDs::LevelIDs_Route101280)
         {
-            if (MainCharObj2[0] != NULL && MainCharObj1[0] != NULL)
+            if (!TimerStopped)
             {
-                MainCharObj2[0]->Powerups = (MainCharObj2[0]->Powerups & ~(1 << PowerupBits::PowerupBits_Barrier));
-                MainCharObj2[0]->Powerups = (MainCharObj2[0]->Powerups & ~(1 << PowerupBits::PowerupBits_MagneticBarrier));
-                MainCharObj2[0]->Powerups = (MainCharObj2[0]->Powerups & ~(1 << PowerupBits::PowerupBits_Invincibility));
-                MainCharObj2[0]->MechHP = 0;
-                MainCharObj1[0]->field_6 = 0; // Invulvnerability Frames
-                MainCharObj1[0]->Status |= Status_Hurt;
+                GameState = GameStates::GameStates_RestartLevel_1;
             }
         }
-    }
+        else
+        {
+            KillPlayer(0);
+            if (CurrentCharacter == Characters_MechTails || CurrentCharacter == Characters_MechEggman)
+            {
+                if (MainCharObj2[0] != NULL && MainCharObj1[0] != NULL)
+                {
+                    MainCharObj2[0]->Powerups = (MainCharObj2[0]->Powerups & ~(1 << PowerupBits::PowerupBits_Barrier));
+                    MainCharObj2[0]->Powerups = (MainCharObj2[0]->Powerups & ~(1 << PowerupBits::PowerupBits_MagneticBarrier));
+                    MainCharObj2[0]->Powerups = (MainCharObj2[0]->Powerups & ~(1 << PowerupBits::PowerupBits_Invincibility));
+                    MainCharObj2[0]->MechHP = 0;
+                    MainCharObj1[0]->field_6 = 0; // Invulvnerability Frames
+                    MainCharObj1[0]->Status |= Status_Hurt;
+                }
+            }
+        }
+     }
 
     __asm
     {
