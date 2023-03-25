@@ -67,6 +67,8 @@ private:
 
 	NJS_VECTOR _TimeStopPos;
 
+	PhysicsData _StoredPhysicsData;
+
 	CharObj2Base* _p2Obj;
 
 

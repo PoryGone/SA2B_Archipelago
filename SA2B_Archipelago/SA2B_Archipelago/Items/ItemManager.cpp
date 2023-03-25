@@ -583,6 +583,21 @@ bool ItemManager::IsActiveTrapValid()
 			return false;
 		}
 		break;
+	case ItemValue::IV_IceTrap:
+		if (CurrentLevel == LevelIDs_Route101280 ||
+			CurrentLevel == LevelIDs_KartRace ||
+			CurrentLevel == LevelIDs_ChaoWorld ||
+			CurrentLevel == LevelIDs_FinalHazard)
+		{
+			return false;
+		}
+
+		if (!MainCharObj2[0] || this->_StoredPhysicsData.GroundFriction != 0.0f)
+		{
+			// Don't take an Ice Trap when already Icy
+			return false;
+		}
+		break;
 	case ItemValue::IV_PongTrap:
 		if (CurrentLevel == LevelIDs_ChaoWorld)
 		{
@@ -618,6 +633,17 @@ void ItemManager::ResetTrapData()
 		Gravity.x = 0.0f;
 		Gravity.y = -1.0f;
 		Gravity.z = 0.0f;
+	}
+
+	if (MainCharObj2[0] &&
+		this->_StoredPhysicsData.GroundFriction != MainCharObj2[0]->PhysData.GroundFriction &&
+		this->_StoredPhysicsData.GroundFriction != 0.0f)
+	{
+		MainCharObj2[0]->PhysData.GroundFriction = this->_StoredPhysicsData.GroundFriction;
+		MainCharObj2[0]->PhysData.RunDecel       = this->_StoredPhysicsData.RunDecel;
+		MainCharObj2[0]->PhysData.RunBrake       = this->_StoredPhysicsData.RunBrake;
+
+		this->_StoredPhysicsData = PhysicsData();
 	}
 }
 
@@ -745,6 +771,10 @@ void ItemManager::OnFrameTrapQueue()
 			}
 		}
 	}
+	else if (this->_ActiveTrap == ItemValue::IV_IceTrap)
+	{
+		// Nothing
+	}
 	else if (this->_ActiveTrap == ItemValue::IV_PongTrap)
 	{
 		// Nothing
@@ -839,6 +869,19 @@ void ItemManager::OnFrameTrapQueue()
 		//	////LoadFogData_Fogtask("stg10_fog.bin", FogDataPtr);
 		//	PlayVoice(2, 1374);
 		//}
+		break;
+	case ItemValue::IV_IceTrap:
+		PlayVoice(2, 864);
+		if (MainCharObj2[0] != NULL)
+		{
+			this->_StoredPhysicsData.GroundFriction = MainCharObj2[0]->PhysData.GroundFriction;
+			this->_StoredPhysicsData.RunDecel       = MainCharObj2[0]->PhysData.RunDecel;
+			this->_StoredPhysicsData.RunBrake       = MainCharObj2[0]->PhysData.RunBrake;
+
+			MainCharObj2[0]->PhysData.GroundFriction = -0.002f;
+			MainCharObj2[0]->PhysData.RunDecel       = -0.0012f;
+			MainCharObj2[0]->PhysData.RunBrake       = -0.0036f;
+		}
 		break;
 	case ItemValue::IV_PongTrap:
 		MinigameManager* minigameManager = &MinigameManager::GetInstance();
