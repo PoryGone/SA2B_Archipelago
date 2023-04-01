@@ -448,8 +448,7 @@ void LocationManager::OnFrameAnimals()
 				{
 					char newDataValue = dataValue | bitFlag;
 
-					*((char*)checkData.Address) = newDataValue;
-					//WriteData<1>((void*)checkData.Address, newDataValue);
+					WriteData<1>((void*)checkData.Address, newDataValue);
 				}
 			}
 		}
@@ -1147,8 +1146,7 @@ void LocationManager::SendAnimalLocationCheck()
 					char bitFlag = (char)(0x01 << checkData.AddressBit);
 					char newDataValue = dataValue | bitFlag;
 
-					*((char*)checkData.Address) = newDataValue;
-					//WriteData<1>((void*)checkData.Address, newDataValue);
+					WriteData<1>((void*)checkData.Address, newDataValue);
 				}
 			}
 		}
