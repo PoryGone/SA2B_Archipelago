@@ -67,7 +67,7 @@ private:
 	const HelperFunctions* _helperFunctions;
 	std::map<int, StageSelectStageData> _stageSelectDataMap;
     std::map<int, StageSelectBossData> _stageSelectBossDataMap;
-	int _emblemsForCannonsCore = 200;
+	int _emblemsForCannonsCore = 2000;
 	bool _requireAllCannonsCoreMissions = false;
 	int _goal = 0;
 	int _kartRacesEnabled = 0;
