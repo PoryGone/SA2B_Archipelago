@@ -29,6 +29,7 @@ public:
 	void OnFrameHidden();
 	void OnFrameGoldBeetles();
 	void OnFrameOmochao();
+	void OnFrameAnimals();
 	void OnFrameKartRace();
 	void OnFrameChaoGarden();
 	void CheckLocation(int location_id);
@@ -39,6 +40,7 @@ public:
 	void SetHiddensEnabled(bool hiddenEnabled);
 	void SetGoldBeetlesEnabled(bool goldBeetlesEnabled);
 	void SetOmochaoEnabled(bool omochaoEnabled);
+	void SetAnimalsEnabled(bool animalsEnabled);
 	void SetKartRacesEnabled(int kartRacesEnabled);
 	void SetRacesPacked(bool racesPacked);
 	void SetChaoEnabled(bool chaoEnabled);
@@ -50,12 +52,14 @@ public:
 	void SendHiddenLocationCheck();
 	void SendGoldBeetleLocationCheck();
 	void SendOmochaoLocationCheck();
+	void SendAnimalLocationCheck();
 
 	std::vector<int> GetChaoKeyLocationsForLevel(int levelID);
 	std::vector<int> GetPipeLocationsForLevel(int levelID);
 	std::vector<int> GetHiddenLocationsForLevel(int levelID);
 	std::vector<int> GetGoldBeetleLocationsForLevel(int levelID);
 	std::vector<int> GetOmochaoLocationsForLevel(int levelID);
+	int GetAnimalLocationsForLevel(int levelID);
 
 	bool AreAllRacesComplete();
 
@@ -74,6 +78,7 @@ private:
 	bool _hiddensEnabled = false;
 	bool _goldBeetlesEnabled = false;
 	bool _omochaoEnabled = false;
+	bool _animalsEnabled = false;
 	int _kartRacesEnabled = 0;
 	bool _racesPacked = false;
 	bool _chaoEnabled = false;
@@ -85,6 +90,7 @@ private:
 	std::map<int, HiddenCheckData> _HiddenData;
 	std::map<int, GoldBeetleCheckData> _GoldBeetleData;
 	std::map<int, OmochaoCheckData> _OmochaoData;
+	std::map<int, AnimalCheckData> _AnimalData;
 	std::map<int, KartRaceCheckData> _KartRaceData;
 
 	std::map<int, std::vector<int>> _ChaoRacePacks;

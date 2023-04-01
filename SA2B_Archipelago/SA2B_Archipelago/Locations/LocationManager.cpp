@@ -53,6 +53,24 @@ static void __cdecl GoldBeetleDestroyed()
 }
 // End Gold Beetle "Trampoline"
 
+// Animal Count
+struct AnimalCountObj
+{
+	void* field_0;
+	void* field_4;
+	int AnimalCount;
+	int MaxAnimalCount;
+};
+
+struct AnimalCounterObj
+{
+	int field_0[13];
+	AnimalCountObj* AnimalCount;
+};
+
+DataPointer(AnimalCounterObj*, AnimalCounter, 0x1A5A344);
+// End Animal Count
+
 void LocationManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
 {
 	this->_helperFunctions = &helperFunctions;
@@ -69,6 +87,7 @@ void LocationManager::OnInitFunction(const char* path, const HelperFunctions& he
 	InitializeHiddenChecks(this->_HiddenData);
 	InitializeGoldBeetleChecks(this->_GoldBeetleData);
 	InitializeOmochaoChecks(this->_OmochaoData);
+	InitializeAnimalChecks(this->_AnimalData);
 	InitializeChaoGardenChecks(this->_ChaoGardenData);
 	InitializeChaoRacePacks(this->_ChaoRacePacks);
 	InitializeKartRaceChecks(this->_KartRaceData);
@@ -76,6 +95,8 @@ void LocationManager::OnInitFunction(const char* path, const HelperFunctions& he
 
 void LocationManager::OnFrameFunction()
 {
+	this->SendAnimalLocationCheck();
+
 	if (!this->_archipelagoManager->IsInit() || !this->_archipelagoManager->IsAuth())
 	{
 		return;
@@ -93,6 +114,7 @@ void LocationManager::OnFrameFunction()
 		this->OnFrameHidden();
 		this->OnFrameGoldBeetles();
 		this->OnFrameOmochao();
+		this->OnFrameAnimals();
 		this->OnFrameKartRace();
 	}
 
@@ -383,6 +405,62 @@ void LocationManager::OnFrameOmochao()
 			}
 		}
 	}
+}
+
+void LocationManager::OnFrameAnimals()
+{
+	if (!this->_animalsEnabled)
+	{
+		return;
+	}
+
+	for (int i = AnimalCheck::AC_BEGIN; i < AnimalCheck::AC_NUM_CHECKS; i++)
+	{
+		if (this->_AnimalData.find(i) != this->_AnimalData.end())
+		{
+			AnimalCheckData& checkData = this->_AnimalData[i];
+
+			if (!checkData.CheckSent)
+			{
+				// DataPointer macro creates a static field, which doesn't work for this case
+				char dataValue = *(char*)checkData.Address;
+
+				char bitFlag = (char)(0x01 << checkData.AddressBit);
+
+				if ((dataValue & bitFlag ) != 0x00)
+				{
+					if (this->_archipelagoManager)
+					{
+						this->_archipelagoManager->SendItem(i);
+
+						checkData.CheckSent = true;
+					}
+				}
+			}
+			else
+			{
+				// Capture offline collects
+				char dataValue = *(char*)checkData.Address;
+
+				char bitFlag = (char)(0x01 << checkData.AddressBit);
+
+				if ((dataValue & bitFlag) == 0x00)
+				{
+					char newDataValue = dataValue | bitFlag;
+
+					*((char*)checkData.Address) = newDataValue;
+					//WriteData<1>((void*)checkData.Address, newDataValue);
+				}
+			}
+		}
+	}
+
+	if (AnimalCounter == NULL || AnimalCounter->AnimalCount == NULL)
+	{
+		return;
+	}
+
+	AnimalCounter->AnimalCount->MaxAnimalCount = 20;
 }
 
 void LocationManager::OnFrameKartRace()
@@ -696,6 +774,18 @@ void LocationManager::CheckLocation(int location_id)
 
 		WriteData<1>((void*)checkData.Address, 0x01);
 	}
+	else if (this->_AnimalData.find(location_id) != this->_AnimalData.end())
+	{
+		AnimalCheckData& checkData = this->_AnimalData[location_id];
+
+		checkData.CheckSent = true;
+
+		char dataValue = *(char*)checkData.Address;
+		char bitFlag = (char)(0x01 << checkData.AddressBit);
+		char newDataValue = dataValue | bitFlag;
+
+		WriteData<1>((void*)checkData.Address, newDataValue);
+	}
 	else if (this->_KartRaceData.find(location_id) != this->_KartRaceData.end())
 	{
 		KartRaceCheckData& checkData = this->_KartRaceData[location_id];
@@ -768,6 +858,11 @@ void LocationManager::SetOmochaoEnabled(bool omochaoEnabled)
 	this->_omochaoEnabled = omochaoEnabled;
 }
 
+void LocationManager::SetAnimalsEnabled(bool animalsEnabled)
+{
+	this->_animalsEnabled = animalsEnabled;
+}
+
 void LocationManager::SetKartRacesEnabled(int kartRacesEnabled)
 {
 	this->_kartRacesEnabled = kartRacesEnabled;
@@ -821,6 +916,11 @@ void LocationManager::ResetLocations()
 	}
 
 	for (auto& pair : this->_OmochaoData)
+	{
+		pair.second.CheckSent = false;
+	}
+
+	for (auto& pair : this->_AnimalData)
 	{
 		pair.second.CheckSent = false;
 	}
@@ -1016,6 +1116,45 @@ void LocationManager::SendOmochaoLocationCheck()
 	}
 }
 
+void LocationManager::SendAnimalLocationCheck()
+{
+	if (!this->_animalsEnabled)
+	{
+		return;
+	}
+
+	if (AnimalCounter == NULL || AnimalCounter->AnimalCount == NULL)
+	{
+		return;
+	}
+
+	for (int i = AnimalCheck::AC_BEGIN; i < AnimalCheck::AC_NUM_CHECKS; i++)
+	{
+		if (this->_AnimalData.find(i) != this->_AnimalData.end())
+		{
+			AnimalCheckData& checkData = this->_AnimalData[i];
+
+			if (checkData.LevelID == CurrentLevel ||
+				(checkData.LevelID == LevelIDs::LevelIDs_CannonsCoreS &&
+				 (CurrentLevel == LevelIDs::LevelIDs_CannonsCoreT ||
+				  CurrentLevel == LevelIDs::LevelIDs_CannonsCoreE ||
+				  CurrentLevel == LevelIDs::LevelIDs_CannonsCoreR ||
+				  CurrentLevel == LevelIDs::LevelIDs_CannonsCoreK)))
+			{
+				if ((int)(AnimalCounter->AnimalCount->AnimalCount) > checkData.AnimalCount)
+				{
+					char dataValue = *(char*)checkData.Address;
+					char bitFlag = (char)(0x01 << checkData.AddressBit);
+					char newDataValue = dataValue | bitFlag;
+
+					*((char*)checkData.Address) = newDataValue;
+					//WriteData<1>((void*)checkData.Address, newDataValue);
+				}
+			}
+		}
+	}
+}
+
 std::vector<int> LocationManager::GetChaoKeyLocationsForLevel(int levelID)
 {
 	std::vector<int> result;
@@ -1116,6 +1255,36 @@ std::vector<int> LocationManager::GetOmochaoLocationsForLevel(int levelID)
 			{
 				OmochaoCheckData& checkData = this->_OmochaoData[locationID];
 				result.push_back(checkData.Address);
+			}
+		}
+	}
+
+	return result;
+}
+
+int LocationManager::GetAnimalLocationsForLevel(int levelID)
+{
+	int result = 0;
+
+	if (this->_animalsEnabled)
+	{
+		int checkOffset = 0xB00;
+
+		for (int j = 0; j < 20; j++)
+		{
+			result = j;
+			int locationID = checkOffset + (j * 0x20) + levelID;
+			if (this->_AnimalData.find(locationID) != this->_AnimalData.end())
+			{
+				AnimalCheckData& checkData = this->_AnimalData[locationID];
+				char dataValue = *(char*)checkData.Address;
+
+				char bitFlag = (char)(0x01 << checkData.AddressBit);
+
+				if ((dataValue & bitFlag) == 0x00)
+				{
+					break;
+				}
 			}
 		}
 	}
