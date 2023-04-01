@@ -93,7 +93,7 @@ void ItemManager::OnFrameFunction()
 		WriteData<1>((void*)0x1DEC650, 0x00);
 	}
 
-	if (this->_EmblemsReceived > EmblemCount)
+	if (this->_EmblemsReceived > EmblemCount && this->_EmblemsReceived <= 255)
 	{
 		EmblemCount = this->_EmblemsReceived;
 		WriteData<1>((void*)0x0174B032, this->_EmblemsReceived);
@@ -137,29 +137,18 @@ void ItemManager::ReceiveItem(int item_id, bool notify)
 			ItemData& receivedItem = this->_ItemData[item_id];
 
 			// DataPointer macro creates a static field, which doesn't work for this case
-			unsigned char dataValue = *(unsigned char*)receivedItem.Address;
+			unsigned int dataValue = *(unsigned int*)receivedItem.Address;
 
 			this->_EmblemsReceived++;
 			dataValue = this->_EmblemsReceived;
-			bool success = WriteData<1>((void*)receivedItem.Address, dataValue);
+			*(unsigned int*)receivedItem.Address = dataValue;
 
-			if (success)
+			if (this->_thisSessionChecksReceived > SavedChecksReceived)
 			{
-				if (this->_thisSessionChecksReceived > SavedChecksReceived)
-				{
-					SavedChecksReceived = this->_thisSessionChecksReceived;
+				SavedChecksReceived = this->_thisSessionChecksReceived;
 
-					std::string message = std::string("New Emblem Count: ");
-					message += std::to_string((unsigned int)dataValue);
-					messageQueue->AddMessage(message);
-				}
-
-				// Cutscene Emblem Count
-				WriteData<1>((void*)0x0174B032, dataValue);
-			}
-			else
-			{
-				std::string message = std::string("Failed to Write Emblem Count");
+				std::string message = std::string("New Emblem Count: ");
+				message += std::to_string((unsigned int)dataValue);
 				messageQueue->AddMessage(message);
 			}
 		}

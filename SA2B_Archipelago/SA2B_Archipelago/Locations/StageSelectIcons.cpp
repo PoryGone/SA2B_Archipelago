@@ -13,6 +13,7 @@ FunctionPointer(void, ReleaseTextureList, (NJS_TEXLIST* a1), 0x77F9F0);
 DataPointer(char, SS_SelectedTile, 0x1D1BF08);
 DataPointer(char, ActiveMission, 0x174AFE3);
 DataPointer(char, SS_CameraPos, 0x1D1BEC0);
+DataPointer(int, RealEmblemCount, 0x1DEE418);
 
 static std::map<int, ItemData>* ItemData_ptr;
 static std::vector<CharacterItemRange>* CharacterItemRanges_ptr;
@@ -377,14 +378,14 @@ void UpdateEmblemRequirements()
 	StageSelectSprite.sy = 0.4f;
 	if (gateRequirements.size() > 1)
 	{
-		if (EmblemCount < gateRequirements[gateRequirements.size() - 1])
+		if (RealEmblemCount < gateRequirements[gateRequirements.size() - 1])
 		{
 			std::string gateRequirementMessage = "";
-			gateRequirementMessage.append(std::to_string(EmblemCount));
+			gateRequirementMessage.append(std::to_string(RealEmblemCount));
 			gateRequirementMessage.append("/");
 			for (int g = 0; g < gateRequirements.size(); g++)
 			{
-				if (gateRequirements[g] > EmblemCount || g == gateRequirements.size() - 1)
+				if (gateRequirements[g] > RealEmblemCount || g == gateRequirements.size() - 1)
 				{
 					gateRequirementMessage.append(std::to_string(gateRequirements[g]));
 					int gateIcon = SSI_Gate1 + g - 1;
@@ -405,11 +406,11 @@ void UpdateEmblemRequirements()
 	DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
 
 	std::string cannonsCoreMessage = "";
-	cannonsCoreMessage.append(std::to_string(EmblemCount));
+	cannonsCoreMessage.append(std::to_string(RealEmblemCount));
 	cannonsCoreMessage.append("/");
 	cannonsCoreMessage.append(std::to_string(emblemsForCannonsCore));
 	DrawString(cannonsCoreMessage, coreX + 53.0f, 16.0f, 0.75f);
-	if (EmblemCount >= emblemsForCannonsCore && SS_CameraPos < 3)
+	if (RealEmblemCount >= emblemsForCannonsCore && SS_CameraPos < 3)
 	{
 		currentCCUnlockFrame = currentCCUnlockFrame == maxCCUnlockFrames - 1 ? 0 : currentCCUnlockFrame + 1;
 		float progress = currentCCUnlockFrame / (float)maxCCUnlockFrames;

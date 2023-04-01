@@ -51,7 +51,7 @@ private:
 
 	std::map<int, ItemData> _ItemData;
 	int _thisSessionChecksReceived = 0;
-	unsigned __int8 _EmblemsReceived = 0;
+	unsigned int _EmblemsReceived = 0;
 
 	std::queue<int> _JunkQueue;
 	std::queue<int> _TrapQueue;

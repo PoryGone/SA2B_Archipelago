@@ -8,7 +8,7 @@ void InitializeItemData(std::map<int, ItemData> &outItemData)
 {
     outItemData.clear();
 
-    outItemData[ItemValue::IV_Emblem] = ItemData(0x01DEC60E, std::string("Emblem"), std::string("Emblem"), 0);
+    outItemData[ItemValue::IV_Emblem] = ItemData(0x01DEE418, std::string("Emblem"), std::string("Emblem"), 0);
 
     outItemData[ItemValue::IV_SonicGloves]         = ItemData(0x01DEB302, std::string("Sonic - Magic Gloves"), std::string("Magic Gloves"), 22);
     outItemData[ItemValue::IV_SonicLightShoes]     = ItemData(0x01DEB300, std::string("Sonic - Light Shoes"), std::string("Light Shoes"), 21);
