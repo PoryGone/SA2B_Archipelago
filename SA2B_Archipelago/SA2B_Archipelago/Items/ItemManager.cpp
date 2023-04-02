@@ -587,6 +587,20 @@ bool ItemManager::IsActiveTrapValid()
 			return false;
 		}
 		break;
+	case ItemValue::IV_SlowTrap:
+		if (CurrentLevel == LevelIDs_Route101280 ||
+			CurrentLevel == LevelIDs_KartRace ||
+			CurrentLevel == LevelIDs_ChaoWorld ||
+			CurrentLevel == LevelIDs_FinalHazard)
+		{
+			return false;
+		}
+
+		if (!MainCharObj2[0])
+		{
+			return false;
+		}
+		break;
 	case ItemValue::IV_PongTrap:
 		if (CurrentLevel == LevelIDs_ChaoWorld)
 		{
@@ -624,15 +638,33 @@ void ItemManager::ResetTrapData()
 		Gravity.z = 0.0f;
 	}
 
-	if (MainCharObj2[0] &&
-		this->_StoredPhysicsData.GroundFriction != MainCharObj2[0]->PhysData.GroundFriction &&
-		this->_StoredPhysicsData.GroundFriction != 0.0f)
+	if (MainCharObj2[0])
 	{
-		MainCharObj2[0]->PhysData.GroundFriction = this->_StoredPhysicsData.GroundFriction;
-		MainCharObj2[0]->PhysData.RunDecel       = this->_StoredPhysicsData.RunDecel;
-		MainCharObj2[0]->PhysData.RunBrake       = this->_StoredPhysicsData.RunBrake;
+		if (this->_StoredPhysicsData.SpeedMaxH != MainCharObj2[0]->PhysData.SpeedMaxH &&
+			this->_StoredPhysicsData.SpeedMaxH != 0.0f)
+		{
+			MainCharObj2[0]->PhysData.SpeedMaxH      = this->_StoredPhysicsData.SpeedMaxH;
+			MainCharObj2[0]->PhysData.SpeedCapH      = this->_StoredPhysicsData.SpeedCapH;
+			MainCharObj2[0]->PhysData.SpeedCapV      = this->_StoredPhysicsData.SpeedCapV;
+			MainCharObj2[0]->PhysData.RunSpeed       = this->_StoredPhysicsData.RunSpeed;
+			MainCharObj2[0]->PhysData.RushSpeed      = this->_StoredPhysicsData.RushSpeed;
+			MainCharObj2[0]->PhysData.DashSpeed      = this->_StoredPhysicsData.DashSpeed;
+			MainCharObj2[0]->PhysData.JogSpeed       = this->_StoredPhysicsData.JogSpeed;
+			MainCharObj2[0]->PhysData.SlideSpeed     = this->_StoredPhysicsData.SlideSpeed;
+			MainCharObj2[0]->PhysData.PushSpeedMax   = this->_StoredPhysicsData.PushSpeedMax;
+			MainCharObj2[0]->PhysData.NoControlSpeed = this->_StoredPhysicsData.NoControlSpeed;
+			MainCharObj2[0]->PhysData.AirResist      = this->_StoredPhysicsData.AirResist;
+		}
 
-		this->_StoredPhysicsData = PhysicsData();
+		if (this->_StoredPhysicsData.GroundFriction != MainCharObj2[0]->PhysData.GroundFriction &&
+			this->_StoredPhysicsData.GroundFriction != 0.0f)
+		{
+			MainCharObj2[0]->PhysData.GroundFriction = this->_StoredPhysicsData.GroundFriction;
+			MainCharObj2[0]->PhysData.RunDecel       = this->_StoredPhysicsData.RunDecel;
+			MainCharObj2[0]->PhysData.RunBrake       = this->_StoredPhysicsData.RunBrake;
+
+			this->_StoredPhysicsData = PhysicsData();
+		}
 	}
 }
 
@@ -764,6 +796,40 @@ void ItemManager::OnFrameTrapQueue()
 	{
 		// Nothing
 	}
+	else if (this->_ActiveTrap == ItemValue::IV_SlowTrap)
+	{
+		if (MainCharObj2[0] != NULL)
+		{
+			if (this->_ActiveTrapTimer > (TRAP_DURATION * 0.9f))
+			{
+				MainCharObj2[0]->PhysData.SpeedMaxH      *= (1.0f / 1.015f);
+				MainCharObj2[0]->PhysData.SpeedCapH      *= (1.0f / 1.015f);
+				MainCharObj2[0]->PhysData.SpeedCapV      *= (1.0f / 1.015f);
+				MainCharObj2[0]->PhysData.RunSpeed       *= (1.0f / 1.015f);
+				MainCharObj2[0]->PhysData.RushSpeed      *= (1.0f / 1.015f);
+				MainCharObj2[0]->PhysData.DashSpeed      *= (1.0f / 1.015f);
+				MainCharObj2[0]->PhysData.JogSpeed       *= (1.0f / 1.015f);
+				MainCharObj2[0]->PhysData.SlideSpeed     *= (1.0f / 1.015f);
+				MainCharObj2[0]->PhysData.PushSpeedMax   *= (1.0f / 1.015f);
+				MainCharObj2[0]->PhysData.NoControlSpeed *= (1.0f / 1.015f);
+				MainCharObj2[0]->PhysData.AirResist      *= 1.015f;
+			}
+			else if (this->_ActiveTrapTimer < (TRAP_DURATION * 0.1f))
+			{
+				MainCharObj2[0]->PhysData.SpeedMaxH      *= 1.015f;
+				MainCharObj2[0]->PhysData.SpeedCapH      *= 1.015f;
+				MainCharObj2[0]->PhysData.SpeedCapV      *= 1.015f;
+				MainCharObj2[0]->PhysData.RunSpeed       *= 1.015f;
+				MainCharObj2[0]->PhysData.RushSpeed      *= 1.015f;
+				MainCharObj2[0]->PhysData.DashSpeed      *= 1.015f;
+				MainCharObj2[0]->PhysData.JogSpeed       *= 1.015f;
+				MainCharObj2[0]->PhysData.SlideSpeed     *= 1.015f;
+				MainCharObj2[0]->PhysData.PushSpeedMax   *= 1.015f;
+				MainCharObj2[0]->PhysData.NoControlSpeed *= 1.015f;
+				MainCharObj2[0]->PhysData.AirResist      *= (1.0f / 1.015f);
+			}
+		}
+	}
 	else if (this->_ActiveTrap == ItemValue::IV_PongTrap)
 	{
 		// Nothing
@@ -870,6 +936,23 @@ void ItemManager::OnFrameTrapQueue()
 			MainCharObj2[0]->PhysData.GroundFriction = -0.002f;
 			MainCharObj2[0]->PhysData.RunDecel       = -0.0012f;
 			MainCharObj2[0]->PhysData.RunBrake       = -0.0036f;
+		}
+		break;
+	case ItemValue::IV_SlowTrap:
+		PlayVoice(2, 636);
+		if (MainCharObj2[0] != NULL)
+		{
+			this->_StoredPhysicsData.SpeedMaxH      = MainCharObj2[0]->PhysData.SpeedMaxH;
+			this->_StoredPhysicsData.SpeedCapH      = MainCharObj2[0]->PhysData.SpeedCapH;
+			this->_StoredPhysicsData.SpeedCapV      = MainCharObj2[0]->PhysData.SpeedCapV;
+			this->_StoredPhysicsData.RunSpeed       = MainCharObj2[0]->PhysData.RunSpeed;
+			this->_StoredPhysicsData.RushSpeed      = MainCharObj2[0]->PhysData.RushSpeed;
+			this->_StoredPhysicsData.DashSpeed      = MainCharObj2[0]->PhysData.DashSpeed;
+			this->_StoredPhysicsData.JogSpeed       = MainCharObj2[0]->PhysData.JogSpeed;
+			this->_StoredPhysicsData.SlideSpeed     = MainCharObj2[0]->PhysData.SlideSpeed;
+			this->_StoredPhysicsData.PushSpeedMax   = MainCharObj2[0]->PhysData.PushSpeedMax;
+			this->_StoredPhysicsData.NoControlSpeed = MainCharObj2[0]->PhysData.NoControlSpeed;
+			this->_StoredPhysicsData.AirResist      = MainCharObj2[0]->PhysData.AirResist;
 		}
 		break;
 	case ItemValue::IV_PongTrap:
