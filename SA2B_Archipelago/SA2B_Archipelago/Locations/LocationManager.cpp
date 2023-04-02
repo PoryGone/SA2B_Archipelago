@@ -96,6 +96,8 @@ void LocationManager::OnInitFunction(const char* path, const HelperFunctions& he
 void LocationManager::OnFrameFunction()
 {
 	this->SendAnimalLocationCheck();
+	this->OnFrameWhistle();
+	this->OnFrameChaoGarden();
 
 	if (!this->_archipelagoManager->IsInit() || !this->_archipelagoManager->IsAuth())
 	{
@@ -117,9 +119,6 @@ void LocationManager::OnFrameFunction()
 		this->OnFrameAnimals();
 		this->OnFrameKartRace();
 	}
-
-	this->OnFrameWhistle();
-	this->OnFrameChaoGarden();
 }
 
 void LocationManager::OnFrameLevelClears()
