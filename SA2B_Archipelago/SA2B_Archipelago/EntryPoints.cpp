@@ -79,6 +79,11 @@ extern "C"
 	__declspec(dllexport) void __cdecl OnInput()
 	{
 		// Executed before the game processes input
+		if (_itemManager)
+		{
+			_itemManager->OnInputFunction();
+		}
+
 		_minigameManager.OnInputFunction();
 	}
 

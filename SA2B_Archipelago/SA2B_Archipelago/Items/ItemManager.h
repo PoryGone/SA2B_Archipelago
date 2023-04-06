@@ -24,6 +24,7 @@ public:
 	}
 
 	void OnInitFunction(const char* path, const HelperFunctions& helperFunctions);
+	void OnInputFunction();
 	void OnFrameFunction();
 
 	// Item Functions
@@ -44,8 +45,10 @@ private:
 	void OnFrameJunkQueue();
 	void OnFrameTrapQueue();
 	void OnFrameDialogueQueue();
+	void OnFrameCutsceneQueue();
 
 	void AddRandomDialogueToQueue();
+	void AddRandomCutsceneToQueue();
 
 	const HelperFunctions* _helperFunctions;
 
@@ -62,6 +65,8 @@ private:
 	int _TrapCooldownTimer = TRAP_COOLDOWN;
 	int _JunkCooldownTimer = 0;
 	int _ActiveDialogueTimer = 0;
+
+	bool _CutsceneQueued = false;
 
 	FogData _StoredFogData;
 
@@ -137,4 +142,63 @@ private:
 		{ DialogueData(2446, 3), DialogueData(2447, 6), DialogueData(2448, 5), DialogueData(2449, 6), DialogueData(), DialogueData(), DialogueData() },                      // GF
 		{ DialogueData(2450, 4), DialogueData(2451, 7), DialogueData(2452, 4), DialogueData(2453, 4), DialogueData(), DialogueData(), DialogueData() },                      // PH
 		} };
+
+	std::array<CutsceneData, 54> _cutsceneOptions = {
+		CutsceneData(0x00, 0x00),
+		CutsceneData(0x02, 0x00),
+		CutsceneData(0x03, 0x00),
+		CutsceneData(0x04, 0x00),
+		CutsceneData(0x06, 0x00),
+		CutsceneData(0x99, 0x01),
+		CutsceneData(0x9B, 0x01),
+		CutsceneData(0x0B, 0x00),
+		CutsceneData(0x0E, 0x00),
+		CutsceneData(0x0F, 0x00),
+		CutsceneData(0x10, 0x00),
+		CutsceneData(0x11, 0x00),
+		CutsceneData(0x13, 0x00),
+		CutsceneData(0xA4, 0x01),
+		CutsceneData(0x15, 0x00),
+		CutsceneData(0x16, 0x00),
+		CutsceneData(0x18, 0x00),
+		CutsceneData(0x19, 0x00),
+		CutsceneData(0x1A, 0x00),
+		CutsceneData(0x1B, 0x00),
+		CutsceneData(0x1C, 0x00),
+
+		CutsceneData(0x64, 0x00),
+		CutsceneData(0x65, 0x00),
+		CutsceneData(0x66, 0x00),
+		CutsceneData(0x67, 0x00),
+		CutsceneData(0x69, 0x00),
+		CutsceneData(0x6A, 0x00),
+		CutsceneData(0x6B, 0x00),
+		CutsceneData(0x6D, 0x00),
+		CutsceneData(0x6F, 0x00),
+		CutsceneData(0x70, 0x00),
+		CutsceneData(0x71, 0x00),
+		CutsceneData(0x74, 0x00),
+		CutsceneData(0x76, 0x00),
+		CutsceneData(0x99, 0x01),
+		CutsceneData(0x77, 0x00),
+		CutsceneData(0x9B, 0x01),
+		CutsceneData(0x78, 0x00),
+		CutsceneData(0x7A, 0x00),
+		CutsceneData(0x7B, 0x00),
+		CutsceneData(0x0C, 0x02),
+		CutsceneData(0x7C, 0x00),
+		CutsceneData(0x7E, 0x00),
+		CutsceneData(0x7F, 0x00),
+		CutsceneData(0x80, 0x00),
+		CutsceneData(0x81, 0x00),
+		CutsceneData(0x82, 0x00),
+		CutsceneData(0x83, 0x00),
+
+		CutsceneData(0xC8, 0x00),
+		CutsceneData(0xC9, 0x00),
+		CutsceneData(0x5A, 0x02),
+		CutsceneData(0xCB, 0x00),
+		CutsceneData(0xCC, 0x00),
+		CutsceneData(0xCD, 0x00),
+	};
 };
