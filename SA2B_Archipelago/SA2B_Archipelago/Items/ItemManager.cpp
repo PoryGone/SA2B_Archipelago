@@ -3,6 +3,7 @@
 #include "ItemData.h"
 #include "Minigames/MinigameManager.h"
 
+#include "../Aesthetics/MusicManager.h"
 #include "../Utilities/MessageQueue.h"
 
 #include "../ModLoader/MemAccess.h"
@@ -1018,7 +1019,7 @@ void ItemManager::OnFrameTrapQueue()
 		break;
 	case ItemValue::IV_TimeStopTrap:
 		Sonic2PTimeStopMan_Load(this->_p2Obj);
-		PlayVoice(2, 1524);
+		PlayUnshuffledVoice(2, 1524);
 		if (MainCharObj1[0])
 		{
 			this->_TimeStopPos = MainCharObj1[0]->Position;
@@ -1029,14 +1030,14 @@ void ItemManager::OnFrameTrapQueue()
 		{
 			MainCharObj2[0]->ConfuseTime = TRAP_DURATION;
 			ConfuStar_Load(0);
-			PlayVoice(2, 1413);
+			PlayUnshuffledVoice(2, 1413);
 		}
 		break;
 	case ItemValue::IV_TinyTrap:
-		PlayVoice(2, 1374);
+		PlayUnshuffledVoice(2, 1374);
 		break;
 	case ItemValue::IV_GravityTrap:
-		PlayVoice(2, 671);
+		PlayUnshuffledVoice(2, 671);
 		break;
 	case ItemValue::IV_ExpositionTrap:
 		AddRandomDialogueToQueue();
@@ -1047,7 +1048,7 @@ void ItemManager::OnFrameTrapQueue()
 			this->_StoredFogData.color = FogDataPtr->color;
 			this->_StoredFogData.far_ = FogDataPtr->far_;
 
-			PlayVoice(2, 1416);
+			PlayUnshuffledVoice(2, 1416);
 		}
 		//else
 		//{
@@ -1056,11 +1057,11 @@ void ItemManager::OnFrameTrapQueue()
 		//	//
 		//	//LoadFogData_Fogtask("stg13_fog.bin", (FogData*)0x19EEF28);
 		//	////LoadFogData_Fogtask("stg10_fog.bin", FogDataPtr);
-		//	PlayVoice(2, 1374);
+		//	PlayUnshuffledVoice(2, 1374);
 		//}
 		break;
 	case ItemValue::IV_IceTrap:
-		PlayVoice(2, 864);
+		PlayUnshuffledVoice(2, 864);
 		if (MainCharObj2[0] != NULL)
 		{
 			this->_StoredPhysicsData.GroundFriction = MainCharObj2[0]->PhysData.GroundFriction;
@@ -1073,7 +1074,7 @@ void ItemManager::OnFrameTrapQueue()
 		}
 		break;
 	case ItemValue::IV_SlowTrap:
-		PlayVoice(2, 636);
+		PlayUnshuffledVoice(2, 636);
 		if (MainCharObj2[0] != NULL)
 		{
 			this->_StoredPhysicsData.SpeedMaxH      = MainCharObj2[0]->PhysData.SpeedMaxH;
@@ -1146,7 +1147,7 @@ void ItemManager::OnFrameDialogueQueue()
 	DialogueData data = this->_DialogueQueue.front();
 	this->_DialogueQueue.pop();
 
-	PlayVoice(2, data.VoiceID);
+	PlayUnshuffledVoice(2, data.VoiceID);
 	this->_ActiveDialogueTimer = data.Duration * 60;
 }
 
