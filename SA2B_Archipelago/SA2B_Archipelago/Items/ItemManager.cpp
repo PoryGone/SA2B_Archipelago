@@ -3,6 +3,7 @@
 #include "ItemData.h"
 #include "Minigames/MinigameManager.h"
 
+#include "../Aesthetics/MusicManager.h"
 #include "../Utilities/MessageQueue.h"
 
 #include "../ModLoader/MemAccess.h"
@@ -13,6 +14,14 @@
 
 
 DataPointer(int, SavedChecksReceived, 0x1DEE414);
+
+DataPointer(char, StoryProgressID_1, 0x1DEB31E);
+DataPointer(char, StoryProgressID_2, 0x1DEB31F);
+DataPointer(char, StoryProgressID_3, 0x1DEB320);
+
+DataPointer(int, StoryEventID_1, 0x173A154);
+DataPointer(char, StoryEventID_2, 0x173A158);
+DataPointer(char, StoryEventID_3, 0x173A159);
 
 void* endLevelSave_ptr = (void*)0x4457df;
 void* updateSettingsSave_ptr = (void*)0x44390C;
@@ -81,6 +90,29 @@ void ItemManager::OnInitFunction(const char* path, const HelperFunctions& helper
 	this->_p2Obj->PlayerNum = 1;
 	WriteJump((void*)0x724B40, (void*)0x724BB8);
 	WriteData((short*)0x724745, (short)0x9090);
+
+	// Cutscene Trap Setup
+	StoryEventID_1 = 0;
+}
+
+void ItemManager::OnInputFunction()
+{
+	if (GameMode == GameMode::GameMode_Event &&
+		CurrentMenu == Menus::Menus_StageSelect &&
+		StoryProgressID_3 != 0x03)
+	{
+		Uint32 HeldButtons    = ControllersRaw->on;
+		Uint32 PressedButtons = ControllersRaw->press;
+
+		if ((HeldButtons & 0b100)        == 0 || // A
+			(HeldButtons & 0b1000)       == 0 || // Start
+			(HeldButtons & 0b100000)     == 0 || // D-Pad Down
+			(HeldButtons & 0b1000000000) == 0)   // Y
+		{
+			ControllersRaw->on    = 0;
+			ControllersRaw->press = 0;
+		}
+	}
 }
 
 void ItemManager::OnFrameFunction()
@@ -101,6 +133,7 @@ void ItemManager::OnFrameFunction()
 
 	this->OnFrameJunkQueue();
 	this->OnFrameTrapQueue();
+	this->OnFrameCutsceneQueue();
 }
 
 void ItemManager::ResetItems()
@@ -468,6 +501,11 @@ bool ItemManager::IsActiveTrapValid()
 	switch (this->_ActiveTrap)
 	{
 	case ItemValue::IV_OmochaoTrap:
+		if (GameMode != GameMode::GameMode_Level)
+		{
+			return false;
+		}
+
 		if (CurrentLevel == LevelIDs_Route101280 ||
 			CurrentLevel == LevelIDs_KartRace ||
 			CurrentLevel == LevelIDs_ChaoWorld ||
@@ -477,6 +515,11 @@ bool ItemManager::IsActiveTrapValid()
 		}
 		break;
 	case ItemValue::IV_TimeStopTrap:
+		if (GameMode != GameMode::GameMode_Level)
+		{
+			return false;
+		}
+
 		if (CurrentLevel == LevelIDs_Route101280 ||
 			CurrentLevel == LevelIDs_KartRace ||
 			CurrentLevel == LevelIDs_ChaoWorld)
@@ -485,6 +528,11 @@ bool ItemManager::IsActiveTrapValid()
 		}
 		break;
 	case ItemValue::IV_ConfuseTrap:
+		if (GameMode != GameMode::GameMode_Level)
+		{
+			return false;
+		}
+
 		if (CurrentLevel == LevelIDs_Route101280 ||
 			CurrentLevel == LevelIDs_KartRace ||
 			CurrentLevel == LevelIDs_ChaoWorld)
@@ -493,6 +541,11 @@ bool ItemManager::IsActiveTrapValid()
 		}
 		break;
 	case ItemValue::IV_TinyTrap:
+		if (GameMode != GameMode::GameMode_Level)
+		{
+			return false;
+		}
+
 		if (CurrentLevel == LevelIDs_Route101280 ||
 			CurrentLevel == LevelIDs_KartRace ||
 			CurrentLevel == LevelIDs_ChaoWorld ||
@@ -508,6 +561,11 @@ bool ItemManager::IsActiveTrapValid()
 		}
 		break;
 	case ItemValue::IV_GravityTrap:
+		if (GameMode != GameMode::GameMode_Level)
+		{
+			return false;
+		}
+
 		if (CurrentLevel == LevelIDs_Route101280 ||
 			CurrentLevel == LevelIDs_KartRace ||
 			CurrentLevel == LevelIDs_ChaoWorld ||
@@ -525,6 +583,11 @@ bool ItemManager::IsActiveTrapValid()
 		}
 		break;
 	case ItemValue::IV_ExpositionTrap:
+		if (GameMode != GameMode::GameMode_Level)
+		{
+			return false;
+		}
+
 		if (CurrentLevel == LevelIDs_ChaoWorld)
 		{
 			return false;
@@ -536,6 +599,11 @@ bool ItemManager::IsActiveTrapValid()
 		}
 		break;
 	case ItemValue::IV_DarknessTrap:
+		if (GameMode != GameMode::GameMode_Level)
+		{
+			return false;
+		}
+
 		if (CurrentLevel == LevelIDs_Route101280 ||
 			CurrentLevel == LevelIDs_KartRace ||
 			CurrentLevel == LevelIDs_ChaoWorld ||
@@ -573,6 +641,11 @@ bool ItemManager::IsActiveTrapValid()
 		}
 		break;
 	case ItemValue::IV_IceTrap:
+		if (GameMode != GameMode::GameMode_Level)
+		{
+			return false;
+		}
+
 		if (CurrentLevel == LevelIDs_Route101280 ||
 			CurrentLevel == LevelIDs_KartRace ||
 			CurrentLevel == LevelIDs_ChaoWorld ||
@@ -588,6 +661,11 @@ bool ItemManager::IsActiveTrapValid()
 		}
 		break;
 	case ItemValue::IV_SlowTrap:
+		if (GameMode != GameMode::GameMode_Level)
+		{
+			return false;
+		}
+
 		if (CurrentLevel == LevelIDs_Route101280 ||
 			CurrentLevel == LevelIDs_KartRace ||
 			CurrentLevel == LevelIDs_ChaoWorld ||
@@ -601,7 +679,43 @@ bool ItemManager::IsActiveTrapValid()
 			return false;
 		}
 		break;
+	case ItemValue::IV_CutsceneTrap:
+		if (GameMode != GameMode::GameMode_Level && GameMode != GameMode::GameMode_Event)
+		{
+			return false;
+		}
+
+		if (StoryProgressID_3 == 0x03)
+		{
+			// Don't interrupt the ending sequence
+			return false;
+		}
+
+		if (CurrentLevel == LevelIDs_CannonsCoreT ||
+			CurrentLevel == LevelIDs_CannonsCoreE ||
+			CurrentLevel == LevelIDs_CannonsCoreR ||
+			CurrentLevel == LevelIDs_CannonsCoreK ||
+			CurrentLevel == LevelIDs_GreenHill ||
+			CurrentLevel == LevelIDs_KartRace ||
+			CurrentLevel == LevelIDs_ChaoWorld ||
+			CurrentLevel == LevelIDs_Biolizard ||
+			CurrentLevel == LevelIDs_FinalHazard)
+		{
+			return false;
+		}
+
+		if (StoryEventID_1 != 0x02)
+		{
+			// Another Cutscene is queued
+			return false;
+		}
+		break;
 	case ItemValue::IV_PongTrap:
+		if (GameMode != GameMode::GameMode_Level)
+		{
+			return false;
+		}
+
 		if (CurrentLevel == LevelIDs_ChaoWorld)
 		{
 			return false;
@@ -630,6 +744,17 @@ void ItemManager::ResetTrapData()
 		MainCharObj1[0]->Scale.z = 1.0f;
 	}
 	this->_StoredFogData = FogData();
+
+	if (this->_CutsceneQueued)
+	{
+		// We queued a Cutscene, but didn't get to use it
+		this->HandleTrap(IV_CutsceneTrap);
+		this->_CutsceneQueued = false;
+
+		StoryEventID_1 = 2;
+		StoryEventID_2 = 0xFF;
+		StoryEventID_3 = 0xFF;
+	}
 
 	if (!(CurrentLevel == LevelIDs_CrazyGadget || CurrentLevel == LevelIDs_MadSpace || CurrentLevel == LevelIDs_FinalChase))
 	{
@@ -675,7 +800,10 @@ void ItemManager::OnFrameTrapQueue()
 		return;
 	}
 
-	if (!(GameState == GameStates::GameStates_Ingame))
+	if ((GameMode != GameMode::GameMode_LoadStory && GameMode != GameMode::GameMode_Event) &&
+		(GameState != GameStates::GameStates_Ingame &&
+		 GameState != GameStates::GameStates_Exit_1 &&
+		 GameState != GameStates::GameStates_GoToNextLevel))
 	{
 		ResetTrapData();
 		return;
@@ -830,6 +958,10 @@ void ItemManager::OnFrameTrapQueue()
 			}
 		}
 	}
+	else if (this->_ActiveTrap == ItemValue::IV_CutsceneTrap)
+	{
+		// Nothing
+	}
 	else if (this->_ActiveTrap == ItemValue::IV_PongTrap)
 	{
 		// Nothing
@@ -844,7 +976,7 @@ void ItemManager::OnFrameTrapQueue()
 	this->_ActiveTrap = 0;
 	this->_TimeStopPos = NJS_VECTOR();
 
-	if (TimerStopped)
+	if (TimerStopped && GameMode != GameMode::GameMode_Event)
 	{
 		return;
 	}
@@ -873,6 +1005,9 @@ void ItemManager::OnFrameTrapQueue()
 		return;
 	}
 
+	this->_ActiveTrapTimer = TRAP_DURATION;
+	this->_TrapCooldownTimer = TRAP_COOLDOWN;
+
 	switch (this->_ActiveTrap)
 	{
 	case ItemValue::IV_OmochaoTrap:
@@ -884,7 +1019,7 @@ void ItemManager::OnFrameTrapQueue()
 		break;
 	case ItemValue::IV_TimeStopTrap:
 		Sonic2PTimeStopMan_Load(this->_p2Obj);
-		PlayVoice(2, 1524);
+		PlayUnshuffledVoice(2, 1524);
 		if (MainCharObj1[0])
 		{
 			this->_TimeStopPos = MainCharObj1[0]->Position;
@@ -895,14 +1030,14 @@ void ItemManager::OnFrameTrapQueue()
 		{
 			MainCharObj2[0]->ConfuseTime = TRAP_DURATION;
 			ConfuStar_Load(0);
-			PlayVoice(2, 1413);
+			PlayUnshuffledVoice(2, 1413);
 		}
 		break;
 	case ItemValue::IV_TinyTrap:
-		PlayVoice(2, 1374);
+		PlayUnshuffledVoice(2, 1374);
 		break;
 	case ItemValue::IV_GravityTrap:
-		PlayVoice(2, 671);
+		PlayUnshuffledVoice(2, 671);
 		break;
 	case ItemValue::IV_ExpositionTrap:
 		AddRandomDialogueToQueue();
@@ -913,7 +1048,7 @@ void ItemManager::OnFrameTrapQueue()
 			this->_StoredFogData.color = FogDataPtr->color;
 			this->_StoredFogData.far_ = FogDataPtr->far_;
 
-			PlayVoice(2, 1416);
+			PlayUnshuffledVoice(2, 1416);
 		}
 		//else
 		//{
@@ -922,11 +1057,11 @@ void ItemManager::OnFrameTrapQueue()
 		//	//
 		//	//LoadFogData_Fogtask("stg13_fog.bin", (FogData*)0x19EEF28);
 		//	////LoadFogData_Fogtask("stg10_fog.bin", FogDataPtr);
-		//	PlayVoice(2, 1374);
+		//	PlayUnshuffledVoice(2, 1374);
 		//}
 		break;
 	case ItemValue::IV_IceTrap:
-		PlayVoice(2, 864);
+		PlayUnshuffledVoice(2, 864);
 		if (MainCharObj2[0] != NULL)
 		{
 			this->_StoredPhysicsData.GroundFriction = MainCharObj2[0]->PhysData.GroundFriction;
@@ -939,7 +1074,7 @@ void ItemManager::OnFrameTrapQueue()
 		}
 		break;
 	case ItemValue::IV_SlowTrap:
-		PlayVoice(2, 636);
+		PlayUnshuffledVoice(2, 636);
 		if (MainCharObj2[0] != NULL)
 		{
 			this->_StoredPhysicsData.SpeedMaxH      = MainCharObj2[0]->PhysData.SpeedMaxH;
@@ -955,14 +1090,16 @@ void ItemManager::OnFrameTrapQueue()
 			this->_StoredPhysicsData.AirResist      = MainCharObj2[0]->PhysData.AirResist;
 		}
 		break;
+	case ItemValue::IV_CutsceneTrap:
+		this->AddRandomCutsceneToQueue();
+		this->_ActiveTrapTimer = 0;
+		this->_TrapCooldownTimer = 0;
+		break;
 	case ItemValue::IV_PongTrap:
 		MinigameManager* minigameManager = &MinigameManager::GetInstance();
 		minigameManager->StartMinigame(ItemValue::IV_PongTrap);
 		break;
 	}
-
-	this->_ActiveTrapTimer = TRAP_DURATION;
-	this->_TrapCooldownTimer = TRAP_COOLDOWN;
 
 	ItemData& receivedItem = this->_ItemData[this->_ActiveTrap];
 
@@ -1010,8 +1147,46 @@ void ItemManager::OnFrameDialogueQueue()
 	DialogueData data = this->_DialogueQueue.front();
 	this->_DialogueQueue.pop();
 
-	PlayVoice(2, data.VoiceID);
+	PlayUnshuffledVoice(2, data.VoiceID);
 	this->_ActiveDialogueTimer = data.Duration * 60;
+}
+
+void ItemManager::AddRandomCutsceneToQueue()
+{
+	StoryProgressID_1 = (char)0;
+	StoryProgressID_2 = (char)1;
+	StoryProgressID_3 = (char)1;
+
+	int nextCutscene = rng() % this->_cutsceneOptions.size();
+	CutsceneData data = this->_cutsceneOptions[nextCutscene];
+
+	StoryEventID_1 = 0;
+	StoryEventID_2 = data.LowID;
+	StoryEventID_3 = data.HighID;
+
+	this->_CutsceneQueued = true;
+}
+
+void ItemManager::OnFrameCutsceneQueue()
+{
+	if (!this->_CutsceneQueued &&
+		GameMode == GameMode::GameMode_Event &&
+		StoryProgressID_3 != 0x03)
+	{
+		// Place the "Finished" Event
+		StoryProgressID_1 = (char)0;
+		StoryProgressID_2 = (char)1;
+		StoryProgressID_3 = (char)1;
+
+		StoryEventID_1 = 2;
+		StoryEventID_2 = 0xFF;
+		StoryEventID_3 = 0xFF;
+	}
+
+	if (GameMode == GameMode::GameMode_LoadStory)
+	{
+		this->_CutsceneQueued = false;
+	}
 }
 
 std::vector<int> ItemManager::GetChaosEmeraldAddresses()

@@ -790,20 +790,16 @@ void StageSelectManager::HandleGreenHill()
 			}
 			else if (this->_goal == 2)
 			{
-				WriteData<1>((void*)0x1DEB060, 0xCC);
-				WriteData<1>((void*)0x1DEB061, 0x00);
-				WriteData<1>((void*)0x1DEB062, 0x00);
-				WriteData<1>((void*)0x1DEB063, 0x00);
-				WriteData<1>((void*)0x1DEB064, 0xCD);
-				WriteData<1>((void*)0x1DEB065, 0x00);
-				WriteData<1>((void*)0x1DEB066, 0x00);
-				WriteData<1>((void*)0x1DEB067, 0x00);
-
-				WriteData<1>((void*)0x1DEB31E, 0x03);
-				WriteData<1>((void*)0x1DEB31F, 0x03);
+				WriteData<1>((void*)0x1DEB31E, 0x04);
+				WriteData<1>((void*)0x1DEB31F, 0x04);
 				WriteData<1>((void*)0x1DEB320, 0x03);
 
 				WriteData<1>((void*)0x174B044, 0x0C);
+
+				WriteData<1>((void*)0x173A5B4, 0xCF);
+				WriteData<1>((void*)0x173A5B5, 0x00);
+				WriteData<1>((void*)0x173A5B6, 0xFF);
+				WriteData<1>((void*)0x173A5B7, 0xFF);
 			}
 		}
 	}

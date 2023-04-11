@@ -268,6 +268,13 @@ void SA2_SetMusicMap(std::map<int, int> map)
     apm->SetMusicMap(map);
 }
 
+void SA2_SetVoiceMap(std::map<int, int> map)
+{
+    MusicManager* musicManager = &MusicManager::getInstance();
+
+    musicManager->SetVoiceMap(map);
+}
+
 void SA2_SetDeathLink(int deathLinkActive)
 {
     ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
@@ -582,6 +589,7 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_RegisterSlotDataIntCallback("Goal", &SA2_SetGoal);
     AP_RegisterSlotDataIntCallback("ModVersion", &SA2_CompareModVersion);
     AP_RegisterSlotDataMapIntIntCallback("MusicMap", &SA2_SetMusicMap);
+    AP_RegisterSlotDataMapIntIntCallback("VoiceMap", &SA2_SetVoiceMap);
     AP_RegisterSlotDataIntCallback("MusicShuffle", &SA2_SetMusicShuffle);
     AP_RegisterSlotDataIntCallback("Narrator", &SA2_SetNarrator);
     AP_RegisterSlotDataIntCallback("RingLoss", &SA2_SetRingLoss);
