@@ -59,7 +59,8 @@ public:
 	std::vector<int> GetHiddenLocationsForLevel(int levelID);
 	std::vector<int> GetGoldBeetleLocationsForLevel(int levelID);
 	std::vector<int> GetOmochaoLocationsForLevel(int levelID);
-	int GetAnimalLocationsForLevel(int levelID);
+	int GetCompletedAnimalLocationsForLevel(int levelID);
+	int GetTotalAnimalLocationsForLevel(int levelID);
 
 	bool AreAllRacesComplete();
 

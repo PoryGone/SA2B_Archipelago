@@ -1259,7 +1259,7 @@ std::vector<int> LocationManager::GetOmochaoLocationsForLevel(int levelID)
 	return result;
 }
 
-int LocationManager::GetAnimalLocationsForLevel(int levelID)
+int LocationManager::GetCompletedAnimalLocationsForLevel(int levelID)
 {
 	int result = 0;
 
@@ -1282,6 +1282,31 @@ int LocationManager::GetAnimalLocationsForLevel(int levelID)
 				{
 					break;
 				}
+			}
+		}
+	}
+
+	return result;
+}
+
+int LocationManager::GetTotalAnimalLocationsForLevel(int levelID)
+{
+	int result = 0;
+
+	if (this->_animalsEnabled)
+	{
+		int checkOffset = 0xB00;
+
+		for (int j = 0; j < 20; j++)
+		{
+			int locationID = checkOffset + (j * 0x20) + levelID;
+			if (this->_AnimalData.find(locationID) != this->_AnimalData.end())
+			{
+				result = j;
+			}
+			else
+			{
+				break;
 			}
 		}
 	}
