@@ -74,7 +74,7 @@ std::map<char, NumberDisplayData> NumberMap = {
 };
 
 static const int Anim_Length = 29;
-static const int Stage_Anim_Length = 28;
+static const int Stage_Anim_Length = 30;
 static const int Num_Anim_Length = 13;
 
 static NJS_TEXNAME UpgradeIconsTexName[Anim_Length];
@@ -172,6 +172,8 @@ void UpdateLevelCheckIcons()
 	std::vector<int> hiddens = locMan->GetHiddenLocationsForLevel(currentTileStageIndex);
 	std::vector<int> beetles = locMan->GetGoldBeetleLocationsForLevel(currentTileStageIndex);
 	std::vector<int> omochao = locMan->GetOmochaoLocationsForLevel(currentTileStageIndex);
+	int animalsFound = locMan->GetCompletedAnimalLocationsForLevel(currentTileStageIndex);
+	int animalsTotal = locMan->GetTotalAnimalLocationsForLevel(currentTileStageIndex);
 	StageSelectSprite.sx = 0.25f;
 	StageSelectSprite.sy = 0.25f;
 	int xCount = 0;
@@ -212,6 +214,18 @@ void UpdateLevelCheckIcons()
 			xCount++;
 			itemCount--;
 		}
+	}
+	if (animalsTotal > 0)
+	{
+		int animalsIcon = animalsFound == animalsTotal ? SSI_Animals : SSI_AnimalsDisabled;
+		float x = maxXPos - ((xCount + 1) * 32.0f);
+		StageSelectSprite.tanim = &StageSelectAnim[animalsIcon];
+		StageSelectSprite.p = { x, yPos, 0.0f };
+		DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+		x += 4;
+		DrawString(std::to_string(animalsFound), x, yPos + 8.0f, 0.25f);
+		DrawString(std::to_string(animalsTotal), x, yPos + 24.0f, 0.25f);
+		xCount++;
 	}
 	StageSelectSprite.sx = 0.1875f;
 	StageSelectSprite.sy = 0.1875f;

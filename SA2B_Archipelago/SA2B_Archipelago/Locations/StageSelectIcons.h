@@ -60,4 +60,6 @@ enum StageSelectIcon {
 	SSI_Omochao					= 24,
 	SSI_OmochaoDisabled			= 25,
 	SSI_CCUnlocked				= 26,
+	SSI_Animals					= 27,
+	SSI_AnimalsDisabled			= 28,
 };
