@@ -834,6 +834,18 @@ void InitializeAnimalChecks(std::map<int, AnimalCheckData>& outAnimalChecks)
     outAnimalChecks[AnimalCheck::AC_WhiteJungle_Animal_15] = AnimalCheckData(0x01DEED48, 0x06, 0x0E, LevelIDs_WhiteJungle);
     outAnimalChecks[AnimalCheck::AC_WhiteJungle_Animal_16] = AnimalCheckData(0x01DEED48, 0x07, 0x0F, LevelIDs_WhiteJungle);
 
+    outAnimalChecks[AnimalCheck::AC_PumpkinHill_Animal_1]  = AnimalCheckData(0x01DEEDA0, 0x00, 0x00, LevelIDs_PumpkinHill);
+    outAnimalChecks[AnimalCheck::AC_PumpkinHill_Animal_2]  = AnimalCheckData(0x01DEEDA0, 0x01, 0x01, LevelIDs_PumpkinHill);
+    outAnimalChecks[AnimalCheck::AC_PumpkinHill_Animal_3]  = AnimalCheckData(0x01DEEDA0, 0x02, 0x02, LevelIDs_PumpkinHill);
+    outAnimalChecks[AnimalCheck::AC_PumpkinHill_Animal_4]  = AnimalCheckData(0x01DEEDA0, 0x03, 0x03, LevelIDs_PumpkinHill);
+    outAnimalChecks[AnimalCheck::AC_PumpkinHill_Animal_5]  = AnimalCheckData(0x01DEEDA0, 0x04, 0x04, LevelIDs_PumpkinHill);
+    outAnimalChecks[AnimalCheck::AC_PumpkinHill_Animal_6]  = AnimalCheckData(0x01DEEDA0, 0x05, 0x05, LevelIDs_PumpkinHill);
+    outAnimalChecks[AnimalCheck::AC_PumpkinHill_Animal_7]  = AnimalCheckData(0x01DEEDA0, 0x06, 0x06, LevelIDs_PumpkinHill);
+    outAnimalChecks[AnimalCheck::AC_PumpkinHill_Animal_8]  = AnimalCheckData(0x01DEEDA0, 0x07, 0x07, LevelIDs_PumpkinHill);
+    outAnimalChecks[AnimalCheck::AC_PumpkinHill_Animal_9]  = AnimalCheckData(0x01DEEDA1, 0x00, 0x08, LevelIDs_PumpkinHill);
+    outAnimalChecks[AnimalCheck::AC_PumpkinHill_Animal_10] = AnimalCheckData(0x01DEEDA1, 0x01, 0x09, LevelIDs_PumpkinHill);
+    outAnimalChecks[AnimalCheck::AC_PumpkinHill_Animal_11] = AnimalCheckData(0x01DEEDA1, 0x02, 0x0A, LevelIDs_PumpkinHill);
+
     outAnimalChecks[AnimalCheck::AC_SkyRail_Animal_1]  = AnimalCheckData(0x01DEED4A, 0x00, 0x00, LevelIDs_SkyRail);
     outAnimalChecks[AnimalCheck::AC_SkyRail_Animal_2]  = AnimalCheckData(0x01DEED4A, 0x01, 0x01, LevelIDs_SkyRail);
     outAnimalChecks[AnimalCheck::AC_SkyRail_Animal_3]  = AnimalCheckData(0x01DEED4A, 0x02, 0x02, LevelIDs_SkyRail);
@@ -921,6 +933,22 @@ void InitializeAnimalChecks(std::map<int, AnimalCheckData>& outAnimalChecks)
     outAnimalChecks[AnimalCheck::AC_IronGate_Animal_13] = AnimalCheckData(0x01DEED57, 0x04, 0x0C, LevelIDs_IronGate);
     outAnimalChecks[AnimalCheck::AC_IronGate_Animal_14] = AnimalCheckData(0x01DEED57, 0x05, 0x0D, LevelIDs_IronGate);
     outAnimalChecks[AnimalCheck::AC_IronGate_Animal_15] = AnimalCheckData(0x01DEED57, 0x06, 0x0E, LevelIDs_IronGate);
+
+    outAnimalChecks[AnimalCheck::AC_WeaponsBed_Animal_1]  = AnimalCheckData(0x01DEEDA2, 0x00, 0x00, LevelIDs_WeaponsBed);
+    outAnimalChecks[AnimalCheck::AC_WeaponsBed_Animal_2]  = AnimalCheckData(0x01DEEDA2, 0x01, 0x01, LevelIDs_WeaponsBed);
+    outAnimalChecks[AnimalCheck::AC_WeaponsBed_Animal_3]  = AnimalCheckData(0x01DEEDA2, 0x02, 0x02, LevelIDs_WeaponsBed);
+    outAnimalChecks[AnimalCheck::AC_WeaponsBed_Animal_4]  = AnimalCheckData(0x01DEEDA2, 0x03, 0x03, LevelIDs_WeaponsBed);
+    outAnimalChecks[AnimalCheck::AC_WeaponsBed_Animal_5]  = AnimalCheckData(0x01DEEDA2, 0x04, 0x04, LevelIDs_WeaponsBed);
+    outAnimalChecks[AnimalCheck::AC_WeaponsBed_Animal_6]  = AnimalCheckData(0x01DEEDA2, 0x05, 0x05, LevelIDs_WeaponsBed);
+    outAnimalChecks[AnimalCheck::AC_WeaponsBed_Animal_7]  = AnimalCheckData(0x01DEEDA2, 0x06, 0x06, LevelIDs_WeaponsBed);
+    outAnimalChecks[AnimalCheck::AC_WeaponsBed_Animal_8]  = AnimalCheckData(0x01DEEDA3, 0x07, 0x07, LevelIDs_WeaponsBed);
+    outAnimalChecks[AnimalCheck::AC_WeaponsBed_Animal_9]  = AnimalCheckData(0x01DEEDA3, 0x00, 0x08, LevelIDs_WeaponsBed);
+    outAnimalChecks[AnimalCheck::AC_WeaponsBed_Animal_10] = AnimalCheckData(0x01DEEDA3, 0x01, 0x09, LevelIDs_WeaponsBed);
+    outAnimalChecks[AnimalCheck::AC_WeaponsBed_Animal_11] = AnimalCheckData(0x01DEEDA3, 0x02, 0x0A, LevelIDs_WeaponsBed);
+    outAnimalChecks[AnimalCheck::AC_WeaponsBed_Animal_12] = AnimalCheckData(0x01DEEDA3, 0x03, 0x0B, LevelIDs_WeaponsBed);
+    outAnimalChecks[AnimalCheck::AC_WeaponsBed_Animal_13] = AnimalCheckData(0x01DEEDA3, 0x04, 0x0C, LevelIDs_WeaponsBed);
+    outAnimalChecks[AnimalCheck::AC_WeaponsBed_Animal_14] = AnimalCheckData(0x01DEEDA3, 0x05, 0x0D, LevelIDs_WeaponsBed);
+    outAnimalChecks[AnimalCheck::AC_WeaponsBed_Animal_15] = AnimalCheckData(0x01DEEDA3, 0x06, 0x0E, LevelIDs_WeaponsBed);
 
     outAnimalChecks[AnimalCheck::AC_CityEscape_Animal_1]  = AnimalCheckData(0x01DEED58, 0x00, 0x00, LevelIDs_CityEscape);
     outAnimalChecks[AnimalCheck::AC_CityEscape_Animal_2]  = AnimalCheckData(0x01DEED58, 0x01, 0x01, LevelIDs_CityEscape);
