@@ -1283,6 +1283,10 @@ int LocationManager::GetCompletedAnimalLocationsForLevel(int levelID)
 					break;
 				}
 			}
+			else
+			{
+				break;
+			}
 		}
 	}
 
@@ -1302,7 +1306,7 @@ int LocationManager::GetTotalAnimalLocationsForLevel(int levelID)
 			int locationID = checkOffset + (j * 0x20) + levelID;
 			if (this->_AnimalData.find(locationID) != this->_AnimalData.end())
 			{
-				result = j;
+				result = j + 1;
 			}
 			else
 			{
