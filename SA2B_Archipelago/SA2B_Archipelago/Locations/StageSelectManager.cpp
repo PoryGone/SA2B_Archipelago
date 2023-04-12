@@ -22,6 +22,8 @@ DataPointer(char, EmblemResultsButton, 0x1D1BC3B);
 
 DataPointer(__int8, Settings_SelectedOption, 0x1D7BAA0);
 
+DataPointer(__int8, BossBattle_SelectedOption, 0x1D1C030);
+
 DataPointer(char, SS_CameraPos, 0x1D1BEC0);
 DataPointer(char, SS_SelectedTile, 0x1D1BF08);
 
@@ -34,6 +36,10 @@ DataArray(char, GateBossSaveData, 0x01DEE59C, 5);
 
 DataArray(int, JapanesseStageHeaders, 0x008A0470, 68);
 DataArray(int, EnglishStageHeaders, 0x8A0560, 45);
+
+DataPointer(char, StoryProgressID_1, 0x1DEB31E);
+DataPointer(char, StoryProgressID_2, 0x1DEB31F);
+DataPointer(char, StoryProgressID_3, 0x1DEB320);
 
 
 const void* const loc_Mission_1 = (void*)0x1DEEBBC;
@@ -156,6 +162,7 @@ void StageSelectManager::OnInitFunction(const char* path, const HelperFunctions&
 	InitializeStageSelectBossData(this->_stageSelectBossDataMap);
 	InitializeItemData(this->_itemData);
 	InitializeCharacterItemRanges(this->_characterItemRanges);
+	InitializeBossRushChecks(this->_BossRushData);
 	UpdateTitleHeaderArrays();
 	StageSelectIcons::GetInstance().OnInit(&_stageSelectDataMap);
 }
@@ -238,6 +245,25 @@ std::vector<int> StageSelectManager::GetGateRequirements()
 void StageSelectManager::SetChosenMissionsMap(std::map<int, int> map)
 {
 	this->_chosenMissionsMap = map;
+}
+
+void StageSelectManager::SetChosenBossRushMap(std::map<int, int> map)
+{
+	this->_chosenBossRushMap = map;
+
+	for (int i = BossRushCheck::BRC_BEGIN; i < BossRushCheck::BRC_NUM_CHECKS; i++)
+	{
+		if (this->_BossRushData.find(i) != this->_BossRushData.end())
+		{
+			BossRushCheckData& bossData = this->_BossRushData[i];
+
+			int replacementBoss = this->_chosenBossRushMap[bossData.StoryID];
+			BossRushCheckData& replacementBossData = this->_BossRushData[BossRushCheck::BRC_BEGIN + replacementBoss];
+
+			WriteData<1>((void*)(bossData.StoryAddress + 1), replacementBossData.Character);
+			WriteData<1>((void*)(bossData.StoryAddress + 2), replacementBossData.LevelID);
+		}
+	}
 }
 
 void StageSelectManager::SetMissionCountMap(std::map<int, int> map)
@@ -500,6 +526,45 @@ void StageSelectManager::UnlockAllLevels()
 	}
 }
 
+bool StageSelectManager::IsCannonsCoreComplete()
+{
+	bool bCannonCoreComplete = true;
+
+	int missionOrderIndex = this->_chosenMissionsMap.at(StageSelectStage::SSS_CannonCore);
+
+	std::array<int, 5> chosenMissionOrder = this->_potentialMissionOrders.at(missionOrderIndex);
+
+	if (this->_requireAllCannonsCoreMissions)
+	{
+		int missionCount = this->_missionCountMap.at(StageSelectStage::SSS_CannonCore);
+
+		for (int i = 0; i < missionCount; i++)
+		{
+			int missionIdx = chosenMissionOrder[i] - 1;
+			char dataValue = *(char*)(0x01DEE040 + missionIdx);
+
+			if (dataValue <= this->_requiredRank)
+			{
+				bCannonCoreComplete = false;
+
+				break;
+			}
+		}
+	}
+	else
+	{
+		int missionIdx = chosenMissionOrder[0] - 1;
+		char dataValue = *(char*)(0x01DEE040 + missionIdx);
+
+		if (dataValue <= this->_requiredRank)
+		{
+			bCannonCoreComplete = false;
+		}
+	}
+
+	return bCannonCoreComplete;
+}
+
 void StageSelectManager::UpdateTitleHeaderArrays()
 {
 	//Japanese Stage Title Atlas ptr
@@ -548,6 +613,25 @@ void StageSelectManager::HideMenuButtons()
 	{
 		KartRaceModeButton = 0x00;
 		WriteData<2>((void*)0x66542F, nullop); // Make Kart Race button always clickable
+	}
+
+	if (this->_goal == 4 || (this->_goal == 5 && this->IsCannonsCoreComplete()))
+	{
+		BossBattleModeButton = 0x00;
+		WriteData<1>((void*)0x1DEFA93, 0x00);
+		WriteData<1>((void*)0x1DEFA94, 0x00);
+		WriteData<1>((void*)0x1DEFA95, 0x01);
+
+		if (CurrentMenu == Menus::Menus_BossAttack)
+		{
+			BossBattle_SelectedOption = 0x02;
+		}
+	}
+	else
+	{
+		WriteData<1>((void*)0x1DEFA93, 0x00);
+		WriteData<1>((void*)0x1DEFA94, 0x00);
+		WriteData<1>((void*)0x1DEFA95, 0x00);
 	}
 
 	if (this->_goal == 3)
@@ -609,17 +693,20 @@ void StageSelectManager::HandleBossStage()
 		this->_needsSave = false;
 	}
 
-	if (IsBossLevel())
+	if (StoryProgressID_3 != 0x0E)
 	{
-		if (GameState == GameStates_GoToNextLevel)
+		if (IsBossLevel())
 		{
-			for (std::map<int, int>::iterator it = _bossGates.begin(); it != _bossGates.end(); ++it)
+			if (GameState == GameStates_GoToNextLevel)
 			{
-				if (CurrentLevel == this->_stageSelectBossDataMap[it->second].GetBossStage(0).LevelID)
+				for (std::map<int, int>::iterator it = _bossGates.begin(); it != _bossGates.end(); ++it)
 				{
-					GateBossSaveData[it->first - 1] = 0x05;
-					this->_needsSave = true;
-					StatsManager::GetInstance().GateUnlocked(it->first - 1);
+					if (CurrentLevel == this->_stageSelectBossDataMap[it->second].GetBossStage(0).LevelID)
+					{
+						GateBossSaveData[it->first - 1] = 0x05;
+						this->_needsSave = true;
+						StatsManager::GetInstance().GateUnlocked(it->first - 1);
+					}
 				}
 			}
 		}
@@ -639,6 +726,10 @@ void StageSelectManager::HandleGoal()
 	else if (this->_goal == 3)
 	{
 		HandleGrandPrix();
+	}
+	else if (this->_goal == 4 || this->_goal == 5)
+	{
+		HandleBossRush();
 	}
 }
 
@@ -660,41 +751,7 @@ void StageSelectManager::HandleBiolizard()
 		return;
 	}
 
-	bool bCannonCoreComplete = true;
-
-	int missionOrderIndex = this->_chosenMissionsMap.at(StageSelectStage::SSS_CannonCore);
-
-	std::array<int, 5> chosenMissionOrder = this->_potentialMissionOrders.at(missionOrderIndex);
-
-	if (this->_requireAllCannonsCoreMissions)
-	{
-		int missionCount = this->_missionCountMap.at(StageSelectStage::SSS_CannonCore);
-
-		for (int i = 0; i < missionCount; i++)
-		{
-			int missionIdx = chosenMissionOrder[i] - 1;
-			char dataValue = *(char*)(0x01DEE040 + missionIdx);
-
-			if (dataValue <= this->_requiredRank)
-			{
-				bCannonCoreComplete = false;
-
-				break;
-			}
-		}
-	}
-	else
-	{
-		int missionIdx = chosenMissionOrder[0] - 1;
-		char dataValue = *(char*)(0x01DEE040 + missionIdx);
-
-		if (dataValue <= this->_requiredRank)
-		{
-			bCannonCoreComplete = false;
-		}
-	}
-
-	if (bCannonCoreComplete)
+	if (this->IsCannonsCoreComplete())
 	{
 		// Biolizard Tile
 		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_GreenHill].TileIDAddress, 0x41);
@@ -856,6 +913,66 @@ void StageSelectManager::HandleGrandPrix()
 		apm->SendStoryComplete();
 
 		this->_victorySent = true;
+	}
+}
+
+void StageSelectManager::HandleBossRush()
+{
+	if (StoryProgressID_3 == 0x0E)
+	{
+		if (GameState == GameStates_GoToNextLevel)
+		{
+			for (int i = BossRushCheck::BRC_BEGIN; i < BossRushCheck::BRC_NUM_CHECKS; i++)
+			{
+				if (this->_BossRushData.find(i) != this->_BossRushData.end())
+				{
+					BossRushCheckData& checkData = this->_BossRushData[i];
+
+					if (StoryProgressID_1 > checkData.StoryID)
+					{
+						char dataValue = *(char*)checkData.Address;
+						char bitFlag = (char)(0x01 << checkData.AddressBit);
+						char newDataValue = dataValue | bitFlag;
+
+						WriteData<1>((void*)checkData.Address, newDataValue);
+					}
+				}
+			}
+		}
+	}
+
+	if (CurrentLevel == LevelIDs_Biolizard)
+	{
+		if (TimerMinutes == 0 && TimerSeconds < 5)
+		{
+			WriteData<1>((void*)0x1DEB060, 0xCC);
+			WriteData<1>((void*)0x1DEB061, 0x00);
+			WriteData<1>((void*)0x1DEB062, 0x00);
+			WriteData<1>((void*)0x1DEB063, 0x00);
+			WriteData<1>((void*)0x1DEB064, 0xCD);
+			WriteData<1>((void*)0x1DEB065, 0x00);
+			WriteData<1>((void*)0x1DEB066, 0x00);
+			WriteData<1>((void*)0x1DEB067, 0x00);
+
+			WriteData<1>((void*)0x1DEB31E, 0x03);
+			WriteData<1>((void*)0x1DEB31F, 0x03);
+			WriteData<1>((void*)0x1DEB320, 0x03);
+
+			WriteData<1>((void*)0x174B044, 0x0C);
+		}
+	}
+
+	if (CurrentLevel == LevelIDs_FinalHazard)
+	{
+		if (GameState == GameStates_GoToNextLevel)
+		{
+			MessageQueue* messageQueue = &MessageQueue::GetInstance();
+			std::string msg = "Victory!";
+			messageQueue->AddMessage(msg);
+
+			ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
+			apm->SendStoryComplete();
+		}
 	}
 }
 

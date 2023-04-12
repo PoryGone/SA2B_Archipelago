@@ -220,6 +220,45 @@ struct LevelClearCheckData
 
 void InitializeLevelClearChecks(std::map<int, LevelClearCheckData>& outLevelClearChecks);
 
+enum BossRushCheck
+{
+    BRC_BEGIN = 0x105,
+    BRC_Boss_1 = 0x105,
+    BRC_Boss_2,
+    BRC_Boss_3,
+    BRC_Boss_4,
+    BRC_Boss_5,
+    BRC_Boss_6,
+    BRC_Boss_7,
+    BRC_Boss_8,
+    BRC_Boss_9,
+    BRC_Boss_10,
+    BRC_Boss_11,
+    BRC_Boss_12,
+    BRC_Boss_13,
+    BRC_Boss_14,
+    BRC_Boss_15,
+    BRC_Boss_16,
+
+    BRC_NUM_CHECKS
+};
+
+struct BossRushCheckData
+{
+    BossRushCheckData() : Address(0x00), AddressBit(0x00) {}
+    BossRushCheckData(int address, int addressBit, int storyID, int storyAddress, char character, int16_t levelID) : Address(address), AddressBit(addressBit), StoryID(storyID), StoryAddress(storyAddress), Character(character), LevelID(levelID) {}
+
+    int Address;
+    int AddressBit;
+    int StoryID = 0x00;
+    int StoryAddress = 0x00;
+    char Character = 0x00;
+    int16_t LevelID = 0x00;
+    bool CheckSent = false;
+};
+
+void InitializeBossRushChecks(std::map<int, BossRushCheckData>& outBossRushChecks);
+
 
 enum ChaoGardenCheck
 {

@@ -23,6 +23,7 @@ public:
 	void OnInitFunction(const char* path, const HelperFunctions& helperFunctions);
 	void OnFrameFunction();
 	void OnFrameLevelClears();
+	void OnFrameBossRush();
 	void OnFrameChaoKeys();
 	void OnFrameWhistle();
 	void OnFramePipes();
@@ -85,6 +86,7 @@ private:
 	bool _chaoEnabled = false;
 
 	std::map<int, LevelClearCheckData> _LevelClearData;
+	std::map<int, BossRushCheckData> _BossRushData;
 	std::map<int, ChaoGardenCheckData> _ChaoGardenData;
 	std::map<int, ChaoKeyCheckData> _ChaoKeyData;
 	std::map<int, PipeCheckData> _PipeData;

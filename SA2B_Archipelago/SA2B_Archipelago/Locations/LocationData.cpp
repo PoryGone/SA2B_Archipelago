@@ -231,6 +231,26 @@ void InitializeLevelClearChecks(std::map<int, LevelClearCheckData> &outLevelClea
     outLevelClearChecks[LevelClearCheck::LCC_Boss_5] = LevelClearCheckData(0x01DEE5A0);
 }
 
+void InitializeBossRushChecks(std::map<int, BossRushCheckData>& outBossRushChecks)
+{
+    outBossRushChecks[BossRushCheck::BRC_Boss_1]  = BossRushCheckData(0x01DEE5A1, 0x00, 0x00, 0x173A708, 0x00, 0x13);
+    outBossRushChecks[BossRushCheck::BRC_Boss_2]  = BossRushCheckData(0x01DEE5A1, 0x01, 0x01, 0x173A714, 0x00, 0x2A);
+    outBossRushChecks[BossRushCheck::BRC_Boss_3]  = BossRushCheckData(0x01DEE5A1, 0x02, 0x02, 0x173A720, 0x06, 0x14);
+    outBossRushChecks[BossRushCheck::BRC_Boss_4]  = BossRushCheckData(0x01DEE5A1, 0x03, 0x03, 0x173A72C, 0x06, 0x1D);
+    outBossRushChecks[BossRushCheck::BRC_Boss_5]  = BossRushCheckData(0x01DEE5A1, 0x04, 0x04, 0x173A738, 0x04, 0x21);
+    outBossRushChecks[BossRushCheck::BRC_Boss_6]  = BossRushCheckData(0x01DEE5A1, 0x05, 0x05, 0x173A744, 0x00, 0x3C);
+    outBossRushChecks[BossRushCheck::BRC_Boss_7]  = BossRushCheckData(0x01DEE5A1, 0x06, 0x06, 0x173A750, 0x01, 0x3D);
+    outBossRushChecks[BossRushCheck::BRC_Boss_8]  = BossRushCheckData(0x01DEE5A1, 0x07, 0x07, 0x173A75C, 0x05, 0x3E);
+    outBossRushChecks[BossRushCheck::BRC_Boss_9]  = BossRushCheckData(0x01DEE5A2, 0x00, 0x08, 0x173A768, 0x00, 0x40);
+    outBossRushChecks[BossRushCheck::BRC_Boss_10] = BossRushCheckData(0x01DEE5A2, 0x01, 0x09, 0x173A774, 0x07, 0x43);
+    outBossRushChecks[BossRushCheck::BRC_Boss_11] = BossRushCheckData(0x01DEE5A2, 0x02, 0x0A, 0x173A780, 0x04, 0x3F);
+    outBossRushChecks[BossRushCheck::BRC_Boss_12] = BossRushCheckData(0x01DEE5A2, 0x03, 0x0B, 0x173A78C, 0x01, 0x13);
+    outBossRushChecks[BossRushCheck::BRC_Boss_13] = BossRushCheckData(0x01DEE5A2, 0x04, 0x0C, 0x173A798, 0x01, 0x2A);
+    outBossRushChecks[BossRushCheck::BRC_Boss_14] = BossRushCheckData(0x01DEE5A2, 0x05, 0x0D, 0x173A7A4, 0x07, 0x14);
+    outBossRushChecks[BossRushCheck::BRC_Boss_15] = BossRushCheckData(0x01DEE5A2, 0x06, 0x0E, 0x173A7B0, 0x07, 0x1D);
+    outBossRushChecks[BossRushCheck::BRC_Boss_16] = BossRushCheckData(0x01DEE5A2, 0x07, 0x0F, 0x173A7BC, 0x05, 0x21);
+}
+
 void InitializeChaoKeyChecks(std::map<int, ChaoKeyCheckData>& outChaoKeyChecks)
 {
     outChaoKeyChecks.clear();
