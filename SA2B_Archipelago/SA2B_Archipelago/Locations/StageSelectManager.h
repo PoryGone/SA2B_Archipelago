@@ -87,6 +87,7 @@ private:
     std::map<int, BossRushCheckData> _BossRushData;
 
     __int8 _firstStageIndex = 0x17;
+    __int8 _previousMainMenuSelection = 0x02;
     __int8 _previousSettingsSelection = 0x02;
     bool _needsSave = false;
 

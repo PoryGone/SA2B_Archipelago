@@ -20,6 +20,7 @@ DataPointer(char, SP_SelectedButton, 0x1D1BC00);
 DataPointer(char, Extras_SelectedButton, 0x1D1BC38);
 DataPointer(char, EmblemResultsButton, 0x1D1BC3B);
 
+DataPointer(__int8, MainMenu_SelectedOption, 0x1D1BBE4);
 DataPointer(__int8, Settings_SelectedOption, 0x1D7BAA0);
 
 DataPointer(__int8, BossBattle_SelectedOption, 0x1D1C030);
@@ -659,7 +660,23 @@ void StageSelectManager::HideMenuButtons()
 		Extras_SelectedButton = 0x03;
 	}
 
-	if (CurrentMenu == Menus::Menus_Settings)
+	if (CurrentMenu == Menus::Menus_Main)
+	{
+		if (MainMenu_SelectedOption == 0x01) // 2 Player Battle Button
+		{
+			if (this->_previousMainMenuSelection == 0x00)
+			{
+				MainMenu_SelectedOption = 0x02;
+			}
+			else
+			{
+				MainMenu_SelectedOption = 0x00;
+			}
+		}
+
+		this->_previousMainMenuSelection = MainMenu_SelectedOption;
+	}
+	else if (CurrentMenu == Menus::Menus_Settings)
 	{
 		if (Settings_SelectedOption == 0x01) // File Select Button
 		{
