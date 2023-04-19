@@ -632,7 +632,8 @@ struct CharObj2Base
 	__int16 ConfuseTime;
 	char gap1C[8];
 	int Upgrades;
-	float field_28;
+	unsigned char NonInteractState;
+	char field_29[3];
 	Angle TiltAngle;
 	float PathDist;
 	float Up;

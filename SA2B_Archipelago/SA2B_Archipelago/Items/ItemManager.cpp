@@ -526,6 +526,28 @@ bool ItemManager::IsActiveTrapValid()
 		{
 			return false;
 		}
+
+		if (CurrentLevel == LevelIDs_CrazyGadget &&
+			(!MainCharObj2[0] || MainCharObj2[0]->NonInteractState == 0x0B || MainCharObj2[0]->gap1C[0] != 0x00))
+		{
+			// Don't take a Chaos Control Trap in Crazy Gadget Tubes
+			return false;
+		}
+
+		if ((CurrentLevel == LevelIDs_PyramidCave || CurrentLevel == LevelIDs_RadicalHighway) &&
+			(!MainCharObj2[0] || MainCharObj2[0]->NonInteractState >= 0xC0))
+		{
+			// Don't take a Chaos Control Trap on Spinning Bars
+			return false;
+		}
+
+		if ((CurrentLevel == LevelIDs_CrazyGadget || CurrentLevel == LevelIDs_PyramidCave || CurrentLevel == LevelIDs_RadicalHighway) &&
+			this->_ChaosControlCooldown > 0)
+		{
+			// Don't take a Chaos Control Trap right in between invalid states
+			this->_ChaosControlCooldown--;
+			return false;
+		}
 		break;
 	case ItemValue::IV_ConfuseTrap:
 		if (GameMode != GameMode::GameMode_Level)
@@ -1007,6 +1029,7 @@ void ItemManager::OnFrameTrapQueue()
 
 	this->_ActiveTrapTimer = TRAP_DURATION;
 	this->_TrapCooldownTimer = TRAP_COOLDOWN;
+	this->_ChaosControlCooldown = TRAP_COOLDOWN;
 
 	switch (this->_ActiveTrap)
 	{
