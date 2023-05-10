@@ -8,7 +8,9 @@
 
 #include "../Utilities/MessageQueue.h"
 #include "../../lib/APCpp/Archipelago.h"
+#include "../../lib/APCpp/json/reader.h"
 
+#include <chrono>
 #include <functional>
 #include "../Locations/StageSelectManager.h"
 #include "../Aesthetics/StatsManager.h"
@@ -145,6 +147,7 @@ void ArchipelagoManager::OnFrameFunction()
 
                 this->Init(serverIP.c_str(), playerName.c_str(), serverPassword.c_str());
 
+                this->ap_player_name = playerName;
             }
             else
             {
@@ -239,6 +242,35 @@ void ArchipelagoManager::OnFrameFunction()
 
 
 void noop() {}
+
+void SA2_HandleBouncedPacket(AP_Bounce bouncePacket)
+{
+    ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
+    
+    Json::Value bounceData;
+    Json::Reader reader;
+    reader.parse(bouncePacket.data, bounceData);
+    for (unsigned int i = 0; i < bouncePacket.tags[0].size(); i++)
+    {
+        if (!strcmp(bouncePacket.tags[0][i].c_str(), "DeathLink"))
+        {
+            if (!strcmp(bounceData["source"].asCString(), apm->ap_player_name.c_str()) &&
+                (bounceData["time"].asInt64() == apm->lastDeathLinkTime))
+            {
+                // This is the packet we just sent
+                apm->lastDeathLinkTime = 0;
+                break;
+            }
+            
+            apm->_deathLinkPending = true;
+            break;
+        }
+        else if (!strcmp(bouncePacket.tags[0][i].c_str(), "RingLink"))
+        {
+        
+        }
+    }
+}
 
 void SA2_ResetItems()
 {
@@ -597,6 +629,7 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_SetItemRecvCallback(&SA2_RecvItem);
     AP_SetLocationCheckedCallback(&SA2_CheckLocation);
     AP_SetDeathLinkRecvCallback(&noop);
+    AP_RegisterBouncedCallback(&SA2_HandleBouncedPacket);
     AP_RegisterSlotDataIntCallback("DeathLink", &SA2_SetDeathLink);
     AP_RegisterSlotDataIntCallback("Goal", &SA2_SetGoal);
     AP_RegisterSlotDataIntCallback("ModVersion", &SA2_CompareModVersion);
@@ -782,11 +815,15 @@ void ArchipelagoManager::DeathLinkSend()
     }
     AP_DeathLinkSend();
     MessageQueue::GetInstance().AddMessage(std::string("Death Sent"));
+
+    std::chrono::time_point<std::chrono::system_clock> timestamp = std::chrono::system_clock::now();
+    this->lastDeathLinkTime = std::chrono::duration_cast<std::chrono::seconds>(timestamp.time_since_epoch()).count();
 }
 
 bool ArchipelagoManager::DeathLinkPending() 
 {
-    return AP_DeathLinkPending();
+    Json::Reader reader;
+    return this->_deathLinkPending;
 }
 
 void ArchipelagoManager::DeathLinkClear() 

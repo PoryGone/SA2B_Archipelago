@@ -43,6 +43,10 @@ public:
 
 	std::string GetSeedName() { return this->_seedName; };
 
+	bool _deathLinkPending = false;
+	std::string ap_player_name;
+	long long lastDeathLinkTime = 0;
+
 private:
 	const HelperFunctions* _helperFunctions;
 	const IniFile* _settingsINI;
