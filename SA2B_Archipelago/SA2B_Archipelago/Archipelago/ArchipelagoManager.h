@@ -10,6 +10,20 @@ constexpr int MOD_VERSION = 201;
 
 constexpr int KEEP_ALIVE = 3600;
 
+constexpr int RINGLINK_RATE = 10;
+
+#define RING_LOSS_SOUND 0x8014
+#define RING_GAIN_SOUND 0x8005
+
+enum class DeathCause
+{
+	DC_Damage,
+	DC_Quicksand,
+	DC_Kart,
+	DC_Fall,
+	DC_Drown,
+};
+
 class ArchipelagoManager
 {
 public:
@@ -37,6 +51,7 @@ public:
 	void SetMusicShuffle(int shuffleType);
 	void SetNarrator(int narrator);
 	void SetDeathLink(bool deathLinkActive);
+	void SetRingLink(bool ringLinkActive);
 	void VerfyModVersion(int modVersion);
 
 	void AP_KillPlayer();
@@ -46,15 +61,23 @@ public:
 	bool _deathLinkPending = false;
 	std::string ap_player_name;
 	long long lastDeathLinkTime = 0;
+	int _instanceID = 0;
+
+	__int16 _lastSentRingCount = 0;
+
+	bool _deathLinkActive = false;
+	bool _ringLinkActive = false;
+
+	std::string receivedDeathCause;
 
 private:
 	const HelperFunctions* _helperFunctions;
 	const IniFile* _settingsINI;
 
 	int _keepAliveTimer = 0;
+	int _ringLinkTimer = RINGLINK_RATE;
 
 	int _deathLinkTimer = 0;
-	bool _deathLinkActive = false;
 
 	std::string _seedName;
 
@@ -71,9 +94,12 @@ private:
 	void OnFrameMessageQueue();
 	void OnFrameDebug();
 
-	// DeathLink functions
+	// DeathLink Functions
 	void OnFrameDeathLink();
-	void DeathLinkSend();
+	void DeathLinkSend(DeathCause cause);
 	bool DeathLinkPending();
 	void DeathLinkClear();
+
+	// RingLink Functions
+	void OnFrameRingLink();
 };
