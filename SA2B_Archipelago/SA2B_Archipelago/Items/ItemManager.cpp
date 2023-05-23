@@ -809,9 +809,9 @@ void ItemManager::ResetTrapData()
 			MainCharObj2[0]->PhysData.GroundFriction = this->_StoredPhysicsData.GroundFriction;
 			MainCharObj2[0]->PhysData.RunDecel       = this->_StoredPhysicsData.RunDecel;
 			MainCharObj2[0]->PhysData.RunBrake       = this->_StoredPhysicsData.RunBrake;
-
-			this->_StoredPhysicsData = PhysicsData();
 		}
+
+		this->_StoredPhysicsData = PhysicsData();
 	}
 }
 
