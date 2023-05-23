@@ -1117,6 +1117,8 @@ void ItemManager::OnFrameTrapQueue()
 		this->AddRandomCutsceneToQueue();
 		this->_ActiveTrapTimer = 0;
 		this->_TrapCooldownTimer = 0;
+		// Don't display Received text until the cutscene actually plays
+		return;
 		break;
 	case ItemValue::IV_PongTrap:
 		MinigameManager* minigameManager = &MinigameManager::GetInstance();
@@ -1208,6 +1210,12 @@ void ItemManager::OnFrameCutsceneQueue()
 
 	if (GameMode == GameMode::GameMode_LoadStory)
 	{
+		if (this->_CutsceneQueued)
+		{
+			std::string message = std::string("Received Cutscene Trap");
+			MessageQueue::GetInstance().AddMessage(message);
+		}
+
 		this->_CutsceneQueued = false;
 	}
 }
