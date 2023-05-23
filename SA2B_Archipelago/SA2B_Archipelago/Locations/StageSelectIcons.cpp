@@ -180,6 +180,15 @@ void UpdateLevelCheckIcons()
 	int itemCount = 0;
 	float yPos = 0.0f;
 	int debugIndex = 0;
+
+	char levelID = *(char*)(*StageSelectDataMap_ptr).at(currentTileStageIndex).TileIDAddress;
+	bool isBossStage = (std::count(StageSelectIcons::GetInstance().bossIDs.begin(), StageSelectIcons::GetInstance().bossIDs.end(), levelID) != 0);
+	if (isBossStage)
+	{
+		// Don't show icons on boss tiles
+		return;
+	}
+
 	if ((*StageSelectDataMap_ptr).at(currentTileStageIndex).UpgradeAddress > 0x00) 
 	{
 		int icon = *(char*)(*StageSelectDataMap_ptr).at(currentTileStageIndex).UpgradeAddress > 0x00 ? SSI_Upgrade : SSI_UpgradeDisabled;
@@ -494,9 +503,16 @@ void DeleteUpgradeIcon_IL(ObjectMaster* obj)
 
 void DrawUpgradeIcon_IL(ObjectMaster* obj)
 {
-	if (CurrentLevel == LevelIDs_ChaoWorld) {
+	if (CurrentLevel == LevelIDs_ChaoWorld)
+	{
 		return;
 	}
+
+	if (CurrentMenu == Menus::Menus_BossAttack || CurrentMenu == Menus::Menus_Kart)
+	{
+		return;
+	}
+
 	if (GameState == GameStates::GameStates_Pause && GameMode == GameMode::GameMode_Level)
 	{
 		UpdateUpgradeIcons(true);
