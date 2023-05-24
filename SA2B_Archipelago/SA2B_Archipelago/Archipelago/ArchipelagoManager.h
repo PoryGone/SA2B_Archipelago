@@ -17,11 +17,13 @@ constexpr int RINGLINK_RATE = 10;
 
 enum class DeathCause
 {
+	DC_None,
 	DC_Damage,
 	DC_Quicksand,
 	DC_Kart,
 	DC_Fall,
 	DC_Drown,
+	DC_Pong
 };
 
 class ArchipelagoManager
@@ -56,6 +58,8 @@ public:
 
 	void AP_KillPlayer();
 
+	void SetDeathCause(DeathCause cause);
+
 	std::string GetSeedName() { return this->_seedName; };
 
 	bool _deathLinkPending = false;
@@ -78,6 +82,7 @@ private:
 	int _ringLinkTimer = RINGLINK_RATE;
 
 	int _deathLinkTimer = 0;
+	DeathCause deathCauseOverride;
 
 	std::string _seedName;
 

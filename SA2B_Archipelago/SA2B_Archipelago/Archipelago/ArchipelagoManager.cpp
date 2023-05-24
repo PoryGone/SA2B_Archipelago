@@ -869,7 +869,12 @@ void ArchipelagoManager::OnFrameDeathLink()
         {
             DeathCause cause = DeathCause::DC_Damage;
 
-            if (MainCharObj1[0]->Action == Action_Drown)
+            if (this->deathCauseOverride != DeathCause::DC_None)
+            {
+                cause = this->deathCauseOverride;
+                this->deathCauseOverride = DeathCause::DC_None;
+            }
+            else if (MainCharObj1[0]->Action == Action_Drown)
             {
                 cause = DeathCause::DC_Drown;
             }
@@ -957,6 +962,12 @@ void ArchipelagoManager::DeathLinkSend(DeathCause cause)
         break;
     case DeathCause::DC_Drown:
         causeText = characterText + " drowned. (" + this->ap_player_name + ")";
+        break;
+    case DeathCause::DC_Pong:
+        causeText = this->ap_player_name + " could not win at Pong.";
+        break;
+    default:
+        causeText = characterText + " died. (" + this->ap_player_name + ")";
         break;
     }
 
@@ -1176,4 +1187,9 @@ void ArchipelagoManager::AP_KillPlayer()
             }
         }
     }
+}
+
+void ArchipelagoManager::SetDeathCause(DeathCause cause)
+{
+    this->deathCauseOverride = cause;
 }
