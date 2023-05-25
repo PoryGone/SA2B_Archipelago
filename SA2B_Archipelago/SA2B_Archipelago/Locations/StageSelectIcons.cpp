@@ -281,7 +281,7 @@ void UpdateLevelCheckIcons()
 void UpdateChaosEmeraldIcons()
 {
 	int goal = StageSelectManager::GetInstance().GetGoal();
-	if (goal == 1 || goal == 2) 
+	if (goal == 1 || goal == 2 || goal == 6)
 	{
 		ItemManager* itemMan = &ItemManager::getInstance();
 		std::vector<int> chaosEmeralds = itemMan->GetChaosEmeraldAddresses();

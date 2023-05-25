@@ -616,7 +616,9 @@ void StageSelectManager::HideMenuButtons()
 		WriteData<2>((void*)0x66542F, nullop); // Make Kart Race button always clickable
 	}
 
-	if (this->_goal == 4 || (this->_goal == 5 && this->IsCannonsCoreComplete()))
+	if (this->_goal == 4 ||
+		(this->_goal == 5 && this->IsCannonsCoreComplete()) ||
+		(this->_goal == 6 && this->HaveAllChaosEmeralds()))
 	{
 		BossBattleModeButton = 0x00;
 		WriteData<1>((void*)0x1DEFA93, 0x00);
@@ -744,7 +746,7 @@ void StageSelectManager::HandleGoal()
 	{
 		HandleGrandPrix();
 	}
-	else if (this->_goal == 4 || this->_goal == 5)
+	else if (this->_goal == 4 || this->_goal == 5 || this->_goal == 6)
 	{
 		HandleBossRush();
 	}
@@ -820,17 +822,7 @@ void StageSelectManager::HandleBiolizard()
 
 void StageSelectManager::HandleGreenHill()
 {
-	bool bHaveChaosEmeralds = true;
-
-	for (int i = 0; i < 7; i++)
-	{
-		unsigned char dataValue = *(unsigned char*)(0x01DEEAF8 + i);
-
-		if (dataValue == 0)
-		{
-			bHaveChaosEmeralds = false;
-		}
-	}
+	bool bHaveChaosEmeralds = this->HaveAllChaosEmeralds();
 
 	if (bHaveChaosEmeralds)
 	{
@@ -1116,4 +1108,19 @@ void StageSelectManager::HandleMissionOrder()
 		}
 		WriteData<1>((void*)((int)(loc_mission_count)), 5);
 	}
+}
+
+bool StageSelectManager::HaveAllChaosEmeralds()
+{
+	for (int i = 0; i < 7; i++)
+	{
+		unsigned char dataValue = *(unsigned char*)(0x01DEEAF8 + i);
+
+		if (dataValue == 0)
+		{
+			return false;
+		}
+	}
+
+	return true;
 }

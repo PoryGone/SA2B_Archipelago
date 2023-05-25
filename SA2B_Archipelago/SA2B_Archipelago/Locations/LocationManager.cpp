@@ -186,7 +186,7 @@ void LocationManager::OnFrameLevelClears()
 
 void LocationManager::OnFrameBossRush()
 {
-	if (!(this->_goal == 4 or this->_goal == 5))
+	if (!(this->_goal == 4 or this->_goal == 5 or this->_goal == 6))
 	{
 		return;
 	}
