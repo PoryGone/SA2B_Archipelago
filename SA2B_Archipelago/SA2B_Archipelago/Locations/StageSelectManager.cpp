@@ -1046,7 +1046,22 @@ void StageSelectManager::HandleMissionOrder()
 	WriteData<1>((void*)0x1DEEBB8, 0x30);
 
 	int currentTileStageIndex = this->TileIDtoStageIndex[SS_SelectedTile];
-	if (CurrentMenu == Menus::Menus_StageSelect && currentTileStageIndex < this->_chosenMissionsMap.size())
+	bool isBossStage = StageSelectIcons::GetInstance().IsCurrentTileBoss();
+	if (isBossStage || currentTileStageIndex == StageSelectStage::SSS_ChaoGarden)
+	{
+		for (int i = 0; i < 5; i++)
+		{
+			WriteData<1>((void*)((int)(loc_Mission_1)+i * 4), (char)(i));
+		}
+		WriteData<1>((void*)((int)(loc_mission_count)), 5);
+
+		// Handle "1st" highlighting
+		WriteData<1>((void*)(0xC69218 + 8), 0x00);
+		WriteData<1>((void*)(0xC69218 + 10), 0x00);
+		WriteData<1>((void*)(0xC69218 + 12), 0x32);
+		WriteData<1>((void*)(0xC69218 + 14), 0x33);
+	}
+	else if (CurrentMenu == Menus::Menus_StageSelect && currentTileStageIndex < this->_chosenMissionsMap.size())
 	{
 		int missionOrderIndex = this->_chosenMissionsMap.at(currentTileStageIndex);
 
@@ -1107,6 +1122,12 @@ void StageSelectManager::HandleMissionOrder()
 			WriteData<1>((void*)((int)(loc_Mission_1)+i * 4), (char)(i));
 		}
 		WriteData<1>((void*)((int)(loc_mission_count)), 5);
+
+		// Handle "1st" highlighting
+		WriteData<1>((void*)(0xC69218 + 8), 0x00);
+		WriteData<1>((void*)(0xC69218 + 10), 0x00);
+		WriteData<1>((void*)(0xC69218 + 12), 0x32);
+		WriteData<1>((void*)(0xC69218 + 14), 0x33);
 	}
 }
 

@@ -15,6 +15,8 @@ public:
 	}
 	void OnFrame();
 	void OnInit(std::map<int, StageSelectStageData>* stageSelectDataMap);
+
+	bool IsCurrentTileBoss();
 	std::map<int, ItemData> ItemData;
 	std::vector<CharacterItemRange> CharacterItemRanges;
 	ObjectMaster* DrawIconObj;

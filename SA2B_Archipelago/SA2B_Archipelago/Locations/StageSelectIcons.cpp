@@ -129,6 +129,13 @@ void DrawString(std::string string, float xPos, float yPos, float scale = 1.0f)
 
 void UpdateLevelCheckIcons()
 {
+	bool isBossStage = StageSelectIcons::GetInstance().IsCurrentTileBoss();
+	if (isBossStage)
+	{
+		// Don't show icons on boss tiles
+		return;
+	}
+
 	int currentTileStageIndex = TileIDtoStageIndex[SS_SelectedTile];
 	LocationManager* locMan = &LocationManager::getInstance();
 	std::vector<int> chaoKeys = locMan->GetChaoKeyLocationsForLevel(currentTileStageIndex);
@@ -144,14 +151,6 @@ void UpdateLevelCheckIcons()
 	int itemCount = 0;
 	float yPos = 0.0f;
 	int debugIndex = 0;
-
-	char levelID = *(char*)(*StageSelectDataMap_ptr).at(currentTileStageIndex).TileIDAddress;
-	bool isBossStage = (std::count(StageSelectIcons::GetInstance().bossIDs.begin(), StageSelectIcons::GetInstance().bossIDs.end(), levelID) != 0);
-	if (isBossStage)
-	{
-		// Don't show icons on boss tiles
-		return;
-	}
 
 	if ((*StageSelectDataMap_ptr).at(currentTileStageIndex).UpgradeAddress > 0x00) 
 	{
@@ -552,4 +551,13 @@ void StageSelectIcons::OnFrame()
 		InLevelIconObj->DisplaySub_Delayed3 = DrawUpgradeIcon_IL;
 		InLevelIconObj->Data1.Entity->Action = 1;
 	}
+}
+
+bool StageSelectIcons::IsCurrentTileBoss()
+{
+	int currentTileStageIndex = TileIDtoStageIndex[SS_SelectedTile];
+	char levelID = *(char*)(*StageSelectDataMap_ptr).at(currentTileStageIndex).TileIDAddress;
+	bool isBossStage = (std::count(StageSelectIcons::GetInstance().bossIDs.begin(), StageSelectIcons::GetInstance().bossIDs.end(), levelID) != 0);
+
+	return isBossStage;
 }
