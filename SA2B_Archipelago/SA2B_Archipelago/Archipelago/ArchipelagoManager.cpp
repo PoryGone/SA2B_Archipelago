@@ -21,6 +21,21 @@ DataPointer(unsigned int, SeedHash, 0x1DEC6FC);
 DataPointer(unsigned int, PlayerNameHash, 0x1DEC700);
 DataPointer(char, LastStoryComplete, 0x1DEFA95);
 
+
+unsigned int CalcHash(std::string str)
+{
+    // DJB2 Hash Algorithm
+    unsigned long hash = 5381;
+    unsigned int str_len = str.length();
+
+    for (int c = 0; c < str_len; c++)
+    {
+        hash = ((hash << 5) + hash) + (int)str[c]; /* hash * 33 + c */
+    }
+
+    return hash;
+}
+
 static void __cdecl HandleRingLoss()
 {
     __asm
@@ -190,7 +205,7 @@ void ArchipelagoManager::OnFrameFunction()
         {
             this->_seedName = RoomInfo.seed_name;
 
-            std::size_t seedHash = std::hash<std::string>{}(this->_seedName);
+            unsigned int seedHash = CalcHash(this->_seedName);
 
             if (SeedHash == 0)
             {
@@ -214,7 +229,8 @@ void ArchipelagoManager::OnFrameFunction()
             if (this->_settingsINI)
             {
                 std::string playerName = this->_settingsINI->getString("AP", "PlayerName");
-                std::size_t playerNameHash = std::hash<std::string>{}(playerName);
+
+                unsigned int playerNameHash = CalcHash(playerName);
 
                 if (PlayerNameHash == 0)
                 {
