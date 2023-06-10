@@ -1338,7 +1338,7 @@ int LocationManager::GetCompletedAnimalLocationsForLevel(int levelID)
 	{
 		int checkOffset = 0xB00;
 
-		for (int j = 0; j < 20; j++)
+		for (int j = 0; j <= 20; j++)
 		{
 			result = j;
 			int locationID = checkOffset + (j * 0x20) + levelID;
