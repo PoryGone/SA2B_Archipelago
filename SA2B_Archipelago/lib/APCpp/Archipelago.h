@@ -131,11 +131,11 @@ int AP_GetUUID();
 
 /* Serverside Data Types */
 
-enum AP_RequestStatus {
+enum struct AP_RequestStatus {
     Pending, Done, Error
 };
 
-enum class AP_DataType {
+enum struct AP_DataType {
     Raw, Int, Double
 };
 
@@ -188,6 +188,8 @@ void AP_RegisterSetReplyCallback(void (*f_setreply)(AP_SetReply));
 void AP_SetNotify(std::map<std::string,AP_DataType>);
 // Single Key version of above for convenience
 void AP_SetNotify(std::string, AP_DataType);
+
+void AP_SetTags(std::vector<std::string> tags);
 
 // Send Bounce package
 void AP_SendBounce(AP_Bounce);

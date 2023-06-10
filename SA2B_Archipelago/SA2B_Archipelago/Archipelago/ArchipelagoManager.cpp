@@ -272,8 +272,18 @@ void SA2_HandleBouncedPacket(AP_Bounce bouncePacket)
     Json::Reader reader;
     reader.parse(bouncePacket.data, bounceData);
 
+    if (bouncePacket.tags == nullptr)
+    {
+        return;
+    }
+
     for (unsigned int i = 0; i < bouncePacket.tags->size(); i++)
     {
+        if ((*bouncePacket.tags)[i].length() == 0)
+        {
+            return;
+        }
+
         if (!strcmp((*bouncePacket.tags)[i].c_str(), "DeathLink"))
         {
             if (!apm->_deathLinkActive)
@@ -1058,8 +1068,7 @@ void ArchipelagoManager::OnFrameRingLink()
             v["amount"] = ringLinkAmount;
             b.data = writer.write(v);
             b.slots = nullptr;
-            std::vector<std::string> games = { std::string("Sonic Adventure 2 Battle") };
-            b.games = &games;
+            b.games = nullptr;
             std::vector<std::string> tags = { std::string("RingLink") };
             b.tags = &tags;
             AP_SendBounce(b);
@@ -1162,11 +1171,33 @@ void ArchipelagoManager::SetNarrator(int narrator)
 void ArchipelagoManager::SetDeathLink(bool deathLinkActive)
 {
     this->_deathLinkActive = deathLinkActive;
+
+    std::vector<std::string> tags;
+    if (this->_deathLinkActive)
+    {
+        tags.push_back(std::string("DeathLink"));
+    }
+    if (this->_ringLinkActive)
+    {
+        tags.push_back(std::string("RingLink"));
+    }
+    AP_SetTags(tags);
 }
 
 void ArchipelagoManager::SetRingLink(bool ringLinkActive)
 {
     this->_ringLinkActive = ringLinkActive;
+
+    std::vector<std::string> tags;
+    if (this->_deathLinkActive)
+    {
+        tags.push_back(std::string("DeathLink"));
+    }
+    if (this->_ringLinkActive)
+    {
+        tags.push_back(std::string("RingLink"));
+    }
+    AP_SetTags(tags);
 }
 
 void ArchipelagoManager::VerfyModVersion(int modVersion)
