@@ -707,9 +707,9 @@ bool ItemManager::IsActiveTrapValid()
 			return false;
 		}
 
-		if (StoryProgressID_3 == 0x03)
+		if (StoryProgressID_3 == 0x03 || StoryProgressID_3 == 0x0E)
 		{
-			// Don't interrupt the ending sequence
+			// Don't interrupt the ending sequence or boss rush
 			return false;
 		}
 
