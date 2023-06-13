@@ -41,6 +41,8 @@ public:
 	bool IsInit();
 	bool IsAuth();
 
+	bool IsDebug();
+
 	void SendStoryComplete();
 
 	// Item Functions

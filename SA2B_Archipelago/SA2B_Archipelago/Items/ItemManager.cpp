@@ -4,13 +4,13 @@
 #include "Minigames/MinigameManager.h"
 
 #include "../Aesthetics/MusicManager.h"
+#include "../Archipelago/ArchipelagoManager.h"
 #include "../Utilities/MessageQueue.h"
 
 #include "../ModLoader/MemAccess.h"
 #include <array>
 #include <map>
 #include <random>
-//#include <math.h>
 
 
 DataPointer(int, SavedChecksReceived, 0x1DEE414);
@@ -18,6 +18,7 @@ DataPointer(int, SavedChecksReceived, 0x1DEE414);
 DataPointer(char, StoryProgressID_1, 0x1DEB31E);
 DataPointer(char, StoryProgressID_2, 0x1DEB31F);
 DataPointer(char, StoryProgressID_3, 0x1DEB320);
+DataPointer(char, StoryProgressID_4, 0x1DEB321);
 
 DataPointer(int, StoryEventID_1, 0x173A154);
 DataPointer(char, StoryEventID_2, 0x173A158);
@@ -104,14 +105,23 @@ void ItemManager::OnInputFunction()
 		Uint32 HeldButtons    = ControllersRaw->on;
 		Uint32 PressedButtons = ControllersRaw->press;
 
-		if ((HeldButtons & 0b100)        == 0 || // A
-			(HeldButtons & 0b1000)       == 0 || // Start
-			(HeldButtons & 0b100000)     == 0 || // D-Pad Down
-			(HeldButtons & 0b1000000000) == 0)   // Y
+		ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
+		if (!apm)
 		{
-			ControllersRaw->on    = 0;
-			ControllersRaw->press = 0;
+			return;
 		}
+
+		if (apm->IsDebug()                    &&
+			(HeldButtons & 0b100)        != 0 && // A
+			(PressedButtons & 0b1000)    != 0 && // Start
+			(HeldButtons & 0b100000)     != 0 && // D-Pad Down
+			(HeldButtons & 0b1000000000) != 0)   // Y
+		{
+			return;
+		}
+
+		ControllersRaw->on    = 0;
+		ControllersRaw->press = 0;
 	}
 }
 
@@ -1181,6 +1191,7 @@ void ItemManager::AddRandomCutsceneToQueue()
 	StoryProgressID_1 = (char)0;
 	StoryProgressID_2 = (char)1;
 	StoryProgressID_3 = (char)1;
+	StoryProgressID_4 = (char)0;
 
 	int nextCutscene = rng() % this->_cutsceneOptions.size();
 	CutsceneData data = this->_cutsceneOptions[nextCutscene];

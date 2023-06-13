@@ -758,6 +758,11 @@ bool ArchipelagoManager::IsAuth()
     return !this->_authFailed;
 }
 
+bool ArchipelagoManager::IsDebug()
+{
+    return (this->_settingsINI && this->_settingsINI->getBool("AP", "DebugDisplayPositionXYZ", false));
+}
+
 void ArchipelagoManager::SendStoryComplete()
 {
     StatsManager::GetInstance().Victory();
@@ -833,7 +838,7 @@ void ArchipelagoManager::OnFrameMessageQueue()
 
 void ArchipelagoManager::OnFrameDebug()
 {
-    if (!this->_settingsINI || !this->_settingsINI->getBool("AP", "DebugDisplayPositionXYZ", false))
+    if (!this->IsDebug())
     {
         return;
     }
@@ -1018,7 +1023,6 @@ void ArchipelagoManager::DeathLinkSend(DeathCause cause)
 
 bool ArchipelagoManager::DeathLinkPending() 
 {
-    Json::Reader reader;
     return this->_deathLinkPending;
 }
 
@@ -1038,8 +1042,14 @@ void ArchipelagoManager::OnFrameRingLink()
         return;
     }
 
+    if (CurrentLevel == LevelIDs_FinalHazard)
+    {
+        return;
+    }
+
     if (GameState != GameStates::GameStates_Ingame &&
-        GameState != GameStates::GameStates_Pause)
+        GameState != GameStates::GameStates_Pause &&
+        RingCount[0] == 0)
     {
         this->_lastSentRingCount = 0;
         this->_ringLinkTimer = RINGLINK_RATE;
