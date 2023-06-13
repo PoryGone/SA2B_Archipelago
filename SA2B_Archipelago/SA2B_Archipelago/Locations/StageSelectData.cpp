@@ -150,3 +150,40 @@ LevelIDs StageSelectStageToLevelID(StageSelectStage stage)
 		return LevelIDs_BasicTest;
 	}
 }
+
+
+std::array<int, 33> TileIDtoStageIndex = {
+		SSS_HiddenBase,
+		SSS_PyramidCave,
+		SSS_DeathChamber,
+		SSS_EggQuarters,
+		SSS_SandOcean,
+		SSS_DryLagoon,
+		SSS_WeaponsBed,
+		SSS_PrisonLane,
+		SSS_WildCanyon,
+		SSS_IronGate,
+		SSS_SecurityHall,
+		SSS_MetalHarbor,
+		SSS_SkyRail,
+		SSS_WhiteJungle,
+		SSS_GreenForest,
+		SSS_PumpkinHill,
+		SSS_AquaticMine,
+		SSS_GreenHill,
+		SSS_Route280,
+		SSS_RadicalHighway,
+		SSS_Route101,
+		SSS_MissionStreet,
+		SSS_ChaoGarden,
+		SSS_CityEscape,
+		SSS_CrazyGadget,
+		SSS_EternalEngine,
+		SSS_CosmicWall,
+		SSS_MeteorHerd,
+		SSS_LostColony,
+		SSS_CannonCore,
+		SSS_FinalChase,
+		SSS_FinalRush,
+		SSS_MadSpace
+};

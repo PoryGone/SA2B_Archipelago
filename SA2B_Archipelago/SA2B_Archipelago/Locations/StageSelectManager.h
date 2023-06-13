@@ -112,6 +112,7 @@ private:
     void DrawCurrentLevelUpgrade();
     void DrawCurrentCharacterUpgrades();
     CharacterItemRange GetItemRangeForCharacter(char character);
+    bool HaveAllChaosEmeralds();
 
     std::array<int, 33> TileIDtoStageIndex = {
         SSS_HiddenBase,

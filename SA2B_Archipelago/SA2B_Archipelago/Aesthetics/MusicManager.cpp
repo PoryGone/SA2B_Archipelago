@@ -93,9 +93,11 @@ __declspec(naked) void PlayShuffledVoice()
     __asm
     {
         mov eax, [esp + 4]
+        push edx
         push eax
         call GetShuffledVoice
         add esp, 4
+        pop edx
         mov [esp + 4], eax
         jmp VoiceJumpBackAddress
     }

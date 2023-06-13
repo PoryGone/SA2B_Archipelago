@@ -69,6 +69,7 @@ struct AnimalCounterObj
 };
 
 DataPointer(AnimalCounterObj*, AnimalCounter, 0x1A5A344);
+DataPointer(char, SS_SelectedTile, 0x1D1BF08);
 // End Animal Count
 
 void LocationManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
@@ -185,7 +186,7 @@ void LocationManager::OnFrameLevelClears()
 
 void LocationManager::OnFrameBossRush()
 {
-	if (!(this->_goal == 4 or this->_goal == 5))
+	if (!(this->_goal == 4 or this->_goal == 5 or this->_goal == 6))
 	{
 		return;
 	}
@@ -508,7 +509,10 @@ void LocationManager::OnFrameAnimals()
 		return;
 	}
 
-	AnimalCounter->AnimalCount->MaxAnimalCount = 20;
+	if (GameState == GameStates::GameStates_Ingame || GameState == GameStates::GameStates_Pause)
+	{
+		AnimalCounter->AnimalCount->MaxAnimalCount = this->GetTotalAnimalLocationsForLevel(TileIDtoStageIndex[SS_SelectedTile]);
+	}
 }
 
 void LocationManager::OnFrameKartRace()
@@ -1334,7 +1338,7 @@ int LocationManager::GetCompletedAnimalLocationsForLevel(int levelID)
 	{
 		int checkOffset = 0xB00;
 
-		for (int j = 0; j < 20; j++)
+		for (int j = 0; j <= 20; j++)
 		{
 			result = j;
 			int locationID = checkOffset + (j * 0x20) + levelID;
