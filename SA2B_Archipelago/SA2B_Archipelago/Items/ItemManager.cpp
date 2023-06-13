@@ -112,10 +112,10 @@ void ItemManager::OnInputFunction()
 		}
 
 		if (apm->IsDebug()                    &&
-			(HeldButtons & 0b100)        != 0 && // A
-			(PressedButtons & 0b1000)    != 0 && // Start
-			(HeldButtons & 0b100000)     != 0 && // D-Pad Down
-			(HeldButtons & 0b1000000000) != 0)   // Y
+			(HeldButtons & 0b100)        != 0 &&
+			(PressedButtons & 0b1000)    != 0 &&
+			(HeldButtons & 0b100000)     != 0 &&
+			(HeldButtons & 0b1000000000) != 0)
 		{
 			return;
 		}
