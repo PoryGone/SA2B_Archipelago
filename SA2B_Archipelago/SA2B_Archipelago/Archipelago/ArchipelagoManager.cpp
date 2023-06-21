@@ -323,6 +323,11 @@ void SA2_HandleBouncedPacket(AP_Bounce bouncePacket)
                 return;
             }
 
+            if (CurrentLevel == LevelIDs_FinalHazard)
+            {
+                return;
+            }
+
             if (bounceData["source"].asInt() != apm->_instanceID)
             {
                 // We didn't send this one
