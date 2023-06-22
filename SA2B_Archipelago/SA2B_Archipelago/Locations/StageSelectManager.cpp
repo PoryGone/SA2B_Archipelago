@@ -42,6 +42,8 @@ DataPointer(char, StoryProgressID_1, 0x1DEB31E);
 DataPointer(char, StoryProgressID_2, 0x1DEB31F);
 DataPointer(char, StoryProgressID_3, 0x1DEB320);
 
+DataPointer(unsigned int, NewEmblemCount, 0x1DEE418);
+
 
 const void* const loc_Mission_1 = (void*)0x1DEEBBC;
 const void* const loc_esi_backup = (void*)0x1DEEBD0;
@@ -369,7 +371,7 @@ void StageSelectManager::LayoutBossGates()
 	}
 	for (std::map<int, int>::iterator i = _bossGates.begin(); i != _bossGates.end(); ++i)
 	{
-		if (_gateRequirements[i->first] <= EmblemCount)
+		if (_gateRequirements[i->first] <= NewEmblemCount)
 		{
 			if (i->first > 1 && GateBossSaveData[i->first - 2] == 0)
 			{
@@ -410,7 +412,7 @@ void StageSelectManager::SetLevelsLockState()
 	int lastUnlockedGateEmblemCount = 0;
 	for (int i = 1; i < _gateRequirements.size(); i++)
 	{
-		if (EmblemCount >= _gateRequirements[i] && GateBossSaveData[i - 1] >= 1)
+		if (NewEmblemCount >= _gateRequirements[i] && GateBossSaveData[i - 1] >= 1)
 		{
 			lastUnlockedGateEmblemCount = _gateRequirements[i];
 		}
@@ -434,7 +436,7 @@ void StageSelectManager::SetLevelsLockState()
 			WriteData<1>((void*)this->_stageSelectDataMap.at(i).UnlockMemAddress, lockByteData);
 		}
     }
-    if (EmblemCount >= _emblemsForCannonsCore)
+    if (NewEmblemCount >= _emblemsForCannonsCore)
     {
         WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_CannonCore].UnlockMemAddress, unlockByteData);
     }

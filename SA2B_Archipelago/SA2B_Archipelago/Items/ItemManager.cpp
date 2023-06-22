@@ -14,6 +14,7 @@
 
 
 DataPointer(int, SavedChecksReceived, 0x1DEE414);
+DataPointer(unsigned int, NewEmblemCount, 0x1DEE418);
 
 DataPointer(char, StoryProgressID_1, 0x1DEB31E);
 DataPointer(char, StoryProgressID_2, 0x1DEB31F);
@@ -135,11 +136,7 @@ void ItemManager::OnFrameFunction()
 		WriteData<1>((void*)0x1DEC650, 0x00);
 	}
 
-	if (this->_EmblemsReceived > EmblemCount && this->_EmblemsReceived <= 255)
-	{
-		EmblemCount = this->_EmblemsReceived;
-		WriteData<1>((void*)0x0174B032, this->_EmblemsReceived);
-	}
+	NewEmblemCount = this->_EmblemsReceived;
 
 	this->OnFrameJunkQueue();
 	this->OnFrameTrapQueue();
@@ -150,7 +147,7 @@ void ItemManager::ResetItems()
 {
 	this->_thisSessionChecksReceived = 0;
 	this->_EmblemsReceived = 0;
-	EmblemCount = 0;
+	NewEmblemCount = 0;
 
 	for (int itemID = ItemValue::IV_WhiteChaosEmerald; itemID <= ItemValue::IV_BlueChaosEmerald; itemID++)
 	{
