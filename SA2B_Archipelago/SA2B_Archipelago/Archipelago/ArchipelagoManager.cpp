@@ -267,7 +267,7 @@ void noop() {}
 void SA2_HandleBouncedPacket(AP_Bounce bouncePacket)
 {
     ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
-    
+
     Json::Value bounceData;
     Json::Reader reader;
     reader.parse(bouncePacket.data, bounceData);
