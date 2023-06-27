@@ -534,6 +534,15 @@ bool ItemManager::IsActiveTrapValid()
 			return false;
 		}
 
+		if (StoryProgressID_3 == 0x0E &&
+			TimerMinutes == 0 &&
+			TimerSeconds == 0 &&
+			TimerFrames == 0)
+		{
+			// Don't interrupt boss rush cutscenes
+			return false;
+		}
+
 		if (CurrentLevel == LevelIDs_CrazyGadget &&
 			(!MainCharObj2[0] || MainCharObj2[0]->NonInteractState == 0x0B || MainCharObj2[0]->gap1C[0] != 0x00))
 		{
