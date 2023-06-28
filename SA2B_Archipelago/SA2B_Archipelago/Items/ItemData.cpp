@@ -8,7 +8,7 @@ void InitializeItemData(std::map<int, ItemData> &outItemData)
 {
     outItemData.clear();
 
-    outItemData[ItemValue::IV_Emblem] = ItemData(0x01DEC60E, std::string("Emblem"), std::string("Emblem"), 0);
+    outItemData[ItemValue::IV_Emblem] = ItemData(0x01DEE418, std::string("Emblem"), std::string("Emblem"), 0);
 
     outItemData[ItemValue::IV_SonicGloves]         = ItemData(0x01DEB302, std::string("Sonic - Magic Gloves"), std::string("Magic Gloves"), 22);
     outItemData[ItemValue::IV_SonicLightShoes]     = ItemData(0x01DEB300, std::string("Sonic - Light Shoes"), std::string("Light Shoes"), 21);
@@ -59,6 +59,9 @@ void InitializeItemData(std::map<int, ItemData> &outItemData)
     outItemData[ItemValue::IV_GravityTrap]    = ItemData(0x0000000, std::string("Gravity Trap"), std::string(), 0);
     outItemData[ItemValue::IV_ExpositionTrap] = ItemData(0x0000000, std::string("Exposition Trap"), std::string(), 0);
     outItemData[ItemValue::IV_DarknessTrap]   = ItemData(0x0000000, std::string("Darkness Trap"), std::string(), 0);
+    outItemData[ItemValue::IV_IceTrap]        = ItemData(0x0000000, std::string("Ice Trap"), std::string(), 0);
+    outItemData[ItemValue::IV_SlowTrap]       = ItemData(0x0000000, std::string("Slow Trap"), std::string(), 0);
+    outItemData[ItemValue::IV_CutsceneTrap]   = ItemData(0x0000000, std::string("Cutscene Trap"), std::string(), 0);
 
     outItemData[ItemValue::IV_WhiteChaosEmerald]  = ItemData(0x01DEEAF8, std::string("White Chaos Emerald"), std::string(), 0);
     outItemData[ItemValue::IV_RedChaosEmerald]    = ItemData(0x01DEEAF9, std::string("Red Chaos Emerald"), std::string(), 0);

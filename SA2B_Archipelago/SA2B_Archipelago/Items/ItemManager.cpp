@@ -3,16 +3,27 @@
 #include "ItemData.h"
 #include "Minigames/MinigameManager.h"
 
+#include "../Aesthetics/MusicManager.h"
+#include "../Archipelago/ArchipelagoManager.h"
 #include "../Utilities/MessageQueue.h"
 
 #include "../ModLoader/MemAccess.h"
 #include <array>
 #include <map>
 #include <random>
-//#include <math.h>
 
 
 DataPointer(int, SavedChecksReceived, 0x1DEE414);
+DataPointer(unsigned int, NewEmblemCount, 0x1DEE418);
+
+DataPointer(char, StoryProgressID_1, 0x1DEB31E);
+DataPointer(char, StoryProgressID_2, 0x1DEB31F);
+DataPointer(char, StoryProgressID_3, 0x1DEB320);
+DataPointer(char, StoryProgressID_4, 0x1DEB321);
+
+DataPointer(int, StoryEventID_1, 0x173A154);
+DataPointer(char, StoryEventID_2, 0x173A158);
+DataPointer(char, StoryEventID_3, 0x173A159);
 
 void* endLevelSave_ptr = (void*)0x4457df;
 void* updateSettingsSave_ptr = (void*)0x44390C;
@@ -81,6 +92,38 @@ void ItemManager::OnInitFunction(const char* path, const HelperFunctions& helper
 	this->_p2Obj->PlayerNum = 1;
 	WriteJump((void*)0x724B40, (void*)0x724BB8);
 	WriteData((short*)0x724745, (short)0x9090);
+
+	// Cutscene Trap Setup
+	StoryEventID_1 = 0;
+}
+
+void ItemManager::OnInputFunction()
+{
+	if (GameMode == GameMode::GameMode_Event &&
+		CurrentMenu == Menus::Menus_StageSelect &&
+		StoryProgressID_3 != 0x03)
+	{
+		Uint32 HeldButtons    = ControllersRaw->on;
+		Uint32 PressedButtons = ControllersRaw->press;
+
+		ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
+		if (!apm)
+		{
+			return;
+		}
+
+		if (apm->IsDebug()                    &&
+			(HeldButtons & 0b100)        != 0 &&
+			(PressedButtons & 0b1000)    != 0 &&
+			(HeldButtons & 0b100000)     != 0 &&
+			(HeldButtons & 0b1000000000) != 0)
+		{
+			return;
+		}
+
+		ControllersRaw->on    = 0;
+		ControllersRaw->press = 0;
+	}
 }
 
 void ItemManager::OnFrameFunction()
@@ -93,21 +136,18 @@ void ItemManager::OnFrameFunction()
 		WriteData<1>((void*)0x1DEC650, 0x00);
 	}
 
-	if (this->_EmblemsReceived > EmblemCount)
-	{
-		EmblemCount = this->_EmblemsReceived;
-		WriteData<1>((void*)0x0174B032, this->_EmblemsReceived);
-	}
+	NewEmblemCount = this->_EmblemsReceived;
 
 	this->OnFrameJunkQueue();
 	this->OnFrameTrapQueue();
+	this->OnFrameCutsceneQueue();
 }
 
 void ItemManager::ResetItems()
 {
 	this->_thisSessionChecksReceived = 0;
 	this->_EmblemsReceived = 0;
-	EmblemCount = 0;
+	NewEmblemCount = 0;
 
 	for (int itemID = ItemValue::IV_WhiteChaosEmerald; itemID <= ItemValue::IV_BlueChaosEmerald; itemID++)
 	{
@@ -137,29 +177,18 @@ void ItemManager::ReceiveItem(int item_id, bool notify)
 			ItemData& receivedItem = this->_ItemData[item_id];
 
 			// DataPointer macro creates a static field, which doesn't work for this case
-			unsigned char dataValue = *(unsigned char*)receivedItem.Address;
+			unsigned int dataValue = *(unsigned int*)receivedItem.Address;
 
 			this->_EmblemsReceived++;
 			dataValue = this->_EmblemsReceived;
-			bool success = WriteData<1>((void*)receivedItem.Address, dataValue);
+			*(unsigned int*)receivedItem.Address = dataValue;
 
-			if (success)
+			if (this->_thisSessionChecksReceived > SavedChecksReceived)
 			{
-				if (this->_thisSessionChecksReceived > SavedChecksReceived)
-				{
-					SavedChecksReceived = this->_thisSessionChecksReceived;
+				SavedChecksReceived = this->_thisSessionChecksReceived;
 
-					std::string message = std::string("New Emblem Count: ");
-					message += std::to_string((unsigned int)dataValue);
-					messageQueue->AddMessage(message);
-				}
-
-				// Cutscene Emblem Count
-				WriteData<1>((void*)0x0174B032, dataValue);
-			}
-			else
-			{
-				std::string message = std::string("Failed to Write Emblem Count");
+				std::string message = std::string("New Emblem Count: ");
+				message += std::to_string((unsigned int)dataValue);
 				messageQueue->AddMessage(message);
 			}
 		}
@@ -479,6 +508,11 @@ bool ItemManager::IsActiveTrapValid()
 	switch (this->_ActiveTrap)
 	{
 	case ItemValue::IV_OmochaoTrap:
+		if (GameMode != GameMode::GameMode_Level)
+		{
+			return false;
+		}
+
 		if (CurrentLevel == LevelIDs_Route101280 ||
 			CurrentLevel == LevelIDs_KartRace ||
 			CurrentLevel == LevelIDs_ChaoWorld ||
@@ -488,14 +522,55 @@ bool ItemManager::IsActiveTrapValid()
 		}
 		break;
 	case ItemValue::IV_TimeStopTrap:
+		if (GameMode != GameMode::GameMode_Level)
+		{
+			return false;
+		}
+
 		if (CurrentLevel == LevelIDs_Route101280 ||
 			CurrentLevel == LevelIDs_KartRace ||
 			CurrentLevel == LevelIDs_ChaoWorld)
 		{
 			return false;
 		}
+
+		if (StoryProgressID_3 == 0x0E &&
+			TimerMinutes == 0 &&
+			TimerSeconds == 0 &&
+			TimerFrames == 0)
+		{
+			// Don't interrupt boss rush cutscenes
+			return false;
+		}
+
+		if (CurrentLevel == LevelIDs_CrazyGadget &&
+			(!MainCharObj2[0] || MainCharObj2[0]->NonInteractState == 0x0B || MainCharObj2[0]->gap1C[0] != 0x00))
+		{
+			// Don't take a Chaos Control Trap in Crazy Gadget Tubes
+			return false;
+		}
+
+		if ((CurrentLevel == LevelIDs_PyramidCave || CurrentLevel == LevelIDs_RadicalHighway) &&
+			(!MainCharObj2[0] || MainCharObj2[0]->NonInteractState >= 0xC0))
+		{
+			// Don't take a Chaos Control Trap on Spinning Bars
+			return false;
+		}
+
+		if ((CurrentLevel == LevelIDs_CrazyGadget || CurrentLevel == LevelIDs_PyramidCave || CurrentLevel == LevelIDs_RadicalHighway) &&
+			this->_ChaosControlCooldown > 0)
+		{
+			// Don't take a Chaos Control Trap right in between invalid states
+			this->_ChaosControlCooldown--;
+			return false;
+		}
 		break;
 	case ItemValue::IV_ConfuseTrap:
+		if (GameMode != GameMode::GameMode_Level)
+		{
+			return false;
+		}
+
 		if (CurrentLevel == LevelIDs_Route101280 ||
 			CurrentLevel == LevelIDs_KartRace ||
 			CurrentLevel == LevelIDs_ChaoWorld)
@@ -504,6 +579,11 @@ bool ItemManager::IsActiveTrapValid()
 		}
 		break;
 	case ItemValue::IV_TinyTrap:
+		if (GameMode != GameMode::GameMode_Level)
+		{
+			return false;
+		}
+
 		if (CurrentLevel == LevelIDs_Route101280 ||
 			CurrentLevel == LevelIDs_KartRace ||
 			CurrentLevel == LevelIDs_ChaoWorld ||
@@ -519,6 +599,11 @@ bool ItemManager::IsActiveTrapValid()
 		}
 		break;
 	case ItemValue::IV_GravityTrap:
+		if (GameMode != GameMode::GameMode_Level)
+		{
+			return false;
+		}
+
 		if (CurrentLevel == LevelIDs_Route101280 ||
 			CurrentLevel == LevelIDs_KartRace ||
 			CurrentLevel == LevelIDs_ChaoWorld ||
@@ -536,6 +621,11 @@ bool ItemManager::IsActiveTrapValid()
 		}
 		break;
 	case ItemValue::IV_ExpositionTrap:
+		if (GameMode != GameMode::GameMode_Level)
+		{
+			return false;
+		}
+
 		if (CurrentLevel == LevelIDs_ChaoWorld)
 		{
 			return false;
@@ -547,6 +637,11 @@ bool ItemManager::IsActiveTrapValid()
 		}
 		break;
 	case ItemValue::IV_DarknessTrap:
+		if (GameMode != GameMode::GameMode_Level)
+		{
+			return false;
+		}
+
 		if (CurrentLevel == LevelIDs_Route101280 ||
 			CurrentLevel == LevelIDs_KartRace ||
 			CurrentLevel == LevelIDs_ChaoWorld ||
@@ -583,7 +678,82 @@ bool ItemManager::IsActiveTrapValid()
 			return false;
 		}
 		break;
+	case ItemValue::IV_IceTrap:
+		if (GameMode != GameMode::GameMode_Level)
+		{
+			return false;
+		}
+
+		if (CurrentLevel == LevelIDs_Route101280 ||
+			CurrentLevel == LevelIDs_KartRace ||
+			CurrentLevel == LevelIDs_ChaoWorld ||
+			CurrentLevel == LevelIDs_FinalHazard)
+		{
+			return false;
+		}
+
+		if (!MainCharObj2[0] || this->_StoredPhysicsData.GroundFriction != 0.0f)
+		{
+			// Don't take an Ice Trap when already Icy
+			return false;
+		}
+		break;
+	case ItemValue::IV_SlowTrap:
+		if (GameMode != GameMode::GameMode_Level)
+		{
+			return false;
+		}
+
+		if (CurrentLevel == LevelIDs_Route101280 ||
+			CurrentLevel == LevelIDs_KartRace ||
+			CurrentLevel == LevelIDs_ChaoWorld ||
+			CurrentLevel == LevelIDs_FinalHazard)
+		{
+			return false;
+		}
+
+		if (!MainCharObj2[0])
+		{
+			return false;
+		}
+		break;
+	case ItemValue::IV_CutsceneTrap:
+		if (GameMode != GameMode::GameMode_Level && GameMode != GameMode::GameMode_Event)
+		{
+			return false;
+		}
+
+		if (StoryProgressID_3 == 0x03 || StoryProgressID_3 == 0x0E)
+		{
+			// Don't interrupt the ending sequence or boss rush
+			return false;
+		}
+
+		if (CurrentLevel == LevelIDs_CannonsCoreT ||
+			CurrentLevel == LevelIDs_CannonsCoreE ||
+			CurrentLevel == LevelIDs_CannonsCoreR ||
+			CurrentLevel == LevelIDs_CannonsCoreK ||
+			CurrentLevel == LevelIDs_GreenHill ||
+			CurrentLevel == LevelIDs_KartRace ||
+			CurrentLevel == LevelIDs_ChaoWorld ||
+			CurrentLevel == LevelIDs_Biolizard ||
+			CurrentLevel == LevelIDs_FinalHazard)
+		{
+			return false;
+		}
+
+		if (StoryEventID_1 != 0x02)
+		{
+			// Another Cutscene is queued
+			return false;
+		}
+		break;
 	case ItemValue::IV_PongTrap:
+		if (GameMode != GameMode::GameMode_Level)
+		{
+			return false;
+		}
+
 		if (CurrentLevel == LevelIDs_ChaoWorld)
 		{
 			return false;
@@ -613,11 +783,51 @@ void ItemManager::ResetTrapData()
 	}
 	this->_StoredFogData = FogData();
 
+	if (this->_CutsceneQueued)
+	{
+		// We queued a Cutscene, but didn't get to use it
+		this->HandleTrap(IV_CutsceneTrap);
+		this->_CutsceneQueued = false;
+
+		StoryEventID_1 = 2;
+		StoryEventID_2 = 0xFF;
+		StoryEventID_3 = 0xFF;
+	}
+
 	if (!(CurrentLevel == LevelIDs_CrazyGadget || CurrentLevel == LevelIDs_MadSpace || CurrentLevel == LevelIDs_FinalChase))
 	{
 		Gravity.x = 0.0f;
 		Gravity.y = -1.0f;
 		Gravity.z = 0.0f;
+	}
+
+	if (MainCharObj2[0])
+	{
+		if (this->_StoredPhysicsData.SpeedMaxH != MainCharObj2[0]->PhysData.SpeedMaxH &&
+			this->_StoredPhysicsData.SpeedMaxH != 0.0f)
+		{
+			MainCharObj2[0]->PhysData.SpeedMaxH      = this->_StoredPhysicsData.SpeedMaxH;
+			MainCharObj2[0]->PhysData.SpeedCapH      = this->_StoredPhysicsData.SpeedCapH;
+			MainCharObj2[0]->PhysData.SpeedCapV      = this->_StoredPhysicsData.SpeedCapV;
+			MainCharObj2[0]->PhysData.RunSpeed       = this->_StoredPhysicsData.RunSpeed;
+			MainCharObj2[0]->PhysData.RushSpeed      = this->_StoredPhysicsData.RushSpeed;
+			MainCharObj2[0]->PhysData.DashSpeed      = this->_StoredPhysicsData.DashSpeed;
+			MainCharObj2[0]->PhysData.JogSpeed       = this->_StoredPhysicsData.JogSpeed;
+			MainCharObj2[0]->PhysData.SlideSpeed     = this->_StoredPhysicsData.SlideSpeed;
+			MainCharObj2[0]->PhysData.PushSpeedMax   = this->_StoredPhysicsData.PushSpeedMax;
+			MainCharObj2[0]->PhysData.NoControlSpeed = this->_StoredPhysicsData.NoControlSpeed;
+			MainCharObj2[0]->PhysData.AirResist      = this->_StoredPhysicsData.AirResist;
+		}
+
+		if (this->_StoredPhysicsData.GroundFriction != MainCharObj2[0]->PhysData.GroundFriction &&
+			this->_StoredPhysicsData.GroundFriction != 0.0f)
+		{
+			MainCharObj2[0]->PhysData.GroundFriction = this->_StoredPhysicsData.GroundFriction;
+			MainCharObj2[0]->PhysData.RunDecel       = this->_StoredPhysicsData.RunDecel;
+			MainCharObj2[0]->PhysData.RunBrake       = this->_StoredPhysicsData.RunBrake;
+		}
+
+		this->_StoredPhysicsData = PhysicsData();
 	}
 }
 
@@ -628,7 +838,10 @@ void ItemManager::OnFrameTrapQueue()
 		return;
 	}
 
-	if (!(GameState == GameStates::GameStates_Ingame))
+	if ((GameMode != GameMode::GameMode_LoadStory && GameMode != GameMode::GameMode_Event) &&
+		(GameState != GameStates::GameStates_Ingame &&
+		 GameState != GameStates::GameStates_Exit_1 &&
+		 GameState != GameStates::GameStates_GoToNextLevel))
 	{
 		ResetTrapData();
 		return;
@@ -745,6 +958,48 @@ void ItemManager::OnFrameTrapQueue()
 			}
 		}
 	}
+	else if (this->_ActiveTrap == ItemValue::IV_IceTrap)
+	{
+		// Nothing
+	}
+	else if (this->_ActiveTrap == ItemValue::IV_SlowTrap)
+	{
+		if (MainCharObj2[0] != NULL)
+		{
+			if (this->_ActiveTrapTimer > (TRAP_DURATION * 0.9f))
+			{
+				MainCharObj2[0]->PhysData.SpeedMaxH      *= (1.0f / 1.015f);
+				MainCharObj2[0]->PhysData.SpeedCapH      *= (1.0f / 1.015f);
+				MainCharObj2[0]->PhysData.SpeedCapV      *= (1.0f / 1.015f);
+				MainCharObj2[0]->PhysData.RunSpeed       *= (1.0f / 1.015f);
+				MainCharObj2[0]->PhysData.RushSpeed      *= (1.0f / 1.015f);
+				MainCharObj2[0]->PhysData.DashSpeed      *= (1.0f / 1.015f);
+				MainCharObj2[0]->PhysData.JogSpeed       *= (1.0f / 1.015f);
+				MainCharObj2[0]->PhysData.SlideSpeed     *= (1.0f / 1.015f);
+				MainCharObj2[0]->PhysData.PushSpeedMax   *= (1.0f / 1.015f);
+				MainCharObj2[0]->PhysData.NoControlSpeed *= (1.0f / 1.015f);
+				MainCharObj2[0]->PhysData.AirResist      *= 1.015f;
+			}
+			else if (this->_ActiveTrapTimer < (TRAP_DURATION * 0.1f))
+			{
+				MainCharObj2[0]->PhysData.SpeedMaxH      *= 1.015f;
+				MainCharObj2[0]->PhysData.SpeedCapH      *= 1.015f;
+				MainCharObj2[0]->PhysData.SpeedCapV      *= 1.015f;
+				MainCharObj2[0]->PhysData.RunSpeed       *= 1.015f;
+				MainCharObj2[0]->PhysData.RushSpeed      *= 1.015f;
+				MainCharObj2[0]->PhysData.DashSpeed      *= 1.015f;
+				MainCharObj2[0]->PhysData.JogSpeed       *= 1.015f;
+				MainCharObj2[0]->PhysData.SlideSpeed     *= 1.015f;
+				MainCharObj2[0]->PhysData.PushSpeedMax   *= 1.015f;
+				MainCharObj2[0]->PhysData.NoControlSpeed *= 1.015f;
+				MainCharObj2[0]->PhysData.AirResist      *= (1.0f / 1.015f);
+			}
+		}
+	}
+	else if (this->_ActiveTrap == ItemValue::IV_CutsceneTrap)
+	{
+		// Nothing
+	}
 	else if (this->_ActiveTrap == ItemValue::IV_PongTrap)
 	{
 		// Nothing
@@ -759,7 +1014,7 @@ void ItemManager::OnFrameTrapQueue()
 	this->_ActiveTrap = 0;
 	this->_TimeStopPos = NJS_VECTOR();
 
-	if (TimerStopped)
+	if (TimerStopped && GameMode != GameMode::GameMode_Event)
 	{
 		return;
 	}
@@ -788,6 +1043,10 @@ void ItemManager::OnFrameTrapQueue()
 		return;
 	}
 
+	this->_ActiveTrapTimer = TRAP_DURATION;
+	this->_TrapCooldownTimer = TRAP_COOLDOWN;
+	this->_ChaosControlCooldown = TRAP_COOLDOWN;
+
 	switch (this->_ActiveTrap)
 	{
 	case ItemValue::IV_OmochaoTrap:
@@ -799,7 +1058,7 @@ void ItemManager::OnFrameTrapQueue()
 		break;
 	case ItemValue::IV_TimeStopTrap:
 		Sonic2PTimeStopMan_Load(this->_p2Obj);
-		PlayVoice(2, 1524);
+		PlayUnshuffledVoice(2, 1524);
 		if (MainCharObj1[0])
 		{
 			this->_TimeStopPos = MainCharObj1[0]->Position;
@@ -810,14 +1069,14 @@ void ItemManager::OnFrameTrapQueue()
 		{
 			MainCharObj2[0]->ConfuseTime = TRAP_DURATION;
 			ConfuStar_Load(0);
-			PlayVoice(2, 1413);
+			PlayUnshuffledVoice(2, 1413);
 		}
 		break;
 	case ItemValue::IV_TinyTrap:
-		PlayVoice(2, 1374);
+		PlayUnshuffledVoice(2, 1374);
 		break;
 	case ItemValue::IV_GravityTrap:
-		PlayVoice(2, 671);
+		PlayUnshuffledVoice(2, 671);
 		break;
 	case ItemValue::IV_ExpositionTrap:
 		AddRandomDialogueToQueue();
@@ -828,7 +1087,7 @@ void ItemManager::OnFrameTrapQueue()
 			this->_StoredFogData.color = FogDataPtr->color;
 			this->_StoredFogData.far_ = FogDataPtr->far_;
 
-			PlayVoice(2, 1416);
+			PlayUnshuffledVoice(2, 1416);
 		}
 		//else
 		//{
@@ -837,17 +1096,51 @@ void ItemManager::OnFrameTrapQueue()
 		//	//
 		//	//LoadFogData_Fogtask("stg13_fog.bin", (FogData*)0x19EEF28);
 		//	////LoadFogData_Fogtask("stg10_fog.bin", FogDataPtr);
-		//	PlayVoice(2, 1374);
+		//	PlayUnshuffledVoice(2, 1374);
 		//}
+		break;
+	case ItemValue::IV_IceTrap:
+		PlayUnshuffledVoice(2, 864);
+		if (MainCharObj2[0] != NULL)
+		{
+			this->_StoredPhysicsData.GroundFriction = MainCharObj2[0]->PhysData.GroundFriction;
+			this->_StoredPhysicsData.RunDecel       = MainCharObj2[0]->PhysData.RunDecel;
+			this->_StoredPhysicsData.RunBrake       = MainCharObj2[0]->PhysData.RunBrake;
+
+			MainCharObj2[0]->PhysData.GroundFriction = -0.002f;
+			MainCharObj2[0]->PhysData.RunDecel       = -0.0012f;
+			MainCharObj2[0]->PhysData.RunBrake       = -0.0036f;
+		}
+		break;
+	case ItemValue::IV_SlowTrap:
+		PlayUnshuffledVoice(2, 636);
+		if (MainCharObj2[0] != NULL)
+		{
+			this->_StoredPhysicsData.SpeedMaxH      = MainCharObj2[0]->PhysData.SpeedMaxH;
+			this->_StoredPhysicsData.SpeedCapH      = MainCharObj2[0]->PhysData.SpeedCapH;
+			this->_StoredPhysicsData.SpeedCapV      = MainCharObj2[0]->PhysData.SpeedCapV;
+			this->_StoredPhysicsData.RunSpeed       = MainCharObj2[0]->PhysData.RunSpeed;
+			this->_StoredPhysicsData.RushSpeed      = MainCharObj2[0]->PhysData.RushSpeed;
+			this->_StoredPhysicsData.DashSpeed      = MainCharObj2[0]->PhysData.DashSpeed;
+			this->_StoredPhysicsData.JogSpeed       = MainCharObj2[0]->PhysData.JogSpeed;
+			this->_StoredPhysicsData.SlideSpeed     = MainCharObj2[0]->PhysData.SlideSpeed;
+			this->_StoredPhysicsData.PushSpeedMax   = MainCharObj2[0]->PhysData.PushSpeedMax;
+			this->_StoredPhysicsData.NoControlSpeed = MainCharObj2[0]->PhysData.NoControlSpeed;
+			this->_StoredPhysicsData.AirResist      = MainCharObj2[0]->PhysData.AirResist;
+		}
+		break;
+	case ItemValue::IV_CutsceneTrap:
+		this->AddRandomCutsceneToQueue();
+		this->_ActiveTrapTimer = 0;
+		this->_TrapCooldownTimer = 0;
+		// Don't display Received text until the cutscene actually plays
+		return;
 		break;
 	case ItemValue::IV_PongTrap:
 		MinigameManager* minigameManager = &MinigameManager::GetInstance();
 		minigameManager->StartMinigame(ItemValue::IV_PongTrap);
 		break;
 	}
-
-	this->_ActiveTrapTimer = TRAP_DURATION;
-	this->_TrapCooldownTimer = TRAP_COOLDOWN;
 
 	ItemData& receivedItem = this->_ItemData[this->_ActiveTrap];
 
@@ -895,8 +1188,53 @@ void ItemManager::OnFrameDialogueQueue()
 	DialogueData data = this->_DialogueQueue.front();
 	this->_DialogueQueue.pop();
 
-	PlayVoice(2, data.VoiceID);
+	PlayUnshuffledVoice(2, data.VoiceID);
 	this->_ActiveDialogueTimer = data.Duration * 60;
+}
+
+void ItemManager::AddRandomCutsceneToQueue()
+{
+	StoryProgressID_1 = (char)0;
+	StoryProgressID_2 = (char)1;
+	StoryProgressID_3 = (char)1;
+	StoryProgressID_4 = (char)0;
+
+	int nextCutscene = rng() % this->_cutsceneOptions.size();
+	CutsceneData data = this->_cutsceneOptions[nextCutscene];
+
+	StoryEventID_1 = 0;
+	StoryEventID_2 = data.LowID;
+	StoryEventID_3 = data.HighID;
+
+	this->_CutsceneQueued = true;
+}
+
+void ItemManager::OnFrameCutsceneQueue()
+{
+	if (!this->_CutsceneQueued &&
+		GameMode == GameMode::GameMode_Event &&
+		StoryProgressID_3 != 0x03)
+	{
+		// Place the "Finished" Event
+		StoryProgressID_1 = (char)0;
+		StoryProgressID_2 = (char)1;
+		StoryProgressID_3 = (char)1;
+
+		StoryEventID_1 = 2;
+		StoryEventID_2 = 0xFF;
+		StoryEventID_3 = 0xFF;
+	}
+
+	if (GameMode == GameMode::GameMode_LoadStory)
+	{
+		if (this->_CutsceneQueued)
+		{
+			std::string message = std::string("Received Cutscene Trap");
+			MessageQueue::GetInstance().AddMessage(message);
+		}
+
+		this->_CutsceneQueued = false;
+	}
 }
 
 std::vector<int> ItemManager::GetChaosEmeraldAddresses()

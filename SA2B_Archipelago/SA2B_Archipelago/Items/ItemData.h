@@ -61,7 +61,10 @@ enum ItemValue
     IV_GravityTrap,
     IV_ExpositionTrap,
     IV_DarknessTrap,
-    IV_END_TRAPS = IV_DarknessTrap,
+    IV_IceTrap,
+    IV_SlowTrap,
+    IV_CutsceneTrap,
+    IV_END_TRAPS = IV_CutsceneTrap,
 
     IV_WhiteChaosEmerald = 0x40,
     IV_RedChaosEmerald,
@@ -102,4 +105,14 @@ struct DialogueData
 
     int VoiceID = 0;
     int Duration = 0;
+};
+
+
+struct CutsceneData
+{
+    CutsceneData() : LowID(0), HighID(0) {}
+    CutsceneData(int lowID, int highID) : LowID(lowID), HighID(highID) {}
+
+    char LowID = 0;
+    char HighID = 0;
 };

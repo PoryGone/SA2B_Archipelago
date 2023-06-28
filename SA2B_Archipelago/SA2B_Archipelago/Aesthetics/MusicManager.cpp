@@ -44,7 +44,8 @@ static char* __cdecl GetShuffledTrack(char* song)
 }
 
 static const int MusicJumpBackAddress = 0x442CF5;
-__declspec(naked) void PlayShuffledMusic() {
+__declspec(naked) void PlayShuffledMusic()
+{
     __asm
     {
         push edi
@@ -56,16 +57,83 @@ __declspec(naked) void PlayShuffledMusic() {
     }
 }
 
+static int __cdecl GetShuffledVoice(int inVoice)
+{
+    MusicManager* musicMan = &MusicManager::getInstance();
+
+    if (musicMan == NULL || musicMan->_VoiceMap.size() == 0)
+    {
+        return inVoice;
+    }
+
+    int index = 0;
+    while (index < musicMan->_ShuffledVoiceIDs.size())
+    {
+        if (inVoice == musicMan->_ShuffledVoiceIDs[index])
+        {
+            if (musicMan->_VoiceMap.find(index) == musicMan->_VoiceMap.end())
+            {
+                return inVoice;
+            }
+
+            int newIndex = musicMan->_VoiceMap.at(index);
+
+            return musicMan->_ShuffledVoiceIDs[newIndex];
+        }
+
+        index++;
+    }
+
+    return inVoice;
+}
+
+static const int VoiceJumpBackAddress = 0x44313D;
+__declspec(naked) void PlayShuffledVoice()
+{
+    __asm
+    {
+        mov eax, [esp + 4]
+        push edx
+        push eax
+        call GetShuffledVoice
+        add esp, 4
+        pop edx
+        mov [esp + 4], eax
+        jmp VoiceJumpBackAddress
+    }
+}
+
+static const void* const PlayUnshuffledVoicePtr = (void*)0x44313D;
+int PlayUnshuffledVoice(int idk, int num)
+{
+    signed int result;
+    __asm
+    {
+        push[num]
+        mov edx, [idk]
+        call PlayUnshuffledVoicePtr
+        add esp, 4
+        mov result, eax
+    }
+    return result;
+}
+
 void MusicManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
 {
 	_helperFunctions = &helperFunctions;
 
     WriteJump((void*)0x442CF0, PlayShuffledMusic);
+    WriteJump((void*)0x443130, PlayShuffledVoice);
 }
 
 void MusicManager::SetMusicMap(std::map<int, int> map)
 {
     this->_MusicMap = map;
+}
+
+void MusicManager::SetVoiceMap(std::map<int, int> map)
+{
+    this->_VoiceMap = map;
 }
 
 void MusicManager::SetMusicShuffle(int shuffleType)

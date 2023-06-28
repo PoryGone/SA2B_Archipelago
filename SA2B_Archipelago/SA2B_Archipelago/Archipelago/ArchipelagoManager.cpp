@@ -8,7 +8,10 @@
 
 #include "../Utilities/MessageQueue.h"
 #include "../../lib/APCpp/Archipelago.h"
+#include "../../lib/APCpp/json/reader.h"
+#include "../../lib/APCpp/json/writer.h"
 
+#include <chrono>
 #include <functional>
 #include "../Locations/StageSelectManager.h"
 #include "../Aesthetics/StatsManager.h"
@@ -17,6 +20,21 @@
 DataPointer(unsigned int, SeedHash, 0x1DEC6FC);
 DataPointer(unsigned int, PlayerNameHash, 0x1DEC700);
 DataPointer(char, LastStoryComplete, 0x1DEFA95);
+
+
+unsigned int CalcHash(std::string str)
+{
+    // DJB2 Hash Algorithm
+    unsigned long hash = 5381;
+    unsigned int str_len = str.length();
+
+    for (int c = 0; c < str_len; c++)
+    {
+        hash = ((hash << 5) + hash) + (int)str[c]; /* hash * 33 + c */
+    }
+
+    return hash;
+}
 
 static void __cdecl HandleRingLoss()
 {
@@ -96,6 +114,9 @@ void ArchipelagoManager::OnInitFunction(const char* path, const HelperFunctions&
 
     int textColor = 0xFF000000 + (textRed * 0x10000) + (textGreen * 0x100) + (textBlue * 0x1);
     MessageQueue::GetInstance().SetDisplayColor(textColor);
+
+    std::chrono::time_point<std::chrono::system_clock> timestamp = std::chrono::system_clock::now();
+    this->_instanceID = std::chrono::duration_cast<std::chrono::seconds>(timestamp.time_since_epoch()).count();
 }
 
 void ArchipelagoManager::OnFrameFunction()
@@ -145,6 +166,7 @@ void ArchipelagoManager::OnFrameFunction()
 
                 this->Init(serverIP.c_str(), playerName.c_str(), serverPassword.c_str());
 
+                this->ap_player_name = playerName;
             }
             else
             {
@@ -183,7 +205,7 @@ void ArchipelagoManager::OnFrameFunction()
         {
             this->_seedName = RoomInfo.seed_name;
 
-            std::size_t seedHash = std::hash<std::string>{}(this->_seedName);
+            unsigned int seedHash = CalcHash(this->_seedName);
 
             if (SeedHash == 0)
             {
@@ -207,7 +229,8 @@ void ArchipelagoManager::OnFrameFunction()
             if (this->_settingsINI)
             {
                 std::string playerName = this->_settingsINI->getString("AP", "PlayerName");
-                std::size_t playerNameHash = std::hash<std::string>{}(playerName);
+
+                unsigned int playerNameHash = CalcHash(playerName);
 
                 if (PlayerNameHash == 0)
                 {
@@ -232,6 +255,7 @@ void ArchipelagoManager::OnFrameFunction()
     }
 
     this->OnFrameDeathLink();
+    this->OnFrameRingLink();
 
     this->OnFrameMessageQueue();
     this->OnFrameDebug();
@@ -239,6 +263,101 @@ void ArchipelagoManager::OnFrameFunction()
 
 
 void noop() {}
+
+void SA2_HandleBouncedPacket(AP_Bounce bouncePacket)
+{
+    ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
+
+    Json::Value bounceData;
+    Json::Reader reader;
+    reader.parse(bouncePacket.data, bounceData);
+
+    if (bouncePacket.tags == nullptr)
+    {
+        return;
+    }
+
+    for (unsigned int i = 0; i < bouncePacket.tags->size(); i++)
+    {
+        if ((*bouncePacket.tags)[i].length() == 0)
+        {
+            return;
+        }
+
+        if (!strcmp((*bouncePacket.tags)[i].c_str(), "DeathLink"))
+        {
+            if (!apm->_deathLinkActive)
+            {
+                return;
+            }
+
+            if (!strcmp(bounceData["source"].asCString(), apm->ap_player_name.c_str()) &&
+                (bounceData["time"].asInt64() == apm->lastDeathLinkTime))
+            {
+                // This is the packet we just sent
+                apm->lastDeathLinkTime = 0;
+                break;
+            }
+
+            if (!bounceData["cause"].isNull())
+            {
+                apm->receivedDeathCause = std::string(bounceData["cause"].asCString());
+            }
+            else
+            {
+                apm->receivedDeathCause = std::string("You were killed by ") + bounceData["source"].asCString();
+            }
+            apm->_deathLinkPending = true;
+            break;
+        }
+        else if (!strcmp((*bouncePacket.tags)[i].c_str(), "RingLink"))
+        {
+            if (!apm->_ringLinkActive)
+            {
+                return;
+            }
+
+            if (GameState != GameStates::GameStates_Ingame)
+            {
+                // We cannot deal with this currently
+                return;
+            }
+
+            if (CurrentLevel == LevelIDs_FinalHazard)
+            {
+                return;
+            }
+
+            if (bounceData["source"].asInt() != apm->_instanceID)
+            {
+                // We didn't send this one
+                __int16 amount = bounceData["amount"].asInt();
+
+                if (amount == 0)
+                {
+                    return;
+                }
+                else if (amount < 0 && RingCount[0] > 0)
+                {
+                    PlaySoundProbably(RING_LOSS_SOUND, 0, 0, 0);
+                }
+                else if (amount > 0 && RingCount[0] < 999)
+                {
+                    PlaySoundProbably(RING_GAIN_SOUND, 0, 0, 0);
+                }
+
+                __int16 newAmount = max(min(RingCount[0] + amount, 999), 0);
+                __int16 realDiff = newAmount - RingCount[0];
+
+                RingCount[0] = newAmount;
+                //AddRings(0, realDiff); // Maybe have to use this function
+
+                // Make sure you don't re-link out your received link
+                apm->_lastSentRingCount += realDiff;
+            }
+        }
+    }
+}
 
 void SA2_ResetItems()
 {
@@ -268,6 +387,13 @@ void SA2_SetMusicMap(std::map<int, int> map)
     apm->SetMusicMap(map);
 }
 
+void SA2_SetVoiceMap(std::map<int, int> map)
+{
+    MusicManager* musicManager = &MusicManager::getInstance();
+
+    musicManager->SetVoiceMap(map);
+}
+
 void SA2_SetDeathLink(int deathLinkActive)
 {
     ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
@@ -277,6 +403,13 @@ void SA2_SetDeathLink(int deathLinkActive)
     StatsManager* stats = &StatsManager::GetInstance();
 
     stats->DeathLinkActive(deathLinkActive != 0);
+}
+
+void SA2_SetRingLink(int ringLinkActive)
+{
+    ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
+
+    apm->SetRingLink(ringLinkActive != 0);
 }
 
 void SA2_SetGoal(int goal)
@@ -471,6 +604,21 @@ void SA2_SetOmochaoChecks(int omochaoChecks)
     }
 }
 
+void SA2_SetAnimalChecks(int animalChecks)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    if (animalChecks > 0)
+    {
+        LocationManager* locationManager = &LocationManager::getInstance();
+
+        locationManager->SetAnimalsEnabled(true);
+    }
+}
+
 void SA2_SetKartRaceChecks(int kartRaceChecks)
 {
     if (!ArchipelagoManager::getInstance().IsInit())
@@ -535,6 +683,18 @@ void SA2_SetGateBosses(std::map<int, int> map)
     ssm->SetBossGates(map);
 }
 
+void SA2_SetChosenBossRushMap(std::map<int, int> map)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    StageSelectManager* ssm = &StageSelectManager::GetInstance();
+
+    ssm->SetChosenBossRushMap(map);
+}
+
 void SA2_SetMinigameDifficulty(int minigameDifficulty)
 {
     if (!ArchipelagoManager::getInstance().IsInit())
@@ -563,10 +723,13 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_SetItemRecvCallback(&SA2_RecvItem);
     AP_SetLocationCheckedCallback(&SA2_CheckLocation);
     AP_SetDeathLinkRecvCallback(&noop);
+    AP_RegisterBouncedCallback(&SA2_HandleBouncedPacket);
     AP_RegisterSlotDataIntCallback("DeathLink", &SA2_SetDeathLink);
+    AP_RegisterSlotDataIntCallback("RingLink", &SA2_SetRingLink);
     AP_RegisterSlotDataIntCallback("Goal", &SA2_SetGoal);
     AP_RegisterSlotDataIntCallback("ModVersion", &SA2_CompareModVersion);
     AP_RegisterSlotDataMapIntIntCallback("MusicMap", &SA2_SetMusicMap);
+    AP_RegisterSlotDataMapIntIntCallback("VoiceMap", &SA2_SetVoiceMap);
     AP_RegisterSlotDataIntCallback("MusicShuffle", &SA2_SetMusicShuffle);
     AP_RegisterSlotDataIntCallback("Narrator", &SA2_SetNarrator);
     AP_RegisterSlotDataIntCallback("RingLoss", &SA2_SetRingLoss);
@@ -577,6 +740,7 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_RegisterSlotDataIntCallback("Whistlesanity", &SA2_SetPipes);
     AP_RegisterSlotDataIntCallback("GoldBeetles", &SA2_SetGoldBeetles);
     AP_RegisterSlotDataIntCallback("OmochaoChecks", &SA2_SetOmochaoChecks);
+    AP_RegisterSlotDataIntCallback("AnimalChecks", &SA2_SetAnimalChecks);
     AP_RegisterSlotDataIntCallback("KartRaceChecks", &SA2_SetKartRaceChecks);
     AP_RegisterSlotDataIntCallback("ChaoRaceChecks", &SA2_SetChaoPacks);
     AP_RegisterSlotDataIntCallback("ChaoGardenDifficulty", &SA2_SetChaoDifficulty);
@@ -585,6 +749,7 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_RegisterSlotDataMapIntIntCallback("MissionMap", &SA2_SetChosenMissionsMap);
     AP_RegisterSlotDataMapIntIntCallback("MissionCountMap", &SA2_SetMissionCountMap);
     AP_RegisterSlotDataMapIntIntCallback("GateBosses", &SA2_SetGateBosses);
+    AP_RegisterSlotDataMapIntIntCallback("BossRushMap", &SA2_SetChosenBossRushMap);
     AP_Start();
 }
 
@@ -596,6 +761,11 @@ bool ArchipelagoManager::IsInit()
 bool ArchipelagoManager::IsAuth()
 {
     return !this->_authFailed;
+}
+
+bool ArchipelagoManager::IsDebug()
+{
+    return (this->_settingsINI && this->_settingsINI->getBool("AP", "DebugDisplayPositionXYZ", false));
 }
 
 void ArchipelagoManager::SendStoryComplete()
@@ -673,7 +843,7 @@ void ArchipelagoManager::OnFrameMessageQueue()
 
 void ArchipelagoManager::OnFrameDebug()
 {
-    if (!this->_settingsINI || !this->_settingsINI->getBool("AP", "DebugDisplayPositionXYZ", false))
+    if (!this->IsDebug())
     {
         return;
     }
@@ -710,13 +880,17 @@ void ArchipelagoManager::OnFrameDeathLink()
 
         this->_deathLinkTimer = 420;
 
+        MessageQueue::GetInstance().AddMessage(this->receivedDeathCause);
+        this->receivedDeathCause.clear();
+
         this->DeathLinkClear();
     }
     else if (!this->DeathLinkPending() &&
              CurrentLevel == LevelIDs::LevelIDs_Route101280 &&
              GameState == GameStates::GameStates_RestartLevel_1) // We Died, Car Flavored
     {
-        this->DeathLinkSend();
+        DeathCause cause = DeathCause::DC_Kart;
+        this->DeathLinkSend(cause);
 
         this->_deathLinkTimer = 420;
     }
@@ -729,33 +903,196 @@ void ArchipelagoManager::OnFrameDeathLink()
             (MainCharObj1[0]->Action == Action_Quicksand && CurrentLevel != LevelIDs_EggGolemS) ||
             (MainCharObj2[0]->Powerups & (1 << PowerupBits::PowerupBits_Dead))) // We Died
         {
-            this->DeathLinkSend();
+            DeathCause cause = DeathCause::DC_Damage;
+
+            if (this->deathCauseOverride != DeathCause::DC_None)
+            {
+                cause = this->deathCauseOverride;
+                this->deathCauseOverride = DeathCause::DC_None;
+            }
+            else if (MainCharObj1[0]->Action == Action_Drown)
+            {
+                cause = DeathCause::DC_Drown;
+            }
+            else if (MainCharObj1[0]->Action == Action_Quicksand)
+            {
+                cause = DeathCause::DC_Quicksand;
+            }
+            else if (MainCharObj1[0]->Action == Action_Death)
+            {
+                cause = DeathCause::DC_Damage;
+            }
+            else if (MainCharObj2[0]->Powerups & (1 << PowerupBits::PowerupBits_Dead))
+            {
+                cause = DeathCause::DC_Fall;
+            }
+
+            this->DeathLinkSend(cause);
 
             this->_deathLinkTimer = 420;
         }
     }
 }
 
-void ArchipelagoManager::DeathLinkSend() 
+void ArchipelagoManager::DeathLinkSend(DeathCause cause)
 {
     StatsManager::GetInstance().DeathLinkSent();
     if (!this->_deathLinkActive)
     {
         return;
     }
-    AP_DeathLinkSend();
+
+    std::string causeText;
+    std::string characterText;
+
+    switch (CurrentCharacter)
+    {
+    case Characters::Characters_Sonic:
+        characterText = std::string("Sonic");
+        break;
+    case Characters::Characters_SuperSonic:
+        characterText = std::string("Super Sonic");
+        break;
+    case Characters::Characters_Shadow:
+        characterText = std::string("Shadow");
+        break;
+    case Characters::Characters_SuperShadow:
+        characterText = std::string("Super Shadow");
+        break;
+    case Characters::Characters_Tails:
+        characterText = std::string("Tails");
+        break;
+    case Characters::Characters_MechTails:
+        characterText = std::string("Tails");
+        break;
+    case Characters::Characters_Eggman:
+        characterText = std::string("Eggman");
+        break;
+    case Characters::Characters_MechEggman:
+        characterText = std::string("Eggman");
+        break;
+    case Characters::Characters_Knuckles:
+        characterText = std::string("Knuckles");
+        break;
+    case Characters::Characters_Rouge:
+        characterText = std::string("Rouge");
+        break;
+    default:
+        characterText = std::string("Sonic");
+        break;
+    }
+
+    switch (cause)
+    {
+    case DeathCause::DC_Damage:
+        causeText = characterText + " ran out of rings. (" + this->ap_player_name + ")";
+        break;
+    case DeathCause::DC_Quicksand:
+        causeText = characterText + " fell into quicksand. (" + this->ap_player_name + ")";
+        break;
+    case DeathCause::DC_Fall:
+        causeText = characterText + " didn't make the jump. (" + this->ap_player_name + ")";
+        break;
+    case DeathCause::DC_Kart:
+        causeText = characterText + " crashed their kart. (" + this->ap_player_name + ")";
+        break;
+    case DeathCause::DC_Drown:
+        causeText = characterText + " drowned. (" + this->ap_player_name + ")";
+        break;
+    case DeathCause::DC_Pong:
+        causeText = this->ap_player_name + " could not win at Pong.";
+        break;
+    default:
+        causeText = characterText + " died. (" + this->ap_player_name + ")";
+        break;
+    }
+
+    Json::FastWriter writer;
+    std::chrono::time_point<std::chrono::system_clock> timestamp = std::chrono::system_clock::now();
+    AP_Bounce b;
+    Json::Value v;
+    v["time"] = std::chrono::duration_cast<std::chrono::seconds>(timestamp.time_since_epoch()).count();
+    v["source"] = this->ap_player_name;
+    v["cause"] = causeText;
+    b.data = writer.write(v);
+    b.games = nullptr;
+    b.slots = nullptr;
+    std::vector<std::string> tags = { std::string("DeathLink") };
+    b.tags = &tags;
+    AP_SendBounce(b);
+
     MessageQueue::GetInstance().AddMessage(std::string("Death Sent"));
+
+    this->lastDeathLinkTime = std::chrono::duration_cast<std::chrono::seconds>(timestamp.time_since_epoch()).count();
 }
 
 bool ArchipelagoManager::DeathLinkPending() 
 {
-    return AP_DeathLinkPending();
+    return this->_deathLinkPending;
 }
 
 void ArchipelagoManager::DeathLinkClear() 
 {
     StatsManager::GetInstance().DeathLinkReceived();
+
+    this->_deathLinkPending = false;
     AP_DeathLinkClear();
+}
+
+// RingLink Functions
+void ArchipelagoManager::OnFrameRingLink()
+{
+    if (!this->_ringLinkActive)
+    {
+        return;
+    }
+
+    if (CurrentLevel == LevelIDs_FinalHazard)
+    {
+        return;
+    }
+
+    if (GameState != GameStates::GameStates_Ingame &&
+        GameState != GameStates::GameStates_Pause &&
+        RingCount[0] == 0)
+    {
+        this->_lastSentRingCount = 0;
+        this->_ringLinkTimer = RINGLINK_RATE;
+
+        return;
+    }
+
+    if (RingCount[0] != this->_lastSentRingCount)
+    {
+        this->_ringLinkTimer--;
+
+        if (this->_ringLinkTimer <= 0)
+        {
+            // Send RingLink
+            int ringLinkAmount = (RingCount[0] - this->_lastSentRingCount);
+
+            this->_ringLinkTimer = RINGLINK_RATE;
+            this->_lastSentRingCount = RingCount[0];
+
+            Json::FastWriter writer;
+            std::chrono::time_point<std::chrono::system_clock> timestamp = std::chrono::system_clock::now();
+            AP_Bounce b;
+            Json::Value v;
+            v["time"] = std::chrono::duration_cast<std::chrono::seconds>(timestamp.time_since_epoch()).count();
+            v["source"] = this->_instanceID;
+            v["amount"] = ringLinkAmount;
+            b.data = writer.write(v);
+            b.slots = nullptr;
+            b.games = nullptr;
+            std::vector<std::string> tags = { std::string("RingLink") };
+            b.tags = &tags;
+            AP_SendBounce(b);
+        }
+    }
+    else
+    {
+        this->_ringLinkTimer = RINGLINK_RATE;
+    }
 }
 
 // Item Functions
@@ -849,6 +1186,33 @@ void ArchipelagoManager::SetNarrator(int narrator)
 void ArchipelagoManager::SetDeathLink(bool deathLinkActive)
 {
     this->_deathLinkActive = deathLinkActive;
+
+    std::vector<std::string> tags;
+    if (this->_deathLinkActive)
+    {
+        tags.push_back(std::string("DeathLink"));
+    }
+    if (this->_ringLinkActive)
+    {
+        tags.push_back(std::string("RingLink"));
+    }
+    AP_SetTags(tags);
+}
+
+void ArchipelagoManager::SetRingLink(bool ringLinkActive)
+{
+    this->_ringLinkActive = ringLinkActive;
+
+    std::vector<std::string> tags;
+    if (this->_deathLinkActive)
+    {
+        tags.push_back(std::string("DeathLink"));
+    }
+    if (this->_ringLinkActive)
+    {
+        tags.push_back(std::string("RingLink"));
+    }
+    AP_SetTags(tags);
 }
 
 void ArchipelagoManager::VerfyModVersion(int modVersion)
@@ -885,4 +1249,9 @@ void ArchipelagoManager::AP_KillPlayer()
             }
         }
     }
+}
+
+void ArchipelagoManager::SetDeathCause(DeathCause cause)
+{
+    this->deathCauseOverride = cause;
 }

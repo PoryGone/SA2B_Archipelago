@@ -15,10 +15,14 @@ public:
 	}
 	void OnFrame();
 	void OnInit(std::map<int, StageSelectStageData>* stageSelectDataMap);
+
+	bool IsCurrentTileBoss();
 	std::map<int, ItemData> ItemData;
 	std::vector<CharacterItemRange> CharacterItemRanges;
 	ObjectMaster* DrawIconObj;
 	ObjectMaster* InLevelIconObj;
+
+	std::vector<int> bossIDs{ 0x13, 0x14, 0x1D, 0x21, 0x2A, 0x3C, 0x3D, 0x3E, 0x3F, 0x40, 0x41, 0x43 };
 };
 
 struct NumberDisplayData 
@@ -60,4 +64,6 @@ enum StageSelectIcon {
 	SSI_Omochao					= 24,
 	SSI_OmochaoDisabled			= 25,
 	SSI_CCUnlocked				= 26,
+	SSI_Animals					= 27,
+	SSI_AnimalsDisabled			= 28,
 };

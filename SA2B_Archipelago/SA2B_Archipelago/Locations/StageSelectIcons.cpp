@@ -13,6 +13,7 @@ FunctionPointer(void, ReleaseTextureList, (NJS_TEXLIST* a1), 0x77F9F0);
 DataPointer(char, SS_SelectedTile, 0x1D1BF08);
 DataPointer(char, ActiveMission, 0x174AFE3);
 DataPointer(char, SS_CameraPos, 0x1D1BEC0);
+DataPointer(int, RealEmblemCount, 0x1DEE418);
 
 static std::map<int, ItemData>* ItemData_ptr;
 static std::vector<CharacterItemRange>* CharacterItemRanges_ptr;
@@ -20,42 +21,6 @@ static std::map<int, StageSelectStageData>* StageSelectDataMap_ptr;
 
 static float minXPos;
 static float maxXPos;
-
-std::array<int, 33> TileIDtoStageIndex = {
-		SSS_HiddenBase,
-		SSS_PyramidCave,
-		SSS_DeathChamber,
-		SSS_EggQuarters,
-		SSS_SandOcean,
-		SSS_DryLagoon,
-		SSS_WeaponsBed,
-		SSS_PrisonLane,
-		SSS_WildCanyon,
-		SSS_IronGate,
-		SSS_SecurityHall,
-		SSS_MetalHarbor,
-		SSS_SkyRail,
-		SSS_WhiteJungle,
-		SSS_GreenForest,
-		SSS_PumpkinHill,
-		SSS_AquaticMine,
-		SSS_GreenHill,
-		SSS_Route280,
-		SSS_RadicalHighway,
-		SSS_Route101,
-		SSS_MissionStreet,
-		SSS_ChaoGarden,
-		SSS_CityEscape,
-		SSS_CrazyGadget,
-		SSS_EternalEngine,
-		SSS_CosmicWall,
-		SSS_MeteorHerd,
-		SSS_LostColony,
-		SSS_CannonCore,
-		SSS_FinalChase,
-		SSS_FinalRush,
-		SSS_MadSpace
-};
 
 std::map<char, NumberDisplayData> NumberMap = {
 	{'0', NumberDisplayData(-1, 40.0f, 0.0f, 4.0f)},
@@ -73,7 +38,7 @@ std::map<char, NumberDisplayData> NumberMap = {
 };
 
 static const int Anim_Length = 29;
-static const int Stage_Anim_Length = 28;
+static const int Stage_Anim_Length = 30;
 static const int Num_Anim_Length = 13;
 
 static NJS_TEXNAME UpgradeIconsTexName[Anim_Length];
@@ -164,6 +129,13 @@ void DrawString(std::string string, float xPos, float yPos, float scale = 1.0f)
 
 void UpdateLevelCheckIcons()
 {
+	bool isBossStage = StageSelectIcons::GetInstance().IsCurrentTileBoss();
+	if (isBossStage)
+	{
+		// Don't show icons on boss tiles
+		return;
+	}
+
 	int currentTileStageIndex = TileIDtoStageIndex[SS_SelectedTile];
 	LocationManager* locMan = &LocationManager::getInstance();
 	std::vector<int> chaoKeys = locMan->GetChaoKeyLocationsForLevel(currentTileStageIndex);
@@ -171,12 +143,15 @@ void UpdateLevelCheckIcons()
 	std::vector<int> hiddens = locMan->GetHiddenLocationsForLevel(currentTileStageIndex);
 	std::vector<int> beetles = locMan->GetGoldBeetleLocationsForLevel(currentTileStageIndex);
 	std::vector<int> omochao = locMan->GetOmochaoLocationsForLevel(currentTileStageIndex);
+	int animalsFound = locMan->GetCompletedAnimalLocationsForLevel(currentTileStageIndex);
+	int animalsTotal = locMan->GetTotalAnimalLocationsForLevel(currentTileStageIndex);
 	StageSelectSprite.sx = 0.25f;
 	StageSelectSprite.sy = 0.25f;
 	int xCount = 0;
 	int itemCount = 0;
 	float yPos = 0.0f;
 	int debugIndex = 0;
+
 	if ((*StageSelectDataMap_ptr).at(currentTileStageIndex).UpgradeAddress > 0x00) 
 	{
 		int icon = *(char*)(*StageSelectDataMap_ptr).at(currentTileStageIndex).UpgradeAddress > 0x00 ? SSI_Upgrade : SSI_UpgradeDisabled;
@@ -211,6 +186,18 @@ void UpdateLevelCheckIcons()
 			xCount++;
 			itemCount--;
 		}
+	}
+	if (animalsTotal > 0)
+	{
+		int animalsIcon = animalsFound == animalsTotal ? SSI_Animals : SSI_AnimalsDisabled;
+		float x = maxXPos - ((xCount + 1) * 32.0f);
+		StageSelectSprite.tanim = &StageSelectAnim[animalsIcon];
+		StageSelectSprite.p = { x, yPos, 0.0f };
+		DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+		x += 4;
+		DrawString(std::to_string(animalsFound), x, yPos + 8.0f, 0.25f);
+		DrawString(std::to_string(animalsTotal), x, yPos + 24.0f, 0.25f);
+		xCount++;
 	}
 	StageSelectSprite.sx = 0.1875f;
 	StageSelectSprite.sy = 0.1875f;
@@ -293,7 +280,7 @@ void UpdateLevelCheckIcons()
 void UpdateChaosEmeraldIcons()
 {
 	int goal = StageSelectManager::GetInstance().GetGoal();
-	if (goal == 1 || goal == 2) 
+	if (goal == 1 || goal == 2 || goal == 6)
 	{
 		ItemManager* itemMan = &ItemManager::getInstance();
 		std::vector<int> chaosEmeralds = itemMan->GetChaosEmeraldAddresses();
@@ -377,14 +364,14 @@ void UpdateEmblemRequirements()
 	StageSelectSprite.sy = 0.4f;
 	if (gateRequirements.size() > 1)
 	{
-		if (EmblemCount < gateRequirements[gateRequirements.size() - 1])
+		if (RealEmblemCount < gateRequirements[gateRequirements.size() - 1])
 		{
 			std::string gateRequirementMessage = "";
-			gateRequirementMessage.append(std::to_string(EmblemCount));
+			gateRequirementMessage.append(std::to_string(RealEmblemCount));
 			gateRequirementMessage.append("/");
 			for (int g = 0; g < gateRequirements.size(); g++)
 			{
-				if (gateRequirements[g] > EmblemCount || g == gateRequirements.size() - 1)
+				if (gateRequirements[g] > RealEmblemCount || g == gateRequirements.size() - 1)
 				{
 					gateRequirementMessage.append(std::to_string(gateRequirements[g]));
 					int gateIcon = SSI_Gate1 + g - 1;
@@ -405,11 +392,11 @@ void UpdateEmblemRequirements()
 	DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
 
 	std::string cannonsCoreMessage = "";
-	cannonsCoreMessage.append(std::to_string(EmblemCount));
+	cannonsCoreMessage.append(std::to_string(RealEmblemCount));
 	cannonsCoreMessage.append("/");
 	cannonsCoreMessage.append(std::to_string(emblemsForCannonsCore));
 	DrawString(cannonsCoreMessage, coreX + 53.0f, 16.0f, 0.75f);
-	if (EmblemCount >= emblemsForCannonsCore && SS_CameraPos < 3)
+	if (RealEmblemCount >= emblemsForCannonsCore && SS_CameraPos < 3)
 	{
 		currentCCUnlockFrame = currentCCUnlockFrame == maxCCUnlockFrames - 1 ? 0 : currentCCUnlockFrame + 1;
 		float progress = currentCCUnlockFrame / (float)maxCCUnlockFrames;
@@ -479,9 +466,16 @@ void DeleteUpgradeIcon_IL(ObjectMaster* obj)
 
 void DrawUpgradeIcon_IL(ObjectMaster* obj)
 {
-	if (CurrentLevel == LevelIDs_ChaoWorld) {
+	if (CurrentLevel == LevelIDs_ChaoWorld)
+	{
 		return;
 	}
+
+	if (CurrentMenu == Menus::Menus_BossAttack || CurrentMenu == Menus::Menus_Kart)
+	{
+		return;
+	}
+
 	if (GameState == GameStates::GameStates_Pause && GameMode == GameMode::GameMode_Level)
 	{
 		UpdateUpgradeIcons(true);
@@ -557,4 +551,13 @@ void StageSelectIcons::OnFrame()
 		InLevelIconObj->DisplaySub_Delayed3 = DrawUpgradeIcon_IL;
 		InLevelIconObj->Data1.Entity->Action = 1;
 	}
+}
+
+bool StageSelectIcons::IsCurrentTileBoss()
+{
+	int currentTileStageIndex = TileIDtoStageIndex[SS_SelectedTile];
+	char levelID = *(char*)(*StageSelectDataMap_ptr).at(currentTileStageIndex).TileIDAddress;
+	bool isBossStage = (std::count(StageSelectIcons::GetInstance().bossIDs.begin(), StageSelectIcons::GetInstance().bossIDs.end(), levelID) != 0);
+
+	return isBossStage;
 }

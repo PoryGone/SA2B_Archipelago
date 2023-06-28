@@ -135,6 +135,8 @@ void MinigameManager::HandleVictory()
 
 void MinigameManager::HandleLoss()
 {
+	// TODO: Make this dynamic when we have multiple Minigames
+	ArchipelagoManager::getInstance().SetDeathCause(DeathCause::DC_Pong);
 	ArchipelagoManager::getInstance().AP_KillPlayer();
 
 	this->state = MinigameState::MGS_None;

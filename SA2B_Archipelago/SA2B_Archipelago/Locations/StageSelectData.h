@@ -44,6 +44,8 @@ enum StageSelectStage
     SSS_COUNT
 };
 
+extern std::array<int, 33> TileIDtoStageIndex;
+
 struct StageSelectStageData
 {
     StageSelectStageData() : UnlockMemAddress(0x00), TileIDAddress(0x00), TileCharacterAddress(0x00), TileColumnAddress(0x00), TileRowAddress(0x00), UpgradeAddress(0x00), DefaultCharacter() {}
