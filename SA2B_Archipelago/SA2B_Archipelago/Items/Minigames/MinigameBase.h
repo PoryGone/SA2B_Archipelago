@@ -1,6 +1,7 @@
 #pragma once
 #include "MinigameIconData.h"
 #include "../../Utilities/SpriteUtilities.h"
+#include "Backend/MinigameBackend.h"
 
 enum RawInputFlags
 {
@@ -42,6 +43,7 @@ public:
 	MinigameState managerState;
 	MinigameIconData* icons;
 	MinigameDifficulty difficulty;
+	SpriteHierarchy* hierarchy;
 };
 
 class MinigameBase
