@@ -69,6 +69,7 @@ struct AnimalCounterObj
 };
 
 DataPointer(AnimalCounterObj*, AnimalCounter, 0x1A5A344);
+DataPointer(char, SS_SelectedTile, 0x1D1BF08);
 // End Animal Count
 
 void LocationManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
@@ -82,6 +83,7 @@ void LocationManager::OnInitFunction(const char* path, const HelperFunctions& he
 	WriteData<4>((void*)0x006BE978, '\x90');
 
 	InitializeLevelClearChecks(this->_LevelClearData);
+	InitializeBossRushChecks(this->_BossRushData);
 	InitializeChaoKeyChecks(this->_ChaoKeyData);
 	InitializePipeChecks(this->_PipeData);
 	InitializeHiddenChecks(this->_HiddenData);
@@ -111,6 +113,7 @@ void LocationManager::OnFrameFunction()
 		this->_timer = 0;
 
 		this->OnFrameLevelClears();
+		this->OnFrameBossRush();
 		this->OnFrameChaoKeys();
 		this->OnFramePipes();
 		this->OnFrameHidden();
@@ -175,6 +178,54 @@ void LocationManager::OnFrameLevelClears()
 				if (dataValue <= requiredValue)
 				{
 					WriteData<1>((void*)checkData.Address, requiredValue + 1);
+				}
+			}
+		}
+	}
+}
+
+void LocationManager::OnFrameBossRush()
+{
+	if (!(this->_goal == 4 or this->_goal == 5 or this->_goal == 6))
+	{
+		return;
+	}
+
+	for (int i = BossRushCheck::BRC_BEGIN; i < BossRushCheck::BRC_NUM_CHECKS; i++)
+	{
+		if (this->_BossRushData.find(i) != this->_BossRushData.end())
+		{
+			BossRushCheckData& checkData = this->_BossRushData[i];
+
+			if (!checkData.CheckSent)
+			{
+				// DataPointer macro creates a static field, which doesn't work for this case
+				char dataValue = *(char*)checkData.Address;
+
+				char bitFlag = (char)(0x01 << checkData.AddressBit);
+
+				if ((dataValue & bitFlag) != 0x00)
+				{
+					if (this->_archipelagoManager)
+					{
+						this->_archipelagoManager->SendItem(i);
+
+						checkData.CheckSent = true;
+					}
+				}
+			}
+			else
+			{
+				// Capture offline collects
+				char dataValue = *(char*)checkData.Address;
+
+				char bitFlag = (char)(0x01 << checkData.AddressBit);
+
+				if ((dataValue & bitFlag) == 0x00)
+				{
+					char newDataValue = dataValue | bitFlag;
+
+					WriteData<1>((void*)checkData.Address, newDataValue);
 				}
 			}
 		}
@@ -458,7 +509,10 @@ void LocationManager::OnFrameAnimals()
 		return;
 	}
 
-	AnimalCounter->AnimalCount->MaxAnimalCount = 20;
+	if (GameState == GameStates::GameStates_Ingame || GameState == GameStates::GameStates_Pause)
+	{
+		AnimalCounter->AnimalCount->MaxAnimalCount = this->GetTotalAnimalLocationsForLevel(TileIDtoStageIndex[SS_SelectedTile]);
+	}
 }
 
 void LocationManager::OnFrameKartRace()
@@ -677,6 +731,18 @@ void LocationManager::CheckLocation(int location_id)
 
 		WriteData<1>((void*)checkData.Address, this->_requiredRank + 1);
 	}
+	else if (this->_BossRushData.find(location_id) != this->_BossRushData.end())
+	{
+		BossRushCheckData& checkData = this->_BossRushData[location_id];
+
+		checkData.CheckSent = true;
+
+		char dataValue = *(char*)checkData.Address;
+		char bitFlag = (char)(0x01 << checkData.AddressBit);
+		char newDataValue = dataValue | bitFlag;
+
+		WriteData<1>((void*)checkData.Address, newDataValue);
+	}
 	else if (this->_ChaoGardenData.find(location_id) != this->_ChaoGardenData.end())
 	{
 		if (location_id >= ChaoGardenCheck::CGC_Beginner_Karate && location_id <= ChaoGardenCheck::CGC_Super_Karate)
@@ -884,6 +950,11 @@ void LocationManager::SetRequiredCannonsCoreMissions(bool allMissionsRequired)
 void LocationManager::ResetLocations()
 {
 	for (auto& pair : this->_LevelClearData)
+	{
+		pair.second.CheckSent = false;
+	}
+
+	for (auto& pair : this->_BossRushData)
 	{
 		pair.second.CheckSent = false;
 	}
@@ -1267,7 +1338,7 @@ int LocationManager::GetCompletedAnimalLocationsForLevel(int levelID)
 	{
 		int checkOffset = 0xB00;
 
-		for (int j = 0; j < 20; j++)
+		for (int j = 0; j <= 20; j++)
 		{
 			result = j;
 			int locationID = checkOffset + (j * 0x20) + levelID;

@@ -66,6 +66,8 @@ private:
 	int _JunkCooldownTimer = 0;
 	int _ActiveDialogueTimer = 0;
 
+	int _ChaosControlCooldown = TRAP_COOLDOWN;
+
 	bool _CutsceneQueued = false;
 
 	FogData _StoredFogData;

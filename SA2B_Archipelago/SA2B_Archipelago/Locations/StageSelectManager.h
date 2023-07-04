@@ -1,5 +1,6 @@
 #include "../pch.h"
 #include "../Items/ItemData.h"
+#include "../Locations/LocationData.h"
 #include "StageSelectData.h"
 #include "StageSelectIcons.h"
 #include <map>
@@ -59,6 +60,7 @@ public:
 	void SetChosenMissionsMap(std::map<int, int> map);
 	void SetMissionCountMap(std::map<int, int> map);
     void SetBossGates(std::map<int, int> map);
+    void SetChosenBossRushMap(std::map<int, int> map);
     int GetGoal();
     int GetCannonsCoreEmblemCount();
     std::vector<int> GetGateRequirements();
@@ -77,11 +79,15 @@ private:
     std::vector<int> _gateRequirements;
     std::map<int, int> _chosenMissionsMap;
     std::map<int, int> _missionCountMap;
+    std::map<int, int> _chosenBossRushMap;
     std::map<int, ItemData> _itemData;
     std::vector<CharacterItemRange> _characterItemRanges;
     std::vector<GateBossLayout> _gateBossLayoutData;
 
+    std::map<int, BossRushCheckData> _BossRushData;
+
     __int8 _firstStageIndex = 0x17;
+    __int8 _previousMainMenuSelection = 0x02;
     __int8 _previousSettingsSelection = 0x02;
     bool _needsSave = false;
 
@@ -92,11 +98,13 @@ private:
 	void SetLevelsLockState();
     void LayoutBossGates();
 	void UnlockAllLevels();
+	bool IsCannonsCoreComplete();
 	void HideMenuButtons();
 	void HandleGoal();
 	void HandleBiolizard();
 	void HandleGreenHill();
 	void HandleGrandPrix();
+	void HandleBossRush();
     void HandleBossStage();
 	void HandleStageSelectCamera();
 	void HandleMissionOrder();
@@ -104,6 +112,7 @@ private:
     void DrawCurrentLevelUpgrade();
     void DrawCurrentCharacterUpgrades();
     CharacterItemRange GetItemRangeForCharacter(char character);
+    bool HaveAllChaosEmeralds();
 
     std::array<int, 33> TileIDtoStageIndex = {
         SSS_HiddenBase,

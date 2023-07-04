@@ -4,20 +4,22 @@
 #include "Minigames/MinigameManager.h"
 
 #include "../Aesthetics/MusicManager.h"
+#include "../Archipelago/ArchipelagoManager.h"
 #include "../Utilities/MessageQueue.h"
 
 #include "../ModLoader/MemAccess.h"
 #include <array>
 #include <map>
 #include <random>
-//#include <math.h>
 
 
 DataPointer(int, SavedChecksReceived, 0x1DEE414);
+DataPointer(unsigned int, NewEmblemCount, 0x1DEE418);
 
 DataPointer(char, StoryProgressID_1, 0x1DEB31E);
 DataPointer(char, StoryProgressID_2, 0x1DEB31F);
 DataPointer(char, StoryProgressID_3, 0x1DEB320);
+DataPointer(char, StoryProgressID_4, 0x1DEB321);
 
 DataPointer(int, StoryEventID_1, 0x173A154);
 DataPointer(char, StoryEventID_2, 0x173A158);
@@ -104,14 +106,23 @@ void ItemManager::OnInputFunction()
 		Uint32 HeldButtons    = ControllersRaw->on;
 		Uint32 PressedButtons = ControllersRaw->press;
 
-		if ((HeldButtons & 0b100)        == 0 || // A
-			(HeldButtons & 0b1000)       == 0 || // Start
-			(HeldButtons & 0b100000)     == 0 || // D-Pad Down
-			(HeldButtons & 0b1000000000) == 0)   // Y
+		ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
+		if (!apm)
 		{
-			ControllersRaw->on    = 0;
-			ControllersRaw->press = 0;
+			return;
 		}
+
+		if (apm->IsDebug()                    &&
+			(HeldButtons & 0b100)        != 0 &&
+			(PressedButtons & 0b1000)    != 0 &&
+			(HeldButtons & 0b100000)     != 0 &&
+			(HeldButtons & 0b1000000000) != 0)
+		{
+			return;
+		}
+
+		ControllersRaw->on    = 0;
+		ControllersRaw->press = 0;
 	}
 }
 
@@ -125,11 +136,7 @@ void ItemManager::OnFrameFunction()
 		WriteData<1>((void*)0x1DEC650, 0x00);
 	}
 
-	if (this->_EmblemsReceived > EmblemCount && this->_EmblemsReceived <= 255)
-	{
-		EmblemCount = this->_EmblemsReceived;
-		WriteData<1>((void*)0x0174B032, this->_EmblemsReceived);
-	}
+	NewEmblemCount = this->_EmblemsReceived;
 
 	this->OnFrameJunkQueue();
 	this->OnFrameTrapQueue();
@@ -140,7 +147,7 @@ void ItemManager::ResetItems()
 {
 	this->_thisSessionChecksReceived = 0;
 	this->_EmblemsReceived = 0;
-	EmblemCount = 0;
+	NewEmblemCount = 0;
 
 	for (int itemID = ItemValue::IV_WhiteChaosEmerald; itemID <= ItemValue::IV_BlueChaosEmerald; itemID++)
 	{
@@ -526,6 +533,37 @@ bool ItemManager::IsActiveTrapValid()
 		{
 			return false;
 		}
+
+		if (StoryProgressID_3 == 0x0E &&
+			TimerMinutes == 0 &&
+			TimerSeconds == 0 &&
+			TimerFrames == 0)
+		{
+			// Don't interrupt boss rush cutscenes
+			return false;
+		}
+
+		if (CurrentLevel == LevelIDs_CrazyGadget &&
+			(!MainCharObj2[0] || MainCharObj2[0]->NonInteractState == 0x0B || MainCharObj2[0]->gap1C[0] != 0x00))
+		{
+			// Don't take a Chaos Control Trap in Crazy Gadget Tubes
+			return false;
+		}
+
+		if ((CurrentLevel == LevelIDs_PyramidCave || CurrentLevel == LevelIDs_RadicalHighway) &&
+			(!MainCharObj2[0] || MainCharObj2[0]->NonInteractState >= 0xC0))
+		{
+			// Don't take a Chaos Control Trap on Spinning Bars
+			return false;
+		}
+
+		if ((CurrentLevel == LevelIDs_CrazyGadget || CurrentLevel == LevelIDs_PyramidCave || CurrentLevel == LevelIDs_RadicalHighway) &&
+			this->_ChaosControlCooldown > 0)
+		{
+			// Don't take a Chaos Control Trap right in between invalid states
+			this->_ChaosControlCooldown--;
+			return false;
+		}
 		break;
 	case ItemValue::IV_ConfuseTrap:
 		if (GameMode != GameMode::GameMode_Level)
@@ -685,9 +723,9 @@ bool ItemManager::IsActiveTrapValid()
 			return false;
 		}
 
-		if (StoryProgressID_3 == 0x03)
+		if (StoryProgressID_3 == 0x03 || StoryProgressID_3 == 0x0E)
 		{
-			// Don't interrupt the ending sequence
+			// Don't interrupt the ending sequence or boss rush
 			return false;
 		}
 
@@ -787,9 +825,9 @@ void ItemManager::ResetTrapData()
 			MainCharObj2[0]->PhysData.GroundFriction = this->_StoredPhysicsData.GroundFriction;
 			MainCharObj2[0]->PhysData.RunDecel       = this->_StoredPhysicsData.RunDecel;
 			MainCharObj2[0]->PhysData.RunBrake       = this->_StoredPhysicsData.RunBrake;
-
-			this->_StoredPhysicsData = PhysicsData();
 		}
+
+		this->_StoredPhysicsData = PhysicsData();
 	}
 }
 
@@ -1007,6 +1045,7 @@ void ItemManager::OnFrameTrapQueue()
 
 	this->_ActiveTrapTimer = TRAP_DURATION;
 	this->_TrapCooldownTimer = TRAP_COOLDOWN;
+	this->_ChaosControlCooldown = TRAP_COOLDOWN;
 
 	switch (this->_ActiveTrap)
 	{
@@ -1094,6 +1133,8 @@ void ItemManager::OnFrameTrapQueue()
 		this->AddRandomCutsceneToQueue();
 		this->_ActiveTrapTimer = 0;
 		this->_TrapCooldownTimer = 0;
+		// Don't display Received text until the cutscene actually plays
+		return;
 		break;
 	case ItemValue::IV_PongTrap:
 		MinigameManager* minigameManager = &MinigameManager::GetInstance();
@@ -1156,6 +1197,7 @@ void ItemManager::AddRandomCutsceneToQueue()
 	StoryProgressID_1 = (char)0;
 	StoryProgressID_2 = (char)1;
 	StoryProgressID_3 = (char)1;
+	StoryProgressID_4 = (char)0;
 
 	int nextCutscene = rng() % this->_cutsceneOptions.size();
 	CutsceneData data = this->_cutsceneOptions[nextCutscene];
@@ -1185,6 +1227,12 @@ void ItemManager::OnFrameCutsceneQueue()
 
 	if (GameMode == GameMode::GameMode_LoadStory)
 	{
+		if (this->_CutsceneQueued)
+		{
+			std::string message = std::string("Received Cutscene Trap");
+			MessageQueue::GetInstance().AddMessage(message);
+		}
+
 		this->_CutsceneQueued = false;
 	}
 }

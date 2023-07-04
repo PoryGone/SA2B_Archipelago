@@ -22,42 +22,6 @@ static std::map<int, StageSelectStageData>* StageSelectDataMap_ptr;
 static float minXPos;
 static float maxXPos;
 
-std::array<int, 33> TileIDtoStageIndex = {
-		SSS_HiddenBase,
-		SSS_PyramidCave,
-		SSS_DeathChamber,
-		SSS_EggQuarters,
-		SSS_SandOcean,
-		SSS_DryLagoon,
-		SSS_WeaponsBed,
-		SSS_PrisonLane,
-		SSS_WildCanyon,
-		SSS_IronGate,
-		SSS_SecurityHall,
-		SSS_MetalHarbor,
-		SSS_SkyRail,
-		SSS_WhiteJungle,
-		SSS_GreenForest,
-		SSS_PumpkinHill,
-		SSS_AquaticMine,
-		SSS_GreenHill,
-		SSS_Route280,
-		SSS_RadicalHighway,
-		SSS_Route101,
-		SSS_MissionStreet,
-		SSS_ChaoGarden,
-		SSS_CityEscape,
-		SSS_CrazyGadget,
-		SSS_EternalEngine,
-		SSS_CosmicWall,
-		SSS_MeteorHerd,
-		SSS_LostColony,
-		SSS_CannonCore,
-		SSS_FinalChase,
-		SSS_FinalRush,
-		SSS_MadSpace
-};
-
 std::map<char, NumberDisplayData> NumberMap = {
 	{'0', NumberDisplayData(-1, 40.0f, 0.0f, 4.0f)},
 	{'1', NumberDisplayData(0, 18.0f, 0.0f, 4.0f)},
@@ -165,6 +129,13 @@ void DrawString(std::string string, float xPos, float yPos, float scale = 1.0f)
 
 void UpdateLevelCheckIcons()
 {
+	bool isBossStage = StageSelectIcons::GetInstance().IsCurrentTileBoss();
+	if (isBossStage)
+	{
+		// Don't show icons on boss tiles
+		return;
+	}
+
 	int currentTileStageIndex = TileIDtoStageIndex[SS_SelectedTile];
 	LocationManager* locMan = &LocationManager::getInstance();
 	std::vector<int> chaoKeys = locMan->GetChaoKeyLocationsForLevel(currentTileStageIndex);
@@ -180,6 +151,7 @@ void UpdateLevelCheckIcons()
 	int itemCount = 0;
 	float yPos = 0.0f;
 	int debugIndex = 0;
+
 	if ((*StageSelectDataMap_ptr).at(currentTileStageIndex).UpgradeAddress > 0x00) 
 	{
 		int icon = *(char*)(*StageSelectDataMap_ptr).at(currentTileStageIndex).UpgradeAddress > 0x00 ? SSI_Upgrade : SSI_UpgradeDisabled;
@@ -308,7 +280,7 @@ void UpdateLevelCheckIcons()
 void UpdateChaosEmeraldIcons()
 {
 	int goal = StageSelectManager::GetInstance().GetGoal();
-	if (goal == 1 || goal == 2) 
+	if (goal == 1 || goal == 2 || goal == 6)
 	{
 		ItemManager* itemMan = &ItemManager::getInstance();
 		std::vector<int> chaosEmeralds = itemMan->GetChaosEmeraldAddresses();
@@ -494,9 +466,16 @@ void DeleteUpgradeIcon_IL(ObjectMaster* obj)
 
 void DrawUpgradeIcon_IL(ObjectMaster* obj)
 {
-	if (CurrentLevel == LevelIDs_ChaoWorld) {
+	if (CurrentLevel == LevelIDs_ChaoWorld)
+	{
 		return;
 	}
+
+	if (CurrentMenu == Menus::Menus_BossAttack || CurrentMenu == Menus::Menus_Kart)
+	{
+		return;
+	}
+
 	if (GameState == GameStates::GameStates_Pause && GameMode == GameMode::GameMode_Level)
 	{
 		UpdateUpgradeIcons(true);
@@ -572,4 +551,13 @@ void StageSelectIcons::OnFrame()
 		InLevelIconObj->DisplaySub_Delayed3 = DrawUpgradeIcon_IL;
 		InLevelIconObj->Data1.Entity->Action = 1;
 	}
+}
+
+bool StageSelectIcons::IsCurrentTileBoss()
+{
+	int currentTileStageIndex = TileIDtoStageIndex[SS_SelectedTile];
+	char levelID = *(char*)(*StageSelectDataMap_ptr).at(currentTileStageIndex).TileIDAddress;
+	bool isBossStage = (std::count(StageSelectIcons::GetInstance().bossIDs.begin(), StageSelectIcons::GetInstance().bossIDs.end(), levelID) != 0);
+
+	return isBossStage;
 }

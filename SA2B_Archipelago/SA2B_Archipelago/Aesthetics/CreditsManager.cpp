@@ -36,7 +36,6 @@ void GenerateAPCredits(std::vector<SA2BCreditsEntry>& apCredits)
 	}
 
 	apCredits.emplace_back();
-	apCredits.emplace_back();
 	apCredits.push_back(SA2BCreditsEntry(CreditsEntryType::CET_Logo_4, SA2B_AP_Color, ""));
 	apCredits.emplace_back();
 	apCredits.emplace_back();
@@ -48,6 +47,7 @@ void GenerateAPCredits(std::vector<SA2BCreditsEntry>& apCredits)
 	apCredits.emplace_back();
 	apCredits.push_back(SA2BCreditsEntry(CreditsEntryType::CET_Name, SA2B_AP_Color, "MAINMEMORY"));
 	apCredits.push_back(SA2BCreditsEntry(CreditsEntryType::CET_Name, SA2B_AP_Color, "N00BYKING"));
+	apCredits.push_back(SA2BCreditsEntry(CreditsEntryType::CET_Name, SA2B_AP_Color, "ENTISS"));
 	apCredits.push_back(SA2BCreditsEntry(CreditsEntryType::CET_Name, SA2B_AP_Color, "THEBULBLAXEMPIRE"));
 	apCredits.push_back(SA2BCreditsEntry(CreditsEntryType::CET_Name, SA2B_AP_Color, "X-HAX COMMUNITY"));
 	apCredits.push_back(SA2BCreditsEntry(CreditsEntryType::CET_Name, SA2B_AP_Color, "ARCHIPELAGO COMMUNITY"));
