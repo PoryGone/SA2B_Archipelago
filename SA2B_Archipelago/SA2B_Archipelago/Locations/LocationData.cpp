@@ -1372,6 +1372,22 @@ void InitializeChaoRacePacks(std::map<int, std::vector<int>>& outChaoRacePacks)
     outChaoRacePacks[ChaoGardenCheck::CGC_Dark_4] = std::vector<int>{ CGC_Dark_3 };
 }
 
+void InitializeChaoStatChecks(std::map<int, ChaoStatCheckData>& outChaoStatChecks)
+{
+    outChaoStatChecks.clear();
+
+    for (int i = 1; i <= 99; i++)
+    {
+        outChaoStatChecks[ChaoStatCheck::CSC_Swim_BEGIN         + i] = ChaoStatCheckData(0x01DEC7CE, ChaoStatCheckType::CSCT_Swim, i);
+        outChaoStatChecks[ChaoStatCheck::CSC_Fly_BEGIN          + i] = ChaoStatCheckData(0x01DEC7CF, ChaoStatCheckType::CSCT_Fly, i);
+        outChaoStatChecks[ChaoStatCheck::CSC_Run_BEGIN          + i] = ChaoStatCheckData(0x01DEC7D0, ChaoStatCheckType::CSCT_Run, i);
+        outChaoStatChecks[ChaoStatCheck::CSC_Power_BEGIN        + i] = ChaoStatCheckData(0x01DEC7D1, ChaoStatCheckType::CSCT_Power, i);
+        outChaoStatChecks[ChaoStatCheck::CSC_Stamina_BEGIN      + i] = ChaoStatCheckData(0x01DEC7D2, ChaoStatCheckType::CSCT_Stamina, i);
+        outChaoStatChecks[ChaoStatCheck::CSC_Luck_BEGIN         + i] = ChaoStatCheckData(0x01DEC7D3, ChaoStatCheckType::CSCT_Luck, i);
+        outChaoStatChecks[ChaoStatCheck::CSC_Intelligence_BEGIN + i] = ChaoStatCheckData(0x01DEC7D4, ChaoStatCheckType::CSCT_Intelligence, i);
+    }
+}
+
 void InitializeKartRaceChecks(std::map<int, KartRaceCheckData>& outKartRaceChecks)
 {
     outKartRaceChecks.clear();

@@ -532,7 +532,22 @@ void SA2_SetChaoDifficulty(int chaoDifficulty)
     {
         LocationManager* locationManager = &LocationManager::getInstance();
 
-        locationManager->SetChaoEnabled(true);
+        locationManager->SetChaoRaceEnabled(true);
+    }
+}
+
+void SA2_SetChaoStats(int chaoStats)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    if (chaoStats > 0)
+    {
+        LocationManager* locationManager = &LocationManager::getInstance();
+
+        locationManager->SetChaoStatsEnabled(chaoStats);
     }
 }
 
@@ -744,6 +759,7 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_RegisterSlotDataIntCallback("KartRaceChecks", &SA2_SetKartRaceChecks);
     AP_RegisterSlotDataIntCallback("ChaoRaceChecks", &SA2_SetChaoPacks);
     AP_RegisterSlotDataIntCallback("ChaoGardenDifficulty", &SA2_SetChaoDifficulty);
+    AP_RegisterSlotDataIntCallback("ChaoStats", &SA2_SetChaoStats);
     AP_RegisterSlotDataIntCallback("MinigameTrapDifficulty", &SA2_SetMinigameDifficulty);
     AP_RegisterSlotDataMapIntIntCallback("RegionEmblemMap", &SA2_SetRegionEmblemMap);
     AP_RegisterSlotDataMapIntIntCallback("MissionMap", &SA2_SetChosenMissionsMap);

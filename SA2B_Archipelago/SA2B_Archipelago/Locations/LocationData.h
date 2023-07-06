@@ -354,6 +354,44 @@ void InitializeChaoGardenChecks(std::map<int, ChaoGardenCheckData>& outChaoGarde
 void InitializeChaoRacePacks(std::map<int, std::vector<int>>& outChaoRacePacks);
 
 
+enum ChaoStatCheck
+{
+    CSC_BEGIN = 0xE00,
+
+    CSC_Swim_BEGIN         = 0xE00,
+    CSC_Fly_BEGIN          = 0xE80,
+    CSC_Run_BEGIN          = 0xF00,
+    CSC_Power_BEGIN        = 0xF80,
+    CSC_Stamina_BEGIN      = 0x1000,
+    CSC_Luck_BEGIN         = 0x1080,
+    CSC_Intelligence_BEGIN = 0x1100,
+};
+
+enum ChaoStatCheckType
+{
+    CSCT_Swim = 0,
+    CSCT_Fly,
+    CSCT_Run,
+    CSCT_Power,
+    CSCT_Stamina,
+    CSCT_Luck,
+    CSCT_Intelligence,
+};
+
+struct ChaoStatCheckData
+{
+    ChaoStatCheckData() : Address(0x00), StatType(ChaoStatCheckType::CSCT_Swim), Level(0x00) {}
+    ChaoStatCheckData(int address, ChaoStatCheckType statType, int level) : Address(address), StatType(statType), Level(level) {}
+
+    int Address;
+    ChaoStatCheckType StatType;
+    int Level;
+    bool CheckSent = false;
+};
+
+void InitializeChaoStatChecks(std::map<int, ChaoStatCheckData>& outChaoStatChecks);
+
+
 enum ChaoKeyCheck
 {
     CKC_BEGIN = 0x400,

@@ -91,6 +91,7 @@ void LocationManager::OnInitFunction(const char* path, const HelperFunctions& he
 	InitializeOmochaoChecks(this->_OmochaoData);
 	InitializeAnimalChecks(this->_AnimalData);
 	InitializeChaoGardenChecks(this->_ChaoGardenData);
+	InitializeChaoStatChecks(this->_ChaoStatData);
 	InitializeChaoRacePacks(this->_ChaoRacePacks);
 	InitializeKartRaceChecks(this->_KartRaceData);
 }
@@ -593,102 +594,144 @@ void LocationManager::OnFrameChaoGarden()
 	{
 		this->_chaoTimer = 0;
 
-		for (int i = ChaoGardenCheck::CGC_BEGIN; i <= ChaoGardenCheck::CGC_END_RACE; i++)
+		if (this->_chaoRaceEnabled)
 		{
-			if (this->_ChaoGardenData.find(i) != this->_ChaoGardenData.end())
+			for (int i = ChaoGardenCheck::CGC_BEGIN; i <= ChaoGardenCheck::CGC_END_RACE; i++)
 			{
-				ChaoGardenCheckData& checkData = this->_ChaoGardenData[i];
-
-				if (!checkData.CheckSent)
+				if (this->_ChaoGardenData.find(i) != this->_ChaoGardenData.end())
 				{
-					char dataValue = *(char*)checkData.Address;
+					ChaoGardenCheckData& checkData = this->_ChaoGardenData[i];
 
-					if (dataValue == 0xFF)
+					if (!checkData.CheckSent)
 					{
-						continue;
-					}
+						char dataValue = *(char*)checkData.Address;
 
-					int requiredValue = checkData.Index;
-
-					if (dataValue >= requiredValue)
-					{
-						if (this->_archipelagoManager)
+						if (dataValue == 0xFF)
 						{
-							this->_archipelagoManager->SendItem(i);
+							continue;
+						}
 
-							checkData.CheckSent = true;
+						int requiredValue = checkData.Index;
+
+						if (dataValue >= requiredValue)
+						{
+							if (this->_archipelagoManager)
+							{
+								this->_archipelagoManager->SendItem(i);
+
+								checkData.CheckSent = true;
+							}
 						}
 					}
 				}
 			}
-		}
 
-		// Move Race Data over from AP Storage
-		for (int address = 0x01DEC7C0; address <= 0x01DEC7CD; address++)
-		{
-			char dataValue = *(char*)address;
-			char currentRaceProgress = -1;
-
-			for (int index = 0; index <= 7; index++)
+			// Move Race Data over from AP Storage
+			for (int address = 0x01DEC7C0; address <= 0x01DEC7CD; address++)
 			{
-				// Handle Challenge Race Upper bits
-				if (address == 0x01DEC7CB && index >= 4)
-				{
-					break;
-				}
+				char dataValue = *(char*)address;
+				char currentRaceProgress = -1;
 
-				if (((dataValue) & (1 << index)) == 0)
+				for (int index = 0; index <= 7; index++)
 				{
-					break;
-				}
-
-				currentRaceProgress++;
-			}
-
-			// Handle Challenge Race Upper bits
-			if (address == 0x01DEC7CA)
-			{
-				char dataValue = *(char*)(address + 1);
-				for (int index2 = 4; index2 <= 7; index2++)
-				{
-					if (((dataValue) & (1 << index2)) == 0)
+					// Handle Challenge Race Upper bits
+					if (address == 0x01DEC7CB && index >= 4)
 					{
 						break;
 					}
 
-					if (currentRaceProgress < 7)
+					if (((dataValue) & (1 << index)) == 0)
 					{
 						break;
 					}
 
 					currentRaceProgress++;
 				}
+
+				// Handle Challenge Race Upper bits
+				if (address == 0x01DEC7CA)
+				{
+					char dataValue = *(char*)(address + 1);
+					for (int index2 = 4; index2 <= 7; index2++)
+					{
+						if (((dataValue) & (1 << index2)) == 0)
+						{
+							break;
+						}
+
+						if (currentRaceProgress < 7)
+						{
+							break;
+						}
+
+						currentRaceProgress++;
+					}
+				}
+
+				if (currentRaceProgress != (char)-1)
+				{
+					WriteData<1>((void*)(address - CHAO_LOCATION_STORAGE_OFFSET), currentRaceProgress);
+					WriteData<1>((void*)(address - CHAO_LOCATION_STORAGE_OFFSET - CHAO_LOCATION_INTERNAL_OFFSET), currentRaceProgress);
+				}
 			}
 
-			if (currentRaceProgress != (char)-1)
+			for (int i = ChaoGardenCheck::CGC_Beginner_Karate; i <= ChaoGardenCheck::CGC_Super_Karate; i++)
 			{
-				WriteData<1>((void*)(address - CHAO_LOCATION_STORAGE_OFFSET), currentRaceProgress);
-				WriteData<1>((void*)(address - CHAO_LOCATION_STORAGE_OFFSET - CHAO_LOCATION_INTERNAL_OFFSET), currentRaceProgress);
+				if (this->_ChaoGardenData.find(i) != this->_ChaoGardenData.end())
+				{
+					ChaoGardenCheckData& checkData = this->_ChaoGardenData[i];
+
+					if (!checkData.CheckSent)
+					{
+						char dataValue = *(char*)checkData.Address;
+
+						if (dataValue > 0x00)
+						{
+							if (this->_archipelagoManager)
+							{
+								this->_archipelagoManager->SendItem(i);
+
+								checkData.CheckSent = true;
+							}
+						}
+					}
+				}
 			}
 		}
 
-		for (int i = ChaoGardenCheck::CGC_Beginner_Karate; i <= ChaoGardenCheck::CGC_Super_Karate; i++)
+		for (int chaoIdx = 0; chaoIdx < 37; chaoIdx++)
 		{
-			if (this->_ChaoGardenData.find(i) != this->_ChaoGardenData.end())
+			ChaoDataBase chaoData = ChaoSlots[chaoIdx].data;
+
+			// Chao Stats
+			for (int statLevel = 1; statLevel <= this->_chaoStatsEnabled; statLevel++)
 			{
-				ChaoGardenCheckData& checkData = this->_ChaoGardenData[i];
-
-				if (!checkData.CheckSent)
+				for (int statType = ChaoStatCheckType::CSCT_Swim; statType <= ChaoStatCheckType::CSCT_Intelligence; statType++)
 				{
-					char dataValue = *(char*)checkData.Address;
-
-					if (dataValue > 0x00)
+					int locationID = 0xE00 + (statType * 0x80) + statLevel;
+					if (this->_ChaoStatData.find(locationID) != this->_ChaoStatData.end())
 					{
-						if (this->_archipelagoManager)
-						{
-							this->_archipelagoManager->SendItem(i);
+						ChaoStatCheckData& checkData = this->_ChaoStatData[locationID];
 
-							checkData.CheckSent = true;
+						if (!checkData.CheckSent)
+						{
+							char chaoLevel = chaoData.StatLevels[statType];
+
+							if (chaoLevel >= statLevel)
+							{
+								if (this->_archipelagoManager)
+								{
+									this->_archipelagoManager->SendItem(locationID);
+
+									checkData.CheckSent = true;
+								}
+							}
+
+							char dataValue = *(char*)checkData.Address;
+							if (chaoLevel > dataValue)
+							{
+								WriteData<1>((void*)checkData.Address, chaoLevel);
+							}
 						}
 					}
 				}
@@ -797,6 +840,10 @@ void LocationManager::CheckLocation(int location_id)
 				}
 			}
 		}
+	}
+	else if (this->_ChaoStatData.find(location_id) != this->_ChaoStatData.end())
+	{
+
 	}
 	else if (this->_ChaoKeyData.find(location_id) != this->_ChaoKeyData.end())
 	{
@@ -939,7 +986,28 @@ void LocationManager::SetRacesPacked(bool racesPacked)
 
 void LocationManager::SetChaoEnabled(bool chaoEnabled)
 {
+	// Anything Chao-related is active
 	this->_chaoEnabled = chaoEnabled;
+}
+
+void LocationManager::SetChaoRaceEnabled(bool chaoRaceEnabled)
+{
+	this->_chaoRaceEnabled = chaoRaceEnabled;
+
+	if (chaoRaceEnabled)
+	{
+		this->SetChaoEnabled(true);
+	}
+}
+
+void LocationManager::SetChaoStatsEnabled(int chaoStatsEnabled)
+{
+	this->_chaoStatsEnabled = chaoStatsEnabled;
+
+	if (chaoStatsEnabled > 0)
+	{
+		this->SetChaoEnabled(true);
+	}
 }
 
 void LocationManager::SetRequiredCannonsCoreMissions(bool allMissionsRequired)
@@ -960,6 +1028,11 @@ void LocationManager::ResetLocations()
 	}
 
 	for (auto& pair : this->_ChaoGardenData)
+	{
+		pair.second.CheckSent = false;
+	}
+
+	for (auto& pair : this->_ChaoStatData)
 	{
 		pair.second.CheckSent = false;
 	}

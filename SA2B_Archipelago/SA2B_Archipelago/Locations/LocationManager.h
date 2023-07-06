@@ -45,6 +45,8 @@ public:
 	void SetKartRacesEnabled(int kartRacesEnabled);
 	void SetRacesPacked(bool racesPacked);
 	void SetChaoEnabled(bool chaoEnabled);
+	void SetChaoRaceEnabled(bool chaoRaceEnabled);
+	void SetChaoStatsEnabled(int chaostatsEnabled);
 	void SetRequiredCannonsCoreMissions(bool requireAllCannonsCoreMissions);
 	void ResetLocations();
 
@@ -83,11 +85,15 @@ private:
 	bool _animalsEnabled = false;
 	int _kartRacesEnabled = 0;
 	bool _racesPacked = false;
+
 	bool _chaoEnabled = false;
+	bool _chaoRaceEnabled = false;
+	int _chaoStatsEnabled = 0;
 
 	std::map<int, LevelClearCheckData> _LevelClearData;
 	std::map<int, BossRushCheckData> _BossRushData;
 	std::map<int, ChaoGardenCheckData> _ChaoGardenData;
+	std::map<int, ChaoStatCheckData> _ChaoStatData;
 	std::map<int, ChaoKeyCheckData> _ChaoKeyData;
 	std::map<int, PipeCheckData> _PipeData;
 	std::map<int, HiddenCheckData> _HiddenData;
