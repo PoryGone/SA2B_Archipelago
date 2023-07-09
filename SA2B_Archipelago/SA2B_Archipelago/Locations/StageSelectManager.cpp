@@ -752,6 +752,10 @@ void StageSelectManager::HandleGoal()
 	{
 		HandleBossRush();
 	}
+	else if (this->_goal == 7)
+	{
+		HandleChaosChao();
+	}
 }
 
 void StageSelectManager::HandleBiolizard()
@@ -973,6 +977,11 @@ void StageSelectManager::HandleBossRush()
 		}
 	}
 
+	if (this->_victorySent)
+	{
+		return;
+	}
+
 	if (CurrentLevel == LevelIDs_FinalHazard)
 	{
 		if (GameState == GameStates_GoToNextLevel)
@@ -983,6 +992,48 @@ void StageSelectManager::HandleBossRush()
 
 			ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
 			apm->SendStoryComplete();
+
+			this->_victorySent = true;
+		}
+	}
+}
+
+void StageSelectManager::HandleChaosChao()
+{
+	if (this->_victorySent)
+	{
+		return;
+	}
+
+	if (CurrentLevel != LevelIDs_ChaoWorld)
+	{
+		return;
+	}
+
+	for (int chaoIdx = 0; chaoIdx < 37; chaoIdx++)
+	{
+		ChaoDataBase chaoData = ChaoSlots[chaoIdx].data;
+
+		if (chaoData.TimescaleTimer == 0)
+		{
+			// This Chao does not exist yet
+			continue;
+		}
+
+		if (chaoData.Type == ChaoType::ChaoType_Hero_Chaos ||
+			chaoData.Type == ChaoType::ChaoType_Neutral_Chaos ||
+			chaoData.Type == ChaoType::ChaoType_Dark_Chaos)
+		{
+			MessageQueue* messageQueue = &MessageQueue::GetInstance();
+			std::string msg = "Victory!";
+			messageQueue->AddMessage(msg);
+
+			ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
+			apm->SendStoryComplete();
+
+			this->_victorySent = true;
+
+			return;
 		}
 	}
 }

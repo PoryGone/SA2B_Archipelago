@@ -1388,6 +1388,101 @@ void InitializeChaoStatChecks(std::map<int, ChaoStatCheckData>& outChaoStatCheck
     }
 }
 
+void InitializeChaoBodyPartChecks(std::map<int, ChaoBodyPartCheckData>& outChaoBodyPartChecks)
+{
+    outChaoBodyPartChecks.clear();
+
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_PenguinArms]     = ChaoBodyPartCheckData(0x01DEC7D5, SA2BAnimal_Penguin, ChaoBodyPart::CBP_Arms);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_PenguinForehead] = ChaoBodyPartCheckData(0x01DEC7D5, SA2BAnimal_Penguin, ChaoBodyPart::CBP_Forehead);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_PenguinLegs]     = ChaoBodyPartCheckData(0x01DEC7D5, SA2BAnimal_Penguin, ChaoBodyPart::CBP_Legs);
+
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_SealArms] = ChaoBodyPartCheckData(0x01DEC7D6, SA2BAnimal_Seal, ChaoBodyPart::CBP_Arms);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_SealTail] = ChaoBodyPartCheckData(0x01DEC7D6, SA2BAnimal_Seal, ChaoBodyPart::CBP_Tail);
+
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_OtterArms] = ChaoBodyPartCheckData(0x01DEC7D7, SA2BAnimal_Otter, ChaoBodyPart::CBP_Arms);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_OtterEars] = ChaoBodyPartCheckData(0x01DEC7D7, SA2BAnimal_Otter, ChaoBodyPart::CBP_Ears);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_OtterLegs] = ChaoBodyPartCheckData(0x01DEC7D7, SA2BAnimal_Otter, ChaoBodyPart::CBP_Legs);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_OtterTail] = ChaoBodyPartCheckData(0x01DEC7D7, SA2BAnimal_Otter, ChaoBodyPart::CBP_Tail);
+
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_RabbitArms] = ChaoBodyPartCheckData(0x01DEC7DC, SA2BAnimal_Rabbit, ChaoBodyPart::CBP_Arms);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_RabbitEars] = ChaoBodyPartCheckData(0x01DEC7DC, SA2BAnimal_Rabbit, ChaoBodyPart::CBP_Ears);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_RabbitLegs] = ChaoBodyPartCheckData(0x01DEC7DC, SA2BAnimal_Rabbit, ChaoBodyPart::CBP_Legs);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_RabbitTail] = ChaoBodyPartCheckData(0x01DEC7DC, SA2BAnimal_Rabbit, ChaoBodyPart::CBP_Tail);
+
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_CheetahArms] = ChaoBodyPartCheckData(0x01DEC7DD, SA2BAnimal_Cheetah, ChaoBodyPart::CBP_Arms);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_CheetahEars] = ChaoBodyPartCheckData(0x01DEC7DD, SA2BAnimal_Cheetah, ChaoBodyPart::CBP_Ears);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_CheetahLegs] = ChaoBodyPartCheckData(0x01DEC7DD, SA2BAnimal_Cheetah, ChaoBodyPart::CBP_Legs);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_CheetahTail] = ChaoBodyPartCheckData(0x01DEC7DD, SA2BAnimal_Cheetah, ChaoBodyPart::CBP_Tail);
+
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_WarthogArms] = ChaoBodyPartCheckData(0x01DEC7DE, SA2BAnimal_Warthog, ChaoBodyPart::CBP_Arms);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_WarthogEars] = ChaoBodyPartCheckData(0x01DEC7DE, SA2BAnimal_Warthog, ChaoBodyPart::CBP_Ears);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_WarthogFace] = ChaoBodyPartCheckData(0x01DEC7DE, SA2BAnimal_Warthog, ChaoBodyPart::CBP_Face);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_WarthogLegs] = ChaoBodyPartCheckData(0x01DEC7DE, SA2BAnimal_Warthog, ChaoBodyPart::CBP_Legs);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_WarthogTail] = ChaoBodyPartCheckData(0x01DEC7DE, SA2BAnimal_Warthog, ChaoBodyPart::CBP_Tail);
+
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_BearArms] = ChaoBodyPartCheckData(0x01DEC7DF, SA2BAnimal_Bear, ChaoBodyPart::CBP_Arms);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_BearEars] = ChaoBodyPartCheckData(0x01DEC7DF, SA2BAnimal_Bear, ChaoBodyPart::CBP_Ears);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_BearLegs] = ChaoBodyPartCheckData(0x01DEC7DF, SA2BAnimal_Bear, ChaoBodyPart::CBP_Legs);
+
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_TigerArms] = ChaoBodyPartCheckData(0x01DEC7E0, SA2BAnimal_Tiger, ChaoBodyPart::CBP_Arms);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_TigerEars] = ChaoBodyPartCheckData(0x01DEC7E0, SA2BAnimal_Tiger, ChaoBodyPart::CBP_Ears);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_TigerLegs] = ChaoBodyPartCheckData(0x01DEC7E0, SA2BAnimal_Tiger, ChaoBodyPart::CBP_Legs);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_TigerTail] = ChaoBodyPartCheckData(0x01DEC7E0, SA2BAnimal_Tiger, ChaoBodyPart::CBP_Tail);
+
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_GorillaArms]     = ChaoBodyPartCheckData(0x01DEC7E1, SA2BAnimal_Gorilla, ChaoBodyPart::CBP_Arms);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_GorillaEars]     = ChaoBodyPartCheckData(0x01DEC7E1, SA2BAnimal_Gorilla, ChaoBodyPart::CBP_Ears);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_GorillaForehead] = ChaoBodyPartCheckData(0x01DEC7E1, SA2BAnimal_Gorilla, ChaoBodyPart::CBP_Forehead);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_GorillaLegs]     = ChaoBodyPartCheckData(0x01DEC7E1, SA2BAnimal_Gorilla, ChaoBodyPart::CBP_Legs);
+
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_PeacockForehead] = ChaoBodyPartCheckData(0x01DEC7E2, SA2BAnimal_Peacock, ChaoBodyPart::CBP_Forehead);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_PeacockLegs]     = ChaoBodyPartCheckData(0x01DEC7E2, SA2BAnimal_Peacock, ChaoBodyPart::CBP_Legs);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_PeacockTail]     = ChaoBodyPartCheckData(0x01DEC7E2, SA2BAnimal_Peacock, ChaoBodyPart::CBP_Tail);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_PeacockWings]    = ChaoBodyPartCheckData(0x01DEC7E2, SA2BAnimal_Peacock, ChaoBodyPart::CBP_Wings);
+
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_ParrotForehead] = ChaoBodyPartCheckData(0x01DEC7E3, SA2BAnimal_Parrot, ChaoBodyPart::CBP_Forehead);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_ParrotLegs]     = ChaoBodyPartCheckData(0x01DEC7E3, SA2BAnimal_Parrot, ChaoBodyPart::CBP_Legs);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_ParrotTail]     = ChaoBodyPartCheckData(0x01DEC7E3, SA2BAnimal_Parrot, ChaoBodyPart::CBP_Tail);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_ParrotWings]    = ChaoBodyPartCheckData(0x01DEC7E3, SA2BAnimal_Parrot, ChaoBodyPart::CBP_Wings);
+
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_CondorEars]  = ChaoBodyPartCheckData(0x01DEC7E8, SA2BAnimal_Condor, ChaoBodyPart::CBP_Ears);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_CondorLegs]  = ChaoBodyPartCheckData(0x01DEC7E8, SA2BAnimal_Condor, ChaoBodyPart::CBP_Legs);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_CondorTail]  = ChaoBodyPartCheckData(0x01DEC7E8, SA2BAnimal_Condor, ChaoBodyPart::CBP_Tail);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_CondorWings] = ChaoBodyPartCheckData(0x01DEC7E8, SA2BAnimal_Condor, ChaoBodyPart::CBP_Wings);
+
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_SkunkArms]     = ChaoBodyPartCheckData(0x01DEC7E9, SA2BAnimal_Skunk, ChaoBodyPart::CBP_Arms);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_SkunkForehead] = ChaoBodyPartCheckData(0x01DEC7E9, SA2BAnimal_Skunk, ChaoBodyPart::CBP_Forehead);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_SkunkLegs]     = ChaoBodyPartCheckData(0x01DEC7E9, SA2BAnimal_Skunk, ChaoBodyPart::CBP_Legs);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_SkunkTail]     = ChaoBodyPartCheckData(0x01DEC7E9, SA2BAnimal_Skunk, ChaoBodyPart::CBP_Tail);
+
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_SheepArms] = ChaoBodyPartCheckData(0x01DEC7EA, SA2BAnimal_Sheep, ChaoBodyPart::CBP_Arms);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_SheepEars] = ChaoBodyPartCheckData(0x01DEC7EA, SA2BAnimal_Sheep, ChaoBodyPart::CBP_Ears);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_SheepLegs] = ChaoBodyPartCheckData(0x01DEC7EA, SA2BAnimal_Sheep, ChaoBodyPart::CBP_Legs);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_SheepHorn] = ChaoBodyPartCheckData(0x01DEC7EA, SA2BAnimal_Sheep, ChaoBodyPart::CBP_Horn);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_SheepTail] = ChaoBodyPartCheckData(0x01DEC7EA, SA2BAnimal_Sheep, ChaoBodyPart::CBP_Tail);
+
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_RaccoonArms] = ChaoBodyPartCheckData(0x01DEC7EB, SA2BAnimal_Raccoon, ChaoBodyPart::CBP_Arms);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_RaccoonEars] = ChaoBodyPartCheckData(0x01DEC7EB, SA2BAnimal_Raccoon, ChaoBodyPart::CBP_Ears);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_RaccoonLegs] = ChaoBodyPartCheckData(0x01DEC7EB, SA2BAnimal_Raccoon, ChaoBodyPart::CBP_Legs);
+
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_DragonArms]  = ChaoBodyPartCheckData(0x01DEC7ED, SA2BAnimal_Dragon, ChaoBodyPart::CBP_Arms);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_DragonEars]  = ChaoBodyPartCheckData(0x01DEC7ED, SA2BAnimal_Dragon, ChaoBodyPart::CBP_Ears);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_DragonLegs]  = ChaoBodyPartCheckData(0x01DEC7ED, SA2BAnimal_Dragon, ChaoBodyPart::CBP_Legs);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_DragonHorn]  = ChaoBodyPartCheckData(0x01DEC7ED, SA2BAnimal_Dragon, ChaoBodyPart::CBP_Horn);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_DragonTail]  = ChaoBodyPartCheckData(0x01DEC7ED, SA2BAnimal_Dragon, ChaoBodyPart::CBP_Tail);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_DragonWings] = ChaoBodyPartCheckData(0x01DEC7ED, SA2BAnimal_Dragon, ChaoBodyPart::CBP_Wings);
+
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_UnicornArms]     = ChaoBodyPartCheckData(0x01DEC7EE, SA2BAnimal_Unicorn, ChaoBodyPart::CBP_Arms);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_UnicornEars]     = ChaoBodyPartCheckData(0x01DEC7EE, SA2BAnimal_Unicorn, ChaoBodyPart::CBP_Ears);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_UnicornForehead] = ChaoBodyPartCheckData(0x01DEC7EE, SA2BAnimal_Unicorn, ChaoBodyPart::CBP_Forehead);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_UnicornLegs]     = ChaoBodyPartCheckData(0x01DEC7EE, SA2BAnimal_Unicorn, ChaoBodyPart::CBP_Legs);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_UnicornTail]     = ChaoBodyPartCheckData(0x01DEC7EE, SA2BAnimal_Unicorn, ChaoBodyPart::CBP_Tail);
+
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_PhoenixForehead] = ChaoBodyPartCheckData(0x01DEC7EF, SA2BAnimal_Phoenix, ChaoBodyPart::CBP_Forehead);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_PhoenixLegs]     = ChaoBodyPartCheckData(0x01DEC7EF, SA2BAnimal_Phoenix, ChaoBodyPart::CBP_Legs);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_PhoenixTail]     = ChaoBodyPartCheckData(0x01DEC7EF, SA2BAnimal_Phoenix, ChaoBodyPart::CBP_Tail);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_PhoenixWings]    = ChaoBodyPartCheckData(0x01DEC7EF, SA2BAnimal_Phoenix, ChaoBodyPart::CBP_Wings);
+}
+
 void InitializeKartRaceChecks(std::map<int, KartRaceCheckData>& outKartRaceChecks)
 {
     outKartRaceChecks.clear();

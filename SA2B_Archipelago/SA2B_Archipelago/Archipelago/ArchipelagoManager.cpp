@@ -551,6 +551,21 @@ void SA2_SetChaoStats(int chaoStats)
     }
 }
 
+void SA2_SetChaoBodyParts(int chaoBodyParts)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    if (chaoBodyParts > 0)
+    {
+        LocationManager* locationManager = &LocationManager::getInstance();
+
+        locationManager->SetChaoBodyPartsEnabled(true);
+    }
+}
+
 void SA2_SetChaoKeys(int chaoKeys)
 {
     if (!ArchipelagoManager::getInstance().IsInit())
@@ -760,6 +775,7 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_RegisterSlotDataIntCallback("ChaoRaceChecks", &SA2_SetChaoPacks);
     AP_RegisterSlotDataIntCallback("ChaoGardenDifficulty", &SA2_SetChaoDifficulty);
     AP_RegisterSlotDataIntCallback("ChaoStats", &SA2_SetChaoStats);
+    AP_RegisterSlotDataIntCallback("ChaoAnimalParts", &SA2_SetChaoBodyParts);
     AP_RegisterSlotDataIntCallback("MinigameTrapDifficulty", &SA2_SetMinigameDifficulty);
     AP_RegisterSlotDataMapIntIntCallback("RegionEmblemMap", &SA2_SetRegionEmblemMap);
     AP_RegisterSlotDataMapIntIntCallback("MissionMap", &SA2_SetChosenMissionsMap);

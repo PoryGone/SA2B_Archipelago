@@ -392,6 +392,129 @@ struct ChaoStatCheckData
 void InitializeChaoStatChecks(std::map<int, ChaoStatCheckData>& outChaoStatChecks);
 
 
+enum ChaoBodyPart
+{
+    CBP_Arms = 0,
+    CBP_Ears,
+    CBP_Forehead,
+    CBP_Face,
+    CBP_Legs,
+    CBP_Horn,
+    CBP_Tail,
+    CBP_Wings,
+};
+
+enum ChaoBodyPartCheck
+{
+    CBPC_BEGIN = 0x1220,
+
+    CBPC_PenguinArms     = 0x1220,
+    CBPC_PenguinForehead = 0x1222,
+    CBPC_PenguinLegs     = 0x1224,
+
+    CBPC_SealArms     = 0x1228,
+    CBPC_SealTail     = 0x122E,
+
+    CBPC_OtterArms = 0x1230,
+    CBPC_OtterEars = 0x1231,
+    CBPC_OtterLegs = 0x1234,
+    CBPC_OtterTail = 0x1236,
+
+    CBPC_RabbitArms = 0x1238,
+    CBPC_RabbitEars = 0x1239,
+    CBPC_RabbitLegs = 0x123C,
+    CBPC_RabbitTail = 0x123E,
+
+    CBPC_CheetahArms = 0x1240,
+    CBPC_CheetahEars = 0x1241,
+    CBPC_CheetahLegs = 0x1244,
+    CBPC_CheetahTail = 0x1246,
+
+    CBPC_WarthogArms = 0x1248,
+    CBPC_WarthogEars = 0x1249,
+    CBPC_WarthogFace = 0x124B,
+    CBPC_WarthogLegs = 0x124C,
+    CBPC_WarthogTail = 0x124E,
+
+    CBPC_BearArms = 0x1250,
+    CBPC_BearEars = 0x1251,
+    CBPC_BearLegs = 0x1254,
+
+    CBPC_TigerArms = 0x1258,
+    CBPC_TigerEars = 0x1259,
+    CBPC_TigerLegs = 0x125C,
+    CBPC_TigerTail = 0x125E,
+
+    CBPC_GorillaArms     = 0x1260,
+    CBPC_GorillaEars     = 0x1261,
+    CBPC_GorillaForehead = 0x1262,
+    CBPC_GorillaLegs     = 0x1264,
+
+    CBPC_PeacockForehead = 0x126A,
+    CBPC_PeacockLegs     = 0x126C,
+    CBPC_PeacockTail     = 0x126E,
+    CBPC_PeacockWings    = 0x126F,
+
+    CBPC_ParrotForehead = 0x1272,
+    CBPC_ParrotLegs     = 0x1274,
+    CBPC_ParrotTail     = 0x1276,
+    CBPC_ParrotWings    = 0x1277,
+
+    CBPC_CondorEars  = 0x1279,
+    CBPC_CondorLegs  = 0x127C,
+    CBPC_CondorTail  = 0x127E,
+    CBPC_CondorWings = 0x127F,
+
+    CBPC_SkunkArms     = 0x1280,
+    CBPC_SkunkForehead = 0x1282,
+    CBPC_SkunkLegs     = 0x1284,
+    CBPC_SkunkTail     = 0x1286,
+
+    CBPC_SheepArms = 0x1288,
+    CBPC_SheepEars = 0x1289,
+    CBPC_SheepLegs = 0x128C,
+    CBPC_SheepHorn = 0x128D,
+    CBPC_SheepTail = 0x128E,
+
+    CBPC_RaccoonArms = 0x1290,
+    CBPC_RaccoonEars = 0x1291,
+    CBPC_RaccoonLegs = 0x1294,
+
+    CBPC_DragonArms  = 0x12A0,
+    CBPC_DragonEars  = 0x12A1,
+    CBPC_DragonLegs  = 0x12A4,
+    CBPC_DragonHorn  = 0x12A5,
+    CBPC_DragonTail  = 0x12A6,
+    CBPC_DragonWings = 0x12A7,
+
+    CBPC_UnicornArms     = 0x12A8,
+    CBPC_UnicornEars     = 0x12A9,
+    CBPC_UnicornForehead = 0x12AA,
+    CBPC_UnicornLegs     = 0x12AC,
+    CBPC_UnicornTail     = 0x12AE,
+
+    CBPC_PhoenixForehead = 0x12B2,
+    CBPC_PhoenixLegs     = 0x12B4,
+    CBPC_PhoenixTail     = 0x12B6,
+    CBPC_PhoenixWings    = 0x12B7,
+
+    CBPC_NUM_CHECKS = 0x12B8,
+};
+
+struct ChaoBodyPartCheckData
+{
+    ChaoBodyPartCheckData() : Address(0x00), AnimalType(SA2BAnimal_Penguin), BodyPart(ChaoBodyPart::CBP_Arms) {}
+    ChaoBodyPartCheckData(int address, SA2BAnimal animalType, ChaoBodyPart bodyPart) : Address(address), AnimalType(animalType), BodyPart(bodyPart) {}
+
+    int Address;
+    SA2BAnimal AnimalType;
+    ChaoBodyPart BodyPart;
+    bool CheckSent = false;
+};
+
+void InitializeChaoBodyPartChecks(std::map<int, ChaoBodyPartCheckData>& outChaoStatChecks);
+
+
 enum ChaoKeyCheck
 {
     CKC_BEGIN = 0x400,

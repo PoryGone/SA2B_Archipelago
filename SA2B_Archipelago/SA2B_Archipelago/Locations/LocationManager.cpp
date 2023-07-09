@@ -92,6 +92,7 @@ void LocationManager::OnInitFunction(const char* path, const HelperFunctions& he
 	InitializeAnimalChecks(this->_AnimalData);
 	InitializeChaoGardenChecks(this->_ChaoGardenData);
 	InitializeChaoStatChecks(this->_ChaoStatData);
+	InitializeChaoBodyPartChecks(this->_ChaoBodyPartData);
 	InitializeChaoRacePacks(this->_ChaoRacePacks);
 	InitializeKartRaceChecks(this->_KartRaceData);
 }
@@ -584,8 +585,11 @@ void LocationManager::OnFrameChaoGarden()
 
 	if (CurrentLevel != LevelIDs::LevelIDs_ChaoWorld)
 	{
-		// Only check the data while in Chao World, otherwise it may be wrong
-		return;
+		this->_chaoEntryTimer = 0;
+	}
+	else
+	{
+		this->_chaoEntryTimer++;
 	}
 
 	this->_chaoTimer++;
@@ -594,6 +598,69 @@ void LocationManager::OnFrameChaoGarden()
 	{
 		this->_chaoTimer = 0;
 
+		// Sending of Chao Locations to Server
+
+		// Chao Stats
+		for (int statLevel = 1; statLevel <= this->_chaoStatsEnabled; statLevel++)
+		{
+			for (int statType = ChaoStatCheckType::CSCT_Swim; statType <= ChaoStatCheckType::CSCT_Intelligence; statType++)
+			{
+				int locationID = 0xE00 + (statType * 0x80) + statLevel;
+				if (this->_ChaoStatData.find(locationID) != this->_ChaoStatData.end())
+				{
+					ChaoStatCheckData& checkData = this->_ChaoStatData[locationID];
+
+					if (!checkData.CheckSent)
+					{
+						char dataValue = *(char*)checkData.Address;
+						if (dataValue >= statLevel)
+						{
+							this->_archipelagoManager->SendItem(locationID);
+
+							checkData.CheckSent = true;
+						}
+					}
+				}
+			}
+		}
+
+		// Chao Animal Parts
+		if (this->_chaoBodyPartsEnabled)
+		{
+			for (int i = ChaoBodyPartCheck::CBPC_BEGIN; i < ChaoBodyPartCheck::CBPC_NUM_CHECKS; i++)
+			{
+				if (this->_ChaoBodyPartData.find(i) != this->_ChaoBodyPartData.end())
+				{
+					ChaoBodyPartCheckData& checkData = this->_ChaoBodyPartData[i];
+
+					if (!checkData.CheckSent)
+					{
+						char dataValue = *(char*)checkData.Address;
+
+						char bitFlag = (char)(0x01 << (char)checkData.BodyPart);
+
+						if ((dataValue & bitFlag) != 0x00)
+						{
+							if (this->_archipelagoManager)
+							{
+								this->_archipelagoManager->SendItem(i);
+
+								checkData.CheckSent = true;
+							}
+						}
+					}
+				}
+			}
+		}
+		// End Sending of Chao Locations to Server
+
+		if (this->_chaoEntryTimer < CHAO_MEMORY_CHECK_ENTRY_TIME)
+		{
+			// Only check the below data while in Chao World, otherwise it may be wrong
+			return;
+		}
+
+		// In-Garden Tracking of Locations
 		if (this->_chaoRaceEnabled)
 		{
 			for (int i = ChaoGardenCheck::CGC_BEGIN; i <= ChaoGardenCheck::CGC_END_RACE; i++)
@@ -703,6 +770,12 @@ void LocationManager::OnFrameChaoGarden()
 		{
 			ChaoDataBase chaoData = ChaoSlots[chaoIdx].data;
 
+			if (chaoData.TimescaleTimer == 0)
+			{
+				// This Chao does not exist yet
+				continue;
+			}
+
 			// Chao Stats
 			for (int statLevel = 1; statLevel <= this->_chaoStatsEnabled; statLevel++)
 			{
@@ -717,16 +790,6 @@ void LocationManager::OnFrameChaoGarden()
 						{
 							char chaoLevel = chaoData.StatLevels[statType];
 
-							if (chaoLevel >= statLevel)
-							{
-								if (this->_archipelagoManager)
-								{
-									this->_archipelagoManager->SendItem(locationID);
-
-									checkData.CheckSent = true;
-								}
-							}
-
 							char dataValue = *(char*)checkData.Address;
 							if (chaoLevel > dataValue)
 							{
@@ -736,7 +799,61 @@ void LocationManager::OnFrameChaoGarden()
 					}
 				}
 			}
+
+			// Chao Animal Parts
+			if (this->_chaoBodyPartsEnabled)
+			{
+				for (int i = ChaoBodyPartCheck::CBPC_BEGIN; i < ChaoBodyPartCheck::CBPC_NUM_CHECKS; i++)
+				{
+					if (this->_ChaoBodyPartData.find(i) != this->_ChaoBodyPartData.end())
+					{
+						ChaoBodyPartCheckData& checkData = this->_ChaoBodyPartData[i];
+
+						if (!checkData.CheckSent)
+						{
+							SA2BAnimal currentChaoAnimal = SA2BAnimal_None;
+							switch (checkData.BodyPart)
+							{
+							case ChaoBodyPart::CBP_Arms:
+								currentChaoAnimal = chaoData.SA2BArmType;
+								break;
+							case ChaoBodyPart::CBP_Ears:
+								currentChaoAnimal = chaoData.SA2BEarType;
+								break;
+							case ChaoBodyPart::CBP_Forehead:
+								currentChaoAnimal = chaoData.SA2BForeheadType;
+								break;
+							case ChaoBodyPart::CBP_Face:
+								currentChaoAnimal = chaoData.SA2BFaceType;
+								break;
+							case ChaoBodyPart::CBP_Legs:
+								currentChaoAnimal = chaoData.SA2BLegType;
+								break;
+							case ChaoBodyPart::CBP_Horn:
+								currentChaoAnimal = chaoData.SA2BHornType;
+								break;
+							case ChaoBodyPart::CBP_Tail:
+								currentChaoAnimal = chaoData.SA2BTailType;
+								break;
+							case ChaoBodyPart::CBP_Wings:
+								currentChaoAnimal = chaoData.SA2BWingType;
+								break;
+							}
+
+							if (currentChaoAnimal == checkData.AnimalType)
+							{
+								char dataValue = *(char*)checkData.Address;
+								char bitFlag = (char)(0x01 << (char)checkData.BodyPart);
+								char newDataValue = dataValue | bitFlag;
+
+								WriteData<1>((void*)checkData.Address, newDataValue);
+							}
+						}
+					}
+				}
+			}
 		}
+		// End In-Garden Tracking of Locations
 	}
 }
 
@@ -1005,6 +1122,16 @@ void LocationManager::SetChaoStatsEnabled(int chaoStatsEnabled)
 	this->_chaoStatsEnabled = chaoStatsEnabled;
 
 	if (chaoStatsEnabled > 0)
+	{
+		this->SetChaoEnabled(true);
+	}
+}
+
+void LocationManager::SetChaoBodyPartsEnabled(bool chaoBodyPartsEnabled)
+{
+	this->_chaoBodyPartsEnabled = chaoBodyPartsEnabled;
+
+	if (chaoBodyPartsEnabled)
 	{
 		this->SetChaoEnabled(true);
 	}

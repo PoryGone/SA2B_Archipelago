@@ -105,6 +105,7 @@ private:
 	void HandleGreenHill();
 	void HandleGrandPrix();
 	void HandleBossRush();
+	void HandleChaosChao();
     void HandleBossStage();
 	void HandleStageSelectCamera();
 	void HandleMissionOrder();
