@@ -122,13 +122,17 @@ void ChaoGardenManager::HandleStartingEggs()
 				}
 
 				// Starting Chao Names
+				for (int i = 0; i < 7; i++)
+				{
+					ChaoSlots[chaoIdx].data.Name[i] = (char)this->_defaultChaoNameMap[i + (chaoIdx * 7)];
+				}
 
 				// Starting Chao Colors
 				 unsigned char color = this->_defaultEggMap[chaoIdx];
 
 				 if (color != 255)
 				 {
-					 bool twoTone, shiny, jewel = false;
+					 bool twoTone = false, shiny = false, jewel = false;
 
 					 if (color > 0x10)
 					 {
@@ -209,4 +213,9 @@ void ChaoGardenManager::SetChaoBodyPartsEnabled(bool chaoBodyPartsEnabled)
 void ChaoGardenManager::SetDefaultEggMap(std::map<int, int> map)
 {
 	this->_defaultEggMap = map;
+}
+
+void ChaoGardenManager::SetDefaultChaoNameMap(std::map<int, int> map)
+{
+	this->_defaultChaoNameMap = map;
 }

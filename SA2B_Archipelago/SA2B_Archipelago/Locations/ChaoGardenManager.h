@@ -25,6 +25,7 @@ public:
 	void SetChaoStatsEnabled(int chaoStatsEnabled);
 	void SetChaoBodyPartsEnabled(bool chaoBodyPartsEnabled);
 	void SetDefaultEggMap(std::map<int, int> map);
+	void SetDefaultChaoNameMap(std::map<int, int> map);
 
 private:
 	void HandleStartingEggs();
@@ -40,4 +41,5 @@ private:
 	bool _chaoBodyPartsEnabled = false;
 	
 	std::map<int, int> _defaultEggMap;
+	std::map<int, int> _defaultChaoNameMap;
 };
