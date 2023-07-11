@@ -48,9 +48,10 @@ public:
 	void OnGameStart(MinigameManagerData data) override;
 	void OnFrame(MinigameManagerData data) override;
 
+	void CreateHierarchy(MinigameManagerData data);
+
 	void OnFramePlayer(MinigameManagerData data);
 	void OnFrameSimulate(MinigameManagerData data);
-	void OnFrameDraw(MinigameManagerData data);
 
 	void HandleCollision(MinigameManagerData data);
 
@@ -68,7 +69,7 @@ private:
 	float ballAngle     = 0.0f;
 	float rotationDelta = 2.0f;
 
-	NJS_POINT3 leftPaddlePos  = NJS_POINT3();
-	NJS_POINT3 rightPaddlePos = NJS_POINT3();
-	NJS_POINT3 ballPos        = NJS_POINT3();
+	SpriteNode* leftPaddle = nullptr;
+	SpriteNode* rightPaddle = nullptr;
+	SpriteNode* ball = nullptr;
 };

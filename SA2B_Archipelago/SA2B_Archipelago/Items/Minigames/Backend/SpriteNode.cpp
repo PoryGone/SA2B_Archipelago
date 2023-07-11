@@ -1,6 +1,7 @@
 #include "../../../pch.h"
 #include "SpriteNode.h"
 #include "../../../Utilities/SpriteUtilities.h"
+#include <functional>
 
 void SpriteNode::RemoveFromChildren(SpriteNode* child) 
 {
@@ -16,12 +17,22 @@ void SpriteNode::RemoveFromChildren(SpriteNode* child)
 
 void SpriteNode::SetPositionGlobal(NJS_POINT3 pos) 
 {
-
+	globalPosition = pos;
+	NJS_POINT3 local = globalPosition;
+	SpriteNode* ptr = this;
+	while (ptr->parent != nullptr)
+	{
+		ptr = ptr->parent;
+		Point3SubtractEQ(local, (*ptr).localPosition);
+	}
+	localPosition = local;
+	SetBranchDirty();
 }
 
 void SpriteNode::SetPosition(NJS_POINT3 pos)
 {
-
+	localPosition = pos;
+	SetBranchDirty();
 }
 
 NJS_POINT3 SpriteNode::GetPosition()
@@ -35,33 +46,68 @@ NJS_POINT3 SpriteNode::GetPositionGlobal()
 	return globalPosition;
 }
 
+void SpriteNode::Translate(NJS_POINT3 delta)
+{
+	NJS_POINT3 pos = GetPositionGlobal();
+	Point3AddEQ(pos, delta);
+	SetPositionGlobal(pos);
+}
+
 void SpriteNode::Render(NJS_SPRITE& sprite)
 {
-	if (anim == nullptr) return;
-	sprite.tanim = anim;
-	sprite.p = globalPosition;
-	sprite.ang = NJM_DEG_ANG(rotation);
-	sprite.sx = displaySize.x / anim->sx;
-	sprite.sy = displaySize.y / anim->sy;
-	DrawSprite2D(&sprite);
+	if (anim != nullptr)
+	{
+		NJS_TEXANIM* tempAnim = anim;
+		tempAnim--;
+		sprite.tanim = tempAnim;
+		sprite.p = GetPositionGlobal();
+		sprite.ang = NJM_DEG_ANG(rotation);
+		sprite.sx = displaySize.x / (float)anim->sx;
+		sprite.sy = displaySize.y / (float)anim->sy;
+		if (rotation != 0.0f) 
+		{
+			DrawSprite2D(&sprite, 1, 1, NJD_SPRITE_ALPHA | NJD_SPRITE_ANGLE);
+		}
+		else
+		{
+			DrawSprite2D(&sprite);
+		}
+	}
 }
 
 void SpriteNode::OnFrame()
 {
-	for (int i = 0; i < components.size(); i++)
+	for (auto& component : this->components)
 	{
-		components[i].OnFrame(*this);
+		component->OnFrame(*this);
 	}
 }
 
 void SpriteNode::RunMethodOnHeirarchy(std::function<void(SpriteNode&)> func, bool depthFirst)
 {
-	func(*this);
+	if (!depthFirst) 
+	{
+		func(*this);
+	}
+	for (int i = 0; i < children.size(); i++)
+	{
+		children[i]->RunMethodOnHeirarchy(func, depthFirst);
+	}
+	if (depthFirst)
+	{
+		func(*this);
+	}
 }
 
 void SpriteNode::SetPositionDirty()
 {
 	isGlobalPositionDirty = true;
+}
+
+void SpriteNode::SetBranchDirty()
+{
+	std::function<void(SpriteNode&)> func = [](SpriteNode& node) {node.SetPositionDirty(); };
+	RunMethodOnHeirarchy(func);
 }
 
 void SpriteNode::UpdateGlobalPosition()

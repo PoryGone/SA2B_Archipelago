@@ -43,6 +43,8 @@ void MinigameManager::OnFrameFunction()
 	{
 		this->iconData.LoadIcons();
 		this->_data.icons = &this->iconData;
+		this->_data.hierarchy = &this->spriteHierarchy;
+		this->_data.hierarchy->iconData = &this->iconData;
 		this->IconObjPtr = LoadObject(0, "MinigameIcons", DrawUpgradeIconMain_MG, LoadObj_Data1 | LoadObj_Data2);
 		this->IconObjPtr->DeleteSub = DeleteUpgradeIcon_MG;
 		this->IconObjPtr->MainSub = DrawUpgradeIconMain_MG;
@@ -77,6 +79,8 @@ void MinigameManager::UpdateCurrentMinigame()
 		{
 			this->_data.managerState = this->state;
 			this->currentMinigame->OnFrame(this->_data);
+			this->_data.hierarchy->OnFrame();
+			this->_data.hierarchy->Render();
 		}
 		if (this->currentMinigame->currentState == MinigameState::MGS_Victory || this->currentMinigame->currentState == MinigameState::MGS_Loss)
 		{
@@ -89,13 +93,14 @@ void MinigameManager::UpdateCurrentMinigame()
 			{
 				this->HandleLoss();
 			}
-			currentMinigame = nullptr;
+			this->EndMinigame();
 		}
 	}
 }
 
 void MinigameManager::EndMinigame()
 {
+	this->_data.hierarchy->ClearHierarchy();
 	this->currentMinigame = nullptr;
 	this->state = MinigameState::MGS_None;
 }
@@ -129,8 +134,6 @@ void MinigameManager::HandleVictory()
 	}
 
 	ItemManager::getInstance().HandleJunk(itemToSend);
-
-	this->state = MinigameState::MGS_None;
 }
 
 void MinigameManager::HandleLoss()
@@ -138,8 +141,6 @@ void MinigameManager::HandleLoss()
 	// TODO: Make this dynamic when we have multiple Minigames
 	ArchipelagoManager::getInstance().SetDeathCause(DeathCause::DC_Pong);
 	ArchipelagoManager::getInstance().AP_KillPlayer();
-
-	this->state = MinigameState::MGS_None;
 }
 
 void MinigameManager::SetDifficulty(int difficulty)

@@ -3,8 +3,6 @@
 
 
 static NJS_TEXANIM MGAnim[] = {
-	//-1 padding cause reasons --- Ignore this for the count
-	{40, 32, 20, 16, 0x0A, 0x10, 0x34, 0x30, 0, 0},
 	//Bars
 	{64, 256, 32, 128, 0x00, 0x00, 0x3F, 0xFF, 0, 0},
 	{64, 256, 32, 128, 0x40, 0x00, 0x7F, 0xFF, 0, 0},

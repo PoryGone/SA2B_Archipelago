@@ -31,6 +31,7 @@ public:
 	MinigameState state = MinigameState::MGS_None;
 	ObjectMaster* IconObjPtr;
 	MinigameIconData iconData = MinigameIconData();
+	SpriteHierarchy spriteHierarchy = SpriteHierarchy();
 
 private:
 	MinigameBase* currentMinigame;
