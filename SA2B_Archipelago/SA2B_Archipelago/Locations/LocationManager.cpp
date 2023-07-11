@@ -561,26 +561,10 @@ void LocationManager::OnFrameKartRace()
 
 void LocationManager::OnFrameChaoGarden()
 {
-	//Make All Characters have Chao Garden Access
-	WriteData<8>((void*)0x1DEF829, 0x01);
-
 	if (!this->_chaoEnabled)
 	{
 		// Don't do any Chao stuff if no Chao checks are on
 		return;
-	}
-
-	// Make sure Hero/Dark Gardens are always unlocked
-	ChaoGardensUnlocked = 0x56;
-
-	// Handle Separate Chao Saves
-	std::string chaoFileName = ArchipelagoManager::getInstance().GetSeedName().substr(0, 11);
-
-	for (int i = 0; i < 11; i++)
-	{
-		WriteData<1>((void*)(0x8ACF4B + i), chaoFileName[i]);
-		WriteData<1>((void*)(0xC70E5C + i), chaoFileName[i]);
-		WriteData<1>((void*)(0x1366067 + i), chaoFileName[i]);
 	}
 
 	if (CurrentLevel != LevelIDs::LevelIDs_ChaoWorld)

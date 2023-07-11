@@ -3,6 +3,7 @@
 #include "../Locations/LocationData.h"
 #include "../Items/ItemManager.h"
 #include "../Items/Minigames/MinigameManager.h"
+#include "../Locations/ChaoGardenManager.h"
 #include "../Locations/LocationManager.h"
 #include "../Aesthetics/MusicManager.h"
 
@@ -533,6 +534,10 @@ void SA2_SetChaoDifficulty(int chaoDifficulty)
         LocationManager* locationManager = &LocationManager::getInstance();
 
         locationManager->SetChaoRaceEnabled(true);
+
+        ChaoGardenManager* chaoGardenManager = &ChaoGardenManager::GetInstance();
+
+        chaoGardenManager->SetChaoRaceEnabled(chaoDifficulty);
     }
 }
 
@@ -548,6 +553,10 @@ void SA2_SetChaoStats(int chaoStats)
         LocationManager* locationManager = &LocationManager::getInstance();
 
         locationManager->SetChaoStatsEnabled(chaoStats);
+
+        ChaoGardenManager* chaoGardenManager = &ChaoGardenManager::GetInstance();
+
+        chaoGardenManager->SetChaoStatsEnabled(chaoStats);
     }
 }
 
@@ -563,7 +572,23 @@ void SA2_SetChaoBodyParts(int chaoBodyParts)
         LocationManager* locationManager = &LocationManager::getInstance();
 
         locationManager->SetChaoBodyPartsEnabled(true);
+
+        ChaoGardenManager* chaoGardenManager = &ChaoGardenManager::GetInstance();
+
+        chaoGardenManager->SetChaoBodyPartsEnabled(true);
     }
+}
+
+void SA2_SetDefaultEggMap(std::map<int, int> map)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    ChaoGardenManager* chaoGardenManager = &ChaoGardenManager::GetInstance();
+
+    chaoGardenManager->SetDefaultEggMap(map);
 }
 
 void SA2_SetChaoKeys(int chaoKeys)
@@ -776,6 +801,7 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_RegisterSlotDataIntCallback("ChaoGardenDifficulty", &SA2_SetChaoDifficulty);
     AP_RegisterSlotDataIntCallback("ChaoStats", &SA2_SetChaoStats);
     AP_RegisterSlotDataIntCallback("ChaoAnimalParts", &SA2_SetChaoBodyParts);
+    AP_RegisterSlotDataMapIntIntCallback("DefaultEggMap", &SA2_SetDefaultEggMap);
     AP_RegisterSlotDataIntCallback("MinigameTrapDifficulty", &SA2_SetMinigameDifficulty);
     AP_RegisterSlotDataMapIntIntCallback("RegionEmblemMap", &SA2_SetRegionEmblemMap);
     AP_RegisterSlotDataMapIntIntCallback("MissionMap", &SA2_SetChosenMissionsMap);
