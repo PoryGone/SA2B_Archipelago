@@ -210,6 +210,16 @@ void ChaoGardenManager::SetChaoBodyPartsEnabled(bool chaoBodyPartsEnabled)
 	}
 }
 
+void ChaoGardenManager::SetChaoKindergartenEnabled(bool chaoKindergartenEnabled)
+{
+	this->_chaoKindergartenEnabled = chaoKindergartenEnabled;
+
+	if (chaoKindergartenEnabled)
+	{
+		this->SetChaoEnabled(true);
+	}
+}
+
 void ChaoGardenManager::SetDefaultEggMap(std::map<int, int> map)
 {
 	this->_defaultEggMap = map;

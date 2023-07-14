@@ -34,9 +34,14 @@ public:
 	void OnFrameAnimals();
 	void OnFrameKartRace();
 	void OnFrameChaoGarden();
+
 	void CheckLocation(int location_id);
+	void ResetLocations();
+
 	void SetGoal(int goal);
 	void SetRequiredRank(int requiredRank);
+	void SetRequiredCannonsCoreMissions(bool requireAllCannonsCoreMissions);
+
 	void SetChaoKeysEnabled(bool chaoKeysEnabled);
 	void SetPipesEnabled(bool pipesEnabled);
 	void SetHiddensEnabled(bool hiddenEnabled);
@@ -44,13 +49,13 @@ public:
 	void SetOmochaoEnabled(bool omochaoEnabled);
 	void SetAnimalsEnabled(bool animalsEnabled);
 	void SetKartRacesEnabled(int kartRacesEnabled);
+
 	void SetRacesPacked(bool racesPacked);
 	void SetChaoEnabled(bool chaoEnabled);
 	void SetChaoRaceEnabled(bool chaoRaceEnabled);
 	void SetChaoStatsEnabled(int chaoStatsEnabled);
 	void SetChaoBodyPartsEnabled(bool chaoBodyPartsEnabled);
-	void SetRequiredCannonsCoreMissions(bool requireAllCannonsCoreMissions);
-	void ResetLocations();
+	void SetChaoKindergartenEnabled(bool chaoKindergartenEnabled);
 
 	void SendChaoKeyLocationCheck();
 	void SendPipeLocationCheck();
@@ -77,9 +82,11 @@ private:
 	unsigned int _chaoTimer = 0;
 	unsigned int _chaoEntryTimer = 0;
 	unsigned int _whistleTimer = 0;
+
 	int _goal = 0;
 	int _requiredRank = 0;
 	bool _requireAllCannonsCoreMissions = false;
+
 	bool _chaoKeysEnabled = false;
 	bool _pipesEnabled = false;
 	bool _hiddensEnabled = false;
@@ -87,18 +94,21 @@ private:
 	bool _omochaoEnabled = false;
 	bool _animalsEnabled = false;
 	int _kartRacesEnabled = 0;
-	bool _racesPacked = false;
 
+	bool _racesPacked = false;
 	bool _chaoEnabled = false;
 	bool _chaoRaceEnabled = false;
 	int _chaoStatsEnabled = 0;
 	bool _chaoBodyPartsEnabled = false;
+	bool _chaoKindergartenEnabled = false;
 
 	std::map<int, LevelClearCheckData> _LevelClearData;
 	std::map<int, BossRushCheckData> _BossRushData;
 	std::map<int, ChaoGardenCheckData> _ChaoGardenData;
 	std::map<int, ChaoStatCheckData> _ChaoStatData;
 	std::map<int, ChaoBodyPartCheckData> _ChaoBodyPartData;
+	std::map<int, ChaoKindergartenCheckData> _ChaoKindergartenData;
+
 	std::map<int, ChaoKeyCheckData> _ChaoKeyData;
 	std::map<int, PipeCheckData> _PipeData;
 	std::map<int, HiddenCheckData> _HiddenData;

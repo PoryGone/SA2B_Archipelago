@@ -24,6 +24,8 @@ public:
 	void SetChaoRaceEnabled(bool chaoRaceEnabled);
 	void SetChaoStatsEnabled(int chaoStatsEnabled);
 	void SetChaoBodyPartsEnabled(bool chaoBodyPartsEnabled);
+	void SetChaoKindergartenEnabled(bool chaoKindergartenEnabled);
+
 	void SetDefaultEggMap(std::map<int, int> map);
 	void SetDefaultChaoNameMap(std::map<int, int> map);
 
@@ -39,6 +41,7 @@ private:
 	bool _chaoRaceEnabled = false;
 	int _chaoStatsEnabled = 0;
 	bool _chaoBodyPartsEnabled = false;
+	bool _chaoKindergartenEnabled = false;
 	
 	std::map<int, int> _defaultEggMap;
 	std::map<int, int> _defaultChaoNameMap;

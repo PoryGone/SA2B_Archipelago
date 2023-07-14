@@ -1483,6 +1483,38 @@ void InitializeChaoBodyPartChecks(std::map<int, ChaoBodyPartCheckData>& outChaoB
     outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_PhoenixWings]    = ChaoBodyPartCheckData(0x01DEC7EF, SA2BAnimal_Phoenix, ChaoBodyPart::CBP_Wings);
 }
 
+void InitializeChaoKindergartenChecks(std::map<int, ChaoKindergartenCheckData>& outChaoKindergartenChecks)
+{
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Drawing_1] = ChaoKindergartenCheckData(0x01DEC7F4, 0x00);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Drawing_2] = ChaoKindergartenCheckData(0x01DEC7F4, 0x01);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Drawing_3] = ChaoKindergartenCheckData(0x01DEC7F4, 0x02);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Drawing_4] = ChaoKindergartenCheckData(0x01DEC7F4, 0x03);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Drawing_5] = ChaoKindergartenCheckData(0x01DEC7F4, 0x04);
+
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Shake_Dance] = ChaoKindergartenCheckData(0x01DEC7F4, 0x08);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Spin_Dance]  = ChaoKindergartenCheckData(0x01DEC7F4, 0x09);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Step_Dance]  = ChaoKindergartenCheckData(0x01DEC7F4, 0x0A);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_GoGo_Dance]  = ChaoKindergartenCheckData(0x01DEC7F4, 0x0B);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Exercise]    = ChaoKindergartenCheckData(0x01DEC7F4, 0x0C);
+
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Song_1] = ChaoKindergartenCheckData(0x01DEC7F4, 0x10);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Song_2] = ChaoKindergartenCheckData(0x01DEC7F4, 0x11);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Song_3] = ChaoKindergartenCheckData(0x01DEC7F4, 0x12);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Song_4] = ChaoKindergartenCheckData(0x01DEC7F4, 0x13);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Song_5] = ChaoKindergartenCheckData(0x01DEC7F4, 0x14);
+
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Bell]       = ChaoKindergartenCheckData(0x01DEC7F4, 0x18);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Castanets]  = ChaoKindergartenCheckData(0x01DEC7F4, 0x19);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Cymbals]    = ChaoKindergartenCheckData(0x01DEC7F4, 0x1A);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Drum]       = ChaoKindergartenCheckData(0x01DEC7F4, 0x1B);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Flute]      = ChaoKindergartenCheckData(0x01DEC7F4, 0x1C);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Maracas]    = ChaoKindergartenCheckData(0x01DEC7F4, 0x1D);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Trumpet]    = ChaoKindergartenCheckData(0x01DEC7F4, 0x1E);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Tambourine] = ChaoKindergartenCheckData(0x01DEC7F4, 0x1F);
+
+
+}
+
 void InitializeKartRaceChecks(std::map<int, KartRaceCheckData>& outKartRaceChecks)
 {
     outKartRaceChecks.clear();

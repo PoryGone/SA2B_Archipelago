@@ -90,10 +90,13 @@ void LocationManager::OnInitFunction(const char* path, const HelperFunctions& he
 	InitializeGoldBeetleChecks(this->_GoldBeetleData);
 	InitializeOmochaoChecks(this->_OmochaoData);
 	InitializeAnimalChecks(this->_AnimalData);
+
 	InitializeChaoGardenChecks(this->_ChaoGardenData);
 	InitializeChaoStatChecks(this->_ChaoStatData);
 	InitializeChaoBodyPartChecks(this->_ChaoBodyPartData);
+	InitializeChaoKindergartenChecks(this->_ChaoKindergartenData);
 	InitializeChaoRacePacks(this->_ChaoRacePacks);
+
 	InitializeKartRaceChecks(this->_KartRaceData);
 }
 
@@ -638,6 +641,37 @@ void LocationManager::OnFrameChaoGarden()
 		}
 		// End Sending of Chao Locations to Server
 
+
+		// Chao Kindergarten
+		if (this->_chaoKindergartenEnabled)
+		{
+			for (int i = ChaoKindergartenCheck::CKgC_BEGIN; i < ChaoKindergartenCheck::CKgC_NUM_CHECKS; i++)
+			{
+				if (this->_ChaoKindergartenData.find(i) != this->_ChaoKindergartenData.end())
+				{
+					ChaoKindergartenCheckData& checkData = this->_ChaoKindergartenData[i];
+
+					if (!checkData.CheckSent)
+					{
+						int dataValue = *(int*)checkData.Address;
+
+						int bitFlag = (int)(0x01 << (int)checkData.LessonNum);
+
+						if ((dataValue & bitFlag) != 0x00)
+						{
+							if (this->_archipelagoManager)
+							{
+								this->_archipelagoManager->SendItem(i);
+
+								checkData.CheckSent = true;
+							}
+						}
+					}
+				}
+			}
+		}
+		// End Sending of Chao Locations to Server
+
 		if (this->_chaoEntryTimer < CHAO_MEMORY_CHECK_ENTRY_TIME)
 		{
 			// Only check the below data while in Chao World, otherwise it may be wrong
@@ -836,6 +870,35 @@ void LocationManager::OnFrameChaoGarden()
 					}
 				}
 			}
+
+			// Chao Kindergarten
+			if (this->_chaoKindergartenEnabled)
+			{
+				for (int i = ChaoKindergartenCheck::CKgC_BEGIN; i < ChaoKindergartenCheck::CKgC_NUM_CHECKS; i++)
+				{
+					if (this->_ChaoKindergartenData.find(i) != this->_ChaoKindergartenData.end())
+					{
+						ChaoKindergartenCheckData& checkData = this->_ChaoKindergartenData[i];
+
+						if (!checkData.CheckSent)
+						{
+							char byteNum = checkData.LessonNum / 8;
+							char bitNum = checkData.LessonNum % 8;
+							char bitFlag = (char)(0x01 << bitNum);
+
+							char lessonData = chaoData.ClassRoomFlags[byteNum];
+
+							if ((lessonData & bitFlag) != 0)
+							{
+								char dataValue = *(char*)(checkData.Address + byteNum);
+								char newDataValue = dataValue | bitFlag;
+
+								WriteData<1>((void*)(checkData.Address + byteNum), newDataValue);
+							}
+						}
+					}
+				}
+			}
 		}
 		// End In-Garden Tracking of Locations
 	}
@@ -943,6 +1006,14 @@ void LocationManager::CheckLocation(int location_id)
 		}
 	}
 	else if (this->_ChaoStatData.find(location_id) != this->_ChaoStatData.end())
+	{
+
+	}
+	else if (this->_ChaoBodyPartData.find(location_id) != this->_ChaoBodyPartData.end())
+	{
+
+	}
+	else if (this->_ChaoKindergartenData.find(location_id) != this->_ChaoKindergartenData.end())
 	{
 
 	}
@@ -1121,6 +1192,16 @@ void LocationManager::SetChaoBodyPartsEnabled(bool chaoBodyPartsEnabled)
 	}
 }
 
+void LocationManager::SetChaoKindergartenEnabled(bool chaoKindergartenEnabled)
+{
+	this->_chaoKindergartenEnabled = chaoKindergartenEnabled;
+
+	if (chaoKindergartenEnabled)
+	{
+		this->SetChaoEnabled(true);
+	}
+}
+
 void LocationManager::SetRequiredCannonsCoreMissions(bool allMissionsRequired)
 {
 	this->_requireAllCannonsCoreMissions = allMissionsRequired;
@@ -1144,6 +1225,16 @@ void LocationManager::ResetLocations()
 	}
 
 	for (auto& pair : this->_ChaoStatData)
+	{
+		pair.second.CheckSent = false;
+	}
+
+	for (auto& pair : this->_ChaoBodyPartData)
+	{
+		pair.second.CheckSent = false;
+	}
+
+	for (auto& pair : this->_ChaoKindergartenData)
 	{
 		pair.second.CheckSent = false;
 	}

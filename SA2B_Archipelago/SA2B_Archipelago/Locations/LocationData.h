@@ -512,7 +512,53 @@ struct ChaoBodyPartCheckData
     bool CheckSent = false;
 };
 
-void InitializeChaoBodyPartChecks(std::map<int, ChaoBodyPartCheckData>& outChaoStatChecks);
+void InitializeChaoBodyPartChecks(std::map<int, ChaoBodyPartCheckData>& outChaoBodyPartChecks);
+
+enum ChaoKindergartenCheck
+{
+    CKgC_BEGIN = 0x12D0,
+
+    CKgC_Drawing_1 = 0x12D0,
+    CKgC_Drawing_2 = 0x12D1,
+    CKgC_Drawing_3 = 0x12D2,
+    CKgC_Drawing_4 = 0x12D3,
+    CKgC_Drawing_5 = 0x12D4,
+
+    CKgC_Shake_Dance = 0x12D8,
+    CKgC_Spin_Dance  = 0x12D9,
+    CKgC_Step_Dance  = 0x12DA,
+    CKgC_GoGo_Dance  = 0x12DB,
+    CKgC_Exercise    = 0x12DC,
+
+    CKgC_Song_1 = 0x12E0,
+    CKgC_Song_2 = 0x12E1,
+    CKgC_Song_3 = 0x12E2,
+    CKgC_Song_4 = 0x12E3,
+    CKgC_Song_5 = 0x12E4,
+
+    CKgC_Bell       = 0x12E8,
+    CKgC_Castanets  = 0x12E9,
+    CKgC_Cymbals    = 0x12EA,
+    CKgC_Drum       = 0x12EB,
+    CKgC_Flute      = 0x12EC,
+    CKgC_Maracas    = 0x12ED,
+    CKgC_Trumpet    = 0x12EE,
+    CKgC_Tambourine = 0x12EF,
+
+    CKgC_NUM_CHECKS = 0x12F0,
+};
+
+struct ChaoKindergartenCheckData
+{
+    ChaoKindergartenCheckData() : Address(0x00), LessonNum(0x00) {}
+    ChaoKindergartenCheckData(int address, char lessonNum) : Address(address), LessonNum(lessonNum) {}
+
+    int Address;
+    char LessonNum;
+    bool CheckSent = false;
+};
+
+void InitializeChaoKindergartenChecks(std::map<int, ChaoKindergartenCheckData>& outChaoKindergartenChecks);
 
 
 enum ChaoKeyCheck
