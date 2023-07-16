@@ -144,4 +144,12 @@ void InitializeItemData(std::map<int, ItemData> &outItemData)
     outItemData[ItemValue::IV_SuperMushroom] = ItemData(0x0000000, std::string("Super Mushroom"), std::string(), 3);
     outItemData[ItemValue::IV_MintCandy]     = ItemData(0x0000000, std::string("Mint Candy"), std::string(), 3);
     outItemData[ItemValue::IV_Grapes]        = ItemData(0x0000000, std::string("Grapes"), std::string(), 3);
+
+    outItemData[ItemValue::IV_StrongSeed]   = ItemData(0x0000000, std::string("Strong Seed"), std::string(), 7);
+    outItemData[ItemValue::IV_TastySeed]    = ItemData(0x0000000, std::string("Tasty Seed"), std::string(), 7);
+    outItemData[ItemValue::IV_HeroSeed]     = ItemData(0x0000000, std::string("Hero Seed"), std::string(), 7);
+    outItemData[ItemValue::IV_DarkSeed]     = ItemData(0x0000000, std::string("Dark Seed"), std::string(), 7);
+    outItemData[ItemValue::IV_RoundSeed]    = ItemData(0x0000000, std::string("Round Seed"), std::string(), 7);
+    outItemData[ItemValue::IV_TriangleSeed] = ItemData(0x0000000, std::string("Triangle Seed"), std::string(), 7);
+    outItemData[ItemValue::IV_SquareSeed]   = ItemData(0x0000000, std::string("Square Seed"), std::string(), 7);
 }

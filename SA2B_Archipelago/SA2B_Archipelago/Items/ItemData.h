@@ -151,6 +151,16 @@ enum ItemValue
 
     IV_END_FRUITS = IV_Grapes,
 
+    IV_StrongSeed = 0x300,
+    IV_TastySeed,
+    IV_HeroSeed,
+    IV_DarkSeed,
+    IV_RoundSeed,
+    IV_TriangleSeed,
+    IV_SquareSeed,
+
+    IV_END_SEEDS = IV_SquareSeed,
+
     IV_NUM_ITEMS
 };
 
@@ -209,4 +219,13 @@ struct ChaoFruitSlot
     uint16_t Size;
     uint16_t Age;
     char gap_8[12];
+};
+
+
+struct ChaoSeedSlot
+{
+    ChaoSeed Type;
+    char gap_1;
+    uint16_t Garden;
+    char gap_8[16];
 };
