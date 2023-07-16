@@ -116,4 +116,32 @@ void InitializeItemData(std::map<int, ItemData> &outItemData)
     outItemData[ItemValue::IV_PurpleShinyEgg]    = ItemData(0x0000000, std::string("Purple Shiny Egg"), std::string(), 1);
     outItemData[ItemValue::IV_OrangeShinyEgg]    = ItemData(0x0000000, std::string("Orange Shiny Egg"), std::string(), 1);
     outItemData[ItemValue::IV_BlackShinyEgg]     = ItemData(0x0000000, std::string("Black Shiny Egg"), std::string(), 1);
+
+    outItemData[ItemValue::IV_ChaoGardenFruit] = ItemData(0x0000000, std::string("Chao Garden Fruit"), std::string(), 3);
+    outItemData[ItemValue::IV_HeroGardenFruit] = ItemData(0x0000000, std::string("Hero Garden Fruit"), std::string(), 3);
+    outItemData[ItemValue::IV_DarkGardenFruit] = ItemData(0x0000000, std::string("Dark Garden Fruit"), std::string(), 3);
+
+    outItemData[ItemValue::IV_StrongFruit]   = ItemData(0x0000000, std::string("Strong Fruit"), std::string(), 3);
+    outItemData[ItemValue::IV_TastyFruit]    = ItemData(0x0000000, std::string("Tasty Fruit"), std::string(), 3);
+    outItemData[ItemValue::IV_HeroFruit]     = ItemData(0x0000000, std::string("Hero Fruit"), std::string(), 3);
+    outItemData[ItemValue::IV_DarkFruit]     = ItemData(0x0000000, std::string("Dark Fruit"), std::string(), 3);
+    outItemData[ItemValue::IV_RoundFruit]    = ItemData(0x0000000, std::string("Round Fruit"), std::string(), 3);
+    outItemData[ItemValue::IV_TriangleFruit] = ItemData(0x0000000, std::string("Triangle Fruit"), std::string(), 3);
+    outItemData[ItemValue::IV_SquareFruit]   = ItemData(0x0000000, std::string("Square Fruit"), std::string(), 3);
+    outItemData[ItemValue::IV_HeartFruit]    = ItemData(0x0000000, std::string("Heart Fruit"), std::string(), 3);
+    outItemData[ItemValue::IV_ChaoFruit]     = ItemData(0x0000000, std::string("Chao Fruit"), std::string(), 3);
+    outItemData[ItemValue::IV_SmartFruit]    = ItemData(0x0000000, std::string("Smart Fruit"), std::string(), 3);
+
+    outItemData[ItemValue::IV_OrangeFruit] = ItemData(0x0000000, std::string("Orange Fruit"), std::string(), 3);
+    outItemData[ItemValue::IV_BlueFruit]   = ItemData(0x0000000, std::string("Blue Fruit"), std::string(), 3);
+    outItemData[ItemValue::IV_PinkFruit]   = ItemData(0x0000000, std::string("Pink Fruit"), std::string(), 3);
+    outItemData[ItemValue::IV_GreenFruit]  = ItemData(0x0000000, std::string("Green Fruit"), std::string(), 3);
+    outItemData[ItemValue::IV_PurpleFruit] = ItemData(0x0000000, std::string("Purple Fruit"), std::string(), 3);
+    outItemData[ItemValue::IV_YellowFruit] = ItemData(0x0000000, std::string("Yellow Fruit"), std::string(), 3);
+    outItemData[ItemValue::IV_RedFruit]    = ItemData(0x0000000, std::string("Red Fruit"), std::string(), 3);
+
+    outItemData[ItemValue::IV_Mushroom]      = ItemData(0x0000000, std::string("Mushroom"), std::string(), 3);
+    outItemData[ItemValue::IV_SuperMushroom] = ItemData(0x0000000, std::string("Super Mushroom"), std::string(), 3);
+    outItemData[ItemValue::IV_MintCandy]     = ItemData(0x0000000, std::string("Mint Candy"), std::string(), 3);
+    outItemData[ItemValue::IV_Grapes]        = ItemData(0x0000000, std::string("Grapes"), std::string(), 3);
 }

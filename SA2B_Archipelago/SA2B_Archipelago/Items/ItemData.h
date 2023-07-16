@@ -121,6 +121,36 @@ enum ItemValue
     IV_BlackShinyEgg,
     IV_END_EGGS = IV_BlackShinyEgg,
 
+    IV_ChaoGardenFruit = 0x200,
+    IV_HeroGardenFruit,
+    IV_DarkGardenFruit,
+
+    IV_StrongFruit,
+    IV_TastyFruit,
+    IV_HeroFruit,
+    IV_DarkFruit,
+    IV_RoundFruit,
+    IV_TriangleFruit,
+    IV_SquareFruit,
+    IV_HeartFruit,
+    IV_ChaoFruit,
+    IV_SmartFruit,
+
+    IV_OrangeFruit,
+    IV_BlueFruit,
+    IV_PinkFruit,
+    IV_GreenFruit,
+    IV_PurpleFruit,
+    IV_YellowFruit,
+    IV_RedFruit,
+
+    IV_Mushroom,
+    IV_SuperMushroom,
+    IV_MintCandy,
+    IV_Grapes,
+
+    IV_END_FRUITS = IV_Grapes,
+
     IV_NUM_ITEMS
 };
 
@@ -168,4 +198,15 @@ struct ChaoGardenObject
 
     char ItemCategory = 0x00;
     char ItemType = 0xFF;
+};
+
+
+struct ChaoFruitSlot
+{
+    SA2BFruit Type;
+    char gap_1;
+    uint16_t Garden;
+    uint16_t Size;
+    uint16_t Age;
+    char gap_8[12];
 };

@@ -28,7 +28,11 @@ DataPointer(char, StoryEventID_3, 0x173A159);
 // Chao Data
 DataArray(ChaoGardenObject, GardenItemInventory, 0x01DBEDA0, 5);
 DataPointer(char, GardenItemInventoryCount, 0x01DBEDAC);
+
 DataPointer(uint16_t, SavedChaoEggsUsed, 0x19F6462);
+DataPointer(uint16_t, SavedChaoFruitsUsed, 0x19F6464);
+
+DataArray(ChaoFruitSlot, RealChaoFruitSlots, 0x19F6528, 24);
 
 void* endLevelSave_ptr = (void*)0x4457df;
 void* updateSettingsSave_ptr = (void*)0x44390C;
@@ -283,8 +287,18 @@ void ItemManager::ReceiveItem(int item_id, bool notify)
 	}
 	else if (item_id <= ItemValue::IV_END_EGGS) // Chao Egg
 	{
-		// Don't recollect the trap items
+		// Don't recollect the Chao eggs
 		this->HandleEgg(item_id);
+
+		if (this->_thisSessionChecksReceived > SavedChecksReceived)
+		{
+			SavedChecksReceived = this->_thisSessionChecksReceived;
+		}
+	}
+	else if (item_id <= ItemValue::IV_END_FRUITS) // Chao Fruit
+	{
+		// Don't recollect the Chao fruit
+		this->HandleFruit(item_id);
 
 		if (this->_thisSessionChecksReceived > SavedChecksReceived)
 		{
@@ -1269,6 +1283,36 @@ std::vector<int> ItemManager::GetChaosEmeraldAddresses()
 	return result;
 }
 
+bool FruitSlotAvailable()
+{
+	int emptySlotCount = 0;
+
+	for (int i = 0; i < 20; i++)
+	{
+		SA2BFruit fruitType = RealChaoFruitSlots[i].Type;
+		if (fruitType == SA2BFruit::SA2BFruit_None)
+		{
+			// This slot is empty
+			emptySlotCount++;
+		}
+	}
+
+	int fruitsInInventory = 0;
+
+	for (int i = 0; i < GardenItemInventoryCount; i++)
+	{
+		ChaoGardenObject gardenObject = GardenItemInventory[i];
+
+		if (gardenObject.ItemCategory == ChaoItemCategory::ChaoItemCategory_Fruit)
+		{
+			// This is an egg
+			fruitsInInventory++;
+		}
+	}
+
+	return (emptySlotCount - fruitsInInventory) > 0;
+}
+
 bool ChaoSlotAvailable()
 {
 	int emptySlotCount = 0;
@@ -1317,6 +1361,32 @@ void ItemManager::OnFrameChaoGardenQueue()
 		return;
 	}
 
+	// Fruit Handling
+	if (this->_ChaoFruitsUsed < SavedChaoFruitsUsed)
+	{
+		this->_ChaoFruitsUsed = SavedChaoFruitsUsed;
+	}
+
+	if (GardenItemInventoryCount < 5 &&
+		this->_ChaoFruitQueue.size() > this->_ChaoFruitsUsed &&
+		FruitSlotAvailable())
+	{
+		ItemData& receivedItem = this->_ItemData[0x200 + this->_ChaoFruitQueue[this->_ChaoFruitsUsed].ItemType];
+
+		std::string message = std::string("Received ");
+		message += receivedItem.DisplayName;
+		MessageQueue::GetInstance().AddMessage(message);
+
+		GardenItemInventory[GardenItemInventoryCount].ItemCategory = this->_ChaoFruitQueue[this->_ChaoFruitsUsed].ItemCategory;
+		GardenItemInventory[GardenItemInventoryCount].ItemType     = this->_ChaoFruitQueue[this->_ChaoFruitsUsed].ItemType;
+
+		GardenItemInventoryCount++;
+		SavedChaoFruitsUsed++;
+		this->_ChaoFruitsUsed++;
+	}
+	// End Fruit Handling
+
+	// Egg Handling
 	if (this->_ChaoEggsUsed < SavedChaoEggsUsed)
 	{
 		this->_ChaoEggsUsed = SavedChaoEggsUsed;
@@ -1339,9 +1409,15 @@ void ItemManager::OnFrameChaoGardenQueue()
 		SavedChaoEggsUsed++;
 		this->_ChaoEggsUsed++;
 	}
+	// End Egg Handling
 }
 
 void ItemManager::HandleEgg(int item_id)
 {
 	this->_ChaoEggQueue.push_back(ChaoGardenObject(1, item_id - 0x100));
+}
+
+void ItemManager::HandleFruit(int item_id)
+{
+	this->_ChaoFruitQueue.push_back(ChaoGardenObject(3, item_id - 0x200));
 }
