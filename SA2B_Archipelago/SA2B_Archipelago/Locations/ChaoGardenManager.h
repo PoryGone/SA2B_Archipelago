@@ -6,7 +6,7 @@
 #include "../Archipelago/ArchipelagoManager.h"
 #include "../ModLoaderCommon/Trampoline.h"
 
-constexpr unsigned int CGM_MEMORY_CHECK_TIME = 120;
+constexpr unsigned int CGM_MEMORY_CHECK_TIME = 600;
 
 class ChaoGardenManager
 {

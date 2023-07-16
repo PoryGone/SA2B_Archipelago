@@ -72,4 +72,48 @@ void InitializeItemData(std::map<int, ItemData> &outItemData)
     outItemData[ItemValue::IV_BlueChaosEmerald]   = ItemData(0x01DEEAFE, std::string("Blue Chaos Emerald"), std::string(), 0);
 
     outItemData[ItemValue::IV_PongTrap] = ItemData(0x0000000, std::string("Pong Trap"), std::string(), 0);
+
+    outItemData[ItemValue::IV_NormalEgg]            = ItemData(0x0000000, std::string("Normal Egg"), std::string(), 1);
+    outItemData[ItemValue::IV_YellowMonoToneEgg]    = ItemData(0x0000000, std::string("Yellow Mono-Tone Egg"), std::string(), 1);
+    outItemData[ItemValue::IV_WhiteMonoToneEgg]     = ItemData(0x0000000, std::string("White Mono-Tone Egg"), std::string(), 1);
+    outItemData[ItemValue::IV_BrownMonoToneEgg]     = ItemData(0x0000000, std::string("Brown Mono-Tone Egg"), std::string(), 1);
+    outItemData[ItemValue::IV_SkyBlueMonoToneEgg]   = ItemData(0x0000000, std::string("Sky Blue Mono-Tone Egg"), std::string(), 1);
+    outItemData[ItemValue::IV_PinkMonoToneEgg]      = ItemData(0x0000000, std::string("Pink Mono-Tone Egg"), std::string(), 1);
+    outItemData[ItemValue::IV_BlueMonoToneEgg]      = ItemData(0x0000000, std::string("Blue Mono-Tone Egg"), std::string(), 1);
+    outItemData[ItemValue::IV_GreyMonoToneEgg]      = ItemData(0x0000000, std::string("Grey Mono-Tone Egg"), std::string(), 1);
+    outItemData[ItemValue::IV_GreenMonoToneEgg]     = ItemData(0x0000000, std::string("Green Mono-Tone Egg"), std::string(), 1);
+    outItemData[ItemValue::IV_RedMonoToneEgg]       = ItemData(0x0000000, std::string("Red Mono-Tone Egg"), std::string(), 1);
+    outItemData[ItemValue::IV_LimeGreenMonoToneEgg] = ItemData(0x0000000, std::string("Lime Green Mono-Tone Egg"), std::string(), 1);
+    outItemData[ItemValue::IV_PurpleMonoToneEgg]    = ItemData(0x0000000, std::string("Purple Mono-Tone Egg"), std::string(), 1);
+    outItemData[ItemValue::IV_OrangeMonoToneEgg]    = ItemData(0x0000000, std::string("Orange Mono-Tone Egg"), std::string(), 1);
+    outItemData[ItemValue::IV_BlackMonoToneEgg]     = ItemData(0x0000000, std::string("Black Mono-Tone Egg"), std::string(), 1);
+
+    outItemData[ItemValue::IV_YellowTwoToneEgg]    = ItemData(0x0000000, std::string("Yellow Two-Tone Egg"), std::string(), 1);
+    outItemData[ItemValue::IV_WhiteTwoToneEgg]     = ItemData(0x0000000, std::string("White Two-Tone Egg"), std::string(), 1);
+    outItemData[ItemValue::IV_BrownTwoToneEgg]     = ItemData(0x0000000, std::string("Brown Two-Tone Egg"), std::string(), 1);
+    outItemData[ItemValue::IV_SkyBlueTwoToneEgg]   = ItemData(0x0000000, std::string("Sky Blue Two-Tone Egg"), std::string(), 1);
+    outItemData[ItemValue::IV_PinkTwoToneEgg]      = ItemData(0x0000000, std::string("Pink Two-Tone Egg"), std::string(), 1);
+    outItemData[ItemValue::IV_BlueTwoToneEgg]      = ItemData(0x0000000, std::string("Blue Two-Tone Egg"), std::string(), 1);
+    outItemData[ItemValue::IV_GreyTwoToneEgg]      = ItemData(0x0000000, std::string("Grey Two-Tone Egg"), std::string(), 1);
+    outItemData[ItemValue::IV_GreenTwoToneEgg]     = ItemData(0x0000000, std::string("Green Two-Tone Egg"), std::string(), 1);
+    outItemData[ItemValue::IV_RedTwoToneEgg]       = ItemData(0x0000000, std::string("Red Two-Tone Egg"), std::string(), 1);
+    outItemData[ItemValue::IV_LimeGreenTwoToneEgg] = ItemData(0x0000000, std::string("Lime Green Two-Tone Egg"), std::string(), 1);
+    outItemData[ItemValue::IV_PurpleTwoToneEgg]    = ItemData(0x0000000, std::string("Purple Two-Tone Egg"), std::string(), 1);
+    outItemData[ItemValue::IV_OrangeTwoToneEgg]    = ItemData(0x0000000, std::string("Orange Two-Tone Egg"), std::string(), 1);
+    outItemData[ItemValue::IV_BlackTwoToneEgg]     = ItemData(0x0000000, std::string("Black Two-Tone Egg"), std::string(), 1);
+
+    outItemData[ItemValue::IV_NormalShinyEgg]    = ItemData(0x0000000, std::string("Normal Shiny Egg"), std::string(), 1);
+    outItemData[ItemValue::IV_YellowShinyEgg]    = ItemData(0x0000000, std::string("Yellow Shiny Egg"), std::string(), 1);
+    outItemData[ItemValue::IV_WhiteShinyEgg]     = ItemData(0x0000000, std::string("White Shiny Egg"), std::string(), 1);
+    outItemData[ItemValue::IV_BrownShinyEgg]     = ItemData(0x0000000, std::string("Brown Shiny Egg"), std::string(), 1);
+    outItemData[ItemValue::IV_SkyBlueShinyEgg]   = ItemData(0x0000000, std::string("Sky Blue Shiny Egg"), std::string(), 1);
+    outItemData[ItemValue::IV_PinkShinyEgg]      = ItemData(0x0000000, std::string("Pink Shiny Egg"), std::string(), 1);
+    outItemData[ItemValue::IV_BlueShinyEgg]      = ItemData(0x0000000, std::string("Blue Shiny Egg"), std::string(), 1);
+    outItemData[ItemValue::IV_GreyShinyEgg]      = ItemData(0x0000000, std::string("Grey Shiny Egg"), std::string(), 1);
+    outItemData[ItemValue::IV_GreenShinyEgg]     = ItemData(0x0000000, std::string("Green Shiny Egg"), std::string(), 1);
+    outItemData[ItemValue::IV_RedShinyEgg]       = ItemData(0x0000000, std::string("Red Shiny Egg"), std::string(), 1);
+    outItemData[ItemValue::IV_LimeGreenShinyEgg] = ItemData(0x0000000, std::string("Lime Green Shiny Egg"), std::string(), 1);
+    outItemData[ItemValue::IV_PurpleShinyEgg]    = ItemData(0x0000000, std::string("Purple Shiny Egg"), std::string(), 1);
+    outItemData[ItemValue::IV_OrangeShinyEgg]    = ItemData(0x0000000, std::string("Orange Shiny Egg"), std::string(), 1);
+    outItemData[ItemValue::IV_BlackShinyEgg]     = ItemData(0x0000000, std::string("Black Shiny Egg"), std::string(), 1);
 }

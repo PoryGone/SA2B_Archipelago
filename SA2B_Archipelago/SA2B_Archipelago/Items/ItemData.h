@@ -78,6 +78,49 @@ enum ItemValue
     IV_PongTrap = 0x50,
     IV_END_MINIGAMES = IV_PongTrap,
 
+    IV_NormalEgg = 0x100,
+    IV_YellowMonoToneEgg,
+    IV_WhiteMonoToneEgg,
+    IV_BrownMonoToneEgg,
+    IV_SkyBlueMonoToneEgg,
+    IV_PinkMonoToneEgg,
+    IV_BlueMonoToneEgg,
+    IV_GreyMonoToneEgg,
+    IV_GreenMonoToneEgg,
+    IV_RedMonoToneEgg,
+    IV_LimeGreenMonoToneEgg,
+    IV_PurpleMonoToneEgg,
+    IV_OrangeMonoToneEgg,
+    IV_BlackMonoToneEgg,
+    IV_YellowTwoToneEgg,
+    IV_WhiteTwoToneEgg,
+    IV_BrownTwoToneEgg,
+    IV_SkyBlueTwoToneEgg,
+    IV_PinkTwoToneEgg,
+    IV_BlueTwoToneEgg,
+    IV_GreyTwoToneEgg,
+    IV_GreenTwoToneEgg,
+    IV_RedTwoToneEgg,
+    IV_LimeGreenTwoToneEgg,
+    IV_PurpleTwoToneEgg,
+    IV_OrangeTwoToneEgg,
+    IV_BlackTwoToneEgg,
+    IV_NormalShinyEgg,
+    IV_YellowShinyEgg,
+    IV_WhiteShinyEgg,
+    IV_BrownShinyEgg,
+    IV_SkyBlueShinyEgg,
+    IV_PinkShinyEgg,
+    IV_BlueShinyEgg,
+    IV_GreyShinyEgg,
+    IV_GreenShinyEgg,
+    IV_RedShinyEgg,
+    IV_LimeGreenShinyEgg,
+    IV_PurpleShinyEgg,
+    IV_OrangeShinyEgg,
+    IV_BlackShinyEgg,
+    IV_END_EGGS = IV_BlackShinyEgg,
+
     IV_NUM_ITEMS
 };
 
@@ -115,4 +158,14 @@ struct CutsceneData
 
     char LowID = 0;
     char HighID = 0;
+};
+
+
+struct ChaoGardenObject
+{
+    ChaoGardenObject() : ItemCategory(0x00), ItemType(0xFF) {}
+    ChaoGardenObject(int itemCategory, int itemType) : ItemCategory(itemCategory), ItemType(itemType) {}
+
+    char ItemCategory = 0x00;
+    char ItemType = 0xFF;
 };

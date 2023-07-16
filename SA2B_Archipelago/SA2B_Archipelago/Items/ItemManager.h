@@ -14,6 +14,8 @@ constexpr unsigned int TRAP_DURATION = 600;
 constexpr unsigned int TRAP_COOLDOWN = 60;
 constexpr unsigned int JUNK_COOLDOWN = 210;
 
+constexpr unsigned int IM_CHAO_MEMORY_CHECK_ENTRY_TIME = 180;
+
 class ItemManager
 {
 public:
@@ -42,6 +44,7 @@ private:
 	void HandleTrap(int item_id);
 	bool IsActiveTrapValid();
 	void ResetTrapData();
+
 	void OnFrameJunkQueue();
 	void OnFrameTrapQueue();
 	void OnFrameDialogueQueue();
@@ -49,6 +52,9 @@ private:
 
 	void AddRandomDialogueToQueue();
 	void AddRandomCutsceneToQueue();
+
+	void OnFrameChaoGardenQueue();
+	void HandleEgg(int item_id);
 
 	const HelperFunctions* _helperFunctions;
 
@@ -60,11 +66,16 @@ private:
 	std::queue<int> _TrapQueue;
 	std::queue<DialogueData> _DialogueQueue;
 
+	std::vector<ChaoGardenObject> _ChaoEggQueue;
+	unsigned int _ChaoEggsUsed = 0;
+
 	int _ActiveTrap = 0;
 	int _ActiveTrapTimer = 0;
 	int _TrapCooldownTimer = TRAP_COOLDOWN;
 	int _JunkCooldownTimer = 0;
 	int _ActiveDialogueTimer = 0;
+
+	int _chaoEntryTimer = 0;
 
 	int _ChaosControlCooldown = TRAP_COOLDOWN;
 

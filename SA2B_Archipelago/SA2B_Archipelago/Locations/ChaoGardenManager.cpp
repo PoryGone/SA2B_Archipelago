@@ -3,7 +3,8 @@
 #include "../Utilities/MessageQueue.h"
 
 
-DataPointer(char, ChaoEggsRandomized, 0x19F6464);
+DataPointer(char, ChaoEggsRandomized, 0x19F6460);
+
 
 void ChaoGardenManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
 {
@@ -49,6 +50,11 @@ void ChaoGardenManager::OnFrameFunction()
 	}
 
 	this->HandleStartingEggs();
+
+	if (GameState == GameStates::GameStates_Pause)
+	{
+		return;
+	}
 
 	this->_timer++;
 
