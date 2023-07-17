@@ -91,6 +91,8 @@ extern "C"
 		}
 
 		_minigameManager.OnInputFunction();
+
+		_chaoGardenManager.OnInputFunction();
 	}
 
 	__declspec(dllexport) void __cdecl OnControl()

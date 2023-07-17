@@ -5,6 +5,7 @@
 
 DataPointer(char, ChaoEggsRandomized, 0x19F6460);
 DataPointer(char, ChaoNamesUsed, 0x19F6461);
+DataPointer(char, ChaoGardenTimescale, 0x01312DE4);
 
 
 void ChaoGardenManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
@@ -53,6 +54,13 @@ void ChaoGardenManager::OnFrameFunction()
 	this->HandleStartingEggs();
 	this->HandleSubsequentEggs();
 
+	// Handle Time Scale
+	std::string timescaleStr = "Chao Timescale: ";
+	timescaleStr += std::to_string(this->_timescale);
+	timescaleStr += "x";
+	_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 2), timescaleStr.c_str());
+	ChaoGardenTimescale = 120.0f / this->_timescale;
+
 	if (GameState == GameStates::GameStates_Pause)
 	{
 		return;
@@ -66,6 +74,47 @@ void ChaoGardenManager::OnFrameFunction()
 	}
 
 	this->_timer = 0;
+}
+
+void ChaoGardenManager::OnInputFunction()
+{
+	Uint32 PressedButtons = ControllersRaw->press;
+	if ((PressedButtons & 0b100000) != 0) // Down
+	{
+		switch (this->_timescale)
+		{
+		case 2:
+			this->_timescale = 1;
+			break;
+		case 5:
+			this->_timescale = 2;
+			break;
+		case 10:
+			this->_timescale = 5;
+			break;
+		case 15:
+			this->_timescale = 10;
+			break;
+		}
+	}
+	else if ((PressedButtons & 0b10000) != 0) // Up
+	{
+		switch (this->_timescale)
+		{
+		case 1:
+			this->_timescale = 2;
+			break;
+		case 2:
+			this->_timescale = 5;
+			break;
+		case 5:
+			this->_timescale = 10;
+			break;
+		case 10:
+			this->_timescale = 15;
+			break;
+		}
+	}
 }
 
 void ChaoGardenManager::HandleStartingEggs()

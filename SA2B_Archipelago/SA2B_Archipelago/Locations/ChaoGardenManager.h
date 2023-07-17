@@ -19,6 +19,7 @@ public:
 
 	void OnInitFunction(const char* path, const HelperFunctions& helperFunctions);
 	void OnFrameFunction();
+	void OnInputFunction();
 
 	void SetChaoEnabled(bool chaoEnabled);
 	void SetChaoRaceEnabled(bool chaoRaceEnabled);
@@ -37,6 +38,8 @@ private:
 	ArchipelagoManager* _archipelagoManager;
 
 	unsigned int _timer = 0;
+
+	unsigned int _timescale = 1;
 
 	uint8_t _namesUsed = 4;
 
