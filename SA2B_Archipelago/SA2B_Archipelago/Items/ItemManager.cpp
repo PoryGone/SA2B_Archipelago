@@ -813,11 +813,6 @@ bool ItemManager::IsActiveTrapValid()
 			return false;
 		}
 
-		if (CurrentLevel == LevelIDs_ChaoWorld)
-		{
-			return false;
-		}
-
 		if (minigameManager->state != MinigameState::MGS_None)
 		{
 			// Another minigame is already in-progress

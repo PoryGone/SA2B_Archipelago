@@ -51,6 +51,9 @@ void ChaoGardenManager::OnFrameFunction()
 		return;
 	}
 
+	// Prevent Game Overs in Chao Garden
+	Life_Count[0] = 3;
+
 	this->HandleStartingEggs();
 	this->HandleSubsequentEggs();
 
