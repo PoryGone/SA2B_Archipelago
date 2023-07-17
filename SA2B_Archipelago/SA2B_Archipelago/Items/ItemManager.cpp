@@ -171,6 +171,11 @@ void ItemManager::ResetItems()
 			WriteData<1>((void*)itemToReset.Address, 0x00);
 		}
 	}
+
+	this->_ChaoEggQueue.clear();
+	this->_ChaoFruitQueue.clear();
+	this->_ChaoSeedQueue.clear();
+	this->_ChaoHatQueue.clear();
 }
 
 void ItemManager::ReceiveItem(int item_id, bool notify)

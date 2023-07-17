@@ -4,6 +4,7 @@
 
 
 DataPointer(char, ChaoEggsRandomized, 0x19F6460);
+DataPointer(char, ChaoNamesUsed, 0x19F6461);
 
 
 void ChaoGardenManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
@@ -50,6 +51,7 @@ void ChaoGardenManager::OnFrameFunction()
 	}
 
 	this->HandleStartingEggs();
+	this->HandleSubsequentEggs();
 
 	if (GameState == GameStates::GameStates_Pause)
 	{
@@ -134,50 +136,109 @@ void ChaoGardenManager::HandleStartingEggs()
 				}
 
 				// Starting Chao Colors
-				 unsigned char color = this->_defaultEggMap[chaoIdx];
+				unsigned char color = this->_defaultEggMap[chaoIdx];
 
-				 if (color != 255)
-				 {
-					 bool twoTone = false, shiny = false, jewel = false;
+				if (color != 255)
+				{
+					bool twoTone = false, shiny = false, jewel = false;
 
-					 if (color > 0x10)
-					 {
-						 color -= 0x11;
-						 twoTone = true;
-					 }
+					if (color == 0)
+					{
+						twoTone = true;
+					}
 
-					 if (color > 0x10)
-					 {
-						 color -= 0x11;
-						 twoTone = false;
-						 shiny = true;
-					 }
+					if (color > 13)
+					{
+						color -= 13;
+						twoTone = true;
+					}
 
-					 if (color > 0x10)
-					 {
-						 color -= 0x11;
-						 twoTone = false;
-						 shiny = false;
-						 jewel = true;
-					 }
+					if (color > 13)
+					{
+						color -= 14;
+						twoTone = false;
+						shiny = true;
+					}
 
-					 if (jewel)
-					 {
-						 ChaoSlots[chaoIdx].data.Texture = color;
-					 }
-					 else
-					 {
-						 // This happens too soon. The Chao's data gets reset once, on first entry to its garden
-						 ChaoSlots[chaoIdx].data.MonotoneHighlights = !twoTone;
-						 ChaoSlots[chaoIdx].data.Color = color;
-						 ChaoSlots[chaoIdx].data.Shiny = shiny;
-					 }
-					 ChaoSlots[chaoIdx].data.EggColor = color;
-				 }
+					if (color > 13)
+					{
+						color -= 13;
+						twoTone = false;
+						shiny = false;
+						jewel = true;
+					}
+
+					if (jewel)
+					{
+						ChaoSlots[chaoIdx].data.Texture = color;
+					}
+					else
+					{
+						ChaoSlots[chaoIdx].data.MonotoneHighlights = !twoTone;
+						ChaoSlots[chaoIdx].data.Color = color;
+						ChaoSlots[chaoIdx].data.Shiny = shiny;
+					}
+					ChaoSlots[chaoIdx].data.EggColor = color;
+				}
 			}
 		}
 	}
+}
 
+void ChaoGardenManager::HandleSubsequentEggs()
+{
+	if (ChaoNamesUsed == 0)
+	{
+		ChaoNamesUsed = 4;
+	}
+
+	if (ChaoNamesUsed > this->_namesUsed)
+	{
+		this->_namesUsed = ChaoNamesUsed;
+	}
+
+	if (this->_namesUsed >= 30)
+	{
+		return;
+	}
+
+	for (int chaoIdx = 0; chaoIdx < 24; chaoIdx++)
+	{
+		ChaoDataBase chaoData = ChaoSlots[chaoIdx].data;
+
+		if (chaoData.Type != ChaoType::ChaoType_Egg)
+		{
+			continue;
+		}
+
+		if (chaoData.Garden != CurrentChaoArea)
+		{
+			continue;
+		}
+
+		bool emptyName = true;
+		for (int i = 0; i < 7; i++)
+		{
+			if (chaoData.Name[i] != 0x00)
+			{
+				emptyName = false;
+				break;
+			}
+		}
+
+		if (!emptyName)
+		{
+			continue;
+		}
+
+		for (int i = 0; i < 7; i++)
+		{
+			ChaoSlots[chaoIdx].data.Name[i] = (char)this->_defaultChaoNameMap[i + (this->_namesUsed * 7)];
+		}
+
+		this->_namesUsed++;
+		ChaoNamesUsed++;
+	}
 }
 
 void ChaoGardenManager::SetChaoEnabled(bool chaoEnabled)

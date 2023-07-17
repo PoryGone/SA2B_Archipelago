@@ -31,11 +31,14 @@ public:
 
 private:
 	void HandleStartingEggs();
+	void HandleSubsequentEggs();
 
 	const HelperFunctions* _helperFunctions;
 	ArchipelagoManager* _archipelagoManager;
 
 	unsigned int _timer = 0;
+
+	uint8_t _namesUsed = 4;
 
 	bool _chaoEnabled = false;
 	bool _chaoRaceEnabled = false;
