@@ -161,6 +161,24 @@ enum ItemValue
 
     IV_END_SEEDS = IV_SquareSeed,
 
+    IV_Pumpkin = 0x401,
+    IV_Skull,
+    IV_Apple,
+    IV_Bucket,
+    IV_EmptyCan,
+    IV_CardboardBox,
+    IV_FlowerPot,
+    IV_PaperBag,
+    IV_Pan,
+    IV_Stump,
+    IV_Watermelon,
+    IV_RedWoolBeanie,
+    IV_BlueWoolBeanie,
+    IV_BlackWoolBeanie,
+    IV_Pacifier,
+
+    IV_END_HATS = IV_Pacifier,
+
     IV_NUM_ITEMS
 };
 
@@ -225,6 +243,15 @@ struct ChaoFruitSlot
 struct ChaoSeedSlot
 {
     ChaoSeed Type;
+    char gap_1;
+    uint16_t Garden;
+    char gap_8[16];
+};
+
+
+struct ChaoHatSlot
+{
+    SA2BHat Type;
     char gap_1;
     uint16_t Garden;
     char gap_8[16];

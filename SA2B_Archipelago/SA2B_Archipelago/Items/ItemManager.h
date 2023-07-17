@@ -57,6 +57,7 @@ private:
 	void HandleEgg(int item_id);
 	void HandleFruit(int item_id);
 	void HandleSeed(int item_id);
+	void HandleHat(int item_id);
 
 	const HelperFunctions* _helperFunctions;
 
@@ -76,6 +77,9 @@ private:
 
 	std::vector<ChaoGardenObject> _ChaoSeedQueue;
 	unsigned int _ChaoSeedsUsed = 0;
+
+	std::vector<ChaoGardenObject> _ChaoHatQueue;
+	unsigned int _ChaoHatsUsed = 0;
 
 	int _ActiveTrap = 0;
 	int _ActiveTrapTimer = 0;

@@ -152,4 +152,21 @@ void InitializeItemData(std::map<int, ItemData> &outItemData)
     outItemData[ItemValue::IV_RoundSeed]    = ItemData(0x0000000, std::string("Round Seed"), std::string(), 7);
     outItemData[ItemValue::IV_TriangleSeed] = ItemData(0x0000000, std::string("Triangle Seed"), std::string(), 7);
     outItemData[ItemValue::IV_SquareSeed]   = ItemData(0x0000000, std::string("Square Seed"), std::string(), 7);
+
+    outItemData[ItemValue::IV_Pumpkin]      = ItemData(0x0000000, std::string("Pumpkin"), std::string(), 9);
+    outItemData[ItemValue::IV_Skull]        = ItemData(0x0000000, std::string("Skull"), std::string(), 9);
+    outItemData[ItemValue::IV_Apple]        = ItemData(0x0000000, std::string("Apple"), std::string(), 9);
+    outItemData[ItemValue::IV_Bucket]       = ItemData(0x0000000, std::string("Bucket"), std::string(), 9);
+    outItemData[ItemValue::IV_EmptyCan]     = ItemData(0x0000000, std::string("Empty Can"), std::string(), 9);
+    outItemData[ItemValue::IV_CardboardBox] = ItemData(0x0000000, std::string("Cardboard Box"), std::string(), 9);
+    outItemData[ItemValue::IV_FlowerPot]    = ItemData(0x0000000, std::string("Flower Pot"), std::string(), 9);
+    outItemData[ItemValue::IV_PaperBag]     = ItemData(0x0000000, std::string("Paper Bag"), std::string(), 9);
+    outItemData[ItemValue::IV_Pan]          = ItemData(0x0000000, std::string("Pan"), std::string(), 9);
+    outItemData[ItemValue::IV_Stump]        = ItemData(0x0000000, std::string("Stump"), std::string(), 9);
+    outItemData[ItemValue::IV_Watermelon]   = ItemData(0x0000000, std::string("Watermelon"), std::string(), 9);
+
+    outItemData[ItemValue::IV_RedWoolBeanie]   = ItemData(0x0000000, std::string("Red Wool Beanie"), std::string(), 9);
+    outItemData[ItemValue::IV_BlueWoolBeanie]  = ItemData(0x0000000, std::string("Blue Wool Beanie"), std::string(), 9);
+    outItemData[ItemValue::IV_BlackWoolBeanie] = ItemData(0x0000000, std::string("Black Wool Beanie"), std::string(), 9);
+    outItemData[ItemValue::IV_Pacifier]        = ItemData(0x0000000, std::string("Pacifier"), std::string(), 9);
 }

@@ -32,9 +32,11 @@ DataPointer(char, GardenItemInventoryCount, 0x01DBEDAC);
 DataPointer(uint16_t, SavedChaoEggsUsed, 0x19F6462);
 DataPointer(uint16_t, SavedChaoFruitsUsed, 0x19F6464);
 DataPointer(uint16_t, SavedChaoSeedsUsed, 0x19F6466);
+DataPointer(uint16_t, SavedChaoHatsUsed, 0x19F6468);
 
 DataArray(ChaoFruitSlot, RealChaoFruitSlots, 0x19F6528, 24);
 DataArray(ChaoSeedSlot, RealChaoSeedSlots, 0x19F6848, 12);
+DataArray(ChaoHatSlot, RealChaoHatSlots, 0x019F6938, 24);
 
 void* endLevelSave_ptr = (void*)0x4457df;
 void* updateSettingsSave_ptr = (void*)0x44390C;
@@ -311,6 +313,16 @@ void ItemManager::ReceiveItem(int item_id, bool notify)
 	{
 		// Don't recollect the Chao seeds
 		this->HandleSeed(item_id);
+
+		if (this->_thisSessionChecksReceived > SavedChecksReceived)
+		{
+			SavedChecksReceived = this->_thisSessionChecksReceived;
+		}
+	}
+	else if (item_id <= ItemValue::IV_END_HATS) // Chao Hat
+	{
+		// Don't recollect the Chao hats
+		this->HandleHat(item_id);
 
 		if (this->_thisSessionChecksReceived > SavedChecksReceived)
 		{
@@ -1295,6 +1307,36 @@ std::vector<int> ItemManager::GetChaosEmeraldAddresses()
 	return result;
 }
 
+bool HatSlotAvailable()
+{
+	int emptySlotCount = 0;
+
+	for (int i = 0; i < 24; i++)
+	{
+		SA2BHat hatType = RealChaoHatSlots[i].Type;
+		if (hatType == (SA2BHat)-1)
+		{
+			// This slot is empty
+			emptySlotCount++;
+		}
+	}
+
+	int hatsInInventory = 0;
+
+	for (int i = 0; i < GardenItemInventoryCount; i++)
+	{
+		ChaoGardenObject gardenObject = GardenItemInventory[i];
+
+		if (gardenObject.ItemCategory == ChaoItemCategory::ChaoItemCategory_Hat)
+		{
+			// This is a seed
+			hatsInInventory++;
+		}
+	}
+
+	return (emptySlotCount - hatsInInventory) > 0;
+}
+
 bool SeedSlotAvailable()
 {
 	int emptySlotCount = 0;
@@ -1403,6 +1445,31 @@ void ItemManager::OnFrameChaoGardenQueue()
 		return;
 	}
 
+	// Hat Handling
+	if (this->_ChaoHatsUsed < SavedChaoHatsUsed)
+	{
+		this->_ChaoHatsUsed = SavedChaoHatsUsed;
+	}
+
+	if (GardenItemInventoryCount < 5 &&
+		this->_ChaoHatQueue.size() > this->_ChaoHatsUsed &&
+		HatSlotAvailable())
+	{
+		ItemData& receivedItem = this->_ItemData[0x400 + this->_ChaoHatQueue[this->_ChaoHatsUsed].ItemType];
+
+		std::string message = std::string("Received ");
+		message += receivedItem.DisplayName;
+		MessageQueue::GetInstance().AddMessage(message);
+
+		GardenItemInventory[GardenItemInventoryCount].ItemCategory = this->_ChaoHatQueue[this->_ChaoHatsUsed].ItemCategory;
+		GardenItemInventory[GardenItemInventoryCount].ItemType     = this->_ChaoHatQueue[this->_ChaoHatsUsed].ItemType;
+
+		GardenItemInventoryCount++;
+		SavedChaoHatsUsed++;
+		this->_ChaoHatsUsed++;
+	}
+	// End Hat Handling
+
 	// Seed Handling
 	if (this->_ChaoSeedsUsed < SavedChaoSeedsUsed)
 	{
@@ -1492,4 +1559,9 @@ void ItemManager::HandleFruit(int item_id)
 void ItemManager::HandleSeed(int item_id)
 {
 	this->_ChaoSeedQueue.push_back(ChaoGardenObject(7, item_id - 0x300));
+}
+
+void ItemManager::HandleHat(int item_id)
+{
+	this->_ChaoHatQueue.push_back(ChaoGardenObject(9, item_id - 0x400));
 }
