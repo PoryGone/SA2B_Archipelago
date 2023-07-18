@@ -169,4 +169,31 @@ void InitializeItemData(std::map<int, ItemData> &outItemData)
     outItemData[ItemValue::IV_BlueWoolBeanie]  = ItemData(0x0000000, std::string("Blue Wool Beanie"), std::string(), 9);
     outItemData[ItemValue::IV_BlackWoolBeanie] = ItemData(0x0000000, std::string("Black Wool Beanie"), std::string(), 9);
     outItemData[ItemValue::IV_Pacifier]        = ItemData(0x0000000, std::string("Pacifier"), std::string(), 9);
+
+    outItemData[ItemValue::IV_Penguin]     = ItemData(0x0000000, std::string("Penguin"), std::string(), 13);
+    outItemData[ItemValue::IV_Seal]        = ItemData(0x0000000, std::string("Seal"), std::string(), 13);
+    outItemData[ItemValue::IV_Otter]       = ItemData(0x0000000, std::string("Otter"), std::string(), 13);
+    outItemData[ItemValue::IV_Rabbit]      = ItemData(0x0000000, std::string("Rabbit"), std::string(), 13);
+    outItemData[ItemValue::IV_Cheetah]     = ItemData(0x0000000, std::string("Cheetah"), std::string(), 13);
+    outItemData[ItemValue::IV_Warthog]     = ItemData(0x0000000, std::string("Warthog"), std::string(), 13);
+    outItemData[ItemValue::IV_Bear]        = ItemData(0x0000000, std::string("Bear"), std::string(), 13);
+    outItemData[ItemValue::IV_Tiger]       = ItemData(0x0000000, std::string("Tiger"), std::string(), 13);
+    outItemData[ItemValue::IV_Gorilla]     = ItemData(0x0000000, std::string("Gorilla"), std::string(), 13);
+    outItemData[ItemValue::IV_Peacock]     = ItemData(0x0000000, std::string("Peacock"), std::string(), 13);
+    outItemData[ItemValue::IV_Parrot]      = ItemData(0x0000000, std::string("Parrot"), std::string(), 13);
+    outItemData[ItemValue::IV_Condor]      = ItemData(0x0000000, std::string("Condor"), std::string(), 13);
+    outItemData[ItemValue::IV_Skunk]       = ItemData(0x0000000, std::string("Skunk"), std::string(), 13);
+    outItemData[ItemValue::IV_Sheep]       = ItemData(0x0000000, std::string("Sheep"), std::string(), 13);
+    outItemData[ItemValue::IV_Raccoon]     = ItemData(0x0000000, std::string("Raccoon"), std::string(), 13);
+    outItemData[ItemValue::IV_HalfFish]    = ItemData(0x0000000, std::string("HalfFish"), std::string(), 13);
+    outItemData[ItemValue::IV_SkeletonDog] = ItemData(0x0000000, std::string("Skeleton Dog"), std::string(), 13);
+    outItemData[ItemValue::IV_Bat]         = ItemData(0x0000000, std::string("Bat"), std::string(), 13);
+    outItemData[ItemValue::IV_Dragon]      = ItemData(0x0000000, std::string("Dragon"), std::string(), 13);
+    outItemData[ItemValue::IV_Unicorn]     = ItemData(0x0000000, std::string("Unicorn"), std::string(), 13);
+    outItemData[ItemValue::IV_Phoenix]     = ItemData(0x0000000, std::string("Phoenix"), std::string(), 13);
+
+    outItemData[ItemValue::IV_YellowChaosDrive] = ItemData(0x0000000, std::string("Yellow Chaos Drive"), std::string(), 13);
+    outItemData[ItemValue::IV_GreenChaosDrive]  = ItemData(0x0000000, std::string("Green Chaos Drive"), std::string(), 13);
+    outItemData[ItemValue::IV_RedChaosDrive]    = ItemData(0x0000000, std::string("Red Chaos Drive"), std::string(), 13);
+    outItemData[ItemValue::IV_PurpleChaosDrive] = ItemData(0x0000000, std::string("Purple Chaos Drive"), std::string(), 13);
 }

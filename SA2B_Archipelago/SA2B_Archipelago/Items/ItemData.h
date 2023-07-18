@@ -179,6 +179,34 @@ enum ItemValue
 
     IV_END_HATS = IV_Pacifier,
 
+    IV_Penguin = 0x500,
+    IV_Seal,
+    IV_Otter,
+    IV_Rabbit,
+    IV_Cheetah,
+    IV_Warthog,
+    IV_Bear,
+    IV_Tiger,
+    IV_Gorilla,
+    IV_Peacock,
+    IV_Parrot,
+    IV_Condor,
+    IV_Skunk,
+    IV_Sheep,
+    IV_Raccoon,
+    IV_HalfFish,
+    IV_SkeletonDog,
+    IV_Bat,
+    IV_Dragon,
+    IV_Unicorn,
+    IV_Phoenix,
+    IV_YellowChaosDrive,
+    IV_GreenChaosDrive,
+    IV_RedChaosDrive,
+    IV_PurpleChaosDrive,
+
+    IV_END_ANIMALS = IV_PurpleChaosDrive,
+
     IV_NUM_ITEMS
 };
 
@@ -255,4 +283,11 @@ struct ChaoHatSlot
     char gap_1;
     uint16_t Garden;
     char gap_8[16];
+};
+
+
+struct ChaoAnimalSlot
+{
+    SA2BAnimal Type;
+    char gap_1[7];
 };

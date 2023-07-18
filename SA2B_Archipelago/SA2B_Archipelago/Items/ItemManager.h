@@ -15,6 +15,7 @@ constexpr unsigned int TRAP_COOLDOWN = 60;
 constexpr unsigned int JUNK_COOLDOWN = 210;
 
 constexpr unsigned int IM_CHAO_MEMORY_CHECK_ENTRY_TIME = 180;
+constexpr unsigned int ANIMAL_DROPOFF_COOLDOWN = 90;
 
 class ItemManager
 {
@@ -58,6 +59,7 @@ private:
 	void HandleFruit(int item_id);
 	void HandleSeed(int item_id);
 	void HandleHat(int item_id);
+	void HandleAnimal(int item_id);
 
 	const HelperFunctions* _helperFunctions;
 
@@ -81,6 +83,9 @@ private:
 	std::vector<ChaoGardenObject> _ChaoHatQueue;
 	unsigned int _ChaoHatsUsed = 0;
 
+	std::vector<ChaoGardenObject> _ChaoAnimalQueue;
+	unsigned int _ChaoAnimalsUsed = 0;
+
 	int _ActiveTrap = 0;
 	int _ActiveTrapTimer = 0;
 	int _TrapCooldownTimer = TRAP_COOLDOWN;
@@ -88,6 +93,8 @@ private:
 	int _ActiveDialogueTimer = 0;
 
 	int _chaoEntryTimer = 0;
+	int _animalDropoffTimer = ANIMAL_DROPOFF_COOLDOWN;
+	char _lastAnimalCount = 0;
 
 	int _ChaosControlCooldown = TRAP_COOLDOWN;
 
