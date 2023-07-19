@@ -23,6 +23,7 @@ public:
 
 	void SetChaoEnabled(bool chaoEnabled);
 	void SetChaoRaceEnabled(bool chaoRaceEnabled);
+	void SetChaoKarateEnabled(bool chaoKarateEnabled);
 	void SetChaoStatsEnabled(int chaoStatsEnabled);
 	void SetChaoBodyPartsEnabled(bool chaoBodyPartsEnabled);
 	void SetChaoKindergartenEnabled(bool chaoKindergartenEnabled);
@@ -45,6 +46,7 @@ private:
 
 	bool _chaoEnabled = false;
 	bool _chaoRaceEnabled = false;
+	bool _chaoKarateEnabled = false;
 	int _chaoStatsEnabled = 0;
 	bool _chaoBodyPartsEnabled = false;
 	bool _chaoKindergartenEnabled = false;

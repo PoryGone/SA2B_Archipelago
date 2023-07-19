@@ -72,6 +72,10 @@ DataPointer(AnimalCounterObj*, AnimalCounter, 0x1A5A344);
 DataPointer(char, SS_SelectedTile, 0x1D1BF08);
 // End Animal Count
 
+
+DataPointer(ChaoKarateManager*, KarateManager, 0x1A5D148);
+
+
 void LocationManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
 {
 	this->_helperFunctions = &helperFunctions;
@@ -759,8 +763,40 @@ void LocationManager::OnFrameChaoGarden()
 					WriteData<1>((void*)(address - CHAO_LOCATION_STORAGE_OFFSET - CHAO_LOCATION_INTERNAL_OFFSET), currentRaceProgress);
 				}
 			}
+		}
 
-			for (int i = ChaoGardenCheck::CGC_Beginner_Karate; i <= ChaoGardenCheck::CGC_Super_Karate; i++)
+		if (this->_chaoKarateEnabled)
+		{
+			// Only display Emblem on SS if all Karate fights are done
+			WriteData<1>((void*)0x676968, '\x80');
+			WriteData<1>((void*)0x676969, '\xBE');
+			WriteData<1>((void*)0x67696A, '\x2C');
+			WriteData<1>((void*)0x67696B, '\xF8');
+			WriteData<1>((void*)0x67696C, '\xDE');
+			WriteData<1>((void*)0x67696D, '\x01');
+			WriteData<1>((void*)0x67696E, '\x1F');
+			WriteData<1>((void*)0x67696F, '\x74');
+			WriteData<1>((void*)0x676970, '\xCD');
+			WriteData<6>((void*)0X542C06, '\x90');
+
+			if (KarateManager != nullptr)
+			{
+				for (int difficulty = 0; difficulty < 4; difficulty++)
+				{
+					for (int fights = 0; fights < 5; fights++)
+					{
+						if (KarateManager->Difficulty == difficulty && KarateManager->CurrentWins > fights)
+						{
+							char dataValue = *(char*)(0x01DEF831 + difficulty);
+							char bitFlag = (char)(0x01 << fights);
+
+							WriteData<1>((void*)(0x01DEF831 + difficulty), (dataValue | bitFlag));
+						}
+					}
+				}
+			}
+
+			for (int i = ChaoGardenCheck::CGC_BEGIN_KARATE; i <= ChaoGardenCheck::CGC_END_KARATE; i++)
 			{
 				if (this->_ChaoGardenData.find(i) != this->_ChaoGardenData.end())
 				{
@@ -769,8 +805,9 @@ void LocationManager::OnFrameChaoGarden()
 					if (!checkData.CheckSent)
 					{
 						char dataValue = *(char*)checkData.Address;
+						char bitFlag = (char)(0x01 << checkData.Index);
 
-						if (dataValue > 0x00)
+						if ((dataValue & bitFlag) != 0)
 						{
 							if (this->_archipelagoManager)
 							{
@@ -952,13 +989,39 @@ void LocationManager::CheckLocation(int location_id)
 	}
 	else if (this->_ChaoGardenData.find(location_id) != this->_ChaoGardenData.end())
 	{
-		if (location_id >= ChaoGardenCheck::CGC_Beginner_Karate && location_id <= ChaoGardenCheck::CGC_Super_Karate)
+		if (location_id >= ChaoGardenCheck::CGC_BEGIN_KARATE && location_id <= ChaoGardenCheck::CGC_END_KARATE)
 		{
 			ChaoGardenCheckData& checkData = this->_ChaoGardenData[location_id];
 
 			checkData.CheckSent = true;
 
-			WriteData<1>((void*)checkData.Address, 0x01);
+			char dataValue = *(char*)checkData.Address;
+			dataValue      = (dataValue | (char)(1 << checkData.Index));
+
+			WriteData<1>((void*)checkData.Address, dataValue);
+
+			// If only Prize fights give checks, complete preceding fights too on collect
+			if (this->_racesPacked)
+			{
+				if (this->_ChaoRacePacks.find(location_id) != this->_ChaoRacePacks.end())
+				{
+					std::vector<int> racePack = this->_ChaoRacePacks[location_id];
+					for (unsigned int i = 0; i < racePack.size(); i++)
+					{
+						if (this->_ChaoGardenData.find(racePack[i]) != this->_ChaoGardenData.end())
+						{
+							ChaoGardenCheckData& packCheckData = this->_ChaoGardenData[racePack[i]];
+
+							packCheckData.CheckSent = true;
+
+							char dataValue = *(char*)packCheckData.Address;
+							dataValue      = (dataValue | (char)(1 << packCheckData.Index));
+
+							WriteData<1>((void*)packCheckData.Address, dataValue);
+						}
+					}
+				}
+			}
 		}
 		else
 		{
@@ -1167,6 +1230,16 @@ void LocationManager::SetChaoRaceEnabled(bool chaoRaceEnabled)
 	this->_chaoRaceEnabled = chaoRaceEnabled;
 
 	if (chaoRaceEnabled)
+	{
+		this->SetChaoEnabled(true);
+	}
+}
+
+void LocationManager::SetChaoKarateEnabled(bool chaoKarateEnabled)
+{
+	this->_chaoKarateEnabled = chaoKarateEnabled;
+
+	if (chaoKarateEnabled)
 	{
 		this->SetChaoEnabled(true);
 	}

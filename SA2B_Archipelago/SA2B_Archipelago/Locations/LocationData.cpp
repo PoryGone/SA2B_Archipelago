@@ -1339,10 +1339,26 @@ void InitializeChaoGardenChecks(std::map<int, ChaoGardenCheckData>& outChaoGarde
     outChaoGardenChecks[ChaoGardenCheck::CGC_Dark_3] = ChaoGardenCheckData(0x01A0F99F, 2);
     outChaoGardenChecks[ChaoGardenCheck::CGC_Dark_4] = ChaoGardenCheckData(0x01A0F99F, 3);
 
-    outChaoGardenChecks[ChaoGardenCheck::CGC_Beginner_Karate]     = ChaoGardenCheckData(0x01DEF831, 0);
-    outChaoGardenChecks[ChaoGardenCheck::CGC_Intermediate_Karate] = ChaoGardenCheckData(0x01DEF832, 0);
-    outChaoGardenChecks[ChaoGardenCheck::CGC_Expert_Karate]       = ChaoGardenCheckData(0x01DEF833, 0);
-    outChaoGardenChecks[ChaoGardenCheck::CGC_Super_Karate]        = ChaoGardenCheckData(0x01DEF834, 0);
+    outChaoGardenChecks[ChaoGardenCheck::CGC_Beginner_Karate_1]     = ChaoGardenCheckData(0x01DEF831, 0);
+    outChaoGardenChecks[ChaoGardenCheck::CGC_Beginner_Karate_2]     = ChaoGardenCheckData(0x01DEF831, 1);
+    outChaoGardenChecks[ChaoGardenCheck::CGC_Beginner_Karate_3]     = ChaoGardenCheckData(0x01DEF831, 2);
+    outChaoGardenChecks[ChaoGardenCheck::CGC_Beginner_Karate_4]     = ChaoGardenCheckData(0x01DEF831, 3);
+    outChaoGardenChecks[ChaoGardenCheck::CGC_Beginner_Karate_5]     = ChaoGardenCheckData(0x01DEF831, 4);
+    outChaoGardenChecks[ChaoGardenCheck::CGC_Intermediate_Karate_1] = ChaoGardenCheckData(0x01DEF832, 0);
+    outChaoGardenChecks[ChaoGardenCheck::CGC_Intermediate_Karate_2] = ChaoGardenCheckData(0x01DEF832, 1);
+    outChaoGardenChecks[ChaoGardenCheck::CGC_Intermediate_Karate_3] = ChaoGardenCheckData(0x01DEF832, 2);
+    outChaoGardenChecks[ChaoGardenCheck::CGC_Intermediate_Karate_4] = ChaoGardenCheckData(0x01DEF832, 3);
+    outChaoGardenChecks[ChaoGardenCheck::CGC_Intermediate_Karate_5] = ChaoGardenCheckData(0x01DEF832, 4);
+    outChaoGardenChecks[ChaoGardenCheck::CGC_Expert_Karate_1]       = ChaoGardenCheckData(0x01DEF833, 0);
+    outChaoGardenChecks[ChaoGardenCheck::CGC_Expert_Karate_2]       = ChaoGardenCheckData(0x01DEF833, 1);
+    outChaoGardenChecks[ChaoGardenCheck::CGC_Expert_Karate_3]       = ChaoGardenCheckData(0x01DEF833, 2);
+    outChaoGardenChecks[ChaoGardenCheck::CGC_Expert_Karate_4]       = ChaoGardenCheckData(0x01DEF833, 3);
+    outChaoGardenChecks[ChaoGardenCheck::CGC_Expert_Karate_5]       = ChaoGardenCheckData(0x01DEF833, 4);
+    outChaoGardenChecks[ChaoGardenCheck::CGC_Super_Karate_1]        = ChaoGardenCheckData(0x01DEF834, 0);
+    outChaoGardenChecks[ChaoGardenCheck::CGC_Super_Karate_2]        = ChaoGardenCheckData(0x01DEF834, 1);
+    outChaoGardenChecks[ChaoGardenCheck::CGC_Super_Karate_3]        = ChaoGardenCheckData(0x01DEF834, 2);
+    outChaoGardenChecks[ChaoGardenCheck::CGC_Super_Karate_4]        = ChaoGardenCheckData(0x01DEF834, 3);
+    outChaoGardenChecks[ChaoGardenCheck::CGC_Super_Karate_5]        = ChaoGardenCheckData(0x01DEF834, 4);
 }
 
 void InitializeChaoRacePacks(std::map<int, std::vector<int>>& outChaoRacePacks)
@@ -1370,6 +1386,11 @@ void InitializeChaoRacePacks(std::map<int, std::vector<int>>& outChaoRacePacks)
 
     outChaoRacePacks[ChaoGardenCheck::CGC_Dark_2] = std::vector<int>{ CGC_Dark_1 };
     outChaoRacePacks[ChaoGardenCheck::CGC_Dark_4] = std::vector<int>{ CGC_Dark_3 };
+
+    outChaoRacePacks[ChaoGardenCheck::CGC_Beginner_Karate_5]     = std::vector<int>{ CGC_Beginner_Karate_1, CGC_Beginner_Karate_2, CGC_Beginner_Karate_3, CGC_Beginner_Karate_4 };
+    outChaoRacePacks[ChaoGardenCheck::CGC_Intermediate_Karate_5] = std::vector<int>{ CGC_Intermediate_Karate_1, CGC_Intermediate_Karate_2, CGC_Intermediate_Karate_3, CGC_Intermediate_Karate_4 };
+    outChaoRacePacks[ChaoGardenCheck::CGC_Expert_Karate_5]       = std::vector<int>{ CGC_Expert_Karate_1, CGC_Expert_Karate_2, CGC_Expert_Karate_3, CGC_Expert_Karate_4 };
+    outChaoRacePacks[ChaoGardenCheck::CGC_Super_Karate_5]        = std::vector<int>{ CGC_Super_Karate_1, CGC_Super_Karate_2, CGC_Super_Karate_3, CGC_Super_Karate_4 };
 }
 
 void InitializeChaoStatChecks(std::map<int, ChaoStatCheckData>& outChaoStatChecks)

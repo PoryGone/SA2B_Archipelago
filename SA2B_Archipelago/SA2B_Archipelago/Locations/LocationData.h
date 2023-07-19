@@ -332,10 +332,29 @@ enum ChaoGardenCheck
 
     CGC_END_RACE = CGC_Dark_4,
 
-    CGC_Beginner_Karate     = 0x300,
-    CGC_Intermediate_Karate = 0x301,
-    CGC_Expert_Karate       = 0x302,
-    CGC_Super_Karate        = 0x303,
+    CGC_BEGIN_KARATE = 0x300,
+    CGC_Beginner_Karate_1 = CGC_BEGIN_KARATE,
+    CGC_Beginner_Karate_2,
+    CGC_Beginner_Karate_3,
+    CGC_Beginner_Karate_4,
+    CGC_Beginner_Karate_5,
+    CGC_Intermediate_Karate_1,
+    CGC_Intermediate_Karate_2,
+    CGC_Intermediate_Karate_3,
+    CGC_Intermediate_Karate_4,
+    CGC_Intermediate_Karate_5,
+    CGC_Expert_Karate_1,
+    CGC_Expert_Karate_2,
+    CGC_Expert_Karate_3,
+    CGC_Expert_Karate_4,
+    CGC_Expert_Karate_5,
+    CGC_Super_Karate_1,
+    CGC_Super_Karate_2,
+    CGC_Super_Karate_3,
+    CGC_Super_Karate_4,
+    CGC_Super_Karate_5,
+
+    CGC_END_KARATE = CGC_Super_Karate_5,
 
 };
 
@@ -347,6 +366,17 @@ struct ChaoGardenCheckData
     int Address;
     int Index;
     bool CheckSent = false;
+};
+
+struct ChaoKarateManager
+{
+    char gap_0[6];
+    char Difficulty;
+    char CurrentWins;
+    char gap_7[3];
+    char DifficultyMenu;
+    char gap_B;
+    char Timer;
 };
 
 void InitializeChaoGardenChecks(std::map<int, ChaoGardenCheckData>& outChaoGardenChecks);

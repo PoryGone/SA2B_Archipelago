@@ -309,6 +309,16 @@ void ChaoGardenManager::SetChaoRaceEnabled(bool chaoRaceEnabled)
 	}
 }
 
+void ChaoGardenManager::SetChaoKarateEnabled(bool chaoKarateEnabled)
+{
+	this->_chaoKarateEnabled = chaoKarateEnabled;
+
+	if (chaoKarateEnabled)
+	{
+		this->SetChaoEnabled(true);
+	}
+}
+
 void ChaoGardenManager::SetChaoStatsEnabled(int chaoStatsEnabled)
 {
 	this->_chaoStatsEnabled = chaoStatsEnabled;
