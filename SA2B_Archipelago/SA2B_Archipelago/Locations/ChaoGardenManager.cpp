@@ -37,9 +37,9 @@ void ChaoGardenManager::OnFrameFunction()
 	ChaoGardensUnlocked = 0x56;
 
 	// Handle Separate Chao Saves
-	std::string chaoFileName = ArchipelagoManager::getInstance().GetSeedName().substr(0, 11);
+	std::string chaoFileName = ArchipelagoManager::getInstance().GetSeedNameAndPlayer().substr(0, 12);
 
-	for (int i = 0; i < 11; i++)
+	for (int i = 0; i < 12; i++)
 	{
 		WriteData<1>((void*)(0x8ACF4B + i), chaoFileName[i]);
 		WriteData<1>((void*)(0xC70E5C + i), chaoFileName[i]);

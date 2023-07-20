@@ -62,10 +62,12 @@ public:
 
 	void SetDeathCause(DeathCause cause);
 
+	std::string GetSeedNameAndPlayer();
 	std::string GetSeedName() { return this->_seedName; };
 
 	bool _deathLinkPending = false;
 	std::string ap_player_name;
+	int ap_player_num = 0;
 	long long lastDeathLinkTime = 0;
 	int _instanceID = 0;
 

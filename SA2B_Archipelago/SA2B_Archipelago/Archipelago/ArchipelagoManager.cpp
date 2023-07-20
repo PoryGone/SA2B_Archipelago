@@ -824,6 +824,16 @@ void SA2_SetMinigameDifficulty(int minigameDifficulty)
     minigameManager->SetDifficulty(minigameDifficulty);
 }
 
+void SA2_SetPlayerNum(int playerNum)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    ArchipelagoManager::getInstance().ap_player_num = playerNum;
+}
+
 void ArchipelagoManager::Init(const char* ip, const char* playerName, const char* password)
 {
     AP_Init(ip, "Sonic Adventure 2 Battle", playerName, password);
@@ -873,6 +883,7 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_RegisterSlotDataMapIntIntCallback("MissionCountMap", &SA2_SetMissionCountMap);
     AP_RegisterSlotDataMapIntIntCallback("GateBosses", &SA2_SetGateBosses);
     AP_RegisterSlotDataMapIntIntCallback("BossRushMap", &SA2_SetChosenBossRushMap);
+    AP_RegisterSlotDataIntCallback("PlayerNum", &SA2_SetPlayerNum);
     AP_Start();
 }
 
@@ -1377,4 +1388,19 @@ void ArchipelagoManager::AP_KillPlayer()
 void ArchipelagoManager::SetDeathCause(DeathCause cause)
 {
     this->deathCauseOverride = cause;
+}
+
+std::string ArchipelagoManager::GetSeedNameAndPlayer()
+{
+    std::string seedName = ArchipelagoManager::getInstance().GetSeedName().substr(0, 9);
+
+    int numToUse = ArchipelagoManager::getInstance().ap_player_num % 1000;
+    std::string playerNumStr = std::to_string(numToUse);
+
+    while (playerNumStr.length() < 3)
+    {
+        playerNumStr = "0" + playerNumStr;
+    }
+
+    return (seedName + playerNumStr);
 }
