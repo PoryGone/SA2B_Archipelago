@@ -22,6 +22,8 @@ DataPointer(unsigned int, SeedHash, 0x1DEC6FC);
 DataPointer(unsigned int, PlayerNameHash, 0x1DEC700);
 DataPointer(char, LastStoryComplete, 0x1DEFA95);
 
+DataArray(int16_t, ChaoStatValues, 0x8A6240, 0x1F4);
+
 
 unsigned int CalcHash(std::string str)
 {
@@ -118,6 +120,16 @@ void ArchipelagoManager::OnInitFunction(const char* path, const HelperFunctions&
 
     std::chrono::time_point<std::chrono::system_clock> timestamp = std::chrono::system_clock::now();
     this->_instanceID = std::chrono::duration_cast<std::chrono::seconds>(timestamp.time_since_epoch()).count();
+
+    int chaoMult = this->_settingsINI->getInt("Chao", "StatGainMultiplier");
+
+    if (chaoMult > 1 && chaoMult <= 5)
+    {
+        for (int i = 0x00; i < 0x1F4; i++)
+        {
+            ChaoStatValues[i] = ChaoStatValues[i] * chaoMult;
+        }
+    }
 }
 
 void ArchipelagoManager::OnFrameFunction()
