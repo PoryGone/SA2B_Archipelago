@@ -136,142 +136,337 @@ void UpdateLevelCheckIcons()
 		return;
 	}
 
-	int currentTileStageIndex = TileIDtoStageIndex[SS_SelectedTile];
 	LocationManager* locMan = &LocationManager::getInstance();
-	std::vector<int> chaoKeys = locMan->GetChaoKeyLocationsForLevel(currentTileStageIndex);
-	std::vector<int> pipes = locMan->GetPipeLocationsForLevel(currentTileStageIndex);
-	std::vector<int> hiddens = locMan->GetHiddenLocationsForLevel(currentTileStageIndex);
-	std::vector<int> beetles = locMan->GetGoldBeetleLocationsForLevel(currentTileStageIndex);
-	std::vector<int> omochao = locMan->GetOmochaoLocationsForLevel(currentTileStageIndex);
-	int animalsFound = locMan->GetCompletedAnimalLocationsForLevel(currentTileStageIndex);
-	int animalsTotal = locMan->GetTotalAnimalLocationsForLevel(currentTileStageIndex);
-	StageSelectSprite.sx = 0.25f;
-	StageSelectSprite.sy = 0.25f;
+	int currentTileStageIndex = TileIDtoStageIndex[SS_SelectedTile];
 	int xCount = 0;
 	int itemCount = 0;
 	float yPos = 0.0f;
 	int debugIndex = 0;
 
-	if ((*StageSelectDataMap_ptr).at(currentTileStageIndex).UpgradeAddress > 0x00) 
+	if (currentTileStageIndex == SSS_ChaoGarden ||
+		(GameState == GameStates_Ingame && CurrentLevel == LevelIDs::LevelIDs_ChaoWorld))
 	{
-		int icon = *(char*)(*StageSelectDataMap_ptr).at(currentTileStageIndex).UpgradeAddress > 0x00 ? SSI_Upgrade : SSI_UpgradeDisabled;
-		StageSelectSprite.tanim = &StageSelectAnim[icon];
-		StageSelectSprite.p = { maxXPos - ((xCount + 1) * 32.0f), yPos, 0.0f };
-		DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
-		xCount++;
-	}
-	if (beetles.size() > 0) 
-	{
-		for (int i = beetles.size() - 1; i >= 0; i--)
+		StageSelectSprite.sx = 0.25f;
+		StageSelectSprite.sy = 0.25f;
+
+		std::vector<int> beginnerRaces  = locMan->GetChaoBeginnerRaceLocations();
+		std::vector<int> challengeRaces = locMan->GetChaoChallengeRaceLocations();
+		std::vector<int> heroRaces      = locMan->GetChaoHeroRaceLocations();
+		std::vector<int> darkRaces      = locMan->GetChaoDarkRaceLocations();
+		std::vector<int> karateFights   = locMan->GetChaoKarateLocations();
+
+		// Row 1
+		if (karateFights.size() > 0)
 		{
-			int beetleIcon = *(char*)beetles[i] == 0x01 ? SSI_GoldBeetle : SSI_GoldBeetleDisabled;
-			StageSelectSprite.tanim = &StageSelectAnim[beetleIcon];
+			int karateIcon = karateFights[1] == karateFights[0] ? SSI_Animals : SSI_AnimalsDisabled;
+			float x = maxXPos - ((xCount + 1) * 32.0f);
+			StageSelectSprite.tanim = &StageSelectAnim[karateIcon];
+			StageSelectSprite.p = { x, yPos, 0.0f };
+			DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+			x += 4;
+			DrawString(std::to_string(karateFights[1]), x, yPos + 8.0f, 0.25f);
+			DrawString(std::to_string(karateFights[0]), x, yPos + 24.0f, 0.25f);
+			xCount++;
+		}
+
+		for (int i = (int)JewelRaceCategory::JRC_Diamond; i >= JewelRaceCategory::JRC_Aquamarine; i--)
+		{
+			std::vector<int> jewelRaces = locMan->GetChaoJewelRaceLocations((JewelRaceCategory)i);
+			if (jewelRaces.size() > 0)
+			{
+				int racesIcon = jewelRaces[1] == jewelRaces[0] ? SSI_Animals : SSI_AnimalsDisabled;
+				float x = maxXPos - ((xCount + 1) * 32.0f);
+				StageSelectSprite.tanim = &StageSelectAnim[racesIcon];
+				StageSelectSprite.p = { x, yPos, 0.0f };
+				DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+				x += 4;
+				DrawString(std::to_string(jewelRaces[1]), x, yPos + 8.0f, 0.25f);
+				DrawString(std::to_string(jewelRaces[0]), x, yPos + 24.0f, 0.25f);
+				xCount++;
+			}
+		}
+
+		if (darkRaces.size() > 0)
+		{
+			int racesIcon = darkRaces[1] == darkRaces[0] ? SSI_Animals : SSI_AnimalsDisabled;
+			float x = maxXPos - ((xCount + 1) * 32.0f);
+			StageSelectSprite.tanim = &StageSelectAnim[racesIcon];
+			StageSelectSprite.p = { x, yPos, 0.0f };
+			DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+			x += 4;
+			DrawString(std::to_string(darkRaces[1]), x, yPos + 8.0f, 0.25f);
+			DrawString(std::to_string(darkRaces[0]), x, yPos + 24.0f, 0.25f);
+			xCount++;
+		}
+
+		if (heroRaces.size() > 0)
+		{
+			int racesIcon = heroRaces[1] == heroRaces[0] ? SSI_Animals : SSI_AnimalsDisabled;
+			float x = maxXPos - ((xCount + 1) * 32.0f);
+			StageSelectSprite.tanim = &StageSelectAnim[racesIcon];
+			StageSelectSprite.p = { x, yPos, 0.0f };
+			DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+			x += 4;
+			DrawString(std::to_string(heroRaces[1]), x, yPos + 8.0f, 0.25f);
+			DrawString(std::to_string(heroRaces[0]), x, yPos + 24.0f, 0.25f);
+			xCount++;
+		}
+
+		if (challengeRaces.size() > 0)
+		{
+			int racesIcon = challengeRaces[1] == challengeRaces[0] ? SSI_Animals : SSI_AnimalsDisabled;
+			float x = maxXPos - ((xCount + 1) * 32.0f);
+			StageSelectSprite.tanim = &StageSelectAnim[racesIcon];
+			StageSelectSprite.p = { x, yPos, 0.0f };
+			DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+			x += 4;
+			DrawString(std::to_string(challengeRaces[1]), x, yPos + 8.0f, 0.25f);
+			DrawString(std::to_string(challengeRaces[0]), x, yPos + 24.0f, 0.25f);
+			xCount++;
+		}
+
+		if (beginnerRaces.size() > 0)
+		{
+			int racesIcon = beginnerRaces[1] == beginnerRaces[0] ? SSI_Animals : SSI_AnimalsDisabled;
+			float x = maxXPos - ((xCount + 1) * 32.0f);
+			StageSelectSprite.tanim = &StageSelectAnim[racesIcon];
+			StageSelectSprite.p = { x, yPos, 0.0f };
+			DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+			x += 4;
+			DrawString(std::to_string(beginnerRaces[1]), x, yPos + 8.0f, 0.25f);
+			DrawString(std::to_string(beginnerRaces[0]), x, yPos + 24.0f, 0.25f);
+			xCount++;
+		}
+		// End Row 1
+		if (xCount > 0)
+		{
+			xCount = 0;
+			yPos = 32.0f;
+		}
+		// Row 2
+		for (int i = (int)ChaoStatCheckType::CSCT_Intelligence; i >= ChaoStatCheckType::CSCT_Swim; i--)
+		{
+			std::vector<int> statLocs = locMan->GetChaoStatLocations((ChaoStatCheckType)i);
+			if (statLocs.size() > 0)
+			{
+				int racesIcon = statLocs[1] == statLocs[0] ? SSI_Animals : SSI_AnimalsDisabled;
+				float x = maxXPos - ((xCount + 1) * 32.0f);
+				StageSelectSprite.tanim = &StageSelectAnim[racesIcon];
+				StageSelectSprite.p = { x, yPos, 0.0f };
+				DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+				x += 4;
+				DrawString(std::to_string(statLocs[1]), x, yPos + 8.0f, 0.25f);
+				DrawString(std::to_string(statLocs[0]), x, yPos + 24.0f, 0.25f);
+				xCount++;
+			}
+		}
+		// End Row 2
+		if (xCount > 0)
+		{
+			xCount = 0;
+			yPos += 32.0f;
+		}
+		// Row 3
+		for (int i = (int)ChaoLessonType::CLT_Instrument; i >= ChaoLessonType::CLT_Drawing; i--)
+		{
+			std::vector<int> lessonLocs = locMan->GetChaoLessonLocations((ChaoLessonType)i);
+			if (lessonLocs.size() > 0)
+			{
+				int racesIcon = lessonLocs[1] == lessonLocs[0] ? SSI_Animals : SSI_AnimalsDisabled;
+				float x = maxXPos - ((xCount + 1) * 32.0f);
+				StageSelectSprite.tanim = &StageSelectAnim[racesIcon];
+				StageSelectSprite.p = { x, yPos, 0.0f };
+				DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+				x += 4;
+				DrawString(std::to_string(lessonLocs[1]), x, yPos + 8.0f, 0.25f);
+				DrawString(std::to_string(lessonLocs[0]), x, yPos + 24.0f, 0.25f);
+				xCount++;
+			}
+		}
+		// End Row 3
+		StageSelectSprite.sx = 0.1875f;
+		StageSelectSprite.sy = 0.1875f;
+		if (xCount > 0)
+		{
+			xCount = 0;
+			yPos += 32.0f;
+		}
+		// Row 4
+		for (int i = (int)ChaoBodyPartAnimal::CBPA_Gorilla; i >= ChaoBodyPartAnimal::CBPA_Penguin; i--)
+		{
+			std::vector<int> animalParts = locMan->GetChaoAnimalPartLocations((ChaoBodyPartAnimal)i);
+			if (animalParts.size() > 0)
+			{
+				int animalIcon = animalParts[1] == animalParts[0] ? SSI_Animals : SSI_AnimalsDisabled;
+				float x = maxXPos - ((xCount + 1) * 24.0f);
+				StageSelectSprite.tanim = &StageSelectAnim[animalIcon];
+				StageSelectSprite.p = { x, yPos, 0.0f };
+				DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+				x += 4;
+				DrawString(std::to_string(animalParts[1]), x, yPos + 6.0f, 0.1875f);
+				DrawString(std::to_string(animalParts[0]), x, yPos + 18.0f, 0.1875f);
+				xCount++;
+			}
+		}
+		// End Row 4
+		if (xCount > 0)
+		{
+			xCount = 0;
+			yPos += 24.0f;
+		}
+		// Row 5
+		for (int i = (int)ChaoBodyPartAnimal::CBPA_Phoenix; i >= ChaoBodyPartAnimal::CBPA_Peacock; i--)
+		{
+			std::vector<int> animalParts = locMan->GetChaoAnimalPartLocations((ChaoBodyPartAnimal)i);
+			if (animalParts.size() > 0)
+			{
+				int animalIcon = animalParts[1] == animalParts[0] ? SSI_Animals : SSI_AnimalsDisabled;
+				float x = maxXPos - ((xCount + 1) * 24.0f);
+				StageSelectSprite.tanim = &StageSelectAnim[animalIcon];
+				StageSelectSprite.p = { x, yPos, 0.0f };
+				DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+				x += 4;
+				DrawString(std::to_string(animalParts[1]), x, yPos + 6.0f, 0.1875f);
+				DrawString(std::to_string(animalParts[0]), x, yPos + 18.0f, 0.1875f);
+				xCount++;
+			}
+		}
+		// End Row 5
+	}
+	else
+	{
+		StageSelectSprite.sx = 0.25f;
+		StageSelectSprite.sy = 0.25f;
+
+		std::vector<int> chaoKeys = locMan->GetChaoKeyLocationsForLevel(currentTileStageIndex);
+		std::vector<int> pipes = locMan->GetPipeLocationsForLevel(currentTileStageIndex);
+		std::vector<int> hiddens = locMan->GetHiddenLocationsForLevel(currentTileStageIndex);
+		std::vector<int> beetles = locMan->GetGoldBeetleLocationsForLevel(currentTileStageIndex);
+		std::vector<int> omochao = locMan->GetOmochaoLocationsForLevel(currentTileStageIndex);
+		int animalsFound = locMan->GetCompletedAnimalLocationsForLevel(currentTileStageIndex);
+		int animalsTotal = locMan->GetTotalAnimalLocationsForLevel(currentTileStageIndex);
+
+		if ((*StageSelectDataMap_ptr).at(currentTileStageIndex).UpgradeAddress > 0x00)
+		{
+			int icon = *(char*)(*StageSelectDataMap_ptr).at(currentTileStageIndex).UpgradeAddress > 0x00 ? SSI_Upgrade : SSI_UpgradeDisabled;
+			StageSelectSprite.tanim = &StageSelectAnim[icon];
 			StageSelectSprite.p = { maxXPos - ((xCount + 1) * 32.0f), yPos, 0.0f };
 			DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
 			xCount++;
 		}
-	}
-	if (chaoKeys.size() > 0) 
-	{
-		itemCount = chaoKeys.size();
-		for (int i = chaoKeys.size() - 1; i >= 0; i--)
+		if (beetles.size() > 0)
 		{
-			int chaoIcon = *(char*)chaoKeys[i] == 0x01 ? SSI_ChaoKey : SSI_ChaoKeyDisabled;
+			for (int i = beetles.size() - 1; i >= 0; i--)
+			{
+				int beetleIcon = *(char*)beetles[i] == 0x01 ? SSI_GoldBeetle : SSI_GoldBeetleDisabled;
+				StageSelectSprite.tanim = &StageSelectAnim[beetleIcon];
+				StageSelectSprite.p = { maxXPos - ((xCount + 1) * 32.0f), yPos, 0.0f };
+				DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+				xCount++;
+			}
+		}
+		if (chaoKeys.size() > 0)
+		{
+			itemCount = chaoKeys.size();
+			for (int i = chaoKeys.size() - 1; i >= 0; i--)
+			{
+				int chaoIcon = *(char*)chaoKeys[i] == 0x01 ? SSI_ChaoKey : SSI_ChaoKeyDisabled;
+				float x = maxXPos - ((xCount + 1) * 32.0f);
+				StageSelectSprite.tanim = &StageSelectAnim[chaoIcon];
+				StageSelectSprite.p = { x, yPos, 0.0f };
+				DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+				x += 4;
+				DrawString(std::to_string(itemCount), x, yPos + 24.0f, 0.25f);
+				xCount++;
+				itemCount--;
+			}
+		}
+		if (animalsTotal > 0)
+		{
+			int animalsIcon = animalsFound == animalsTotal ? SSI_Animals : SSI_AnimalsDisabled;
 			float x = maxXPos - ((xCount + 1) * 32.0f);
-			StageSelectSprite.tanim = &StageSelectAnim[chaoIcon];
+			StageSelectSprite.tanim = &StageSelectAnim[animalsIcon];
 			StageSelectSprite.p = { x, yPos, 0.0f };
 			DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
 			x += 4;
-			DrawString(std::to_string(itemCount), x, yPos + 24.0f, 0.25f);
+			DrawString(std::to_string(animalsFound), x, yPos + 8.0f, 0.25f);
+			DrawString(std::to_string(animalsTotal), x, yPos + 24.0f, 0.25f);
 			xCount++;
-			itemCount--;
 		}
-	}
-	if (animalsTotal > 0)
-	{
-		int animalsIcon = animalsFound == animalsTotal ? SSI_Animals : SSI_AnimalsDisabled;
-		float x = maxXPos - ((xCount + 1) * 32.0f);
-		StageSelectSprite.tanim = &StageSelectAnim[animalsIcon];
-		StageSelectSprite.p = { x, yPos, 0.0f };
-		DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
-		x += 4;
-		DrawString(std::to_string(animalsFound), x, yPos + 8.0f, 0.25f);
-		DrawString(std::to_string(animalsTotal), x, yPos + 24.0f, 0.25f);
-		xCount++;
-	}
-	StageSelectSprite.sx = 0.1875f;
-	StageSelectSprite.sy = 0.1875f;
-	if (xCount > 0) 
-	{
-		xCount = 0;
-		yPos = 32.0f;
-	}
-	if (pipes.size() > 0)
-	{
-		itemCount = pipes.size();
-		for (int i = pipes.size() - 1; i >= 0; i--)
+		StageSelectSprite.sx = 0.1875f;
+		StageSelectSprite.sy = 0.1875f;
+		if (xCount > 0)
 		{
-			int pipeIcon = *(char*)pipes[i] == 0x01 ? SSI_Pipe : SSI_PipeDisabled;
-			float x = maxXPos - ((xCount + 1 + hiddens.size()) * 24.0f);
-			StageSelectSprite.tanim = &StageSelectAnim[pipeIcon];
-			StageSelectSprite.p = { x, yPos, 0.0f };
-			DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
-			x += 2;
-			DrawString(std::to_string(itemCount), x, yPos + 18.0f, 0.1875f);
-			xCount++;
-			itemCount--;
+			xCount = 0;
+			yPos = 32.0f;
 		}
-		xCount = 0;
-	}
-	if (hiddens.size() > 0)
-	{
-		itemCount = hiddens.size();
-		for (int i = hiddens.size() - 1; i >= 0; i--)
+		if (pipes.size() > 0)
 		{
-			int hiddenIcon = *(char*)hiddens[i] == 0x01 ? SSI_Hidden : SSI_HiddenDisabled;
-			float x = maxXPos - ((xCount + 1) * 24.0f);
-			StageSelectSprite.tanim = &StageSelectAnim[hiddenIcon];
-			StageSelectSprite.p = { x, yPos, 0.0f };
-			DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
-			x += 2;
-			DrawString(std::to_string(itemCount), x, yPos + 18.0f, 0.1875f);
-			xCount++;
-			itemCount--;
-		}
-	}
-	if (pipes.size() > 0 || hiddens.size() > 0) 
-	{
-		yPos += 24.0f;
-		xCount = 0;
-	}
-	if (omochao.size() > 0)
-	{
-		itemCount = omochao.size();
-		int rows = 0;
-		for (int i = itemCount; i > 0; i -= omochaoIconsPerRow)
-		{
-			rows++;
-		}
-		int numInRow = itemCount % omochaoIconsPerRow;
-		numInRow = numInRow == 0 ? omochaoIconsPerRow : numInRow;
-		yPos += (rows - 1) * 24.0f;
-		while (itemCount > 0) 
-		{
-			int omochaoIcon = *(char*)omochao[itemCount - 1] == 0x01 ? SSI_Omochao : SSI_OmochaoDisabled;
-			float x = maxXPos - ((xCount + 1) * 24.0f);
-			StageSelectSprite.tanim = &StageSelectAnim[omochaoIcon];
-			StageSelectSprite.p = { x, yPos, 0.0f };
-			DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
-			x += 2;
-			DrawString(std::to_string(itemCount), x, yPos + 18.0f, 0.1875f);
-			xCount++;
-			itemCount--;
-			numInRow--;
-			if (numInRow <= 0) 
+			itemCount = pipes.size();
+			for (int i = pipes.size() - 1; i >= 0; i--)
 			{
-				xCount = 0;
-				yPos -= 24.0f;
-				numInRow = omochaoIconsPerRow;
+				int pipeIcon = *(char*)pipes[i] == 0x01 ? SSI_Pipe : SSI_PipeDisabled;
+				float x = maxXPos - ((xCount + 1 + hiddens.size()) * 24.0f);
+				StageSelectSprite.tanim = &StageSelectAnim[pipeIcon];
+				StageSelectSprite.p = { x, yPos, 0.0f };
+				DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+				x += 2;
+				DrawString(std::to_string(itemCount), x, yPos + 18.0f, 0.1875f);
+				xCount++;
+				itemCount--;
+			}
+			xCount = 0;
+		}
+		if (hiddens.size() > 0)
+		{
+			itemCount = hiddens.size();
+			for (int i = hiddens.size() - 1; i >= 0; i--)
+			{
+				int hiddenIcon = *(char*)hiddens[i] == 0x01 ? SSI_Hidden : SSI_HiddenDisabled;
+				float x = maxXPos - ((xCount + 1) * 24.0f);
+				StageSelectSprite.tanim = &StageSelectAnim[hiddenIcon];
+				StageSelectSprite.p = { x, yPos, 0.0f };
+				DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+				x += 2;
+				DrawString(std::to_string(itemCount), x, yPos + 18.0f, 0.1875f);
+				xCount++;
+				itemCount--;
+			}
+		}
+		if (pipes.size() > 0 || hiddens.size() > 0)
+		{
+			yPos += 24.0f;
+			xCount = 0;
+		}
+		if (omochao.size() > 0)
+		{
+			itemCount = omochao.size();
+			int rows = 0;
+			for (int i = itemCount; i > 0; i -= omochaoIconsPerRow)
+			{
+				rows++;
+			}
+			int numInRow = itemCount % omochaoIconsPerRow;
+			numInRow = numInRow == 0 ? omochaoIconsPerRow : numInRow;
+			yPos += (rows - 1) * 24.0f;
+			while (itemCount > 0)
+			{
+				int omochaoIcon = *(char*)omochao[itemCount - 1] == 0x01 ? SSI_Omochao : SSI_OmochaoDisabled;
+				float x = maxXPos - ((xCount + 1) * 24.0f);
+				StageSelectSprite.tanim = &StageSelectAnim[omochaoIcon];
+				StageSelectSprite.p = { x, yPos, 0.0f };
+				DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+				x += 2;
+				DrawString(std::to_string(itemCount), x, yPos + 18.0f, 0.1875f);
+				xCount++;
+				itemCount--;
+				numInRow--;
+				if (numInRow <= 0)
+				{
+					xCount = 0;
+					yPos -= 24.0f;
+					numInRow = omochaoIconsPerRow;
+				}
 			}
 		}
 	}
@@ -432,12 +627,14 @@ void DrawUpgradeIcon(ObjectMaster* obj)
 {
 	if (CurrentMenu == Menus::Menus_StageSelect && GameMode == GameMode::GameMode_Advertise)
 	{
+		UpdateLevelCheckIcons();
+
 		int currentTileStageIndex = TileIDtoStageIndex[SS_SelectedTile];
 		if (currentTileStageIndex != SSS_ChaoGarden)
 		{
-			UpdateLevelCheckIcons();
 			UpdateUpgradeIcons(false);
 		}
+
 		UpdateChaosEmeraldIcons();
 		UpdateEmblemRequirements();
 	}
@@ -466,11 +663,6 @@ void DeleteUpgradeIcon_IL(ObjectMaster* obj)
 
 void DrawUpgradeIcon_IL(ObjectMaster* obj)
 {
-	if (CurrentLevel == LevelIDs_ChaoWorld)
-	{
-		return;
-	}
-
 	if (CurrentMenu == Menus::Menus_BossAttack || CurrentMenu == Menus::Menus_Kart)
 	{
 		return;
@@ -478,9 +670,12 @@ void DrawUpgradeIcon_IL(ObjectMaster* obj)
 
 	if (GameState == GameStates::GameStates_Pause && GameMode == GameMode::GameMode_Level)
 	{
-		UpdateUpgradeIcons(true);
+		if (CurrentLevel != LevelIDs_ChaoWorld)
+		{
+			UpdateUpgradeIcons(true);
+			UpdateMissionInLevel();
+		}
 		UpdateLevelCheckIcons();
-		UpdateMissionInLevel();
 	}
 }
 

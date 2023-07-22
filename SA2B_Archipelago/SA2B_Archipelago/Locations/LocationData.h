@@ -260,6 +260,16 @@ struct BossRushCheckData
 void InitializeBossRushChecks(std::map<int, BossRushCheckData>& outBossRushChecks);
 
 
+enum JewelRaceCategory
+{
+    JRC_Aquamarine = 0,
+    JRC_Topaz,
+    JRC_Peridot,
+    JRC_Garnet,
+    JRC_Onyx,
+    JRC_Diamond,
+};
+
 enum ChaoGardenCheck
 {
     CGC_BEGIN = 0x200,
@@ -434,6 +444,28 @@ enum ChaoBodyPart
     CBP_Wings,
 };
 
+enum ChaoBodyPartAnimal
+{
+    CBPA_Penguin,
+    CBPA_Seal,
+    CBPA_Otter,
+    CBPA_Rabbit,
+    CBPA_Cheetah,
+    CBPA_Warthog,
+    CBPA_Bear,
+    CBPA_Tiger,
+    CBPA_Gorilla,
+    CBPA_Peacock,
+    CBPA_Parrot,
+    CBPA_Condor,
+    CBPA_Skunk,
+    CBPA_Sheep,
+    CBPA_Raccoon,
+    CBPA_Dragon = 16,
+    CBPA_Unicorn,
+    CBPA_Phoenix,
+};
+
 enum ChaoBodyPartCheck
 {
     CBPC_BEGIN = 0x1220,
@@ -543,6 +575,15 @@ struct ChaoBodyPartCheckData
 };
 
 void InitializeChaoBodyPartChecks(std::map<int, ChaoBodyPartCheckData>& outChaoBodyPartChecks);
+
+
+enum ChaoLessonType
+{
+    CLT_Drawing,
+    CLT_Dance,
+    CLT_Song,
+    CLT_Instrument,
+};
 
 enum ChaoKindergartenCheck
 {

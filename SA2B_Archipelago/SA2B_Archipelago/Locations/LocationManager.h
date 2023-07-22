@@ -52,9 +52,11 @@ public:
 
 	void SetRacesPacked(bool racesPacked);
 	void SetChaoEnabled(bool chaoEnabled);
-	void SetChaoRaceEnabled(bool chaoRaceEnabled);
-	void SetChaoKarateEnabled(bool chaoKarateEnabled);
+	void SetChaoRaceEnabled(int chaoRaceEnabled);
+	void SetChaoKarateEnabled(int chaoKarateEnabled);
 	void SetChaoStatsEnabled(int chaoStatsEnabled);
+	void SetChaoStatsStaminaEnabled(bool chaoStatsStaminaEnabled);
+	void SetChaoStatsHiddenEnabled(bool chaoStatsHiddenEnabled);
 	void SetChaoBodyPartsEnabled(bool chaoBodyPartsEnabled);
 	void SetChaoKindergartenEnabled(bool chaoKindergartenEnabled);
 
@@ -72,6 +74,19 @@ public:
 	std::vector<int> GetOmochaoLocationsForLevel(int levelID);
 	int GetCompletedAnimalLocationsForLevel(int levelID);
 	int GetTotalAnimalLocationsForLevel(int levelID);
+
+	std::vector<int> GetChaoBeginnerRaceLocations();
+	std::vector<int> GetChaoChallengeRaceLocations();
+	std::vector<int> GetChaoHeroRaceLocations();
+	std::vector<int> GetChaoDarkRaceLocations();
+	std::vector<int> GetChaoJewelRaceLocations(JewelRaceCategory jewel);
+	std::vector<int> GetChaoKarateLocations();
+
+	std::vector<int> GetChaoStatLocations(ChaoStatCheckType stat);
+
+	std::vector<int> GetChaoAnimalPartLocations(ChaoBodyPartAnimal animal);
+
+	std::vector<int> GetChaoLessonLocations(ChaoLessonType lesson);
 
 	bool AreAllRacesComplete();
 
@@ -98,9 +113,11 @@ private:
 
 	bool _racesPacked = false;
 	bool _chaoEnabled = false;
-	bool _chaoRaceEnabled = false;
-	bool _chaoKarateEnabled = false;
+	int _chaoRaceEnabled = 0;
+	int _chaoKarateEnabled = 0;
 	int _chaoStatsEnabled = 0;
+	bool _chaoStatsStaminaEnabled = false;
+	bool _chaoStatsHiddenEnabled = false;
 	bool _chaoBodyPartsEnabled = false;
 	bool _chaoKindergartenEnabled = false;
 

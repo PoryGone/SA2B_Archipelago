@@ -683,7 +683,7 @@ void LocationManager::OnFrameChaoGarden()
 		}
 
 		// In-Garden Tracking of Locations
-		if (this->_chaoRaceEnabled)
+		if (this->_chaoRaceEnabled > 0)
 		{
 			for (int i = ChaoGardenCheck::CGC_BEGIN; i <= ChaoGardenCheck::CGC_END_RACE; i++)
 			{
@@ -1225,7 +1225,7 @@ void LocationManager::SetChaoEnabled(bool chaoEnabled)
 	this->_chaoEnabled = chaoEnabled;
 }
 
-void LocationManager::SetChaoRaceEnabled(bool chaoRaceEnabled)
+void LocationManager::SetChaoRaceEnabled(int chaoRaceEnabled)
 {
 	this->_chaoRaceEnabled = chaoRaceEnabled;
 
@@ -1235,7 +1235,7 @@ void LocationManager::SetChaoRaceEnabled(bool chaoRaceEnabled)
 	}
 }
 
-void LocationManager::SetChaoKarateEnabled(bool chaoKarateEnabled)
+void LocationManager::SetChaoKarateEnabled(int chaoKarateEnabled)
 {
 	this->_chaoKarateEnabled = chaoKarateEnabled;
 
@@ -1253,6 +1253,16 @@ void LocationManager::SetChaoStatsEnabled(int chaoStatsEnabled)
 	{
 		this->SetChaoEnabled(true);
 	}
+}
+
+void LocationManager::SetChaoStatsStaminaEnabled(bool chaoStatsStaminaEnabled)
+{
+	this->_chaoStatsStaminaEnabled = chaoStatsStaminaEnabled;
+}
+
+void LocationManager::SetChaoStatsHiddenEnabled(bool chaoStatsHiddenEnabled)
+{
+	this->_chaoStatsHiddenEnabled = chaoStatsHiddenEnabled;
 }
 
 void LocationManager::SetChaoBodyPartsEnabled(bool chaoBodyPartsEnabled)
@@ -1765,4 +1775,385 @@ bool LocationManager::AreAllRacesComplete()
 	}
 
 	return true;
+}
+
+std::vector<int> LocationManager::GetChaoBeginnerRaceLocations()
+{
+	std::vector<int> result;
+
+	if (this->_chaoRaceEnabled > 0)
+	{
+		if (this->_racesPacked)
+		{
+			result.push_back(4);
+		}
+		else
+		{
+			result.push_back(12);
+		}
+
+		int count = 0;
+
+		for (auto& pair : this->_ChaoGardenData)
+		{
+			if (pair.first > ChaoGardenCheck::CGC_BlockCanyon_3)
+			{
+				continue;
+			}
+
+			if (this->_racesPacked == 1)
+			{
+				// Prize
+				if (pair.first != ChaoGardenCheck::CGC_CrabPool_3 &&
+					pair.first != ChaoGardenCheck::CGC_StumpValley_3 &&
+					pair.first != ChaoGardenCheck::CGC_MushroomForest_3 &&
+					pair.first != ChaoGardenCheck::CGC_BlockCanyon_3)
+				{
+					continue;
+				}
+			}
+
+			if (pair.second.CheckSent)
+			{
+				count++;
+			}
+		}
+
+		result.push_back(count);
+	}
+
+	return result;
+}
+
+std::vector<int> LocationManager::GetChaoChallengeRaceLocations()
+{
+	std::vector<int> result;
+
+	if (this->_chaoRaceEnabled > 1)
+	{
+		if (this->_racesPacked)
+		{
+			result.push_back(3);
+		}
+		else
+		{
+			result.push_back(12);
+		}
+
+		int count = 0;
+
+		for (auto& pair : this->_ChaoGardenData)
+		{
+			if (pair.first < ChaoGardenCheck::CGC_Challenge_1 || pair.first > ChaoGardenCheck::CGC_Challenge_12)
+			{
+				continue;
+			}
+
+			if (this->_racesPacked == 1)
+			{
+				// Prize
+				if (pair.first != ChaoGardenCheck::CGC_Challenge_4 &&
+					pair.first != ChaoGardenCheck::CGC_Challenge_8 &&
+					pair.first != ChaoGardenCheck::CGC_Challenge_12)
+				{
+					continue;
+				}
+			}
+
+			if (pair.second.CheckSent)
+			{
+				count++;
+			}
+		}
+
+		result.push_back(count);
+	}
+
+	return result;
+}
+
+std::vector<int> LocationManager::GetChaoHeroRaceLocations()
+{
+	std::vector<int> result;
+
+	if (this->_chaoRaceEnabled > 1)
+	{
+		if (this->_racesPacked)
+		{
+			result.push_back(2);
+		}
+		else
+		{
+			result.push_back(4);
+		}
+
+		int count = 0;
+
+		for (auto& pair : this->_ChaoGardenData)
+		{
+			if (pair.first < ChaoGardenCheck::CGC_Hero_1 || pair.first > ChaoGardenCheck::CGC_Hero_4)
+			{
+				continue;
+			}
+
+			if (this->_racesPacked == 1)
+			{
+				// Prize
+				if (pair.first != ChaoGardenCheck::CGC_Hero_2 &&
+					pair.first != ChaoGardenCheck::CGC_Hero_4)
+				{
+					continue;
+				}
+			}
+
+			if (pair.second.CheckSent)
+			{
+				count++;
+			}
+		}
+
+		result.push_back(count);
+	}
+
+	return result;
+}
+
+std::vector<int> LocationManager::GetChaoDarkRaceLocations()
+{
+	std::vector<int> result;
+
+	if (this->_chaoRaceEnabled > 1)
+	{
+		if (this->_racesPacked)
+		{
+			result.push_back(2);
+		}
+		else
+		{
+			result.push_back(4);
+		}
+
+		int count = 0;
+
+		for (auto& pair : this->_ChaoGardenData)
+		{
+			if (pair.first < ChaoGardenCheck::CGC_Dark_1 || pair.first > ChaoGardenCheck::CGC_Dark_4)
+			{
+				continue;
+			}
+
+			if (this->_racesPacked == 1)
+			{
+				// Prize
+				if (pair.first != ChaoGardenCheck::CGC_Dark_2 &&
+					pair.first != ChaoGardenCheck::CGC_Dark_4)
+				{
+					continue;
+				}
+			}
+
+			if (pair.second.CheckSent)
+			{
+				count++;
+			}
+		}
+
+		result.push_back(count);
+	}
+
+	return result;
+}
+
+std::vector<int> LocationManager::GetChaoJewelRaceLocations(JewelRaceCategory jewel)
+{
+	std::vector<int> result;
+
+	if (this->_chaoRaceEnabled > 2)
+	{
+		if (this->_racesPacked)
+		{
+			result.push_back(1);
+		}
+		else
+		{
+			result.push_back(5);
+		}
+
+		int count = 0;
+
+		for (auto& pair : this->_ChaoGardenData)
+		{
+			if (pair.first < (ChaoGardenCheck::CGC_Aquamarine_1 + (5 * jewel)) ||
+			   (pair.first > (ChaoGardenCheck::CGC_Aquamarine_5 + (5 * jewel))))
+			{
+				continue;
+			}
+
+			if (this->_racesPacked == 1)
+			{
+				// Prize
+				if (pair.first != (ChaoGardenCheck::CGC_Aquamarine_5 + (5 * jewel)))
+				{
+					continue;
+				}
+			}
+
+			if (pair.second.CheckSent)
+			{
+				count++;
+			}
+		}
+
+		result.push_back(count);
+	}
+
+	return result;
+}
+
+std::vector<int> LocationManager::GetChaoKarateLocations()
+{
+	std::vector<int> result;
+
+	if (this->_chaoRaceEnabled > 2)
+	{
+		if (this->_racesPacked)
+		{
+			result.push_back(4);
+		}
+		else
+		{
+			result.push_back(20);
+		}
+
+		int count = 0;
+
+		for (auto& pair : this->_ChaoGardenData)
+		{
+			if (pair.first < ChaoGardenCheck::CGC_BEGIN_KARATE || pair.first > ChaoGardenCheck::CGC_END_KARATE)
+			{
+				continue;
+			}
+
+			if (this->_racesPacked == 1)
+			{
+				// Prize
+				if (pair.first != ChaoGardenCheck::CGC_Beginner_Karate_5 &&
+					pair.first != ChaoGardenCheck::CGC_Intermediate_Karate_5 &&
+					pair.first != ChaoGardenCheck::CGC_Expert_Karate_5 &&
+					pair.first != ChaoGardenCheck::CGC_Super_Karate_5)
+				{
+					continue;
+				}
+			}
+
+			if (pair.second.CheckSent)
+			{
+				count++;
+			}
+		}
+
+		result.push_back(count);
+	}
+
+	return result;
+}
+
+std::vector<int> LocationManager::GetChaoStatLocations(ChaoStatCheckType stat)
+{
+	std::vector<int> result;
+
+	if (this->_chaoStatsEnabled > 0)
+	{
+		if (stat == ChaoStatCheckType::CSCT_Stamina && !this->_chaoStatsStaminaEnabled)
+		{
+			return result;
+		}
+
+		if ((stat == ChaoStatCheckType::CSCT_Luck || stat == ChaoStatCheckType::CSCT_Intelligence) && !this->_chaoStatsHiddenEnabled)
+		{
+			return result;
+		}
+
+		result.push_back(this->_chaoStatsEnabled);
+		int countDone = 0;
+
+		for (int i = (ChaoStatCheck::CSC_BEGIN + (0x80 * stat)); i < (ChaoStatCheck::CSC_BEGIN + ((0x80 * stat) + this->_chaoStatsEnabled)); i++)
+		{
+			if (this->_ChaoStatData.find(i) != this->_ChaoStatData.end())
+			{
+				ChaoStatCheckData& checkData = this->_ChaoStatData[i];
+				if (checkData.CheckSent)
+				{
+					countDone++;
+				}
+			}
+		}
+
+		result.push_back(countDone);
+	}
+
+	return result;
+}
+
+std::vector<int> LocationManager::GetChaoAnimalPartLocations(ChaoBodyPartAnimal animal)
+{
+	std::vector<int> result;
+
+	if (this->_chaoBodyPartsEnabled)
+	{
+		int countTotal = 0;
+		int countDone = 0;
+
+		for (int i = (ChaoBodyPartCheck::CBPC_BEGIN + (8 * animal)); i < (ChaoBodyPartCheck::CBPC_BEGIN + (8 * (animal + 1))); i++)
+		{
+			if (this->_ChaoBodyPartData.find(i) != this->_ChaoBodyPartData.end())
+			{
+				countTotal++;
+
+				ChaoBodyPartCheckData& checkData = this->_ChaoBodyPartData[i];
+				if (checkData.CheckSent)
+				{
+					countDone++;
+				}
+			}
+		}
+
+		if (countTotal > 0)
+		{
+			result.push_back(countTotal);
+			result.push_back(countDone);
+		}
+	}
+
+	return result;
+}
+
+std::vector<int> LocationManager::GetChaoLessonLocations(ChaoLessonType lesson)
+{
+	std::vector<int> result;
+
+	if (this->_chaoKindergartenEnabled)
+	{
+		int countTotal = 0;
+		int countDone = 0;
+
+		for (int i = (ChaoKindergartenCheck::CKgC_BEGIN + (0x8 * lesson)); i < (ChaoKindergartenCheck::CKgC_BEGIN + (0x8 * (lesson + 1))); i++)
+		{
+			if (this->_ChaoKindergartenData.find(i) != this->_ChaoKindergartenData.end())
+			{
+				countTotal++;
+
+				ChaoKindergartenCheckData& checkData = this->_ChaoKindergartenData[i];
+				if (checkData.CheckSent)
+				{
+					countDone++;
+				}
+			}
+		}
+
+		result.push_back(countTotal);
+		result.push_back(countDone);
+	}
+
+	return result;
 }

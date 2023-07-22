@@ -545,11 +545,11 @@ void SA2_SetChaoRaceDifficulty(int chaoDifficulty)
     {
         LocationManager* locationManager = &LocationManager::getInstance();
 
-        locationManager->SetChaoRaceEnabled(true);
+        locationManager->SetChaoRaceEnabled(chaoDifficulty);
 
         ChaoGardenManager* chaoGardenManager = &ChaoGardenManager::GetInstance();
 
-        chaoGardenManager->SetChaoRaceEnabled(chaoDifficulty);
+        chaoGardenManager->SetChaoRaceEnabled(true);
     }
 }
 
@@ -564,11 +564,11 @@ void SA2_SetChaoKarateDifficulty(int chaoDifficulty)
     {
         LocationManager* locationManager = &LocationManager::getInstance();
 
-        locationManager->SetChaoKarateEnabled(true);
+        locationManager->SetChaoKarateEnabled(chaoDifficulty);
 
         ChaoGardenManager* chaoGardenManager = &ChaoGardenManager::GetInstance();
 
-        chaoGardenManager->SetChaoKarateEnabled(chaoDifficulty);
+        chaoGardenManager->SetChaoKarateEnabled(true);
     }
 }
 
@@ -588,6 +588,36 @@ void SA2_SetChaoStats(int chaoStats)
         ChaoGardenManager* chaoGardenManager = &ChaoGardenManager::GetInstance();
 
         chaoGardenManager->SetChaoStatsEnabled(chaoStats);
+    }
+}
+
+void SA2_SetChaoStatsStamina(int chaoStatsStamina)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    if (chaoStatsStamina > 0)
+    {
+        LocationManager* locationManager = &LocationManager::getInstance();
+
+        locationManager->SetChaoStatsStaminaEnabled(true);
+    }
+}
+
+void SA2_SetChaoStatsHidden(int chaoStatsHidden)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    if (chaoStatsHidden > 0)
+    {
+        LocationManager* locationManager = &LocationManager::getInstance();
+
+        locationManager->SetChaoStatsHiddenEnabled(true);
     }
 }
 
@@ -873,6 +903,8 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_RegisterSlotDataIntCallback("ChaoRaceDifficulty", &SA2_SetChaoRaceDifficulty);
     AP_RegisterSlotDataIntCallback("ChaoKarateDifficulty", &SA2_SetChaoKarateDifficulty);
     AP_RegisterSlotDataIntCallback("ChaoStats", &SA2_SetChaoStats);
+    AP_RegisterSlotDataIntCallback("ChaoStatsStamina", &SA2_SetChaoStatsStamina);
+    AP_RegisterSlotDataIntCallback("ChaoStatsHidden", &SA2_SetChaoStatsHidden);
     AP_RegisterSlotDataIntCallback("ChaoAnimalParts", &SA2_SetChaoBodyParts);
     AP_RegisterSlotDataIntCallback("ChaoKindergarten", &SA2_SetChaoKindergarten);
     AP_RegisterSlotDataMapIntIntCallback("DefaultEggMap", &SA2_SetDefaultEggMap);
