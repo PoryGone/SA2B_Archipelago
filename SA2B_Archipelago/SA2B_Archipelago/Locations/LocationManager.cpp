@@ -102,6 +102,11 @@ void LocationManager::OnInitFunction(const char* path, const HelperFunctions& he
 	InitializeChaoRacePacks(this->_ChaoRacePacks);
 
 	InitializeKartRaceChecks(this->_KartRaceData);
+
+	for (int i = 0; i < 7; i++)
+	{
+		this->_CollectedChaoStats[i] = std::vector<int>();
+	}
 }
 
 void LocationManager::OnFrameFunction()
@@ -615,6 +620,35 @@ void LocationManager::OnFrameChaoGarden()
 			}
 		}
 
+		// Handle Collected Chao Stats
+		for (int i = 0; i < 7; i++)
+		{
+			for (auto locID : this->_CollectedChaoStats[i])
+			{
+				if (this->_ChaoStatData.find(locID) != this->_ChaoStatData.end())
+				{
+					ChaoStatCheckData& checkData = this->_ChaoStatData[locID];
+
+					if ((checkData.Level % this->_chaoStatsFrequency) == (this->_chaoStatsEnabled % this->_chaoStatsFrequency))
+					{
+						for (int subLocID = (locID - 1); subLocID > locID - this->_chaoStatsFrequency; subLocID--)
+						{
+							ChaoStatCheckData& subCheckData = this->_ChaoStatData[subLocID];
+							subCheckData.CheckSent = true;
+						}
+					}
+
+					char dataValue = *(char*)checkData.Address;
+					if ((dataValue == 0 && checkData.Level < this->_chaoStatsFrequency) ||
+						dataValue == (checkData.Level - this->_chaoStatsFrequency))
+					{
+						WriteData<1>((void*)checkData.Address, checkData.Level);
+					}
+				}
+			}
+		}
+		// End Handle Collected Chao Stats
+
 		// Chao Animal Parts
 		if (this->_chaoBodyPartsEnabled)
 		{
@@ -821,7 +855,7 @@ void LocationManager::OnFrameChaoGarden()
 			}
 		}
 
-		for (int chaoIdx = 0; chaoIdx < 37; chaoIdx++)
+		for (int chaoIdx = 0; chaoIdx < 24; chaoIdx++)
 		{
 			ChaoDataBase chaoData = ChaoSlots[chaoIdx].data;
 
@@ -1070,15 +1104,35 @@ void LocationManager::CheckLocation(int location_id)
 	}
 	else if (this->_ChaoStatData.find(location_id) != this->_ChaoStatData.end())
 	{
+		ChaoStatCheckData& checkData = this->_ChaoStatData[location_id];
+		checkData.CheckSent = true;
 
+		this->_CollectedChaoStats[checkData.StatType].push_back(location_id);
+		std::sort(this->_CollectedChaoStats[checkData.StatType].begin(), this->_CollectedChaoStats[checkData.StatType].end());
 	}
 	else if (this->_ChaoBodyPartData.find(location_id) != this->_ChaoBodyPartData.end())
 	{
+		ChaoBodyPartCheckData& checkData = this->_ChaoBodyPartData[location_id];
 
+		checkData.CheckSent = true;
+
+		char dataValue = *(char*)checkData.Address;
+		char bitFlag = (char)(0x01 << (int)checkData.BodyPart);
+		char newDataValue = dataValue | bitFlag;
+
+		WriteData<1>((void*)checkData.Address, newDataValue);
 	}
 	else if (this->_ChaoKindergartenData.find(location_id) != this->_ChaoKindergartenData.end())
 	{
+		ChaoKindergartenCheckData& checkData = this->_ChaoKindergartenData[location_id];
 
+		checkData.CheckSent = true;
+
+		char dataValue = *(char*)checkData.Address;
+		char bitFlag = (char)(0x01 << (int)checkData.LessonNum);
+		char newDataValue = dataValue | bitFlag;
+
+		WriteData<1>((void*)checkData.Address, newDataValue);
 	}
 	else if (this->_ChaoKeyData.find(location_id) != this->_ChaoKeyData.end())
 	{
@@ -1253,6 +1307,11 @@ void LocationManager::SetChaoStatsEnabled(int chaoStatsEnabled)
 	{
 		this->SetChaoEnabled(true);
 	}
+}
+
+void LocationManager::SetChaoStatsFrequency(int chaoStatsFrequency)
+{
+	this->_chaoStatsFrequency = chaoStatsFrequency;
 }
 
 void LocationManager::SetChaoStatsStaminaEnabled(bool chaoStatsStaminaEnabled)
@@ -2077,19 +2136,14 @@ std::vector<int> LocationManager::GetChaoStatLocations(ChaoStatCheckType stat)
 		result.push_back(this->_chaoStatsEnabled);
 		int countDone = 0;
 
-		for (int i = (ChaoStatCheck::CSC_BEGIN + (0x80 * stat)); i < (ChaoStatCheck::CSC_BEGIN + ((0x80 * stat) + this->_chaoStatsEnabled)); i++)
+		int locID = ChaoStatCheck::CSC_BEGIN + (0x80 * stat) + 1;
+		if (this->_ChaoStatData.find(locID) != this->_ChaoStatData.end())
 		{
-			if (this->_ChaoStatData.find(i) != this->_ChaoStatData.end())
-			{
-				ChaoStatCheckData& checkData = this->_ChaoStatData[i];
-				if (checkData.CheckSent)
-				{
-					countDone++;
-				}
-			}
+			ChaoStatCheckData& checkData = this->_ChaoStatData[locID];
+			char dataValue = *(char*)checkData.Address;
+			countDone = (int)dataValue;
+			result.push_back(countDone);
 		}
-
-		result.push_back(countDone);
 	}
 
 	return result;

@@ -591,6 +591,21 @@ void SA2_SetChaoStats(int chaoStats)
     }
 }
 
+void SA2_SetChaoStatsFrequency(int chaoStatsFrequency)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    if (chaoStatsFrequency > 0)
+    {
+        LocationManager* locationManager = &LocationManager::getInstance();
+
+        locationManager->SetChaoStatsFrequency(chaoStatsFrequency);
+    }
+}
+
 void SA2_SetChaoStatsStamina(int chaoStatsStamina)
 {
     if (!ArchipelagoManager::getInstance().IsInit())
@@ -903,6 +918,7 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_RegisterSlotDataIntCallback("ChaoRaceDifficulty", &SA2_SetChaoRaceDifficulty);
     AP_RegisterSlotDataIntCallback("ChaoKarateDifficulty", &SA2_SetChaoKarateDifficulty);
     AP_RegisterSlotDataIntCallback("ChaoStats", &SA2_SetChaoStats);
+    AP_RegisterSlotDataIntCallback("ChaoStatsFrequency", &SA2_SetChaoStatsFrequency);
     AP_RegisterSlotDataIntCallback("ChaoStatsStamina", &SA2_SetChaoStatsStamina);
     AP_RegisterSlotDataIntCallback("ChaoStatsHidden", &SA2_SetChaoStatsHidden);
     AP_RegisterSlotDataIntCallback("ChaoAnimalParts", &SA2_SetChaoBodyParts);

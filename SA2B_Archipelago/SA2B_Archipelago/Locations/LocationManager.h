@@ -55,6 +55,7 @@ public:
 	void SetChaoRaceEnabled(int chaoRaceEnabled);
 	void SetChaoKarateEnabled(int chaoKarateEnabled);
 	void SetChaoStatsEnabled(int chaoStatsEnabled);
+	void SetChaoStatsFrequency(int chaoStatsFrequency);
 	void SetChaoStatsStaminaEnabled(bool chaoStatsStaminaEnabled);
 	void SetChaoStatsHiddenEnabled(bool chaoStatsHiddenEnabled);
 	void SetChaoBodyPartsEnabled(bool chaoBodyPartsEnabled);
@@ -116,6 +117,7 @@ private:
 	int _chaoRaceEnabled = 0;
 	int _chaoKarateEnabled = 0;
 	int _chaoStatsEnabled = 0;
+	int _chaoStatsFrequency = 1;
 	bool _chaoStatsStaminaEnabled = false;
 	bool _chaoStatsHiddenEnabled = false;
 	bool _chaoBodyPartsEnabled = false;
@@ -127,6 +129,8 @@ private:
 	std::map<int, ChaoStatCheckData> _ChaoStatData;
 	std::map<int, ChaoBodyPartCheckData> _ChaoBodyPartData;
 	std::map<int, ChaoKindergartenCheckData> _ChaoKindergartenData;
+
+	std::map<int, std::vector<int> > _CollectedChaoStats;
 
 	std::map<int, ChaoKeyCheckData> _ChaoKeyData;
 	std::map<int, PipeCheckData> _PipeData;
