@@ -64,7 +64,8 @@ enum ItemValue
     IV_IceTrap,
     IV_SlowTrap,
     IV_CutsceneTrap,
-    IV_END_TRAPS = IV_CutsceneTrap,
+    IV_ReverseTrap,
+    IV_END_TRAPS = IV_ReverseTrap,
 
     IV_WhiteChaosEmerald = 0x40,
     IV_RedChaosEmerald,

@@ -62,6 +62,7 @@ void InitializeItemData(std::map<int, ItemData> &outItemData)
     outItemData[ItemValue::IV_IceTrap]        = ItemData(0x0000000, std::string("Ice Trap"), std::string(), 0);
     outItemData[ItemValue::IV_SlowTrap]       = ItemData(0x0000000, std::string("Slow Trap"), std::string(), 0);
     outItemData[ItemValue::IV_CutsceneTrap]   = ItemData(0x0000000, std::string("Cutscene Trap"), std::string(), 0);
+    outItemData[ItemValue::IV_ReverseTrap]    = ItemData(0x0000000, std::string("Reverse Trap"), std::string(), 0);
 
     outItemData[ItemValue::IV_WhiteChaosEmerald]  = ItemData(0x01DEEAF8, std::string("White Chaos Emerald"), std::string(), 0);
     outItemData[ItemValue::IV_RedChaosEmerald]    = ItemData(0x01DEEAF9, std::string("Red Chaos Emerald"), std::string(), 0);

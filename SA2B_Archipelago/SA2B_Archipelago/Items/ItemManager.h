@@ -92,6 +92,8 @@ private:
 	int _JunkCooldownTimer = 0;
 	int _ActiveDialogueTimer = 0;
 
+	bool _ReverseTrapActive = false;
+
 	int _chaoEntryTimer = 0;
 	int _animalDropoffTimer = ANIMAL_DROPOFF_COOLDOWN;
 	char _lastAnimalCount = 0;

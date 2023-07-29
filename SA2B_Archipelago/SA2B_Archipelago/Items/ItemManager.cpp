@@ -142,6 +142,64 @@ void ItemManager::OnInputFunction()
 		ControllersRaw->on    = 0;
 		ControllersRaw->press = 0;
 	}
+
+	if (this->_ReverseTrapActive &&
+		(GameState == GameStates::GameStates_Ingame || GameState == GameStates::GameStates_Pause))
+	{
+		Uint32 HeldButtons = ControllersRaw->on;
+		Uint32 PressedButtons = ControllersRaw->press;
+
+		Uint32 NewHeldButtons = 0;
+		Uint32 NewPressedButtons = 0;
+
+		if (HeldButtons & 0b10)  NewHeldButtons |= 0b100;
+		if (HeldButtons & 0b100) NewHeldButtons |= 0b10;
+
+		if (HeldButtons & 0b1000)  NewHeldButtons |= 0b1000;
+
+		if (HeldButtons & 0b10000)  NewHeldButtons |= 0b100000;
+		if (HeldButtons & 0b100000) NewHeldButtons |= 0b10000;
+
+		if (HeldButtons & 0b1000000)  NewHeldButtons |= 0b10000000;
+		if (HeldButtons & 0b10000000) NewHeldButtons |= 0b1000000;
+
+		if (HeldButtons & 0b1000000000)  NewHeldButtons |= 0b10000000000;
+		if (HeldButtons & 0b10000000000) NewHeldButtons |= 0b1000000000;
+
+		if (HeldButtons & 0b10000000000000000)  NewHeldButtons |= 0b100000000000000000;
+		if (HeldButtons & 0b100000000000000000) NewHeldButtons |= 0b10000000000000000;
+
+		if (PressedButtons & 0b10)  NewPressedButtons |= 0b100;
+		if (PressedButtons & 0b100) NewPressedButtons |= 0b10;
+
+		if (PressedButtons & 0b1000)  NewPressedButtons |= 0b1000;
+
+		if (PressedButtons & 0b10000)  NewPressedButtons |= 0b100000;
+		if (PressedButtons & 0b100000) NewPressedButtons |= 0b10000;
+
+		if (PressedButtons & 0b1000000)  NewPressedButtons |= 0b10000000;
+		if (PressedButtons & 0b10000000) NewPressedButtons |= 0b1000000;
+
+		if (PressedButtons & 0b1000000000)  NewPressedButtons |= 0b10000000000;
+		if (PressedButtons & 0b10000000000) NewPressedButtons |= 0b1000000000;
+
+		if (PressedButtons & 0b10000000000000000)  NewPressedButtons |= 0b100000000000000000;
+		if (PressedButtons & 0b100000000000000000) NewPressedButtons |= 0b10000000000000000;
+
+		ControllersRaw->on = NewHeldButtons;
+		ControllersRaw->press = NewPressedButtons;
+
+		ControllersRaw->x1 = -ControllersRaw->x1;
+		ControllersRaw->y1 = -ControllersRaw->y1;
+		ControllersRaw->x2 = -ControllersRaw->x2;
+		ControllersRaw->y2 = -ControllersRaw->y2;
+
+		Uint16 l = ControllersRaw->l;
+		Uint16 r = ControllersRaw->r;
+
+		ControllersRaw->r = l;
+		ControllersRaw->l = r;
+	}
 }
 
 void ItemManager::OnFrameFunction()
@@ -822,6 +880,17 @@ bool ItemManager::IsActiveTrapValid()
 			return false;
 		}
 		break;
+	case ItemValue::IV_ReverseTrap:
+		if (GameMode != GameMode::GameMode_Level)
+		{
+			return false;
+		}
+
+		if (this->_ReverseTrapActive)
+		{
+			return false;
+		}
+		break;
 	case ItemValue::IV_PongTrap:
 		if (GameMode != GameMode::GameMode_Level)
 		{
@@ -898,6 +967,8 @@ void ItemManager::ResetTrapData()
 
 		this->_StoredPhysicsData = PhysicsData();
 	}
+
+	this->_ReverseTrapActive = false;
 }
 
 void ItemManager::OnFrameTrapQueue()
@@ -1069,6 +1140,10 @@ void ItemManager::OnFrameTrapQueue()
 	{
 		// Nothing
 	}
+	else if (this->_ActiveTrap == ItemValue::IV_ReverseTrap)
+	{
+		// Nothing
+	}
 	else if (this->_ActiveTrap == ItemValue::IV_PongTrap)
 	{
 		// Nothing
@@ -1204,6 +1279,10 @@ void ItemManager::OnFrameTrapQueue()
 		this->_TrapCooldownTimer = 0;
 		// Don't display Received text until the cutscene actually plays
 		return;
+		break;
+	case ItemValue::IV_ReverseTrap:
+		PlayUnshuffledVoice(2, 834);
+		this->_ReverseTrapActive = true;
 		break;
 	case ItemValue::IV_PongTrap:
 		MinigameManager* minigameManager = &MinigameManager::GetInstance();
