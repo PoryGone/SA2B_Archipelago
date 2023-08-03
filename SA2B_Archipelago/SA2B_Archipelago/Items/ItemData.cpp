@@ -10,6 +10,8 @@ void InitializeItemData(std::map<int, ItemData> &outItemData)
 
     outItemData[ItemValue::IV_Emblem] = ItemData(0x01DEE418, std::string("Emblem"), std::string("Emblem"), 0);
 
+    outItemData[ItemValue::IV_BlackMarketToken] = ItemData(0x01DEE41C, std::string("Chao Coin"), std::string("Chao Coin"), 0);
+
     outItemData[ItemValue::IV_SonicGloves]         = ItemData(0x01DEB302, std::string("Sonic - Magic Gloves"), std::string("Magic Gloves"), 22);
     outItemData[ItemValue::IV_SonicLightShoes]     = ItemData(0x01DEB300, std::string("Sonic - Light Shoes"), std::string("Light Shoes"), 21);
     outItemData[ItemValue::IV_SonicAncientLight]   = ItemData(0x01DEB301, std::string("Sonic - Ancient Light"), std::string("Ancient Light"), 18);

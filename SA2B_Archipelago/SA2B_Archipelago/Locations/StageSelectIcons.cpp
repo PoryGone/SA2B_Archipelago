@@ -283,6 +283,19 @@ void UpdateLevelCheckIcons()
 				xCount++;
 			}
 		}
+		std::vector<int> marketLocs = locMan->GetCompletedBlackMarketLocations();
+		if (marketLocs.size() > 0)
+		{
+			int marketIcon = marketLocs[1] == marketLocs[0] ? SSI_Animals : SSI_AnimalsDisabled;
+			float x = maxXPos - ((xCount + 1) * 32.0f);
+			StageSelectSprite.tanim = &StageSelectAnim[marketIcon];
+			StageSelectSprite.p = { x, yPos, 0.0f };
+			DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+			x += 4;
+			DrawString(std::to_string(marketLocs[1]), x, yPos + 8.0f, 0.25f);
+			DrawString(std::to_string(marketLocs[0]), x, yPos + 24.0f, 0.25f);
+			xCount++;
+		}
 		// End Row 3
 		StageSelectSprite.sx = 0.1875f;
 		StageSelectSprite.sy = 0.1875f;

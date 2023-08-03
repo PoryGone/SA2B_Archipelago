@@ -45,6 +45,8 @@ enum ItemValue
 
     IV_Maria,
 
+    IV_BlackMarketToken = 0x1F,
+
     IV_FiveRings = 0x20,
     IV_TenRings,
     IV_TwentyRings,

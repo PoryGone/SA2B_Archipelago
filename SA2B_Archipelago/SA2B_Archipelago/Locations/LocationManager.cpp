@@ -74,6 +74,7 @@ DataPointer(char, SS_SelectedTile, 0x1D1BF08);
 
 
 DataPointer(ChaoKarateManager*, KarateManager, 0x1A5D148);
+DataPointer(unsigned int, BlackMarketTokenCount, 0x1DEE41C);
 
 
 void LocationManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
@@ -99,6 +100,7 @@ void LocationManager::OnInitFunction(const char* path, const HelperFunctions& he
 	InitializeChaoStatChecks(this->_ChaoStatData);
 	InitializeChaoBodyPartChecks(this->_ChaoBodyPartData);
 	InitializeChaoKindergartenChecks(this->_ChaoKindergartenData);
+	InitializeBlackMarketChecks(this->_BlackMarketLocationData);
 	InitializeChaoRacePacks(this->_ChaoRacePacks);
 
 	InitializeKartRaceChecks(this->_KartRaceData);
@@ -710,6 +712,39 @@ void LocationManager::OnFrameChaoGarden()
 		}
 		// End Sending of Chao Locations to Server
 
+
+		// Black Market
+		if (this->_blackMarketSlots > 0)
+		{
+			for (int i = BlackMarketCheck::BMC_BEGIN; i <= BlackMarketCheck::BMC_BEGIN + 64; i++)
+			{
+				if (this->_BlackMarketLocationData.find(i) != this->_BlackMarketLocationData.end())
+				{
+					BlackMarketCheckData& checkData = this->_BlackMarketLocationData[i];
+
+					if (!checkData.CheckSent)
+					{
+						int byteNum = (checkData.SlotNum - 1) / 8;
+						int bitNum  = (checkData.SlotNum - 1) % 8;
+						int dataValue = *(int*)(checkData.Address + byteNum);
+
+						int bitFlag = (int)(0x01 << bitNum);
+
+						if ((dataValue & bitFlag) != 0x00)
+						{
+							if (this->_archipelagoManager)
+							{
+								this->_archipelagoManager->SendItem(i);
+
+								checkData.CheckSent = true;
+							}
+						}
+					}
+				}
+			}
+		}
+		// End Sending of Chao Locations to Server
+
 		if (this->_chaoEntryTimer < CHAO_MEMORY_CHECK_ENTRY_TIME)
 		{
 			// Only check the below data while in Chao World, otherwise it may be wrong
@@ -1134,6 +1169,20 @@ void LocationManager::CheckLocation(int location_id)
 
 		WriteData<1>((void*)checkData.Address, newDataValue);
 	}
+	else if (this->_BlackMarketLocationData.find(location_id) != this->_BlackMarketLocationData.end())
+	{
+		BlackMarketCheckData& checkData = this->_BlackMarketLocationData[location_id];
+
+		checkData.CheckSent = true;
+
+		int byteNum = (checkData.SlotNum - 1) / 8;
+		int bitNum = (checkData.SlotNum - 1) % 8;
+		int dataValue = *(int*)(checkData.Address + byteNum);
+		int bitFlag = (int)(0x01 << bitNum);
+		char newDataValue = dataValue | bitFlag;
+
+		WriteData<1>((void*)(checkData.Address + byteNum), newDataValue);
+	}
 	else if (this->_ChaoKeyData.find(location_id) != this->_ChaoKeyData.end())
 	{
 		ChaoKeyCheckData& checkData = this->_ChaoKeyData[location_id];
@@ -1344,6 +1393,21 @@ void LocationManager::SetChaoKindergartenEnabled(bool chaoKindergartenEnabled)
 	}
 }
 
+void LocationManager::SetBlackMarketSlots(int blackMarketSlots)
+{
+	this->_blackMarketSlots = blackMarketSlots;
+
+	if (blackMarketSlots)
+	{
+		this->SetChaoEnabled(true);
+	}
+}
+
+void LocationManager::SetBlackMarketUnlockCosts(std::map<int, int> map)
+{
+	this->_blackMarketUnlockCosts = map;
+}
+
 void LocationManager::SetRequiredCannonsCoreMissions(bool allMissionsRequired)
 {
 	this->_requireAllCannonsCoreMissions = allMissionsRequired;
@@ -1377,6 +1441,11 @@ void LocationManager::ResetLocations()
 	}
 
 	for (auto& pair : this->_ChaoKindergartenData)
+	{
+		pair.second.CheckSent = false;
+	}
+
+	for (auto& pair : this->_BlackMarketLocationData)
 	{
 		pair.second.CheckSent = false;
 	}
@@ -1636,6 +1705,39 @@ void LocationManager::SendAnimalLocationCheck()
 					WriteData<1>((void*)checkData.Address, newDataValue);
 				}
 			}
+		}
+	}
+}
+
+void LocationManager::SendBlackMarketLocationCheck(int menuSelection)
+{
+	if (this->_blackMarketSlots == 0)
+	{
+		return;
+	}
+
+	std::vector<int> activeLocations = this->GetAvailableBlackMarketLocations();
+
+	if (activeLocations.size() <= menuSelection)
+	{
+		return;
+	}
+
+	int locationID = BlackMarketCheck::BMC_BEGIN + activeLocations[menuSelection] + 1;
+
+	if (this->_BlackMarketLocationData.find(locationID) != this->_BlackMarketLocationData.end())
+	{
+		BlackMarketCheckData& checkData = this->_BlackMarketLocationData[locationID];
+
+		if (!checkData.CheckSent)
+		{
+			int byteNum = (checkData.SlotNum - 1) / 8;
+			int bitNum = (checkData.SlotNum - 1) % 8;
+			int dataValue = *(int*)(checkData.Address + byteNum);
+			int bitFlag = (int)(0x01 << bitNum);
+			char newDataValue = dataValue | bitFlag;
+
+			WriteData<1>((void*)(checkData.Address + byteNum), newDataValue);
 		}
 	}
 }
@@ -2207,6 +2309,61 @@ std::vector<int> LocationManager::GetChaoLessonLocations(ChaoLessonType lesson)
 
 		result.push_back(countTotal);
 		result.push_back(countDone);
+	}
+
+	return result;
+}
+
+std::vector<int> LocationManager::GetCompletedBlackMarketLocations()
+{
+	std::vector<int> result;
+
+	if (this->_blackMarketSlots > 0)
+	{
+		int countTotal = 0;
+		int countDone = 0;
+
+		for (int i = (BlackMarketCheck::BMC_BEGIN + 1); i <= (BlackMarketCheck::BMC_BEGIN + this->_blackMarketSlots); i++)
+		{
+			if (this->_BlackMarketLocationData.find(i) != this->_BlackMarketLocationData.end())
+			{
+				countTotal++;
+
+				BlackMarketCheckData& checkData = this->_BlackMarketLocationData[i];
+				if (checkData.CheckSent)
+				{
+					countDone++;
+				}
+			}
+		}
+
+		result.push_back(countTotal);
+		result.push_back(countDone);
+	}
+
+	return result;
+}
+
+std::vector<int> LocationManager::GetAvailableBlackMarketLocations()
+{
+	std::vector<int> result;
+
+	if (this->_blackMarketSlots > 0)
+	{
+		for (int i = 0; i < this->_blackMarketSlots; i++)
+		{
+			if (this->_BlackMarketLocationData.find(BlackMarketCheck::BMC_BEGIN + 1 + i) != this->_BlackMarketLocationData.end())
+			{
+				if (BlackMarketTokenCount >= this->_blackMarketUnlockCosts[i])
+				{
+					BlackMarketCheckData& checkData = this->_BlackMarketLocationData[BlackMarketCheck::BMC_BEGIN + 1 + i];
+					if (!checkData.CheckSent)
+					{
+						result.push_back(i);
+					}
+				}
+			}
+		}
 	}
 
 	return result;

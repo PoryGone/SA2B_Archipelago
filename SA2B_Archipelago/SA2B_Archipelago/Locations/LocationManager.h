@@ -60,6 +60,8 @@ public:
 	void SetChaoStatsHiddenEnabled(bool chaoStatsHiddenEnabled);
 	void SetChaoBodyPartsEnabled(bool chaoBodyPartsEnabled);
 	void SetChaoKindergartenEnabled(bool chaoKindergartenEnabled);
+	void SetBlackMarketSlots(int blackMarketSlots);
+	void SetBlackMarketUnlockCosts(std::map<int, int> map);
 
 	void SendChaoKeyLocationCheck();
 	void SendPipeLocationCheck();
@@ -67,6 +69,7 @@ public:
 	void SendGoldBeetleLocationCheck();
 	void SendOmochaoLocationCheck();
 	void SendAnimalLocationCheck();
+	void SendBlackMarketLocationCheck(int menuSelection);
 
 	std::vector<int> GetChaoKeyLocationsForLevel(int levelID);
 	std::vector<int> GetPipeLocationsForLevel(int levelID);
@@ -88,6 +91,9 @@ public:
 	std::vector<int> GetChaoAnimalPartLocations(ChaoBodyPartAnimal animal);
 
 	std::vector<int> GetChaoLessonLocations(ChaoLessonType lesson);
+
+	std::vector<int> GetCompletedBlackMarketLocations();
+	std::vector<int> GetAvailableBlackMarketLocations();
 
 	bool AreAllRacesComplete();
 
@@ -122,6 +128,9 @@ private:
 	bool _chaoStatsHiddenEnabled = false;
 	bool _chaoBodyPartsEnabled = false;
 	bool _chaoKindergartenEnabled = false;
+	int _blackMarketSlots = 0;
+
+	std::map<int, int> _blackMarketUnlockCosts;
 
 	std::map<int, LevelClearCheckData> _LevelClearData;
 	std::map<int, BossRushCheckData> _BossRushData;
@@ -129,6 +138,7 @@ private:
 	std::map<int, ChaoStatCheckData> _ChaoStatData;
 	std::map<int, ChaoBodyPartCheckData> _ChaoBodyPartData;
 	std::map<int, ChaoKindergartenCheckData> _ChaoKindergartenData;
+	std::map<int, BlackMarketCheckData> _BlackMarketLocationData;
 
 	std::map<int, std::vector<int> > _CollectedChaoStats;
 

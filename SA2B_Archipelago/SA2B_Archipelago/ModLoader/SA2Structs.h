@@ -32,6 +32,8 @@ struct ObjUnknownB;
 struct ObjectMaster;
 struct LoopHead;
 
+struct BlackMarketTask;
+
 using ObjectFuncPtr = void(__cdecl*)(ObjectMaster*);
 
 // All structs should be packed.
@@ -58,6 +60,7 @@ union Data2Ptr
 	EntityData2 *Entity;
 	CharObj2Base *Character;
 	UnknownData2 *Unknown_Chao;
+	BlackMarketTask *BlackMarket;
 };
 
 struct ObjectMaster
@@ -430,6 +433,18 @@ struct UnknownData2_B
 	char gap_4[12];
 	float field_10;
 	NJS_VECTOR field_14;
+};
+
+struct BlackMarketTask
+{
+	char gap_0[0x48];
+	void* textPtr;
+	char gap_4C[0x4C];
+	char SubMenu;
+	char gap_95[3];
+	int MenuSelection;
+	int MenuOffset;
+	int ItemRotationTimer;
 };
 
 struct UnknownData2

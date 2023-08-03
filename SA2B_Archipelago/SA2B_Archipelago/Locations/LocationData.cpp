@@ -1532,8 +1532,16 @@ void InitializeChaoKindergartenChecks(std::map<int, ChaoKindergartenCheckData>& 
     outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Maracas]    = ChaoKindergartenCheckData(0x01DEC7F4, 0x1D);
     outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Trumpet]    = ChaoKindergartenCheckData(0x01DEC7F4, 0x1E);
     outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Tambourine] = ChaoKindergartenCheckData(0x01DEC7F4, 0x1F);
+}
 
+void InitializeBlackMarketChecks(std::map<int, BlackMarketCheckData>& outBlackMarketChecks)
+{
+    outBlackMarketChecks.clear();
 
+    for (int i = 1; i <= 64; i++)
+    {
+        outBlackMarketChecks[BlackMarketCheck::BMC_BEGIN + i] = BlackMarketCheckData(0x01DEC800, i);
+    }
 }
 
 void InitializeKartRaceChecks(std::map<int, KartRaceCheckData>& outKartRaceChecks)

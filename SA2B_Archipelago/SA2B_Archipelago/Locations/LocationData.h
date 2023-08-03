@@ -631,6 +631,23 @@ struct ChaoKindergartenCheckData
 
 void InitializeChaoKindergartenChecks(std::map<int, ChaoKindergartenCheckData>& outChaoKindergartenChecks);
 
+enum BlackMarketCheck
+{
+    BMC_BEGIN = 0x1300,
+};
+
+struct BlackMarketCheckData
+{
+    BlackMarketCheckData() : Address(0x00), SlotNum(0x00) {}
+    BlackMarketCheckData(int address, char slotNum) : Address(address), SlotNum(slotNum) {}
+
+    int Address;
+    char SlotNum;
+    bool CheckSent = false;
+};
+
+void InitializeBlackMarketChecks(std::map<int, BlackMarketCheckData>& outBlackMarketChecks);
+
 
 enum ChaoKeyCheck
 {

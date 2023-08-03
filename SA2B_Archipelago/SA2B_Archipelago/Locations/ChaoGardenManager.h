@@ -2,7 +2,7 @@
 #pragma once
 
 #include <map>
-#include <vector>
+#include <array>
 #include "../Archipelago/ArchipelagoManager.h"
 #include "../ModLoaderCommon/Trampoline.h"
 
@@ -27,6 +27,9 @@ public:
 	void SetChaoStatsEnabled(int chaoStatsEnabled);
 	void SetChaoBodyPartsEnabled(bool chaoBodyPartsEnabled);
 	void SetChaoKindergartenEnabled(bool chaoKindergartenEnabled);
+	void SetBlackMarketSlots(int blackMarketSlots);
+
+	void SetBlackMarketData(std::map<int, int> map);
 
 	void SetDefaultEggMap(std::map<int, int> map);
 	void SetDefaultChaoNameMap(std::map<int, int> map);
@@ -50,7 +53,14 @@ private:
 	int _chaoStatsEnabled = 0;
 	bool _chaoBodyPartsEnabled = false;
 	bool _chaoKindergartenEnabled = false;
+	int _blackMarketSlots = 0;
 	
+	std::map<int, int> _blackMarketData;
+
 	std::map<int, int> _defaultEggMap;
 	std::map<int, int> _defaultChaoNameMap;
+
+	//std::array<int, 10> _NameStringOffsets = { 0x227, 0x235, 0x244, 0x255, 0x265, 0x275, 0x285, 0x296, 0x2A7, 0x2BA };
+	std::array<int, 10> _NameStringOffsets = { 0x195, 0x1B1, 0x1CF, 0x1E5, 0x201, 0x21D, 0x235, 0x255, 0x275, 0x296 };
+	std::array<int, 10> _NameStringIndeces = {   0x2,   0x5,   0x8,   0xA,   0xC,   0xF,  0x11,  0x13,  0x15,  0x17 };
 };

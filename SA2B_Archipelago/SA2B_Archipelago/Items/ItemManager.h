@@ -66,6 +66,7 @@ private:
 	std::map<int, ItemData> _ItemData;
 	int _thisSessionChecksReceived = 0;
 	unsigned int _EmblemsReceived = 0;
+	unsigned int _BlackMarketTokensReceived = 0;
 
 	std::queue<int> _JunkQueue;
 	std::queue<int> _TrapQueue;

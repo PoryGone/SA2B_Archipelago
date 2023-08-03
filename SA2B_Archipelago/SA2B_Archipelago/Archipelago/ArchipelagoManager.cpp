@@ -674,6 +674,49 @@ void SA2_SetChaoKindergarten(int chaoKindergarten)
     }
 }
 
+void SA2_SetBlackMarketSlots(int blackMarketSlots)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    if (blackMarketSlots > 0)
+    {
+        LocationManager* locationManager = &LocationManager::getInstance();
+
+        locationManager->SetBlackMarketSlots(blackMarketSlots);
+
+        ChaoGardenManager* chaoGardenManager = &ChaoGardenManager::GetInstance();
+
+        chaoGardenManager->SetBlackMarketSlots(blackMarketSlots);
+    }
+}
+
+void SA2_SetBlackMarketData(std::map<int, int> map)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    ChaoGardenManager* chaoGardenManager = &ChaoGardenManager::GetInstance();
+
+    chaoGardenManager->SetBlackMarketData(map);
+}
+
+void SA2_SetBlackMarketUnlockCosts(std::map<int, int> map)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    LocationManager* locationManager = &LocationManager::getInstance();
+
+    locationManager->SetBlackMarketUnlockCosts(map);
+}
+
 void SA2_SetDefaultEggMap(std::map<int, int> map)
 {
     if (!ArchipelagoManager::getInstance().IsInit())
@@ -923,6 +966,9 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_RegisterSlotDataIntCallback("ChaoStatsHidden", &SA2_SetChaoStatsHidden);
     AP_RegisterSlotDataIntCallback("ChaoAnimalParts", &SA2_SetChaoBodyParts);
     AP_RegisterSlotDataIntCallback("ChaoKindergarten", &SA2_SetChaoKindergarten);
+    AP_RegisterSlotDataIntCallback("BlackMarketSlots", &SA2_SetBlackMarketSlots);
+    AP_RegisterSlotDataMapIntIntCallback("BlackMarketData", &SA2_SetBlackMarketData);
+    AP_RegisterSlotDataMapIntIntCallback("BlackMarketUnlockCosts", &SA2_SetBlackMarketUnlockCosts);
     AP_RegisterSlotDataMapIntIntCallback("DefaultEggMap", &SA2_SetDefaultEggMap);
     AP_RegisterSlotDataMapIntIntCallback("DefaultChaoNameMap", &SA2_SetDefaultChaoNameMap);
     AP_RegisterSlotDataIntCallback("MinigameTrapDifficulty", &SA2_SetMinigameDifficulty);

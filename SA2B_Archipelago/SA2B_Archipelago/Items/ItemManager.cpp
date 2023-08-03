@@ -83,6 +83,7 @@ void ItemManager::OnInitFunction(const char* path, const HelperFunctions& helper
 
 	this->_thisSessionChecksReceived = 0;
 	this->_EmblemsReceived = 0;
+	this->_BlackMarketTokensReceived = 0;
 
 	InitializeItemData(this->_ItemData);
 
@@ -224,6 +225,7 @@ void ItemManager::ResetItems()
 {
 	this->_thisSessionChecksReceived = 0;
 	this->_EmblemsReceived = 0;
+	this->_BlackMarketTokensReceived = 0;
 	NewEmblemCount = 0;
 
 	for (int itemID = ItemValue::IV_WhiteChaosEmerald; itemID <= ItemValue::IV_BlueChaosEmerald; itemID++)
@@ -302,6 +304,32 @@ void ItemManager::ReceiveItem(int item_id, bool notify)
 			{
 				std::string message = std::string("Write failed: ");
 				message += std::to_string(item_id);
+				messageQueue->AddMessage(message);
+			}
+		}
+	}
+	else if (item_id == ItemValue::IV_BlackMarketToken) // Black Market Tokens
+	{
+		ItemData& receivedItem = this->_ItemData[item_id];
+
+		if (this->_ItemData.find(item_id) != this->_ItemData.end())
+		{
+			ItemData& receivedItem = this->_ItemData[item_id];
+
+			unsigned int dataValue = *(unsigned int*)receivedItem.Address;
+
+			this->_BlackMarketTokensReceived++;
+			dataValue = this->_BlackMarketTokensReceived;
+			*(unsigned int*)receivedItem.Address = dataValue;
+
+			if (this->_thisSessionChecksReceived > SavedChecksReceived)
+			{
+				SavedChecksReceived = this->_thisSessionChecksReceived;
+
+				std::string message = std::string("New ");
+				message += receivedItem.DisplayName;
+				message += " Count: ";
+				message += std::to_string((unsigned int)dataValue);
 				messageQueue->AddMessage(message);
 			}
 		}
