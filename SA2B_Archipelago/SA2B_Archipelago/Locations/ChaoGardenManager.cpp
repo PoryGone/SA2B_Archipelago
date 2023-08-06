@@ -121,9 +121,10 @@ void ChaoGardenManager::OnFrameFunction()
 		if (CurrentChaoArea == 0x06 && BlackMarketObject != nullptr && BlackMarketObject->Data2.BlackMarket != nullptr)
 		{
 			std::vector<int> ActiveMarketSlots = LocationManager::getInstance().GetAvailableBlackMarketLocations();
-			BlackMarketItemCount = min(10, ActiveMarketSlots.size());
+			int ItemCount = min(10, ActiveMarketSlots.size());
+			BlackMarketItemCount = ItemCount;
 
-			for (int i = 0; i < BlackMarketItemCount; i++)
+			for (int i = 0; i < ItemCount; i++)
 			{
 				int SlotIdx = ActiveMarketSlots[i];
 
@@ -150,7 +151,9 @@ void ChaoGardenManager::OnFrameFunction()
 
 				for (int j = 0; j < newName.length(); j++)
 				{
-					int writeAddr = (int)BlackMarketObject->Data2.BlackMarket->textPtr + this->_NameStringOffsets[i] + j;
+					int writeAddr = (int)BlackMarketObject->Data2.BlackMarket->textPtr;
+					writeAddr += this->_NameStringOffsets[i];
+					writeAddr += j;
 					WriteData<1>((void*)writeAddr, newName[j]);
 				}
 				int writeAddr = (int)BlackMarketObject->Data2.BlackMarket->textPtr + this->_NameStringOffsets[i] + newName.length();
@@ -158,7 +161,7 @@ void ChaoGardenManager::OnFrameFunction()
 				// End Item Names
 			}
 
-			if (BlackMarketItemCount == 0)
+			if (ItemCount == 0)
 			{
 				BlackMarketInventory[0].Category = ChaoItemCategory::ChaoItemCategory_Fruit;
 				BlackMarketInventory[0].Type = 1;
@@ -166,7 +169,7 @@ void ChaoGardenManager::OnFrameFunction()
 			}
 
 			// Item Descriptions
-			if (ActiveMarketSlots.size())
+			if (ActiveMarketSlots.size() > BlackMarketObject->Data2.BlackMarket->MenuSelection)
 			{
 				int SlotIdx = ActiveMarketSlots[BlackMarketObject->Data2.BlackMarket->MenuSelection];
 				std::string newDesc = "for ";
