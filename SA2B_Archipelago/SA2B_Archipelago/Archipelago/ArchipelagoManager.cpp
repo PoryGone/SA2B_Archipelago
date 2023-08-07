@@ -741,6 +741,18 @@ void SA2_SetDefaultChaoNameMap(std::map<int, int> map)
     chaoGardenManager->SetDefaultChaoNameMap(map);
 }
 
+void SA2_SetChaoERMap(std::map<int, int> map)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    ChaoGardenManager* chaoGardenManager = &ChaoGardenManager::GetInstance();
+
+    chaoGardenManager->SetChaoERData(map);
+}
+
 void SA2_SetChaoKeys(int chaoKeys)
 {
     if (!ArchipelagoManager::getInstance().IsInit())
@@ -971,6 +983,7 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_RegisterSlotDataMapIntIntCallback("BlackMarketUnlockCosts", &SA2_SetBlackMarketUnlockCosts);
     AP_RegisterSlotDataMapIntIntCallback("DefaultEggMap", &SA2_SetDefaultEggMap);
     AP_RegisterSlotDataMapIntIntCallback("DefaultChaoNameMap", &SA2_SetDefaultChaoNameMap);
+    AP_RegisterSlotDataMapIntIntCallback("ChaoERLayout", &SA2_SetChaoERMap);
     AP_RegisterSlotDataIntCallback("MinigameTrapDifficulty", &SA2_SetMinigameDifficulty);
     AP_RegisterSlotDataMapIntIntCallback("RegionEmblemMap", &SA2_SetRegionEmblemMap);
     AP_RegisterSlotDataMapIntIntCallback("MissionMap", &SA2_SetChosenMissionsMap);

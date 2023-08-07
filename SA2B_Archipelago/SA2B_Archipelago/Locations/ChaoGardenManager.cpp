@@ -25,7 +25,6 @@ DataArray(BlackMarketStockItem, BlackMarketFruitStock, 0x8A8028, 0x18);
 DataArray(BlackMarketStockItem, BlackMarketHatStock,   0x8A81A8, 0x55);
 DataArray(BlackMarketStockItem, BlackMarketMenuStock,  0x8A86F8, 0x3);
 
-
 ObjectMaster* BlackMarketObject = nullptr;
 void __cdecl alg_blackmarket_prolog_r(ObjectMaster* obj);
 Trampoline alg_blackmarket_prolog_t(0x58BFC0, 0x58BFC5, alg_blackmarket_prolog_r);
@@ -207,6 +206,13 @@ void ChaoGardenManager::OnFrameFunction()
 	}
 	// End Black Market
 
+	// Entrance Randomization
+	if (this->_chaoERData.size() > 0)
+	{
+		this->HandleChaoER();
+	}
+	// End Entrance Randomization
+
 	if (GameState == GameStates::GameStates_Pause)
 	{
 		return;
@@ -224,6 +230,21 @@ void ChaoGardenManager::OnFrameFunction()
 
 void ChaoGardenManager::OnInputFunction()
 {
+	if (!this->_archipelagoManager->IsInit() || !this->_archipelagoManager->IsAuth())
+	{
+		return;
+	}
+
+	if (!this->_chaoEnabled)
+	{
+		return;
+	}
+
+	if (CurrentLevel != LevelIDs::LevelIDs_ChaoWorld)
+	{
+		return;
+	}
+
 	Uint32 PressedButtons = ControllersRaw->press;
 	if ((PressedButtons & 0b100000) != 0) // Down
 	{
@@ -436,6 +457,109 @@ void ChaoGardenManager::HandleSubsequentEggs()
 	}
 }
 
+void ChaoGardenManager::HandleChaoER()
+{
+	if (!this->_archipelagoManager->IsInit() || !this->_archipelagoManager->IsAuth())
+	{
+		return;
+	}
+
+	if (!this->_chaoEnabled)
+	{
+		return;
+	}
+
+	if (CurrentLevel != LevelIDs::LevelIDs_ChaoWorld)
+	{
+		return;
+	}
+
+	for (int exit = 0; exit < 0x14; exit++)
+	{
+		if (this->_chaoERData.find(exit) != this->_chaoERData.end())
+		{
+			int destination = this->_chaoERData[exit];
+
+			switch (exit)
+			{
+			case ChaoExit::CE_LobbyNeutral:
+				WriteData<1>((void*)0x57F79B, (char)destination);
+				break;
+			case ChaoExit::CE_LobbyHero:
+				WriteData<1>((void*)0x57F967, (char)destination);
+				break;
+			case ChaoExit::CE_LobbyDark:
+				WriteData<1>((void*)0x57FDB8, (char)destination);
+				break;
+			case ChaoExit::CE_LobbyKindergarten:
+				WriteData<1>((void*)0x57EF1B, (char)destination);
+				break;
+			case ChaoExit::CE_NeutralLobby:
+				if (CurrentChaoArea == 0x01)
+				{
+					WriteData<1>((void*)0x55AC06, (char)destination);
+				}
+				break;
+			case ChaoExit::CE_NeutralCave:
+				WriteData<1>((void*)0x55ACD6, (char)destination);
+				break;
+			case ChaoExit::CE_NeutralTransporter:
+				if (CurrentChaoArea == 0x01)
+				{
+					WriteData<1>((void*)0x57D9E2, (char)destination);
+				}
+				break;
+			case ChaoExit::CE_HeroLobby:
+				if (CurrentChaoArea == 0x02)
+				{
+					WriteData<1>((void*)0x55AC06, (char)destination);
+				}
+				break;
+			case ChaoExit::CE_HeroTransporter:
+				if (CurrentChaoArea == 0x02)
+				{
+					WriteData<1>((void*)0x57D9E2, (char)destination);
+				}
+				break;
+			case ChaoExit::CE_DarkLobby:
+				if (CurrentChaoArea == 0x03)
+				{
+					WriteData<1>((void*)0x55AC06, (char)destination);
+				}
+				break;
+			case ChaoExit::CE_DarkTransporter:
+				if (CurrentChaoArea == 0x03)
+				{
+					WriteData<1>((void*)0x57D9E2, (char)destination);
+				}
+				break;
+			case ChaoExit::CE_CaveNeutral:
+				WriteData<1>((void*)0x58191A, (char)destination);
+				break;
+			case ChaoExit::CE_CaveRace:
+				WriteData<1>((void*)0x581993, (char)destination);
+				break;
+			case ChaoExit::CE_CaveKarate:
+				WriteData<1>((void*)0x581936, (char)destination);
+				break;
+			case ChaoExit::CE_RaceCave:
+				WriteData<1>((void*)0x533286, (char)destination);
+				WriteData<1>((void*)0x533325, (char)destination);
+				break;
+			case ChaoExit::CE_KarateCave:
+				WriteData<1>((void*)0x542EA5, (char)destination);
+				break;
+			case ChaoExit::CE_TransporterOut:
+				//WriteData<1>((void*)0x542EA5, (char)destination);
+				break;
+			case ChaoExit::CE_KindergartenLobby:
+				WriteData<1>((void*)0x54E53C, (char)destination);
+				break;
+			}
+		}
+	}
+}
+
 void ChaoGardenManager::SetChaoEnabled(bool chaoEnabled)
 {
 	// Anything Chao-related is active
@@ -515,4 +639,9 @@ void ChaoGardenManager::SetDefaultEggMap(std::map<int, int> map)
 void ChaoGardenManager::SetDefaultChaoNameMap(std::map<int, int> map)
 {
 	this->_defaultChaoNameMap = map;
+}
+
+void ChaoGardenManager::SetChaoERData(std::map<int, int> map)
+{
+	this->_chaoERData = map;
 }
