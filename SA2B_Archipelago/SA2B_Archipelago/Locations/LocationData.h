@@ -616,7 +616,12 @@ enum ChaoKindergartenCheck
     CKgC_Trumpet    = 0x12EE,
     CKgC_Tambourine = 0x12EF,
 
-    CKgC_NUM_CHECKS = 0x12F0,
+    CKgC_AnyDrawing    = 0x12F0,
+    CKgC_AnyDance      = 0x12F1,
+    CKgC_AnySong       = 0x12F2,
+    CKgC_AnyInstrument = 0x12F3,
+
+    CKgC_NUM_CHECKS = 0x12F4,
 };
 
 struct ChaoKindergartenCheckData

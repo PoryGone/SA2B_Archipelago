@@ -1532,6 +1532,11 @@ void InitializeChaoKindergartenChecks(std::map<int, ChaoKindergartenCheckData>& 
     outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Maracas]    = ChaoKindergartenCheckData(0x01DEC7F4, 0x1D);
     outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Trumpet]    = ChaoKindergartenCheckData(0x01DEC7F4, 0x1E);
     outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Tambourine] = ChaoKindergartenCheckData(0x01DEC7F4, 0x1F);
+
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_AnyDrawing]    = ChaoKindergartenCheckData(0x01DEC7F8, 0x20);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_AnyDance]      = ChaoKindergartenCheckData(0x01DEC7F8, 0x21);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_AnySong]       = ChaoKindergartenCheckData(0x01DEC7F8, 0x22);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_AnyInstrument] = ChaoKindergartenCheckData(0x01DEC7F8, 0x23);
 }
 
 void InitializeBlackMarketChecks(std::map<int, BlackMarketCheckData>& outBlackMarketChecks)

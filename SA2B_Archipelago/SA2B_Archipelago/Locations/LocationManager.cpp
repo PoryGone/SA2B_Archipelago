@@ -683,7 +683,7 @@ void LocationManager::OnFrameChaoGarden()
 
 
 		// Chao Kindergarten
-		if (this->_chaoKindergartenEnabled)
+		if (this->_chaoKindergartenEnabled > 0)
 		{
 			for (int i = ChaoKindergartenCheck::CKgC_BEGIN; i < ChaoKindergartenCheck::CKgC_NUM_CHECKS; i++)
 			{
@@ -695,7 +695,7 @@ void LocationManager::OnFrameChaoGarden()
 					{
 						int dataValue = *(int*)checkData.Address;
 
-						int bitFlag = (int)(0x01 << (int)checkData.LessonNum);
+						int bitFlag = (int)(0x01 << (int)(checkData.LessonNum % 0x20));
 
 						if ((dataValue & bitFlag) != 0x00)
 						{
@@ -978,7 +978,7 @@ void LocationManager::OnFrameChaoGarden()
 			}
 
 			// Chao Kindergarten
-			if (this->_chaoKindergartenEnabled)
+			if (this->_chaoKindergartenEnabled > 0)
 			{
 				for (int i = ChaoKindergartenCheck::CKgC_BEGIN; i < ChaoKindergartenCheck::CKgC_NUM_CHECKS; i++)
 				{
@@ -988,18 +988,36 @@ void LocationManager::OnFrameChaoGarden()
 
 						if (!checkData.CheckSent)
 						{
-							char byteNum = checkData.LessonNum / 8;
-							char bitNum = checkData.LessonNum % 8;
-							char bitFlag = (char)(0x01 << bitNum);
-
-							char lessonData = chaoData.ClassRoomFlags[byteNum];
-
-							if ((lessonData & bitFlag) != 0)
+							if (checkData.LessonNum < 0x20)
 							{
-								char dataValue = *(char*)(checkData.Address + byteNum);
-								char newDataValue = dataValue | bitFlag;
+								char byteNum = checkData.LessonNum / 8;
+								char bitNum = checkData.LessonNum % 8;
+								char bitFlag = (char)(0x01 << bitNum);
 
-								WriteData<1>((void*)(checkData.Address + byteNum), newDataValue);
+								char lessonData = chaoData.ClassRoomFlags[byteNum];
+
+								if ((lessonData & bitFlag) != 0)
+								{
+									char dataValue = *(char*)(checkData.Address + byteNum);
+									char newDataValue = dataValue | bitFlag;
+
+									WriteData<1>((void*)(checkData.Address + byteNum), newDataValue);
+								}
+							}
+							else
+							{
+								char byteNum = checkData.LessonNum % 0x20;
+								char lessonData = chaoData.ClassRoomFlags[byteNum];
+
+								if (lessonData > 0)
+								{
+									char dataValue = *(char*)(checkData.Address + byteNum);
+									char bitNum = checkData.LessonNum % 8;
+									char bitFlag = (char)(0x01 << bitNum);
+									char newDataValue = dataValue | bitFlag;
+
+									WriteData<1>((void*)(checkData.Address), newDataValue);
+								}
 							}
 						}
 					}
@@ -1383,11 +1401,11 @@ void LocationManager::SetChaoBodyPartsEnabled(bool chaoBodyPartsEnabled)
 	}
 }
 
-void LocationManager::SetChaoKindergartenEnabled(bool chaoKindergartenEnabled)
+void LocationManager::SetChaoKindergartenEnabled(int chaoKindergartenEnabled)
 {
 	this->_chaoKindergartenEnabled = chaoKindergartenEnabled;
 
-	if (chaoKindergartenEnabled)
+	if (chaoKindergartenEnabled > 0)
 	{
 		this->SetChaoEnabled(true);
 	}
@@ -2288,7 +2306,7 @@ std::vector<int> LocationManager::GetChaoLessonLocations(ChaoLessonType lesson)
 {
 	std::vector<int> result;
 
-	if (this->_chaoKindergartenEnabled)
+	if (this->_chaoKindergartenEnabled == 2)
 	{
 		int countTotal = 0;
 		int countDone = 0;
@@ -2304,6 +2322,25 @@ std::vector<int> LocationManager::GetChaoLessonLocations(ChaoLessonType lesson)
 				{
 					countDone++;
 				}
+			}
+		}
+
+		result.push_back(countTotal);
+		result.push_back(countDone);
+	}
+	else if (this->_chaoKindergartenEnabled == 1)
+	{
+		int countTotal = 0;
+		int countDone = 0;
+
+		if (this->_ChaoKindergartenData.find(ChaoKindergartenCheck::CKgC_AnyDrawing + lesson) != this->_ChaoKindergartenData.end())
+		{
+			countTotal++;
+
+			ChaoKindergartenCheckData& checkData = this->_ChaoKindergartenData[ChaoKindergartenCheck::CKgC_AnyDrawing + lesson];
+			if (checkData.CheckSent)
+			{
+				countDone++;
 			}
 		}
 

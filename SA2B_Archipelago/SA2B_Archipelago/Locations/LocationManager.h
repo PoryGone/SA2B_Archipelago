@@ -59,7 +59,7 @@ public:
 	void SetChaoStatsStaminaEnabled(bool chaoStatsStaminaEnabled);
 	void SetChaoStatsHiddenEnabled(bool chaoStatsHiddenEnabled);
 	void SetChaoBodyPartsEnabled(bool chaoBodyPartsEnabled);
-	void SetChaoKindergartenEnabled(bool chaoKindergartenEnabled);
+	void SetChaoKindergartenEnabled(int chaoKindergartenEnabled);
 	void SetBlackMarketSlots(int blackMarketSlots);
 	void SetBlackMarketUnlockCosts(std::map<int, int> map);
 
@@ -127,7 +127,7 @@ private:
 	bool _chaoStatsStaminaEnabled = false;
 	bool _chaoStatsHiddenEnabled = false;
 	bool _chaoBodyPartsEnabled = false;
-	bool _chaoKindergartenEnabled = false;
+	int _chaoKindergartenEnabled = 0;
 	int _blackMarketSlots = 0;
 
 	std::map<int, int> _blackMarketUnlockCosts;
