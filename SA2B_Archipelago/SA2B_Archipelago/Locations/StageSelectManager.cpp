@@ -1100,7 +1100,7 @@ void StageSelectManager::HandleMissionOrder()
 
 	int currentTileStageIndex = this->TileIDtoStageIndex[SS_SelectedTile];
 	bool isBossStage = StageSelectIcons::GetInstance().IsCurrentTileBoss();
-	if (isBossStage || currentTileStageIndex == StageSelectStage::SSS_ChaoGarden)
+	if (isBossStage || this->IsCurrentLevelChaoWorld())
 	{
 		for (int i = 0; i < 5; i++)
 		{
@@ -1197,4 +1197,20 @@ bool StageSelectManager::HaveAllChaosEmeralds()
 	}
 
 	return true;
+}
+
+bool StageSelectManager::IsCurrentLevelChaoWorld()
+{
+	int currentTileStageIndex = this->TileIDtoStageIndex[SS_SelectedTile];
+	if (currentTileStageIndex == StageSelectStage::SSS_ChaoGarden)
+	{
+		return true;
+	}
+
+	if (CurrentLevel == LevelIDs::LevelIDs_ChaoWorld && LastLevel != LevelIDs::LevelIDs_ChaoWorld && LastLevel != 0)
+	{
+		return true;
+	}
+
+	return false;
 }
