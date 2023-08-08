@@ -1105,6 +1105,15 @@ void ArchipelagoManager::OnFrameDebug()
 // DeathLink Functions
 void ArchipelagoManager::OnFrameDeathLink()
 {
+    if (CurrentLevel == LevelIDs::LevelIDs_Route101280)
+    {
+        // Prevent Game Overs in Route levels, which causes underflow
+        if (Life_Count[0] < 1)
+        {
+            Life_Count[0] = 1;
+        }
+    }
+
     if (this->_deathLinkTimer > 0)
     {
         if ((TimerStopped == 0 || GameState != GameStates::GameStates_Ingame) && GameState != GameStates::GameStates_Pause)
