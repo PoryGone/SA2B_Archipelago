@@ -59,6 +59,12 @@ public:
 
 	void SetChaoERData(std::map<int, int> map);
 
+	void LoadAPTextures();
+	void ReleaseAPTextures();
+
+	ObjectMaster* apIconObjPtr;
+	ModelIndex* apModelIndex;
+
 private:
 	void HandleStartingEggs();
 	void HandleSubsequentEggs();
