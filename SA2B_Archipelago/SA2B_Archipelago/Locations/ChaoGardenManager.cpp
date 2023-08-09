@@ -203,20 +203,20 @@ void ChaoGardenManager::OnFrameFunction()
 				BlackMarketInventory[i].Type = i;
 
 				BlackMarketEggStock[i].NameTextIndex = this->_NameStringIndeces[i];
-				BlackMarketEggStock[i].DescTextIndex = 96;
-				if (this->_blackMarketData.find((SlotIdx * 40) + 36) != this->_blackMarketData.end())
+				BlackMarketEggStock[i].DescTextIndex = this->_DescStringIndeces[i];
+				if (this->_blackMarketData.find((SlotIdx * 46) + 42) != this->_blackMarketData.end())
 				{
-					BlackMarketEggStock[i].Cost = this->_blackMarketData[(SlotIdx * 40) + 36];
+					BlackMarketEggStock[i].Cost = this->_blackMarketData[(SlotIdx * 46) + 42];
 				}
 				// Hopefully handle Model stuff here
 
 				// Item Names
 				std::string newName = "";
-				for (int chr_idx = 0; chr_idx < 20; chr_idx++)
+				for (int chr_idx = 0; chr_idx < 26; chr_idx++)
 				{
-					if (this->_blackMarketData.find((SlotIdx * 40) + chr_idx) != this->_blackMarketData.end())
+					if (this->_blackMarketData.find((SlotIdx * 46) + chr_idx) != this->_blackMarketData.end())
 					{
-						newName += this->_blackMarketData[(SlotIdx * 40) + chr_idx];
+						newName += this->_blackMarketData[(SlotIdx * 46) + chr_idx];
 					}
 				}
 
@@ -230,6 +230,26 @@ void ChaoGardenManager::OnFrameFunction()
 				int writeAddr = (int)BlackMarketObject->Data2.BlackMarket->textPtr + this->_NameStringOffsets[i] + newName.length();
 				WriteData<1>((void*)writeAddr, '\x00');
 				// End Item Names
+
+				// Item Descriptions
+				std::string newDesc = "for ";
+				for (int chr_idx = 0; chr_idx < 16; chr_idx++)
+				{
+					if (this->_blackMarketData.find((SlotIdx * 46) + 26 + chr_idx) != this->_blackMarketData.end())
+					{
+						newDesc += this->_blackMarketData[(SlotIdx * 46) + 26 + chr_idx];
+					}
+				}
+				newDesc += ".";
+
+				for (int j = 0; j < newDesc.length(); j++)
+				{
+					int writeAddr = (int)BlackMarketObject->Data2.BlackMarket->textPtr + this->_DescStringOffsets[i] + j;
+					WriteData<1>((void*)writeAddr, newDesc[j]);
+				}
+				writeAddr = (int)BlackMarketObject->Data2.BlackMarket->textPtr + this->_DescStringOffsets[i] + newDesc.length();
+				WriteData<1>((void*)writeAddr, '\x00');
+				// End Item Descriptions
 			}
 
 			if (ItemCount == 0)
@@ -238,30 +258,6 @@ void ChaoGardenManager::OnFrameFunction()
 				BlackMarketInventory[0].Type = 1;
 				BlackMarketItemCount = 1;
 			}
-
-			// Item Descriptions
-			if (ActiveMarketSlots.size() > BlackMarketObject->Data2.BlackMarket->MenuSelection)
-			{
-				int SlotIdx = ActiveMarketSlots[BlackMarketObject->Data2.BlackMarket->MenuSelection];
-				std::string newDesc = "for ";
-				for (int chr_idx = 0; chr_idx < 16; chr_idx++)
-				{
-					if (this->_blackMarketData.find((SlotIdx * 40) + 20 + chr_idx) != this->_blackMarketData.end())
-					{
-						newDesc += this->_blackMarketData[(SlotIdx * 40) + 20 + chr_idx];
-					}
-				}
-				newDesc += ".";
-
-				for (int j = 0; j < newDesc.length(); j++)
-				{
-					int writeAddr = (int)BlackMarketObject->Data2.BlackMarket->textPtr + 0X757 + j;
-					WriteData<1>((void*)writeAddr, newDesc[j]);
-				}
-				int writeAddr = (int)BlackMarketObject->Data2.BlackMarket->textPtr + 0X757 + newDesc.length();
-				WriteData<1>((void*)writeAddr, '\x00');
-			}
-			// End Item Descriptions
 
 
 
