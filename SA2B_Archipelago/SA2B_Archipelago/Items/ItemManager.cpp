@@ -113,7 +113,7 @@ void ItemManager::OnInitFunction(const char* path, const HelperFunctions& helper
 	WriteData((short*)0x724745, (short)0x9090);
 
 	// Cutscene Trap Setup
-	StoryEventID_1 = 0;
+	StoryEventID_1 = 2;
 }
 
 void ItemManager::OnInputFunction()
