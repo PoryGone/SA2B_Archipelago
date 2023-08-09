@@ -142,7 +142,7 @@ void ChaoGardenManager::OnFrameFunction()
 		WriteData<1>((void*)(0x1366067 + i), chaoFileName[i]);
 	}
 
-	if (CurrentLevel != LevelIDs::LevelIDs_ChaoWorld || (GameState != GameStates_Ingame && GameState != GameStates_Pause))
+	if (CurrentLevel != LevelIDs::LevelIDs_ChaoWorld)
 	{
 		return;
 	}
@@ -179,7 +179,7 @@ void ChaoGardenManager::OnFrameFunction()
 		WriteData<2>((void*)0x5892CA, '\x90');
 
 		// Handle AP Model and Texture
-		if (!this->apIconObjPtr)
+		if (!this->apIconObjPtr && (GameState == GameStates_Ingame || GameState == GameStates_Pause))
 		{
 			LoadAPTextures();
 			this->apIconObjPtr = LoadObject(0, "APIconModel", APIconObject_Main, LoadObj_Data1 | LoadObj_Data2);
