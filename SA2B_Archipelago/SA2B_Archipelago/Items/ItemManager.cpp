@@ -993,8 +993,9 @@ void ItemManager::ResetTrapData()
 			MainCharObj2[0]->PhysData.RunBrake       = this->_StoredPhysicsData.RunBrake;
 		}
 
-		this->_StoredPhysicsData = PhysicsData();
 	}
+
+	this->_StoredPhysicsData = PhysicsData();
 
 	this->_ReverseTrapActive = false;
 }
