@@ -4,6 +4,7 @@
 #include "StageSelectManager.h"
 #include "../Utilities/MessageQueue.h"
 #include "LocationManager.h"
+#include "ChaoGardenManager.h"
 #include "../Items/ItemManager.h"
 #include "../Utilities/SpriteUtilities.h"
 #include <map>
@@ -14,6 +15,7 @@ DataPointer(char, SS_SelectedTile, 0x1D1BF08);
 DataPointer(char, ActiveMission, 0x174AFE3);
 DataPointer(char, SS_CameraPos, 0x1D1BEC0);
 DataPointer(int, RealEmblemCount, 0x1DEE418);
+DataPointer(unsigned int, BlackMarketTokenCount, 0x1DEE41C);
 
 static std::map<int, ItemData>* ItemData_ptr;
 static std::vector<CharacterItemRange>* CharacterItemRanges_ptr;
@@ -618,6 +620,80 @@ void UpdateEmblemRequirements()
 	}
 }
 
+void UpdateChaoCoinRequirements()
+{
+	int currentTileStageIndex = TileIDtoStageIndex[SS_SelectedTile];
+	if (currentTileStageIndex != SSS_ChaoGarden && CurrentLevel != LevelIDs::LevelIDs_ChaoWorld)
+	{
+		return;
+	}
+
+	float tokenY = 48.0f;
+
+	if (GameMode != GameMode::GameMode_Level)
+	{
+		tokenY = 92.8f;
+	}
+
+	int maxRequiredTokens = LocationManager::getInstance().GetMaxMarketTokens();
+
+	if (maxRequiredTokens == 0)
+	{
+		return;
+	}
+
+	StageSelectSprite.sx = 0.25f;
+	StageSelectSprite.sy = 0.25f;
+
+	float tokenX = minXPos;
+	StageSelectSprite.tanim = &StageSelectAnim[SSI_Animals];
+	StageSelectSprite.p = { tokenX + 4, tokenY - 12.0f, 0.0f };
+	DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+
+	StageSelectSprite.sx = 0.4f;
+	StageSelectSprite.sy = 0.4f;
+
+	std::string marketTokensMessage = "";
+	marketTokensMessage.append(std::to_string(BlackMarketTokenCount));
+	marketTokensMessage.append("/");
+	marketTokensMessage.append(std::to_string(maxRequiredTokens));
+	DrawString(marketTokensMessage, tokenX + 40.0f, tokenY, 0.75f);
+}
+
+void UpdateTimescale()
+{
+	int currentTileStageIndex = TileIDtoStageIndex[SS_SelectedTile];
+	if (currentTileStageIndex != SSS_ChaoGarden && CurrentLevel != LevelIDs::LevelIDs_ChaoWorld)
+	{
+		return;
+	}
+
+	float timescaleY = 16.0f;
+
+	int chaoTimescale = ChaoGardenManager::GetInstance().GetTimescale();
+
+	if (chaoTimescale == 0)
+	{
+		return;
+	}
+
+	StageSelectSprite.sx = 0.25f;
+	StageSelectSprite.sy = 0.25f;
+
+	float tokenX = minXPos;
+	StageSelectSprite.tanim = &StageSelectAnim[SSI_AnimalsDisabled];
+	StageSelectSprite.p = { tokenX + 4, timescaleY - 12.0f, 0.0f };
+	DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+
+	StageSelectSprite.sx = 0.4f;
+	StageSelectSprite.sy = 0.4f;
+
+	std::string marketTokensMessage = "";
+	marketTokensMessage.append(std::to_string(chaoTimescale));
+	marketTokensMessage.append(":");
+	DrawString(marketTokensMessage, tokenX + 40.0f, timescaleY, 0.75f);
+}
+
 void UpdateMissionInLevel() 
 {
 	NumSprite.tanim = &NumAnim[11 + ActiveMission];
@@ -650,6 +726,7 @@ void DrawUpgradeIcon(ObjectMaster* obj)
 
 		UpdateChaosEmeraldIcons();
 		UpdateEmblemRequirements();
+		UpdateChaoCoinRequirements();
 	}
 }
 
@@ -689,6 +766,12 @@ void DrawUpgradeIcon_IL(ObjectMaster* obj)
 			UpdateMissionInLevel();
 		}
 		UpdateLevelCheckIcons();
+	}
+
+	if (GameMode == GameMode::GameMode_Level)
+	{
+		UpdateChaoCoinRequirements();
+		UpdateTimescale();
 	}
 }
 

@@ -154,10 +154,6 @@ void ChaoGardenManager::OnFrameFunction()
 	this->HandleSubsequentEggs();
 
 	// Handle Time Scale
-	std::string timescaleStr = "Chao Timescale: ";
-	timescaleStr += std::to_string(this->_timescale);
-	timescaleStr += "x";
-	_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 2), timescaleStr.c_str());
 	ChaoGardenTimescale = 120.0f / this->_timescale;
 
 	// Black Market
@@ -258,18 +254,6 @@ void ChaoGardenManager::OnFrameFunction()
 				BlackMarketInventory[0].Type = 1;
 				BlackMarketItemCount = 1;
 			}
-
-
-
-
-			//WriteData<1>((void*)((int)BlackMarketObject->Data2.BlackMarket->textPtr + 0x194), '\x47');
-			//
-			//if (BlackMarketObject->Data2.BlackMarket->SubMenu == 0x01)
-			//{
-			//	std::string timescaleStr = "Black Market Obj: ";
-			//	timescaleStr += std::to_string((int)BlackMarketObject->Data2.BlackMarket->textPtr);
-			//	_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 3), timescaleStr.c_str());
-			//}
 		}
 	}
 	// End Black Market
@@ -712,6 +696,18 @@ void ChaoGardenManager::SetDefaultChaoNameMap(std::map<int, int> map)
 void ChaoGardenManager::SetChaoERData(std::map<int, int> map)
 {
 	this->_chaoERData = map;
+}
+
+int ChaoGardenManager::GetTimescale()
+{
+	if (!this->_chaoEnabled)
+	{
+		return 0;
+	}
+	else
+	{
+		return this->_timescale;
+	}
 }
 
 void ChaoGardenManager::LoadAPTextures()

@@ -1926,6 +1926,18 @@ int LocationManager::GetTotalAnimalLocationsForLevel(int levelID)
 	return result;
 }
 
+int LocationManager::GetMaxMarketTokens()
+{
+	if (this->_blackMarketSlots > 0)
+	{
+		return this->_blackMarketUnlockCosts[this->_blackMarketSlots - 1];
+	}
+	else
+	{
+		return 0;
+	}
+}
+
 bool LocationManager::AreAllRacesComplete()
 {
 	for (auto& pair : this->_KartRaceData)

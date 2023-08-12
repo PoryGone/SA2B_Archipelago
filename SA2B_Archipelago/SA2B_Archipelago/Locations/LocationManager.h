@@ -78,6 +78,7 @@ public:
 	std::vector<int> GetOmochaoLocationsForLevel(int levelID);
 	int GetCompletedAnimalLocationsForLevel(int levelID);
 	int GetTotalAnimalLocationsForLevel(int levelID);
+	int GetMaxMarketTokens();
 
 	std::vector<int> GetChaoBeginnerRaceLocations();
 	std::vector<int> GetChaoChallengeRaceLocations();

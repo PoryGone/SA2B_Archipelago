@@ -59,6 +59,8 @@ public:
 
 	void SetChaoERData(std::map<int, int> map);
 
+	int GetTimescale();
+
 	void LoadAPTextures();
 	void ReleaseAPTextures();
 
