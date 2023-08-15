@@ -628,6 +628,16 @@ void UpdateChaoCoinRequirements()
 		return;
 	}
 
+	if (CurrentChaoArea == 0x04 ||
+		CurrentChaoArea == 0x05 ||
+		CurrentChaoArea == 0x08 ||
+		CurrentChaoArea == 0x09 ||
+		CurrentChaoArea == 0x0A ||
+		CurrentChaoArea == 0x0C)
+	{
+		return;
+	}
+
 	float tokenY = 48.0f;
 
 	if (GameMode != GameMode::GameMode_Level)
