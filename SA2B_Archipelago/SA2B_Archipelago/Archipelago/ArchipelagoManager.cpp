@@ -336,7 +336,8 @@ void SA2_HandleBouncedPacket(AP_Bounce bouncePacket)
                 return;
             }
 
-            if (CurrentLevel == LevelIDs_FinalHazard)
+            if (CurrentLevel == LevelIDs_FinalHazard ||
+                CurrentLevel == LevelIDs_ChaoWorld)
             {
                 return;
             }
@@ -1297,7 +1298,8 @@ void ArchipelagoManager::OnFrameRingLink()
         return;
     }
 
-    if (CurrentLevel == LevelIDs_FinalHazard)
+    if (CurrentLevel == LevelIDs_FinalHazard ||
+        CurrentLevel == LevelIDs_ChaoWorld)
     {
         return;
     }
