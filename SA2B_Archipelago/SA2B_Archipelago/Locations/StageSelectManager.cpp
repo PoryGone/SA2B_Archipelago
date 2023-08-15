@@ -1095,6 +1095,16 @@ void StageSelectManager::HandleStageSelectCamera()
 
 void StageSelectManager::HandleMissionOrder()
 {
+	if (GameMode == GameMode::GameMode_Advertise &&
+		GameState != GameStates::GameStates_Ingame &&
+		GameState != GameStates::GameStates_Pause &&
+		GameState != GameStates::GameStates_Loading &&
+		CurrentLevel == LevelIDs::LevelIDs_ChaoWorld &&
+		LastLevel == LevelIDs::LevelIDs_ChaoWorld)
+	{
+		CurrentLevel = 0;
+	}
+
 	//Make sure first mission displays as active
 	WriteData<1>((void*)0x1DEEBB8, 0x30);
 
