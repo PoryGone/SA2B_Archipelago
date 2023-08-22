@@ -68,6 +68,7 @@ public:
 	ModelIndex* apModelIndex;
 
 private:
+	void HandleBlackMarket();
 	void HandleStartingEggs();
 	void HandleSubsequentEggs();
 	void HandleChaoER();

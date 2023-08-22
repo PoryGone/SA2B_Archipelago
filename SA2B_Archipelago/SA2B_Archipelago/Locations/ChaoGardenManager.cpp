@@ -159,102 +159,7 @@ void ChaoGardenManager::OnFrameFunction()
 	// Black Market
 	if (this->_blackMarketSlots > 0)
 	{
-		// Write jump at first 5 bytes here to function handling sending location check
-		WriteCall(static_cast<void*>((void*)0x58AFD5), &BlackMarketPurchase);
-		WriteData<3>((void*)0x58AFDA, '\x90');
-		WriteData<5>((void*)0x58AFDF, '\x90');
-
-		WriteData<3>((void*)0x58B090, '\x90');
-
-		// Make all "objects" use the 0 Texture Index
-		WriteData<1>((void*)0x58A527, '\x33');
-		WriteData<1>((void*)0x58A528, '\xC0');
-		WriteData<1>((void*)0x58A529, '\x90');
-		WriteData<1>((void*)0x5892C8, '\x33');
-		WriteData<1>((void*)0x5892C9, '\xD2');
-		WriteData<2>((void*)0x5892CA, '\x90');
-
-		// Handle AP Model and Texture
-		if (!this->apIconObjPtr && (GameState == GameStates_Ingame || GameState == GameStates_Pause))
-		{
-			LoadAPTextures();
-			this->apIconObjPtr = LoadObject(0, "APIconModel", APIconObject_Main, LoadObj_Data1 | LoadObj_Data2);
-			this->apIconObjPtr->DeleteSub = APIconObject_Delete;
-			this->apIconObjPtr->MainSub = APIconObject_Main;
-			this->apIconObjPtr->Data1.Entity->Action = 1;
-		}
-		// End Handle AP Model and Texture
-
-		if (CurrentChaoArea == 0x06 && BlackMarketObject != nullptr && BlackMarketObject->Data2.BlackMarket != nullptr)
-		{
-			std::vector<int> ActiveMarketSlots = LocationManager::getInstance().GetAvailableBlackMarketLocations();
-			int ItemCount = min(10, ActiveMarketSlots.size());
-			BlackMarketItemCount = ItemCount;
-
-			for (int i = 0; i < ItemCount; i++)
-			{
-				int SlotIdx = ActiveMarketSlots[i];
-
-				BlackMarketInventory[i].Category = ChaoItemCategory::ChaoItemCategory_Egg;
-				BlackMarketInventory[i].Type = i;
-
-				BlackMarketEggStock[i].NameTextIndex = this->_NameStringIndeces[i];
-				BlackMarketEggStock[i].DescTextIndex = this->_DescStringIndeces[i];
-				if (this->_blackMarketData.find((SlotIdx * 46) + 42) != this->_blackMarketData.end())
-				{
-					BlackMarketEggStock[i].Cost = this->_blackMarketData[(SlotIdx * 46) + 42];
-				}
-				// Hopefully handle Model stuff here
-
-				// Item Names
-				std::string newName = "";
-				for (int chr_idx = 0; chr_idx < 26; chr_idx++)
-				{
-					if (this->_blackMarketData.find((SlotIdx * 46) + chr_idx) != this->_blackMarketData.end())
-					{
-						newName += this->_blackMarketData[(SlotIdx * 46) + chr_idx];
-					}
-				}
-
-				for (int j = 0; j < newName.length(); j++)
-				{
-					int writeAddr = (int)BlackMarketObject->Data2.BlackMarket->textPtr;
-					writeAddr += this->_NameStringOffsets[i];
-					writeAddr += j;
-					WriteData<1>((void*)writeAddr, newName[j]);
-				}
-				int writeAddr = (int)BlackMarketObject->Data2.BlackMarket->textPtr + this->_NameStringOffsets[i] + newName.length();
-				WriteData<1>((void*)writeAddr, '\x00');
-				// End Item Names
-
-				// Item Descriptions
-				std::string newDesc = "for ";
-				for (int chr_idx = 0; chr_idx < 16; chr_idx++)
-				{
-					if (this->_blackMarketData.find((SlotIdx * 46) + 26 + chr_idx) != this->_blackMarketData.end())
-					{
-						newDesc += this->_blackMarketData[(SlotIdx * 46) + 26 + chr_idx];
-					}
-				}
-				newDesc += ".";
-
-				for (int j = 0; j < newDesc.length(); j++)
-				{
-					int writeAddr = (int)BlackMarketObject->Data2.BlackMarket->textPtr + this->_DescStringOffsets[i] + j;
-					WriteData<1>((void*)writeAddr, newDesc[j]);
-				}
-				writeAddr = (int)BlackMarketObject->Data2.BlackMarket->textPtr + this->_DescStringOffsets[i] + newDesc.length();
-				WriteData<1>((void*)writeAddr, '\x00');
-				// End Item Descriptions
-			}
-
-			if (ItemCount == 0)
-			{
-				BlackMarketInventory[0].Category = ChaoItemCategory::ChaoItemCategory_Fruit;
-				BlackMarketInventory[0].Type = 1;
-				BlackMarketItemCount = 1;
-			}
-		}
+		this->HandleBlackMarket();
 	}
 	// End Black Market
 
@@ -332,6 +237,114 @@ void ChaoGardenManager::OnInputFunction()
 		case 10:
 			this->_timescale = 15;
 			break;
+		}
+	}
+}
+
+void ChaoGardenManager::HandleBlackMarket()
+{
+	if (CurrentLevel != LevelIDs::LevelIDs_ChaoWorld ||
+		CurrentChaoArea != 0x06)
+	{
+		BlackMarketObject = nullptr;
+	}
+
+	// Write jump at first 5 bytes here to function handling sending location check
+	WriteCall(static_cast<void*>((void*)0x58AFD5), &BlackMarketPurchase);
+	WriteData<3>((void*)0x58AFDA, '\x90');
+	WriteData<5>((void*)0x58AFDF, '\x90');
+
+	WriteData<3>((void*)0x58B090, '\x90');
+
+	// Make all "objects" use the 0 Texture Index
+	WriteData<1>((void*)0x58A527, '\x33');
+	WriteData<1>((void*)0x58A528, '\xC0');
+	WriteData<1>((void*)0x58A529, '\x90');
+	WriteData<1>((void*)0x5892C8, '\x33');
+	WriteData<1>((void*)0x5892C9, '\xD2');
+	WriteData<2>((void*)0x5892CA, '\x90');
+
+	// Handle AP Model and Texture
+	if (!this->apIconObjPtr && (GameState == GameStates_Ingame || GameState == GameStates_Pause))
+	{
+		LoadAPTextures();
+		this->apIconObjPtr = LoadObject(0, "APIconModel", APIconObject_Main, LoadObj_Data1 | LoadObj_Data2);
+		this->apIconObjPtr->DeleteSub = APIconObject_Delete;
+		this->apIconObjPtr->MainSub = APIconObject_Main;
+		this->apIconObjPtr->Data1.Entity->Action = 1;
+	}
+	// End Handle AP Model and Texture
+
+	if (CurrentChaoArea == 0x06 && BlackMarketObject != nullptr && BlackMarketObject->Data2.BlackMarket != nullptr)
+	{
+		unsigned int textAddress = (int)(BlackMarketObject->Data2.BlackMarket->textPtr);
+
+		std::vector<int> ActiveMarketSlots = LocationManager::getInstance().GetAvailableBlackMarketLocations();
+		int ItemCount = min(10, ActiveMarketSlots.size());
+		BlackMarketItemCount = ItemCount;
+
+		for (int i = 0; i < ItemCount; i++)
+		{
+			int SlotIdx = ActiveMarketSlots[i];
+
+			BlackMarketInventory[i].Category = ChaoItemCategory::ChaoItemCategory_Egg;
+			BlackMarketInventory[i].Type = i;
+
+			BlackMarketEggStock[i].NameTextIndex = this->_NameStringIndeces[i];
+			BlackMarketEggStock[i].DescTextIndex = this->_DescStringIndeces[i];
+			if (this->_blackMarketData.find((SlotIdx * 46) + 42) != this->_blackMarketData.end())
+			{
+				BlackMarketEggStock[i].Cost = this->_blackMarketData[(SlotIdx * 46) + 42];
+			}
+			// Hopefully handle Model stuff here
+
+			// Item Names
+			std::string newName = "";
+			for (int chr_idx = 0; chr_idx < 26; chr_idx++)
+			{
+				if (this->_blackMarketData.find((SlotIdx * 46) + chr_idx) != this->_blackMarketData.end())
+				{
+					newName += this->_blackMarketData[(SlotIdx * 46) + chr_idx];
+				}
+			}
+
+			for (int j = 0; j < newName.length(); j++)
+			{
+				int writeAddr = textAddress;
+				writeAddr += this->_NameStringOffsets[i];
+				writeAddr += j;
+				WriteData<1>((void*)writeAddr, newName[j]);
+			}
+			int writeAddr = textAddress + this->_NameStringOffsets[i] + newName.length();
+			WriteData<1>((void*)writeAddr, '\x00');
+			// End Item Names
+
+			// Item Descriptions
+			std::string newDesc = "for ";
+			for (int chr_idx = 0; chr_idx < 16; chr_idx++)
+			{
+				if (this->_blackMarketData.find((SlotIdx * 46) + 26 + chr_idx) != this->_blackMarketData.end())
+				{
+					newDesc += this->_blackMarketData[(SlotIdx * 46) + 26 + chr_idx];
+				}
+			}
+			newDesc += ".";
+
+			for (int j = 0; j < newDesc.length(); j++)
+			{
+				int writeAddr = textAddress + this->_DescStringOffsets[i] + j;
+				WriteData<1>((void*)writeAddr, newDesc[j]);
+			}
+			writeAddr = textAddress + this->_DescStringOffsets[i] + newDesc.length();
+			WriteData<1>((void*)writeAddr, '\x00');
+			// End Item Descriptions
+		}
+
+		if (ItemCount == 0)
+		{
+			BlackMarketInventory[0].Category = ChaoItemCategory::ChaoItemCategory_Fruit;
+			BlackMarketInventory[0].Type = 1;
+			BlackMarketItemCount = 1;
 		}
 	}
 }
