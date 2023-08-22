@@ -37,11 +37,12 @@ std::map<char, NumberDisplayData> NumberMap = {
 	{'9', NumberDisplayData(8, 40.0f, 0.0f, 4.0f)},
 	{'/', NumberDisplayData(9, 32.0f, 0.0f, 4.0f)},
 	{':', NumberDisplayData(10, 16.0f, 0.0f, 4.0f)},
+	{'X', NumberDisplayData(11, 40.0f, 0.0f, 4.0f)},
 };
 
 static const int Anim_Length = 29;
-static const int Stage_Anim_Length = 30;
-static const int Num_Anim_Length = 13;
+static const int Stage_Anim_Length = 120;
+static const int Num_Anim_Length = 14;
 
 static NJS_TEXNAME UpgradeIconsTexName[Anim_Length];
 static NJS_TEXNAME UpgradeIconsTexName_Inactive[Anim_Length];
@@ -65,6 +66,7 @@ static NJS_TEXANIM NumAnim[] = {
 	{40, 32, 20, 16, 0x4A, 0x90, 0x74, 0xB0, 0, 0},
 	{32, 32, 16, 16, 0x90, 0x88, 0xAF, 0xB7, 0, 0},
 	{16, 32, 8, 16, 0xD8, 0x90, 0xE7, 0xB0, 0, 0},
+	{40, 32, 20, 16, 0x0A, 0xD0, 0x34, 0xF0, 0, 0},
 	//Missions
 	{0x31, 0x19, 0x18, 0x0C, 0x00, 0x00, 0x31, 0x32, 1, 0},
 	{0x31, 0x19, 0x18, 0x0C, 0x32, 0x00, 0x63, 0x32, 1, 0},
@@ -101,6 +103,27 @@ static int omochaoIconsPerRow = 14;
 static const float maxCCUnlockOffset = 5.0f;
 static int currentCCUnlockFrame = 0;
 static const int maxCCUnlockFrames = 100;
+
+std::map<int, int> animalOrderMap = {
+	{ ChaoBodyPartAnimal::CBPA_Penguin, 10 },
+	{ ChaoBodyPartAnimal::CBPA_Seal,	14 },
+	{ ChaoBodyPartAnimal::CBPA_Otter,	7 },
+	{ ChaoBodyPartAnimal::CBPA_Rabbit,	12 },
+	{ ChaoBodyPartAnimal::CBPA_Cheetah, 3 },
+	{ ChaoBodyPartAnimal::CBPA_Warthog, 2 },
+	{ ChaoBodyPartAnimal::CBPA_Bear,	1 },
+	{ ChaoBodyPartAnimal::CBPA_Tiger,	18 },
+	{ ChaoBodyPartAnimal::CBPA_Gorilla, 5 },
+	{ ChaoBodyPartAnimal::CBPA_Peacock, 9 },
+	{ ChaoBodyPartAnimal::CBPA_Parrot,	8 },
+	{ ChaoBodyPartAnimal::CBPA_Condor,	20 },
+	{ ChaoBodyPartAnimal::CBPA_Skunk,	17 },
+	{ ChaoBodyPartAnimal::CBPA_Sheep,	15 },
+	{ ChaoBodyPartAnimal::CBPA_Raccoon, 13 },
+	{ ChaoBodyPartAnimal::CBPA_Dragon,	4 },
+	{ ChaoBodyPartAnimal::CBPA_Unicorn, 19 },
+	{ ChaoBodyPartAnimal::CBPA_Phoenix, 11 },
+};
 
 CharacterItemRange GetItemRangeForCharacter(char character)
 {
@@ -160,7 +183,7 @@ void UpdateLevelCheckIcons()
 		// Row 1
 		if (karateFights.size() > 0)
 		{
-			int karateIcon = karateFights[1] == karateFights[0] ? SSI_Animals : SSI_AnimalsDisabled;
+			int karateIcon = karateFights[1] == karateFights[0] ? SSI_Karate : SSI_KarateDisabled;
 			float x = maxXPos - ((xCount + 1) * 32.0f);
 			StageSelectSprite.tanim = &StageSelectAnim[karateIcon];
 			StageSelectSprite.p = { x, yPos, 0.0f };
@@ -176,7 +199,7 @@ void UpdateLevelCheckIcons()
 			std::vector<int> jewelRaces = locMan->GetChaoJewelRaceLocations((JewelRaceCategory)i);
 			if (jewelRaces.size() > 0)
 			{
-				int racesIcon = jewelRaces[1] == jewelRaces[0] ? SSI_Animals : SSI_AnimalsDisabled;
+				int racesIcon = jewelRaces[1] == jewelRaces[0] ? (SSI_Aquamarine + (i * 2)) : (SSI_AquamarineDisabled + (i * 2));
 				float x = maxXPos - ((xCount + 1) * 32.0f);
 				StageSelectSprite.tanim = &StageSelectAnim[racesIcon];
 				StageSelectSprite.p = { x, yPos, 0.0f };
@@ -190,7 +213,7 @@ void UpdateLevelCheckIcons()
 
 		if (darkRaces.size() > 0)
 		{
-			int racesIcon = darkRaces[1] == darkRaces[0] ? SSI_Animals : SSI_AnimalsDisabled;
+			int racesIcon = darkRaces[1] == darkRaces[0] ? SSI_Dark : SSI_DarkDisabled;
 			float x = maxXPos - ((xCount + 1) * 32.0f);
 			StageSelectSprite.tanim = &StageSelectAnim[racesIcon];
 			StageSelectSprite.p = { x, yPos, 0.0f };
@@ -203,7 +226,7 @@ void UpdateLevelCheckIcons()
 
 		if (heroRaces.size() > 0)
 		{
-			int racesIcon = heroRaces[1] == heroRaces[0] ? SSI_Animals : SSI_AnimalsDisabled;
+			int racesIcon = heroRaces[1] == heroRaces[0] ? SSI_Hero : SSI_HeroDisabled;
 			float x = maxXPos - ((xCount + 1) * 32.0f);
 			StageSelectSprite.tanim = &StageSelectAnim[racesIcon];
 			StageSelectSprite.p = { x, yPos, 0.0f };
@@ -216,7 +239,7 @@ void UpdateLevelCheckIcons()
 
 		if (challengeRaces.size() > 0)
 		{
-			int racesIcon = challengeRaces[1] == challengeRaces[0] ? SSI_Animals : SSI_AnimalsDisabled;
+			int racesIcon = challengeRaces[1] == challengeRaces[0] ? SSI_Challenge : SSI_ChallengeDisabled;
 			float x = maxXPos - ((xCount + 1) * 32.0f);
 			StageSelectSprite.tanim = &StageSelectAnim[racesIcon];
 			StageSelectSprite.p = { x, yPos, 0.0f };
@@ -229,7 +252,7 @@ void UpdateLevelCheckIcons()
 
 		if (beginnerRaces.size() > 0)
 		{
-			int racesIcon = beginnerRaces[1] == beginnerRaces[0] ? SSI_Animals : SSI_AnimalsDisabled;
+			int racesIcon = beginnerRaces[1] == beginnerRaces[0] ? SSI_Beginner : SSI_BeginnerDisabled;
 			float x = maxXPos - ((xCount + 1) * 32.0f);
 			StageSelectSprite.tanim = &StageSelectAnim[racesIcon];
 			StageSelectSprite.p = { x, yPos, 0.0f };
@@ -251,7 +274,7 @@ void UpdateLevelCheckIcons()
 			std::vector<int> statLocs = locMan->GetChaoStatLocations((ChaoStatCheckType)i);
 			if (statLocs.size() > 0)
 			{
-				int racesIcon = statLocs[1] == statLocs[0] ? SSI_Animals : SSI_AnimalsDisabled;
+				int racesIcon = statLocs[1] == statLocs[0] ? (SSI_Swim + (i * 2)) : (SSI_SwimDisabled + (i * 2));
 				float x = maxXPos - ((xCount + 1) * 32.0f);
 				StageSelectSprite.tanim = &StageSelectAnim[racesIcon];
 				StageSelectSprite.p = { x, yPos, 0.0f };
@@ -274,21 +297,24 @@ void UpdateLevelCheckIcons()
 			std::vector<int> lessonLocs = locMan->GetChaoLessonLocations((ChaoLessonType)i);
 			if (lessonLocs.size() > 0)
 			{
-				int racesIcon = lessonLocs[1] == lessonLocs[0] ? SSI_Animals : SSI_AnimalsDisabled;
+				int racesIcon = lessonLocs[1] == lessonLocs[0] ? (SSI_Drawing + (i * 2)) : (SSI_DrawingDisabled + (i * 2));
 				float x = maxXPos - ((xCount + 1) * 32.0f);
 				StageSelectSprite.tanim = &StageSelectAnim[racesIcon];
 				StageSelectSprite.p = { x, yPos, 0.0f };
 				DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
-				x += 4;
-				DrawString(std::to_string(lessonLocs[1]), x, yPos + 8.0f, 0.25f);
-				DrawString(std::to_string(lessonLocs[0]), x, yPos + 24.0f, 0.25f);
+				if (lessonLocs[0] > 1)
+				{
+					x += 4;
+					DrawString(std::to_string(lessonLocs[1]), x, yPos + 8.0f, 0.25f);
+					DrawString(std::to_string(lessonLocs[0]), x, yPos + 24.0f, 0.25f);
+				}
 				xCount++;
 			}
 		}
 		std::vector<int> marketLocs = locMan->GetCompletedBlackMarketLocations();
 		if (marketLocs.size() > 0)
 		{
-			int marketIcon = marketLocs[1] == marketLocs[0] ? SSI_Animals : SSI_AnimalsDisabled;
+			int marketIcon = marketLocs[1] == marketLocs[0] ? SSI_BlackMarket : SSI_BlackMarketDisabled;
 			float x = maxXPos - ((xCount + 1) * 32.0f);
 			StageSelectSprite.tanim = &StageSelectAnim[marketIcon];
 			StageSelectSprite.p = { x, yPos, 0.0f };
@@ -312,7 +338,7 @@ void UpdateLevelCheckIcons()
 			std::vector<int> animalParts = locMan->GetChaoAnimalPartLocations((ChaoBodyPartAnimal)i);
 			if (animalParts.size() > 0)
 			{
-				int animalIcon = animalParts[1] == animalParts[0] ? SSI_Animals : SSI_AnimalsDisabled;
+				int animalIcon = animalParts[1] == animalParts[0] ? (SSI_Bat + (animalOrderMap[i] * 2)) : (SSI_BatDisabled + (animalOrderMap[i] * 2));
 				float x = maxXPos - ((xCount + 1) * 24.0f);
 				StageSelectSprite.tanim = &StageSelectAnim[animalIcon];
 				StageSelectSprite.p = { x, yPos, 0.0f };
@@ -335,7 +361,7 @@ void UpdateLevelCheckIcons()
 			std::vector<int> animalParts = locMan->GetChaoAnimalPartLocations((ChaoBodyPartAnimal)i);
 			if (animalParts.size() > 0)
 			{
-				int animalIcon = animalParts[1] == animalParts[0] ? SSI_Animals : SSI_AnimalsDisabled;
+				int animalIcon = animalParts[1] == animalParts[0] ? (SSI_Bat + (animalOrderMap[i] * 2)) : (SSI_BatDisabled + (animalOrderMap[i] * 2));
 				float x = maxXPos - ((xCount + 1) * 24.0f);
 				StageSelectSprite.tanim = &StageSelectAnim[animalIcon];
 				StageSelectSprite.p = { x, yPos, 0.0f };
@@ -656,7 +682,7 @@ void UpdateChaoCoinRequirements()
 	StageSelectSprite.sy = 0.25f;
 
 	float tokenX = minXPos;
-	StageSelectSprite.tanim = &StageSelectAnim[SSI_Animals];
+	StageSelectSprite.tanim = &StageSelectAnim[SSI_ChaoCoin];
 	StageSelectSprite.p = { tokenX + 4, tokenY - 12.0f, 0.0f };
 	DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
 
@@ -690,23 +716,23 @@ void UpdateTimescale()
 	StageSelectSprite.sx = 0.25f;
 	StageSelectSprite.sy = 0.25f;
 
-	float tokenX = minXPos;
-	StageSelectSprite.tanim = &StageSelectAnim[SSI_AnimalsDisabled];
-	StageSelectSprite.p = { tokenX + 4, timescaleY - 12.0f, 0.0f };
+	float timescaleX = minXPos;
+	StageSelectSprite.tanim = &StageSelectAnim[SSI_Clock];
+	StageSelectSprite.p = { timescaleX + 4, timescaleY - 12.0f, 0.0f };
 	DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
 
 	StageSelectSprite.sx = 0.4f;
 	StageSelectSprite.sy = 0.4f;
 
-	std::string marketTokensMessage = "";
-	marketTokensMessage.append(std::to_string(chaoTimescale));
-	marketTokensMessage.append(":");
-	DrawString(marketTokensMessage, tokenX + 40.0f, timescaleY, 0.75f);
+	std::string timescaleMessage = "";
+	timescaleMessage.append(std::to_string(chaoTimescale));
+	timescaleMessage.append("X");
+	DrawString(timescaleMessage, timescaleX + 40.0f, timescaleY, 0.75f);
 }
 
 void UpdateMissionInLevel() 
 {
-	NumSprite.tanim = &NumAnim[11 + ActiveMission];
+	NumSprite.tanim = &NumAnim[(Num_Anim_Length - 2) + ActiveMission];
 	NumSprite.p = { 320.0f, 12.0f, 0.0f };
 	NumSprite.sx = 1.0f;
 	NumSprite.sy = 1.0f;

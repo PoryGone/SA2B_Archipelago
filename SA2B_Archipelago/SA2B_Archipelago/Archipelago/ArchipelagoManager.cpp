@@ -667,7 +667,7 @@ void SA2_SetChaoKindergarten(int chaoKindergarten)
     {
         LocationManager* locationManager = &LocationManager::getInstance();
 
-        locationManager->SetChaoKindergartenEnabled(true);
+        locationManager->SetChaoKindergartenEnabled(chaoKindergarten);
 
         ChaoGardenManager* chaoGardenManager = &ChaoGardenManager::GetInstance();
 
