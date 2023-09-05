@@ -1099,8 +1099,7 @@ void StageSelectManager::HandleMissionOrder()
 		GameState != GameStates::GameStates_Ingame &&
 		GameState != GameStates::GameStates_Pause &&
 		GameState != GameStates::GameStates_Loading &&
-		CurrentLevel == LevelIDs::LevelIDs_ChaoWorld &&
-		LastLevel == LevelIDs::LevelIDs_ChaoWorld)
+		CurrentLevel == LevelIDs::LevelIDs_ChaoWorld)
 	{
 		CurrentLevel = 0;
 	}
