@@ -2205,15 +2205,15 @@ std::vector<int> LocationManager::GetChaoKarateLocations()
 {
 	std::vector<int> result;
 
-	if (this->_chaoRaceEnabled > 2)
+	if (this->_chaoKarateEnabled > 0)
 	{
 		if (this->_racesPacked)
 		{
-			result.push_back(4);
+			result.push_back(this->_chaoKarateEnabled);
 		}
 		else
 		{
-			result.push_back(20);
+			result.push_back(this->_chaoKarateEnabled * 5);
 		}
 
 		int count = 0;
