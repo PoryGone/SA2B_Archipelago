@@ -264,6 +264,9 @@ void ChaoGardenManager::HandleBlackMarket()
 	WriteData<1>((void*)0x5892C9, '\xD2');
 	WriteData<2>((void*)0x5892CA, '\x90');
 
+	// Make it possible to buy Black Market items with a full inventory
+	WriteData<1>((void*)0x58AF91, '\x06');
+
 	// Handle AP Model and Texture
 	if (!this->apIconObjPtr && (GameState == GameStates_Ingame || GameState == GameStates_Pause))
 	{
