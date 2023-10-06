@@ -1423,6 +1423,7 @@ void InitializeChaoBodyPartChecks(std::map<int, ChaoBodyPartCheckData>& outChaoB
 
     outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_OtterArms] = ChaoBodyPartCheckData(0x01DEC7D7, SA2BAnimal_Otter, ChaoBodyPart::CBP_Arms);
     outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_OtterEars] = ChaoBodyPartCheckData(0x01DEC7D7, SA2BAnimal_Otter, ChaoBodyPart::CBP_Ears);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_OtterFace] = ChaoBodyPartCheckData(0x01DEC7D7, SA2BAnimal_Otter, ChaoBodyPart::CBP_Face);
     outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_OtterLegs] = ChaoBodyPartCheckData(0x01DEC7D7, SA2BAnimal_Otter, ChaoBodyPart::CBP_Legs);
     outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_OtterTail] = ChaoBodyPartCheckData(0x01DEC7D7, SA2BAnimal_Otter, ChaoBodyPart::CBP_Tail);
 

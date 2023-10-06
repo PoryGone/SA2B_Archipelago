@@ -479,6 +479,7 @@ enum ChaoBodyPartCheck
 
     CBPC_OtterArms = 0x1230,
     CBPC_OtterEars = 0x1231,
+    CBPC_OtterFace = 0x1233,
     CBPC_OtterLegs = 0x1234,
     CBPC_OtterTail = 0x1236,
 
