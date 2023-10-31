@@ -138,6 +138,21 @@
     <ClInclude Include="Items\Minigames\Backend\SpriteBounds.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Items\Minigames\Backend\Collision\BoundingBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Items\Minigames\Backend\Collision\CollisionTest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Items\Minigames\Backend\Collision\CircleCollider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Items\Minigames\Backend\Collision\PolygonCollider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Items\Minigames\Backend\Collision\CollisionManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -222,6 +237,21 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Items\Minigames\Backend\SpriteBounds.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Items\Minigames\Backend\Collision\BoundingBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Items\Minigames\Backend\Collision\CollisionTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Items\Minigames\Backend\Collision\CircleCollider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Items\Minigames\Backend\Collision\PolygonCollider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Items\Minigames\Backend\Collision\CollisionManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

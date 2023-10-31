@@ -153,54 +153,27 @@ void Pong::HandleCollision(MinigameManagerData data)
 	}
 
 	// Paddle Bounding
-	NJS_POINT3 paddlePos = this->leftPaddle->GetPositionGlobal();
-	if ((paddlePos.y - PONG_PLAYER_PADDLE_HALFLENGTH) <= PONG_TOP)
+	NJS_POINT3 leftPaddlePos = this->leftPaddle->GetPositionGlobal();
+	if ((leftPaddlePos.y - PONG_PLAYER_PADDLE_HALFLENGTH) <= PONG_TOP)
 	{
-		paddlePos.y = PONG_TOP + PONG_PLAYER_PADDLE_HALFLENGTH;
+		leftPaddlePos.y = PONG_TOP + PONG_PLAYER_PADDLE_HALFLENGTH;
 	}
-	else if ((paddlePos.y + PONG_PLAYER_PADDLE_HALFLENGTH) >= PONG_BOTTOM)
+	else if ((leftPaddlePos.y + PONG_PLAYER_PADDLE_HALFLENGTH) >= PONG_BOTTOM)
 	{
-		paddlePos.y = PONG_BOTTOM - PONG_PLAYER_PADDLE_HALFLENGTH;
+		leftPaddlePos.y = PONG_BOTTOM - PONG_PLAYER_PADDLE_HALFLENGTH;
 	}
-	this->leftPaddle->SetPositionGlobal(paddlePos);
+	this->leftPaddle->SetPositionGlobal(leftPaddlePos);
 
-	paddlePos = this->rightPaddle->GetPositionGlobal();
-	if ((paddlePos.y - PONG_AI_PADDLE_HALFLENGTH) <= PONG_TOP)
+	NJS_POINT3 rightPaddlePos = this->rightPaddle->GetPositionGlobal();
+	if ((rightPaddlePos.y - PONG_AI_PADDLE_HALFLENGTH) <= PONG_TOP)
 	{
-		paddlePos.y = PONG_TOP + PONG_AI_PADDLE_HALFLENGTH;
+		rightPaddlePos.y = PONG_TOP + PONG_AI_PADDLE_HALFLENGTH;
 	}
-	else if ((paddlePos.y + PONG_AI_PADDLE_HALFLENGTH) >= PONG_BOTTOM)
+	else if ((rightPaddlePos.y + PONG_AI_PADDLE_HALFLENGTH) >= PONG_BOTTOM)
 	{
-		paddlePos.y = PONG_BOTTOM - PONG_AI_PADDLE_HALFLENGTH;
+		rightPaddlePos.y = PONG_BOTTOM - PONG_AI_PADDLE_HALFLENGTH;
 	}
-	this->rightPaddle->SetPositionGlobal(paddlePos);
-}
-
-void Pong::DrawPaddleBacking(MinigameManagerData data, float xPos)
-{
-	NJS_SPRITE sprite = { { 0.0f, 0.0f, 0.0f }, 1.0f, 1.0f, 0, data.icons->MinigameTex, data.icons->MinigameAnims };
-
-	sprite.sx = ((float)(PONG_PADDLE_WIDTH) / (float)(PONG_PADDLE_SPRITE_X));
-	sprite.sy = ((float)(PONG_AI_PADDLE_HALFLENGTH * 2) / (float)(PONG_PADDLE_SPRITE_Y));
-	sprite.p.x = xPos;
-
-	sprite.p.y = PONG_BOTTOM - PONG_PLAYER_PADDLE_HALFLENGTH;
-	sprite.tanim = data.icons->GetAnim(MinigameIcon::MGI_RoundedBarDark_Bottom);
-	DrawSprite2D(&sprite);
-
-	sprite.p.y = PONG_TOP + PONG_PLAYER_PADDLE_HALFLENGTH;
-	sprite.tanim = data.icons->GetAnim(MinigameIcon::MGI_RoundedBarDark_Top);
-	DrawSprite2D(&sprite);
-
-	sprite.p.y += 0.5f;
-	sprite.sy = ((float)(PONG_AI_PADDLE_HALFLENGTH * 2 - 1) / (float)(PONG_PADDLE_SPRITE_Y));
-	sprite.tanim = data.icons->GetAnim(MinigameIcon::MGI_RoundedBarDark_Mid);
-
-	for (int i = 0; i < 4; i++)
-	{
-		sprite.p.y += PONG_PLAYER_PADDLE_HALFLENGTH * 2 - 1;
-		DrawSprite2D(&sprite);
-	}
+	this->rightPaddle->SetPositionGlobal(rightPaddlePos);
 }
 
 void Pong::CreateHierarchy(MinigameManagerData data)

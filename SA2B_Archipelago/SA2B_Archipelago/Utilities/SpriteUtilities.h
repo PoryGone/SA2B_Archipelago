@@ -8,5 +8,17 @@ void Point3AddEQ(NJS_POINT3& a, NJS_POINT3 b);
 NJS_POINT3 Point3Substract(NJS_POINT3 a, NJS_POINT3 b);
 void Point3SubtractEQ(NJS_POINT3& a, NJS_POINT3 b);
 
-NJS_POINT3 Point3Multiply(NJS_POINT3 a, float b);
-void Point3MultiplyEQ(NJS_POINT3& a, float b);
+NJS_POINT3 Point3Scale(NJS_POINT3 a, float b);
+void Point3ScaleEQ(NJS_POINT3& a, float b);
+
+float Point3Distance(NJS_POINT3 a, NJS_POINT3 b);
+
+NJS_POINT3 Point3RotateAround(NJS_POINT3 point, NJS_POINT3 center, float angleDeg);
+void Point3RotateAroundEQ(NJS_POINT3& point, NJS_POINT3 center, float angleDeg);
+
+float Point3DotProduct(NJS_POINT3 a, NJS_POINT3 b);
+
+float Point3Magnitude(NJS_POINT3 a);
+
+NJS_POINT3 Point3Normalize(NJS_POINT3 a);
+void Point3NormalizeEQ(NJS_POINT3& a);

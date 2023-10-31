@@ -14,11 +14,13 @@ void SpriteHierarchy::AddNode(SpriteNode* node, SpriteNode* parent)
 	node->SetPositionGlobal(gPos);
 }
 
-SpriteNode* SpriteHierarchy::CreateNode(std::string name, SpriteNode* parent) {
+SpriteNode* SpriteHierarchy::CreateNode(std::string name, SpriteNode* parent) 
+{
 	return CreateNode(name, nullptr, { 1, 1, 0 }, { 0, 0, 0 }, parent);
 }
 
-SpriteNode* SpriteHierarchy::CreateNode(std::string name, NJS_TEXANIM* anim, NJS_POINT3 displaySize, NJS_POINT3 globalPosition, SpriteNode* parent) {
+SpriteNode* SpriteHierarchy::CreateNode(std::string name, NJS_TEXANIM* anim, NJS_POINT3 displaySize, NJS_POINT3 globalPosition, SpriteNode* parent) 
+{
 	SpriteNode* node = new SpriteNode(name, anim, displaySize, globalPosition);
 	AddNode(node, parent);
 	return node;
@@ -37,7 +39,8 @@ void SpriteHierarchy::OnFrame()
 	rootNode.RunMethodOnHeirarchy(func);
 }
 
-void SpriteHierarchy::ClearHierarchy() {
+void SpriteHierarchy::ClearHierarchy() 
+{
 	std::function<void(SpriteNode&)> func = [](SpriteNode& node) 
 	{
 		if (node.name != "ROOT_NODE")

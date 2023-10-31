@@ -8,6 +8,7 @@
 #include "Aesthetics/CreditsManager.h"
 #include "Aesthetics/StatsManager.h"
 #include "Items/Minigames/MinigameManager.h"
+#include "Items/Minigames/Backend/Collision/CollisionTest.h"
 
 
 ItemManager* _itemManager;
@@ -19,6 +20,8 @@ StageSelectManager& _stageSelectManager = StageSelectManager::GetInstance();
 MessageQueue& _messageQueue = MessageQueue::GetInstance();
 StatsManager& _statsManager = StatsManager::GetInstance();
 MinigameManager& _minigameManager = MinigameManager::GetInstance();
+
+CollisionTest collisionTest = CollisionTest();
 
 extern "C"
 {
@@ -47,6 +50,7 @@ extern "C"
 		_statsManager.OnInitFunction(path, helperFunctions);
 
 		_minigameManager.OnInitFunction(path, helperFunctions);
+
 	}
 
 	__declspec(dllexport) void __cdecl OnFrame()
@@ -74,6 +78,11 @@ extern "C"
 		_statsManager.OnFrameFunction();
 
 		_minigameManager.OnFrameFunction();
+
+		if (_archipelagoManager->IsDebug())
+		{
+			collisionTest.RunTests();
+		}
 	}
 
 	__declspec(dllexport) void __cdecl OnInput()

@@ -66,7 +66,12 @@ void SpriteNode::Render(NJS_SPRITE& sprite)
 		sprite.sy = displaySize.y / (float)anim->sy;
 		if (rotation != 0.0f) 
 		{
-			DrawSprite2D(&sprite, 1, 1, NJD_SPRITE_ALPHA | NJD_SPRITE_ANGLE);
+			ConstantMaterial.a = 0.5f;
+			ConstantMaterial.r = 1.0f;
+			ConstantMaterial.g = 1.0f;
+			ConstantMaterial.b = 0.0f;
+			DrawSprite2D(&sprite, 1, 1.0f, NJD_SPRITE_ALPHA | NJD_SPRITE_ANGLE | NJD_SPRITE_COLOR);
+			ResetMaterial();
 		}
 		else
 		{
