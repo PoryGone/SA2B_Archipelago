@@ -9,6 +9,7 @@ public:
 	bool IsColliding(Collider& otherCollider) override;
 	BoundingBox GetBoundingBox() override;
 
+	bool ContainsPoint(NJS_POINT3 point);
 	NJS_POINT3 GetCentroid();
 	std::vector<NJS_POINT3> GetAdjustedPoints();
 
@@ -29,11 +30,6 @@ public:
 		for (int i = 0; i < points.size(); i++)
 		{
 			points[i] = Point3RotateAround(points[i], { 0.0f, 0.0f, 0.0f }, _rotation);
-			if (_rotation > 0.0f)
-			{
-				PrintDebug(std::to_string(points[i].x).c_str());
-				PrintDebug(std::to_string(points[i].y).c_str());
-			}
 		}
 	}
 

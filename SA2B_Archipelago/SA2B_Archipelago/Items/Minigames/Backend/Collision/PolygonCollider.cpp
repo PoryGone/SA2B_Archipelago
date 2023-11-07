@@ -1,11 +1,16 @@
 #include "../../../../pch.h"
 #include "PolygonCollider.h"
+#include "CircleCollider.h"
 
 bool PolygonCollider::IsColliding(Collider& otherCollider)
 {
 	if (auto polygon = dynamic_cast<PolygonCollider*>(&otherCollider))
 	{
 		return IsCollidingPolygon(*polygon);
+	}
+	if (auto circle = dynamic_cast<CircleCollider*>(&otherCollider))
+	{
+		return ContainsPoint(circle->GetClosestPoint(GetCentroid()));
 	}
 	return false;
 }
@@ -18,6 +23,26 @@ BoundingBox PolygonCollider::GetBoundingBox()
 		box.Add(points[i]);
 	}
 	return box;
+}
+
+bool PolygonCollider::ContainsPoint(NJS_POINT3 point)
+{
+	bool isInside = true;
+
+	GetAdjustedPoints();
+
+	for (int i = 0; i < adjustedPoints.size(); i++)
+	{
+		int i2 = i + 1;
+		NJS_POINT3 p1 = adjustedPoints[i];
+		NJS_POINT3 p2 = adjustedPoints[i2 == adjustedPoints.size() ? 0 : i2];
+		if (((p2.x - p1.x) * (point.y - p1.y) - (p2.y - p1.y) * (point.x - p1.x)) > 0.0f)
+		{
+			return false;
+		}
+	}
+
+	return true;
 }
 
 NJS_POINT3 PolygonCollider::GetCentroid()

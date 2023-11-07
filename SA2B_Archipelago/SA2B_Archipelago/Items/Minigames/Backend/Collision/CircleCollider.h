@@ -8,6 +8,7 @@ public:
 	BoundingBox GetBoundingBox() override;
 
 	NJS_POINT3 GetCenter();
+	NJS_POINT3 GetClosestPoint(NJS_POINT3 point);
 
 	float radius;
 

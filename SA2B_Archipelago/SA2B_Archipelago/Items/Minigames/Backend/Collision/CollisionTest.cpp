@@ -141,6 +141,25 @@ void CollisionTest::RunTests()
 
 	AssertFalse(pCol1.IsColliding(pCol2), "ApartBoxesResultsInNoCollision");
 
+	AssertTrue(pCol1.ContainsPoint({ 0.0f,0.0f,0.0f }), "PointInPolygonResultsInContainingTrue");
+
+	AssertFalse(pCol1.ContainsPoint({ 2.0f,0.0f,0.0f }), "PointOutsidePolygonResultsInContainingFalse");
+
+	cCol1 = CircleCollider(0.5f);
+
+	AssertTrue(pCol1.IsColliding(cCol1), "CircleContainedByPolygonResultsInCollision");
+	AssertTrue(cCol1.IsColliding(pCol1), "CircleContainedByPolygonResultsInCollision_Reverse");
+
+	cCol1 = CircleCollider(0.5f, { 1.0f,0.0f,0.0f });
+
+	AssertTrue(pCol1.IsColliding(cCol1), "CircleTouchingPolygonResultsInCollision");
+	AssertTrue(cCol1.IsColliding(pCol1), "CircleTouchingPolygonResultsInCollision_Reverse");
+
+	cCol1 = CircleCollider(0.5f, { 2.0f,0.0f,0.0f });
+
+	AssertFalse(pCol1.IsColliding(cCol1), "CircleApartFromPolygonResultsInNoCollision");
+	AssertFalse(cCol1.IsColliding(pCol1), "CircleApartFromPolygonResultsInNoCollision_Reverse");
+
 	PrintDebug("-----Run Tests End-----");
 	hasRun = true;
 }
