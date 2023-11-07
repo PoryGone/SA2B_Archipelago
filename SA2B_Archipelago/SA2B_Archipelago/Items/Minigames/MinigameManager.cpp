@@ -44,6 +44,7 @@ void MinigameManager::OnFrameFunction()
 		this->iconData.LoadIcons();
 		this->_data.icons = &this->iconData;
 		this->_data.hierarchy = &this->spriteHierarchy;
+		this->_data.collision = &this->collisionManager;
 		this->_data.hierarchy->iconData = &this->iconData;
 		this->IconObjPtr = LoadObject(0, "MinigameIcons", DrawUpgradeIconMain_MG, LoadObj_Data1 | LoadObj_Data2);
 		this->IconObjPtr->DeleteSub = DeleteUpgradeIcon_MG;

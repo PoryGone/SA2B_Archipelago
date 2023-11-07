@@ -166,6 +166,7 @@
     <ClInclude Include="Items\ItemManager.h" />
     <ClInclude Include="Items\Minigames\Backend\Collision\BoundingBox.h" />
     <ClInclude Include="Items\Minigames\Backend\Collision\CircleCollider.h" />
+    <ClInclude Include="Items\Minigames\Backend\Collision\Collider.h" />
     <ClInclude Include="Items\Minigames\Backend\Collision\CollisionManager.h" />
     <ClInclude Include="Items\Minigames\Backend\Collision\CollisionTest.h" />
     <ClInclude Include="Items\Minigames\Backend\Collision\PolygonCollider.h" />

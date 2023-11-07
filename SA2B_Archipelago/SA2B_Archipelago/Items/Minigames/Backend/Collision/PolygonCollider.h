@@ -1,5 +1,5 @@
 #pragma once
-#include "CollisionManager.h"
+#include "Collider.h"
 #include "../../../../Utilities/SpriteUtilities.h"
 #include <vector>
 

@@ -32,6 +32,7 @@ public:
 	ObjectMaster* IconObjPtr;
 	MinigameIconData iconData = MinigameIconData();
 	SpriteHierarchy spriteHierarchy = SpriteHierarchy();
+	CollisionManager collisionManager = CollisionManager();
 
 private:
 	MinigameBase* currentMinigame;

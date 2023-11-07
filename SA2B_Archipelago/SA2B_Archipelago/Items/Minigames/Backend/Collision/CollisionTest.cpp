@@ -160,6 +160,24 @@ void CollisionTest::RunTests()
 	AssertFalse(pCol1.IsColliding(cCol1), "CircleApartFromPolygonResultsInNoCollision");
 	AssertFalse(cCol1.IsColliding(pCol1), "CircleApartFromPolygonResultsInNoCollision_Reverse");
 
+	SpriteHierarchy hierarchy = SpriteHierarchy();
+	CollisionManager colManager = CollisionManager();
+
+	SpriteNode* spr1 = hierarchy.CreateNode("Sprite 1");
+	SpriteNode* spr2 = hierarchy.CreateNode("Sprite 2");
+
+	colManager.Reset();
+	colManager.AddCollision(spr1, std::make_shared<CircleCollider>(1.0f));
+	colManager.AddCollision(spr2, std::make_shared<CircleCollider>(1.0f));
+
+	AssertTrue(colManager.IsColliding(spr1, spr2), "Manager_OverlappingCirclesResultsInCollision");
+
+	spr2->SetPositionGlobal({ 3.0f,0.0f,0.0f });
+
+	AssertFalse(colManager.IsColliding(spr1, spr2), "Manager_ApartCirclesResultsInNoCollision");
+
+	colManager.Reset();
+
 	PrintDebug("-----Run Tests End-----");
 	hasRun = true;
 }

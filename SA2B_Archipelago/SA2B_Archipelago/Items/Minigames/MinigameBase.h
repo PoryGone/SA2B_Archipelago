@@ -44,6 +44,7 @@ public:
 	MinigameIconData* icons;
 	MinigameDifficulty difficulty;
 	SpriteHierarchy* hierarchy;
+	CollisionManager* collision;
 };
 
 class MinigameBase

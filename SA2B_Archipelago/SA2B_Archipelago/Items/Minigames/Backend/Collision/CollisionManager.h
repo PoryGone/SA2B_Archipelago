@@ -1,17 +1,22 @@
 #pragma once
 #include "BoundingBox.h"
 #include "../SpriteNode.h"
+#include "Collider.h"
+#include "CircleCollider.h"
+#include "PolygonCollider.h"
+#include <vector>
+#include <map>
+#include <memory>
 
-class Collider
+class CollisionManager
 {
 public:
-	virtual bool IsColliding(Collider& otherCollider) = 0;
-	virtual BoundingBox GetBoundingBox() = 0;
-	NJS_POINT3 offset;
-	SpriteNode* node;
+	void Reset();
+	void AddCollision(SpriteNode* node, std::shared_ptr<Collider> collider);
+	//void AddCollision(SpriteNode* node, PolygonCollider collider);
+	void AddCollision(SpriteNode* node, std::vector<std::shared_ptr<Collider>> colliders);
+	bool IsColliding(SpriteNode* nodeA, SpriteNode* nodeB);
 
-	Collider() : offset({ 0.0f,0.0f,0.0f }), node(nullptr) {}
-	Collider(NJS_POINT3 _offset) : offset(_offset), node(nullptr) {}
-	Collider(SpriteNode* _node) : offset({ 0.0f,0.0f,0.0f }), node(_node) {}
-	Collider(NJS_POINT3 _offset, SpriteNode* _node) : offset(_offset), node(_node) {}
+private:
+	std::map<SpriteNode*, std::vector<std::shared_ptr<Collider>>> colliderMap;
 };

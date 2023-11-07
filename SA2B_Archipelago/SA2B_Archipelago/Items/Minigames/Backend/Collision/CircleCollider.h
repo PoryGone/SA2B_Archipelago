@@ -1,5 +1,5 @@
 #pragma once
-#include "CollisionManager.h"
+#include "Collider.h"
 
 class CircleCollider : public Collider
 {
