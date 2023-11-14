@@ -3,6 +3,7 @@
 #include "../Locations/LocationData.h"
 #include "../Items/ItemManager.h"
 #include "../Items/Minigames/MinigameManager.h"
+#include "../Locations/ChaoGardenManager.h"
 #include "../Locations/LocationManager.h"
 #include "../Aesthetics/MusicManager.h"
 
@@ -20,6 +21,8 @@
 DataPointer(unsigned int, SeedHash, 0x1DEC6FC);
 DataPointer(unsigned int, PlayerNameHash, 0x1DEC700);
 DataPointer(char, LastStoryComplete, 0x1DEFA95);
+
+DataArray(int16_t, ChaoStatValues, 0x8A6240, 0x1F4);
 
 
 unsigned int CalcHash(std::string str)
@@ -117,6 +120,16 @@ void ArchipelagoManager::OnInitFunction(const char* path, const HelperFunctions&
 
     std::chrono::time_point<std::chrono::system_clock> timestamp = std::chrono::system_clock::now();
     this->_instanceID = std::chrono::duration_cast<std::chrono::seconds>(timestamp.time_since_epoch()).count();
+
+    int chaoMult = this->_settingsINI->getInt("Chao", "StatGainMultiplier");
+
+    if (chaoMult > 1 && chaoMult <= 5)
+    {
+        for (int i = 0x00; i < 0x1F4; i++)
+        {
+            ChaoStatValues[i] = ChaoStatValues[i] * chaoMult;
+        }
+    }
 }
 
 void ArchipelagoManager::OnFrameFunction()
@@ -323,7 +336,8 @@ void SA2_HandleBouncedPacket(AP_Bounce bouncePacket)
                 return;
             }
 
-            if (CurrentLevel == LevelIDs_FinalHazard)
+            if (CurrentLevel == LevelIDs_FinalHazard ||
+                CurrentLevel == LevelIDs_ChaoWorld)
             {
                 return;
             }
@@ -521,7 +535,7 @@ void SA2_SetChaoPacks(int chaoRaceChecks)
     }
 }
 
-void SA2_SetChaoDifficulty(int chaoDifficulty)
+void SA2_SetChaoRaceDifficulty(int chaoDifficulty)
 {
     if (!ArchipelagoManager::getInstance().IsInit())
     {
@@ -532,8 +546,212 @@ void SA2_SetChaoDifficulty(int chaoDifficulty)
     {
         LocationManager* locationManager = &LocationManager::getInstance();
 
-        locationManager->SetChaoEnabled(true);
+        locationManager->SetChaoRaceEnabled(chaoDifficulty);
+
+        ChaoGardenManager* chaoGardenManager = &ChaoGardenManager::GetInstance();
+
+        chaoGardenManager->SetChaoRaceEnabled(true);
     }
+}
+
+void SA2_SetChaoKarateDifficulty(int chaoDifficulty)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    if (chaoDifficulty > 0)
+    {
+        LocationManager* locationManager = &LocationManager::getInstance();
+
+        locationManager->SetChaoKarateEnabled(chaoDifficulty);
+
+        ChaoGardenManager* chaoGardenManager = &ChaoGardenManager::GetInstance();
+
+        chaoGardenManager->SetChaoKarateEnabled(true);
+    }
+}
+
+void SA2_SetChaoStats(int chaoStats)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    if (chaoStats > 0)
+    {
+        LocationManager* locationManager = &LocationManager::getInstance();
+
+        locationManager->SetChaoStatsEnabled(chaoStats);
+
+        ChaoGardenManager* chaoGardenManager = &ChaoGardenManager::GetInstance();
+
+        chaoGardenManager->SetChaoStatsEnabled(chaoStats);
+    }
+}
+
+void SA2_SetChaoStatsFrequency(int chaoStatsFrequency)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    if (chaoStatsFrequency > 0)
+    {
+        LocationManager* locationManager = &LocationManager::getInstance();
+
+        locationManager->SetChaoStatsFrequency(chaoStatsFrequency);
+    }
+}
+
+void SA2_SetChaoStatsStamina(int chaoStatsStamina)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    if (chaoStatsStamina > 0)
+    {
+        LocationManager* locationManager = &LocationManager::getInstance();
+
+        locationManager->SetChaoStatsStaminaEnabled(true);
+    }
+}
+
+void SA2_SetChaoStatsHidden(int chaoStatsHidden)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    if (chaoStatsHidden > 0)
+    {
+        LocationManager* locationManager = &LocationManager::getInstance();
+
+        locationManager->SetChaoStatsHiddenEnabled(true);
+    }
+}
+
+void SA2_SetChaoBodyParts(int chaoBodyParts)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    if (chaoBodyParts > 0)
+    {
+        LocationManager* locationManager = &LocationManager::getInstance();
+
+        locationManager->SetChaoBodyPartsEnabled(true);
+
+        ChaoGardenManager* chaoGardenManager = &ChaoGardenManager::GetInstance();
+
+        chaoGardenManager->SetChaoBodyPartsEnabled(true);
+    }
+}
+
+void SA2_SetChaoKindergarten(int chaoKindergarten)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    if (chaoKindergarten > 0)
+    {
+        LocationManager* locationManager = &LocationManager::getInstance();
+
+        locationManager->SetChaoKindergartenEnabled(chaoKindergarten);
+
+        ChaoGardenManager* chaoGardenManager = &ChaoGardenManager::GetInstance();
+
+        chaoGardenManager->SetChaoKindergartenEnabled(true);
+    }
+}
+
+void SA2_SetBlackMarketSlots(int blackMarketSlots)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    if (blackMarketSlots > 0)
+    {
+        LocationManager* locationManager = &LocationManager::getInstance();
+
+        locationManager->SetBlackMarketSlots(blackMarketSlots);
+
+        ChaoGardenManager* chaoGardenManager = &ChaoGardenManager::GetInstance();
+
+        chaoGardenManager->SetBlackMarketSlots(blackMarketSlots);
+    }
+}
+
+void SA2_SetBlackMarketData(std::map<int, int> map)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    ChaoGardenManager* chaoGardenManager = &ChaoGardenManager::GetInstance();
+
+    chaoGardenManager->SetBlackMarketData(map);
+}
+
+void SA2_SetBlackMarketUnlockCosts(std::map<int, int> map)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    LocationManager* locationManager = &LocationManager::getInstance();
+
+    locationManager->SetBlackMarketUnlockCosts(map);
+}
+
+void SA2_SetDefaultEggMap(std::map<int, int> map)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    ChaoGardenManager* chaoGardenManager = &ChaoGardenManager::GetInstance();
+
+    chaoGardenManager->SetDefaultEggMap(map);
+}
+
+void SA2_SetDefaultChaoNameMap(std::map<int, int> map)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    ChaoGardenManager* chaoGardenManager = &ChaoGardenManager::GetInstance();
+
+    chaoGardenManager->SetDefaultChaoNameMap(map);
+}
+
+void SA2_SetChaoERMap(std::map<int, int> map)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    ChaoGardenManager* chaoGardenManager = &ChaoGardenManager::GetInstance();
+
+    chaoGardenManager->SetChaoERData(map);
 }
 
 void SA2_SetChaoKeys(int chaoKeys)
@@ -707,6 +925,16 @@ void SA2_SetMinigameDifficulty(int minigameDifficulty)
     minigameManager->SetDifficulty(minigameDifficulty);
 }
 
+void SA2_SetPlayerNum(int playerNum)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    ArchipelagoManager::getInstance().ap_player_num = playerNum;
+}
+
 void ArchipelagoManager::Init(const char* ip, const char* playerName, const char* password)
 {
     AP_Init(ip, "Sonic Adventure 2 Battle", playerName, password);
@@ -742,14 +970,28 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_RegisterSlotDataIntCallback("OmochaoChecks", &SA2_SetOmochaoChecks);
     AP_RegisterSlotDataIntCallback("AnimalChecks", &SA2_SetAnimalChecks);
     AP_RegisterSlotDataIntCallback("KartRaceChecks", &SA2_SetKartRaceChecks);
-    AP_RegisterSlotDataIntCallback("ChaoRaceChecks", &SA2_SetChaoPacks);
-    AP_RegisterSlotDataIntCallback("ChaoGardenDifficulty", &SA2_SetChaoDifficulty);
+    AP_RegisterSlotDataIntCallback("ChaoStadiumChecks", &SA2_SetChaoPacks);
+    AP_RegisterSlotDataIntCallback("ChaoRaceDifficulty", &SA2_SetChaoRaceDifficulty);
+    AP_RegisterSlotDataIntCallback("ChaoKarateDifficulty", &SA2_SetChaoKarateDifficulty);
+    AP_RegisterSlotDataIntCallback("ChaoStats", &SA2_SetChaoStats);
+    AP_RegisterSlotDataIntCallback("ChaoStatsFrequency", &SA2_SetChaoStatsFrequency);
+    AP_RegisterSlotDataIntCallback("ChaoStatsStamina", &SA2_SetChaoStatsStamina);
+    AP_RegisterSlotDataIntCallback("ChaoStatsHidden", &SA2_SetChaoStatsHidden);
+    AP_RegisterSlotDataIntCallback("ChaoAnimalParts", &SA2_SetChaoBodyParts);
+    AP_RegisterSlotDataIntCallback("ChaoKindergarten", &SA2_SetChaoKindergarten);
+    AP_RegisterSlotDataIntCallback("BlackMarketSlots", &SA2_SetBlackMarketSlots);
+    AP_RegisterSlotDataMapIntIntCallback("BlackMarketData", &SA2_SetBlackMarketData);
+    AP_RegisterSlotDataMapIntIntCallback("BlackMarketUnlockCosts", &SA2_SetBlackMarketUnlockCosts);
+    AP_RegisterSlotDataMapIntIntCallback("DefaultEggMap", &SA2_SetDefaultEggMap);
+    AP_RegisterSlotDataMapIntIntCallback("DefaultChaoNameMap", &SA2_SetDefaultChaoNameMap);
+    AP_RegisterSlotDataMapIntIntCallback("ChaoERLayout", &SA2_SetChaoERMap);
     AP_RegisterSlotDataIntCallback("MinigameTrapDifficulty", &SA2_SetMinigameDifficulty);
     AP_RegisterSlotDataMapIntIntCallback("RegionEmblemMap", &SA2_SetRegionEmblemMap);
     AP_RegisterSlotDataMapIntIntCallback("MissionMap", &SA2_SetChosenMissionsMap);
     AP_RegisterSlotDataMapIntIntCallback("MissionCountMap", &SA2_SetMissionCountMap);
     AP_RegisterSlotDataMapIntIntCallback("GateBosses", &SA2_SetGateBosses);
     AP_RegisterSlotDataMapIntIntCallback("BossRushMap", &SA2_SetChosenBossRushMap);
+    AP_RegisterSlotDataIntCallback("PlayerNum", &SA2_SetPlayerNum);
     AP_Start();
 }
 
@@ -864,6 +1106,15 @@ void ArchipelagoManager::OnFrameDebug()
 // DeathLink Functions
 void ArchipelagoManager::OnFrameDeathLink()
 {
+    if (CurrentLevel == LevelIDs::LevelIDs_Route101280)
+    {
+        // Prevent Game Overs in Route levels, which causes underflow
+        if (Life_Count[0] < 1)
+        {
+            Life_Count[0] = 1;
+        }
+    }
+
     if (this->_deathLinkTimer > 0)
     {
         if ((TimerStopped == 0 || GameState != GameStates::GameStates_Ingame) && GameState != GameStates::GameStates_Pause)
@@ -1047,7 +1298,8 @@ void ArchipelagoManager::OnFrameRingLink()
         return;
     }
 
-    if (CurrentLevel == LevelIDs_FinalHazard)
+    if (CurrentLevel == LevelIDs_FinalHazard ||
+        CurrentLevel == LevelIDs_ChaoWorld)
     {
         return;
     }
@@ -1254,4 +1506,19 @@ void ArchipelagoManager::AP_KillPlayer()
 void ArchipelagoManager::SetDeathCause(DeathCause cause)
 {
     this->deathCauseOverride = cause;
+}
+
+std::string ArchipelagoManager::GetSeedNameAndPlayer()
+{
+    std::string seedName = ArchipelagoManager::getInstance().GetSeedName().substr(0, 9);
+
+    int numToUse = ArchipelagoManager::getInstance().ap_player_num % 1000;
+    std::string playerNumStr = std::to_string(numToUse);
+
+    while (playerNumStr.length() < 3)
+    {
+        playerNumStr = "0" + playerNumStr;
+    }
+
+    return (seedName + playerNumStr);
 }

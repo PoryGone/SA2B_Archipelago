@@ -6,7 +6,7 @@
 #include <map>
 
 constexpr unsigned int AP_ID_OFFSET = 0xFF0000;
-constexpr int MOD_VERSION = 202;
+constexpr int MOD_VERSION = 203;
 
 constexpr int KEEP_ALIVE = 3600;
 
@@ -62,10 +62,12 @@ public:
 
 	void SetDeathCause(DeathCause cause);
 
+	std::string GetSeedNameAndPlayer();
 	std::string GetSeedName() { return this->_seedName; };
 
 	bool _deathLinkPending = false;
 	std::string ap_player_name;
+	int ap_player_num = 0;
 	long long lastDeathLinkTime = 0;
 	int _instanceID = 0;
 

@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Utilities/MessageQueue.h"
 #include "Items/ItemManager.h"
+#include "Locations/ChaoGardenManager.h"
 #include "Locations/LocationManager.h"
 #include "Locations/StageSelectManager.h"
 #include "Archipelago/ArchipelagoManager.h"
@@ -16,6 +17,7 @@ LocationManager* _locationManager;
 MusicManager* _musicManager;
 ArchipelagoManager* _archipelagoManager;
 CreditsManager& _creditsManager = CreditsManager::GetInstance();
+ChaoGardenManager& _chaoGardenManager = ChaoGardenManager::GetInstance();
 StageSelectManager& _stageSelectManager = StageSelectManager::GetInstance();
 MessageQueue& _messageQueue = MessageQueue::GetInstance();
 StatsManager& _statsManager = StatsManager::GetInstance();
@@ -44,6 +46,8 @@ extern "C"
 		_archipelagoManager = &ArchipelagoManager::getInstance();
 		_archipelagoManager->OnInitFunction(path, helperFunctions);
 
+		_chaoGardenManager.OnInitFunction(path, helperFunctions);
+
 		_locationManager = &LocationManager::getInstance();
 		_locationManager->OnInitFunction(path, helperFunctions);
 
@@ -65,6 +69,8 @@ extern "C"
 		{
 			_archipelagoManager->OnFrameFunction();
 		}
+
+		_chaoGardenManager.OnFrameFunction();
 
 		if (_locationManager)
 		{
@@ -94,6 +100,8 @@ extern "C"
 		}
 
 		_minigameManager.OnInputFunction();
+
+		_chaoGardenManager.OnInputFunction();
 	}
 
 	__declspec(dllexport) void __cdecl OnControl()

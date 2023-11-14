@@ -72,6 +72,11 @@ DataPointer(AnimalCounterObj*, AnimalCounter, 0x1A5A344);
 DataPointer(char, SS_SelectedTile, 0x1D1BF08);
 // End Animal Count
 
+
+DataPointer(ChaoKarateManager*, KarateManager, 0x1A5D148);
+DataPointer(unsigned int, BlackMarketTokenCount, 0x1DEE41C);
+
+
 void LocationManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
 {
 	this->_helperFunctions = &helperFunctions;
@@ -90,9 +95,20 @@ void LocationManager::OnInitFunction(const char* path, const HelperFunctions& he
 	InitializeGoldBeetleChecks(this->_GoldBeetleData);
 	InitializeOmochaoChecks(this->_OmochaoData);
 	InitializeAnimalChecks(this->_AnimalData);
+
 	InitializeChaoGardenChecks(this->_ChaoGardenData);
+	InitializeChaoStatChecks(this->_ChaoStatData);
+	InitializeChaoBodyPartChecks(this->_ChaoBodyPartData);
+	InitializeChaoKindergartenChecks(this->_ChaoKindergartenData);
+	InitializeBlackMarketChecks(this->_BlackMarketLocationData);
 	InitializeChaoRacePacks(this->_ChaoRacePacks);
+
 	InitializeKartRaceChecks(this->_KartRaceData);
+
+	for (int i = 0; i < 7; i++)
+	{
+		this->_CollectedChaoStats[i] = std::vector<int>();
+	}
 }
 
 void LocationManager::OnFrameFunction()
@@ -559,32 +575,19 @@ void LocationManager::OnFrameKartRace()
 
 void LocationManager::OnFrameChaoGarden()
 {
-	//Make All Characters have Chao Garden Access
-	WriteData<8>((void*)0x1DEF829, 0x01);
-
 	if (!this->_chaoEnabled)
 	{
 		// Don't do any Chao stuff if no Chao checks are on
 		return;
 	}
 
-	// Make sure Hero/Dark Gardens are always unlocked
-	ChaoGardensUnlocked = 0x56;
-
-	// Handle Separate Chao Saves
-	std::string chaoFileName = ArchipelagoManager::getInstance().GetSeedName().substr(0, 11);
-
-	for (int i = 0; i < 11; i++)
-	{
-		WriteData<1>((void*)(0x8ACF4B + i), chaoFileName[i]);
-		WriteData<1>((void*)(0xC70E5C + i), chaoFileName[i]);
-		WriteData<1>((void*)(0x1366067 + i), chaoFileName[i]);
-	}
-
 	if (CurrentLevel != LevelIDs::LevelIDs_ChaoWorld)
 	{
-		// Only check the data while in Chao World, otherwise it may be wrong
-		return;
+		this->_chaoEntryTimer = 0;
+	}
+	else
+	{
+		this->_chaoEntryTimer++;
 	}
 
 	this->_chaoTimer++;
@@ -593,28 +596,24 @@ void LocationManager::OnFrameChaoGarden()
 	{
 		this->_chaoTimer = 0;
 
-		for (int i = ChaoGardenCheck::CGC_BEGIN; i <= ChaoGardenCheck::CGC_END_RACE; i++)
+		// Sending of Chao Locations to Server
+
+		// Chao Stats
+		for (int statLevel = 1; statLevel <= this->_chaoStatsEnabled; statLevel++)
 		{
-			if (this->_ChaoGardenData.find(i) != this->_ChaoGardenData.end())
+			for (int statType = ChaoStatCheckType::CSCT_Swim; statType <= ChaoStatCheckType::CSCT_Intelligence; statType++)
 			{
-				ChaoGardenCheckData& checkData = this->_ChaoGardenData[i];
-
-				if (!checkData.CheckSent)
+				int locationID = 0xE00 + (statType * 0x80) + statLevel;
+				if (this->_ChaoStatData.find(locationID) != this->_ChaoStatData.end())
 				{
-					char dataValue = *(char*)checkData.Address;
+					ChaoStatCheckData& checkData = this->_ChaoStatData[locationID];
 
-					if (dataValue == 0xFF)
+					if (!checkData.CheckSent)
 					{
-						continue;
-					}
-
-					int requiredValue = checkData.Index;
-
-					if (dataValue >= requiredValue)
-					{
-						if (this->_archipelagoManager)
+						char dataValue = *(char*)checkData.Address;
+						if (dataValue >= statLevel)
 						{
-							this->_archipelagoManager->SendItem(i);
+							this->_archipelagoManager->SendItem(locationID);
 
 							checkData.CheckSent = true;
 						}
@@ -623,77 +622,409 @@ void LocationManager::OnFrameChaoGarden()
 			}
 		}
 
-		// Move Race Data over from AP Storage
-		for (int address = 0x01DEC7C0; address <= 0x01DEC7CD; address++)
+		// Handle Collected Chao Stats
+		for (int i = 0; i < 7; i++)
 		{
-			char dataValue = *(char*)address;
-			char currentRaceProgress = -1;
-
-			for (int index = 0; index <= 7; index++)
+			for (auto locID : this->_CollectedChaoStats[i])
 			{
-				// Handle Challenge Race Upper bits
-				if (address == 0x01DEC7CB && index >= 4)
+				if (this->_ChaoStatData.find(locID) != this->_ChaoStatData.end())
 				{
-					break;
-				}
+					ChaoStatCheckData& checkData = this->_ChaoStatData[locID];
 
-				if (((dataValue) & (1 << index)) == 0)
+					if ((checkData.Level % this->_chaoStatsFrequency) == (this->_chaoStatsEnabled % this->_chaoStatsFrequency))
+					{
+						for (int subLocID = (locID - 1); subLocID > locID - this->_chaoStatsFrequency; subLocID--)
+						{
+							ChaoStatCheckData& subCheckData = this->_ChaoStatData[subLocID];
+							subCheckData.CheckSent = true;
+						}
+					}
+
+					char dataValue = *(char*)checkData.Address;
+					if ((dataValue == 0 && checkData.Level < this->_chaoStatsFrequency) ||
+						dataValue == (checkData.Level - this->_chaoStatsFrequency))
+					{
+						WriteData<1>((void*)checkData.Address, checkData.Level);
+					}
+				}
+			}
+		}
+		// End Handle Collected Chao Stats
+
+		// Chao Animal Parts
+		if (this->_chaoBodyPartsEnabled)
+		{
+			for (int i = ChaoBodyPartCheck::CBPC_BEGIN; i < ChaoBodyPartCheck::CBPC_NUM_CHECKS; i++)
+			{
+				if (this->_ChaoBodyPartData.find(i) != this->_ChaoBodyPartData.end())
 				{
-					break;
-				}
+					ChaoBodyPartCheckData& checkData = this->_ChaoBodyPartData[i];
 
-				currentRaceProgress++;
+					if (!checkData.CheckSent)
+					{
+						char dataValue = *(char*)checkData.Address;
+
+						char bitFlag = (char)(0x01 << (char)checkData.BodyPart);
+
+						if ((dataValue & bitFlag) != 0x00)
+						{
+							if (this->_archipelagoManager)
+							{
+								this->_archipelagoManager->SendItem(i);
+
+								checkData.CheckSent = true;
+							}
+						}
+					}
+				}
+			}
+		}
+		// End Sending of Chao Locations to Server
+
+
+		// Chao Kindergarten
+		if (this->_chaoKindergartenEnabled > 0)
+		{
+			for (int i = ChaoKindergartenCheck::CKgC_BEGIN; i < ChaoKindergartenCheck::CKgC_NUM_CHECKS; i++)
+			{
+				if (this->_ChaoKindergartenData.find(i) != this->_ChaoKindergartenData.end())
+				{
+					ChaoKindergartenCheckData& checkData = this->_ChaoKindergartenData[i];
+
+					if (!checkData.CheckSent)
+					{
+						int dataValue = *(int*)checkData.Address;
+
+						int bitFlag = (int)(0x01 << (int)(checkData.LessonNum % 0x20));
+
+						if ((dataValue & bitFlag) != 0x00)
+						{
+							if (this->_archipelagoManager)
+							{
+								this->_archipelagoManager->SendItem(i);
+
+								checkData.CheckSent = true;
+							}
+						}
+					}
+				}
+			}
+		}
+		// End Sending of Chao Locations to Server
+
+
+		// Black Market
+		if (this->_blackMarketSlots > 0)
+		{
+			for (int i = BlackMarketCheck::BMC_BEGIN; i <= BlackMarketCheck::BMC_BEGIN + 64; i++)
+			{
+				if (this->_BlackMarketLocationData.find(i) != this->_BlackMarketLocationData.end())
+				{
+					BlackMarketCheckData& checkData = this->_BlackMarketLocationData[i];
+
+					if (!checkData.CheckSent)
+					{
+						int byteNum = (checkData.SlotNum - 1) / 8;
+						int bitNum  = (checkData.SlotNum - 1) % 8;
+						int dataValue = *(int*)(checkData.Address + byteNum);
+
+						int bitFlag = (int)(0x01 << bitNum);
+
+						if ((dataValue & bitFlag) != 0x00)
+						{
+							if (this->_archipelagoManager)
+							{
+								this->_archipelagoManager->SendItem(i);
+
+								checkData.CheckSent = true;
+							}
+						}
+					}
+				}
+			}
+		}
+		// End Sending of Chao Locations to Server
+
+		if (this->_chaoEntryTimer < CHAO_MEMORY_CHECK_ENTRY_TIME)
+		{
+			// Only check the below data while in Chao World, otherwise it may be wrong
+			return;
+		}
+
+		// In-Garden Tracking of Locations
+		if (this->_chaoRaceEnabled > 0)
+		{
+			for (int i = ChaoGardenCheck::CGC_BEGIN; i <= ChaoGardenCheck::CGC_END_RACE; i++)
+			{
+				if (this->_ChaoGardenData.find(i) != this->_ChaoGardenData.end())
+				{
+					ChaoGardenCheckData& checkData = this->_ChaoGardenData[i];
+
+					if (!checkData.CheckSent)
+					{
+						char dataValue = *(char*)checkData.Address;
+
+						if (dataValue == 0xFF)
+						{
+							continue;
+						}
+
+						int requiredValue = checkData.Index;
+
+						if (dataValue >= requiredValue)
+						{
+							if (this->_archipelagoManager)
+							{
+								this->_archipelagoManager->SendItem(i);
+
+								checkData.CheckSent = true;
+							}
+						}
+					}
+				}
 			}
 
-			// Handle Challenge Race Upper bits
-			if (address == 0x01DEC7CA)
+			// Move Race Data over from AP Storage
+			for (int address = 0x01DEC7C0; address <= 0x01DEC7CD; address++)
 			{
-				char dataValue = *(char*)(address + 1);
-				for (int index2 = 4; index2 <= 7; index2++)
+				char dataValue = *(char*)address;
+				char currentRaceProgress = -1;
+
+				for (int index = 0; index <= 7; index++)
 				{
-					if (((dataValue) & (1 << index2)) == 0)
+					// Handle Challenge Race Upper bits
+					if (address == 0x01DEC7CB && index >= 4)
 					{
 						break;
 					}
 
-					if (currentRaceProgress < 7)
+					if (((dataValue) & (1 << index)) == 0)
 					{
 						break;
 					}
 
 					currentRaceProgress++;
 				}
-			}
 
-			if (currentRaceProgress != (char)-1)
-			{
-				WriteData<1>((void*)(address - CHAO_LOCATION_STORAGE_OFFSET), currentRaceProgress);
-				WriteData<1>((void*)(address - CHAO_LOCATION_STORAGE_OFFSET - CHAO_LOCATION_INTERNAL_OFFSET), currentRaceProgress);
+				// Handle Challenge Race Upper bits
+				if (address == 0x01DEC7CA)
+				{
+					char dataValue = *(char*)(address + 1);
+					for (int index2 = 4; index2 <= 7; index2++)
+					{
+						if (((dataValue) & (1 << index2)) == 0)
+						{
+							break;
+						}
+
+						if (currentRaceProgress < 7)
+						{
+							break;
+						}
+
+						currentRaceProgress++;
+					}
+				}
+
+				if (currentRaceProgress != (char)-1)
+				{
+					WriteData<1>((void*)(address - CHAO_LOCATION_STORAGE_OFFSET), currentRaceProgress);
+					WriteData<1>((void*)(address - CHAO_LOCATION_STORAGE_OFFSET - CHAO_LOCATION_INTERNAL_OFFSET), currentRaceProgress);
+				}
 			}
 		}
 
-		for (int i = ChaoGardenCheck::CGC_Beginner_Karate; i <= ChaoGardenCheck::CGC_Super_Karate; i++)
+		if (this->_chaoKarateEnabled)
 		{
-			if (this->_ChaoGardenData.find(i) != this->_ChaoGardenData.end())
+			// Only display Emblem on SS if all Karate fights are done
+			WriteData<1>((void*)0x676968, '\x80');
+			WriteData<1>((void*)0x676969, '\xBE');
+			WriteData<1>((void*)0x67696A, '\x2C');
+			WriteData<1>((void*)0x67696B, '\xF8');
+			WriteData<1>((void*)0x67696C, '\xDE');
+			WriteData<1>((void*)0x67696D, '\x01');
+			WriteData<1>((void*)0x67696E, '\x1F');
+			WriteData<1>((void*)0x67696F, '\x74');
+			WriteData<1>((void*)0x676970, '\xCD');
+			WriteData<6>((void*)0X542C06, '\x90');
+
+			if (KarateManager != nullptr)
 			{
-				ChaoGardenCheckData& checkData = this->_ChaoGardenData[i];
-
-				if (!checkData.CheckSent)
+				for (int difficulty = 0; difficulty < 4; difficulty++)
 				{
-					char dataValue = *(char*)checkData.Address;
-
-					if (dataValue > 0x00)
+					for (int fights = 0; fights < 5; fights++)
 					{
-						if (this->_archipelagoManager)
+						if (KarateManager->Difficulty == difficulty && KarateManager->CurrentWins > fights)
 						{
-							this->_archipelagoManager->SendItem(i);
+							char dataValue = *(char*)(0x01DEF831 + difficulty);
+							char bitFlag = (char)(0x01 << fights);
 
-							checkData.CheckSent = true;
+							WriteData<1>((void*)(0x01DEF831 + difficulty), (dataValue | bitFlag));
+						}
+					}
+				}
+			}
+
+			for (int i = ChaoGardenCheck::CGC_BEGIN_KARATE; i <= ChaoGardenCheck::CGC_END_KARATE; i++)
+			{
+				if (this->_ChaoGardenData.find(i) != this->_ChaoGardenData.end())
+				{
+					ChaoGardenCheckData& checkData = this->_ChaoGardenData[i];
+
+					if (!checkData.CheckSent)
+					{
+						char dataValue = *(char*)checkData.Address;
+						char bitFlag = (char)(0x01 << checkData.Index);
+
+						if ((dataValue & bitFlag) != 0)
+						{
+							if (this->_archipelagoManager)
+							{
+								this->_archipelagoManager->SendItem(i);
+
+								checkData.CheckSent = true;
+							}
 						}
 					}
 				}
 			}
 		}
+
+		for (int chaoIdx = 0; chaoIdx < 24; chaoIdx++)
+		{
+			ChaoDataBase chaoData = ChaoSlots[chaoIdx].data;
+
+			if (chaoData.TimescaleTimer == 0)
+			{
+				// This Chao does not exist yet
+				continue;
+			}
+
+			// Chao Stats
+			for (int statLevel = 1; statLevel <= this->_chaoStatsEnabled; statLevel++)
+			{
+				for (int statType = ChaoStatCheckType::CSCT_Swim; statType <= ChaoStatCheckType::CSCT_Intelligence; statType++)
+				{
+					int locationID = 0xE00 + (statType * 0x80) + statLevel;
+					if (this->_ChaoStatData.find(locationID) != this->_ChaoStatData.end())
+					{
+						ChaoStatCheckData& checkData = this->_ChaoStatData[locationID];
+
+						if (!checkData.CheckSent)
+						{
+							char chaoLevel = chaoData.StatLevels[statType];
+
+							char dataValue = *(char*)checkData.Address;
+							if (chaoLevel > dataValue)
+							{
+								WriteData<1>((void*)checkData.Address, chaoLevel);
+							}
+						}
+					}
+				}
+			}
+
+			// Chao Animal Parts
+			if (this->_chaoBodyPartsEnabled)
+			{
+				for (int i = ChaoBodyPartCheck::CBPC_BEGIN; i < ChaoBodyPartCheck::CBPC_NUM_CHECKS; i++)
+				{
+					if (this->_ChaoBodyPartData.find(i) != this->_ChaoBodyPartData.end())
+					{
+						ChaoBodyPartCheckData& checkData = this->_ChaoBodyPartData[i];
+
+						if (!checkData.CheckSent)
+						{
+							SA2BAnimal currentChaoAnimal = SA2BAnimal_None;
+							switch (checkData.BodyPart)
+							{
+							case ChaoBodyPart::CBP_Arms:
+								currentChaoAnimal = chaoData.SA2BArmType;
+								break;
+							case ChaoBodyPart::CBP_Ears:
+								currentChaoAnimal = chaoData.SA2BEarType;
+								break;
+							case ChaoBodyPart::CBP_Forehead:
+								currentChaoAnimal = chaoData.SA2BForeheadType;
+								break;
+							case ChaoBodyPart::CBP_Face:
+								currentChaoAnimal = chaoData.SA2BFaceType;
+								break;
+							case ChaoBodyPart::CBP_Legs:
+								currentChaoAnimal = chaoData.SA2BLegType;
+								break;
+							case ChaoBodyPart::CBP_Horn:
+								currentChaoAnimal = chaoData.SA2BHornType;
+								break;
+							case ChaoBodyPart::CBP_Tail:
+								currentChaoAnimal = chaoData.SA2BTailType;
+								break;
+							case ChaoBodyPart::CBP_Wings:
+								currentChaoAnimal = chaoData.SA2BWingType;
+								break;
+							}
+
+							if (currentChaoAnimal == checkData.AnimalType)
+							{
+								char dataValue = *(char*)checkData.Address;
+								char bitFlag = (char)(0x01 << (char)checkData.BodyPart);
+								char newDataValue = dataValue | bitFlag;
+
+								WriteData<1>((void*)checkData.Address, newDataValue);
+							}
+						}
+					}
+				}
+			}
+
+			// Chao Kindergarten
+			if (this->_chaoKindergartenEnabled > 0)
+			{
+				for (int i = ChaoKindergartenCheck::CKgC_BEGIN; i < ChaoKindergartenCheck::CKgC_NUM_CHECKS; i++)
+				{
+					if (this->_ChaoKindergartenData.find(i) != this->_ChaoKindergartenData.end())
+					{
+						ChaoKindergartenCheckData& checkData = this->_ChaoKindergartenData[i];
+
+						if (!checkData.CheckSent)
+						{
+							if (checkData.LessonNum < 0x20)
+							{
+								char byteNum = checkData.LessonNum / 8;
+								char bitNum = checkData.LessonNum % 8;
+								char bitFlag = (char)(0x01 << bitNum);
+
+								char lessonData = chaoData.ClassRoomFlags[byteNum];
+
+								if ((lessonData & bitFlag) != 0)
+								{
+									char dataValue = *(char*)(checkData.Address + byteNum);
+									char newDataValue = dataValue | bitFlag;
+
+									WriteData<1>((void*)(checkData.Address + byteNum), newDataValue);
+								}
+							}
+							else
+							{
+								char byteNum = checkData.LessonNum % 0x20;
+								char lessonData = chaoData.ClassRoomFlags[byteNum];
+
+								if (lessonData > 0)
+								{
+									char dataValue = *(char*)(checkData.Address + byteNum);
+									char bitNum = checkData.LessonNum % 8;
+									char bitFlag = (char)(0x01 << bitNum);
+									char newDataValue = dataValue | bitFlag;
+
+									WriteData<1>((void*)(checkData.Address), newDataValue);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		// End In-Garden Tracking of Locations
 	}
 }
 
@@ -745,13 +1076,39 @@ void LocationManager::CheckLocation(int location_id)
 	}
 	else if (this->_ChaoGardenData.find(location_id) != this->_ChaoGardenData.end())
 	{
-		if (location_id >= ChaoGardenCheck::CGC_Beginner_Karate && location_id <= ChaoGardenCheck::CGC_Super_Karate)
+		if (location_id >= ChaoGardenCheck::CGC_BEGIN_KARATE && location_id <= ChaoGardenCheck::CGC_END_KARATE)
 		{
 			ChaoGardenCheckData& checkData = this->_ChaoGardenData[location_id];
 
 			checkData.CheckSent = true;
 
-			WriteData<1>((void*)checkData.Address, 0x01);
+			char dataValue = *(char*)checkData.Address;
+			dataValue      = (dataValue | (char)(1 << checkData.Index));
+
+			WriteData<1>((void*)checkData.Address, dataValue);
+
+			// If only Prize fights give checks, complete preceding fights too on collect
+			if (this->_racesPacked)
+			{
+				if (this->_ChaoRacePacks.find(location_id) != this->_ChaoRacePacks.end())
+				{
+					std::vector<int> racePack = this->_ChaoRacePacks[location_id];
+					for (unsigned int i = 0; i < racePack.size(); i++)
+					{
+						if (this->_ChaoGardenData.find(racePack[i]) != this->_ChaoGardenData.end())
+						{
+							ChaoGardenCheckData& packCheckData = this->_ChaoGardenData[racePack[i]];
+
+							packCheckData.CheckSent = true;
+
+							char dataValue = *(char*)packCheckData.Address;
+							dataValue      = (dataValue | (char)(1 << packCheckData.Index));
+
+							WriteData<1>((void*)packCheckData.Address, dataValue);
+						}
+					}
+				}
+			}
 		}
 		else
 		{
@@ -797,6 +1154,52 @@ void LocationManager::CheckLocation(int location_id)
 				}
 			}
 		}
+	}
+	else if (this->_ChaoStatData.find(location_id) != this->_ChaoStatData.end())
+	{
+		ChaoStatCheckData& checkData = this->_ChaoStatData[location_id];
+		checkData.CheckSent = true;
+
+		this->_CollectedChaoStats[checkData.StatType].push_back(location_id);
+		std::sort(this->_CollectedChaoStats[checkData.StatType].begin(), this->_CollectedChaoStats[checkData.StatType].end());
+	}
+	else if (this->_ChaoBodyPartData.find(location_id) != this->_ChaoBodyPartData.end())
+	{
+		ChaoBodyPartCheckData& checkData = this->_ChaoBodyPartData[location_id];
+
+		checkData.CheckSent = true;
+
+		char dataValue = *(char*)checkData.Address;
+		char bitFlag = (char)(0x01 << (int)checkData.BodyPart);
+		char newDataValue = dataValue | bitFlag;
+
+		WriteData<1>((void*)checkData.Address, newDataValue);
+	}
+	else if (this->_ChaoKindergartenData.find(location_id) != this->_ChaoKindergartenData.end())
+	{
+		ChaoKindergartenCheckData& checkData = this->_ChaoKindergartenData[location_id];
+
+		checkData.CheckSent = true;
+
+		char dataValue = *(char*)checkData.Address;
+		char bitFlag = (char)(0x01 << (int)checkData.LessonNum);
+		char newDataValue = dataValue | bitFlag;
+
+		WriteData<1>((void*)checkData.Address, newDataValue);
+	}
+	else if (this->_BlackMarketLocationData.find(location_id) != this->_BlackMarketLocationData.end())
+	{
+		BlackMarketCheckData& checkData = this->_BlackMarketLocationData[location_id];
+
+		checkData.CheckSent = true;
+
+		int byteNum = (checkData.SlotNum - 1) / 8;
+		int bitNum = (checkData.SlotNum - 1) % 8;
+		int dataValue = *(int*)(checkData.Address + byteNum);
+		int bitFlag = (int)(0x01 << bitNum);
+		char newDataValue = dataValue | bitFlag;
+
+		WriteData<1>((void*)(checkData.Address + byteNum), newDataValue);
 	}
 	else if (this->_ChaoKeyData.find(location_id) != this->_ChaoKeyData.end())
 	{
@@ -939,7 +1342,88 @@ void LocationManager::SetRacesPacked(bool racesPacked)
 
 void LocationManager::SetChaoEnabled(bool chaoEnabled)
 {
+	// Anything Chao-related is active
 	this->_chaoEnabled = chaoEnabled;
+}
+
+void LocationManager::SetChaoRaceEnabled(int chaoRaceEnabled)
+{
+	this->_chaoRaceEnabled = chaoRaceEnabled;
+
+	if (chaoRaceEnabled)
+	{
+		this->SetChaoEnabled(true);
+	}
+}
+
+void LocationManager::SetChaoKarateEnabled(int chaoKarateEnabled)
+{
+	this->_chaoKarateEnabled = chaoKarateEnabled;
+
+	if (chaoKarateEnabled)
+	{
+		this->SetChaoEnabled(true);
+	}
+}
+
+void LocationManager::SetChaoStatsEnabled(int chaoStatsEnabled)
+{
+	this->_chaoStatsEnabled = chaoStatsEnabled;
+
+	if (chaoStatsEnabled > 0)
+	{
+		this->SetChaoEnabled(true);
+	}
+}
+
+void LocationManager::SetChaoStatsFrequency(int chaoStatsFrequency)
+{
+	this->_chaoStatsFrequency = chaoStatsFrequency;
+}
+
+void LocationManager::SetChaoStatsStaminaEnabled(bool chaoStatsStaminaEnabled)
+{
+	this->_chaoStatsStaminaEnabled = chaoStatsStaminaEnabled;
+}
+
+void LocationManager::SetChaoStatsHiddenEnabled(bool chaoStatsHiddenEnabled)
+{
+	this->_chaoStatsHiddenEnabled = chaoStatsHiddenEnabled;
+}
+
+void LocationManager::SetChaoBodyPartsEnabled(bool chaoBodyPartsEnabled)
+{
+	this->_chaoBodyPartsEnabled = chaoBodyPartsEnabled;
+
+	if (chaoBodyPartsEnabled)
+	{
+		this->SetChaoEnabled(true);
+	}
+}
+
+void LocationManager::SetChaoKindergartenEnabled(int chaoKindergartenEnabled)
+{
+	this->_chaoKindergartenEnabled = chaoKindergartenEnabled;
+
+	if (chaoKindergartenEnabled > 0)
+	{
+		this->SetChaoEnabled(true);
+	}
+}
+
+void LocationManager::SetBlackMarketSlots(int blackMarketSlots)
+{
+	this->_blackMarketSlots = blackMarketSlots;
+
+	if (blackMarketSlots)
+	{
+		this->SetChaoEnabled(true);
+	}
+}
+
+void LocationManager::SetBlackMarketUnlockCosts(std::map<int, int> map)
+{
+	this->_blackMarketUnlockCosts = map;
 }
 
 void LocationManager::SetRequiredCannonsCoreMissions(bool allMissionsRequired)
@@ -960,6 +1444,26 @@ void LocationManager::ResetLocations()
 	}
 
 	for (auto& pair : this->_ChaoGardenData)
+	{
+		pair.second.CheckSent = false;
+	}
+
+	for (auto& pair : this->_ChaoStatData)
+	{
+		pair.second.CheckSent = false;
+	}
+
+	for (auto& pair : this->_ChaoBodyPartData)
+	{
+		pair.second.CheckSent = false;
+	}
+
+	for (auto& pair : this->_ChaoKindergartenData)
+	{
+		pair.second.CheckSent = false;
+	}
+
+	for (auto& pair : this->_BlackMarketLocationData)
 	{
 		pair.second.CheckSent = false;
 	}
@@ -1223,6 +1727,39 @@ void LocationManager::SendAnimalLocationCheck()
 	}
 }
 
+void LocationManager::SendBlackMarketLocationCheck(int menuSelection)
+{
+	if (this->_blackMarketSlots == 0)
+	{
+		return;
+	}
+
+	std::vector<int> activeLocations = this->GetAvailableBlackMarketLocations();
+
+	if (activeLocations.size() <= menuSelection)
+	{
+		return;
+	}
+
+	int locationID = BlackMarketCheck::BMC_BEGIN + activeLocations[menuSelection] + 1;
+
+	if (this->_BlackMarketLocationData.find(locationID) != this->_BlackMarketLocationData.end())
+	{
+		BlackMarketCheckData& checkData = this->_BlackMarketLocationData[locationID];
+
+		if (!checkData.CheckSent)
+		{
+			int byteNum = (checkData.SlotNum - 1) / 8;
+			int bitNum = (checkData.SlotNum - 1) % 8;
+			int dataValue = *(int*)(checkData.Address + byteNum);
+			int bitFlag = (int)(0x01 << bitNum);
+			char newDataValue = dataValue | bitFlag;
+
+			WriteData<1>((void*)(checkData.Address + byteNum), newDataValue);
+		}
+	}
+}
+
 std::vector<int> LocationManager::GetChaoKeyLocationsForLevel(int levelID)
 {
 	std::vector<int> result;
@@ -1389,6 +1926,18 @@ int LocationManager::GetTotalAnimalLocationsForLevel(int levelID)
 	return result;
 }
 
+int LocationManager::GetMaxMarketTokens()
+{
+	if (this->_blackMarketSlots > 0)
+	{
+		return this->_blackMarketUnlockCosts[this->_blackMarketSlots - 1];
+	}
+	else
+	{
+		return 0;
+	}
+}
+
 bool LocationManager::AreAllRacesComplete()
 {
 	for (auto& pair : this->_KartRaceData)
@@ -1417,4 +1966,454 @@ bool LocationManager::AreAllRacesComplete()
 	}
 
 	return true;
+}
+
+std::vector<int> LocationManager::GetChaoBeginnerRaceLocations()
+{
+	std::vector<int> result;
+
+	if (this->_chaoRaceEnabled > 0)
+	{
+		if (this->_racesPacked)
+		{
+			result.push_back(4);
+		}
+		else
+		{
+			result.push_back(12);
+		}
+
+		int count = 0;
+
+		for (auto& pair : this->_ChaoGardenData)
+		{
+			if (pair.first > ChaoGardenCheck::CGC_BlockCanyon_3)
+			{
+				continue;
+			}
+
+			if (this->_racesPacked == 1)
+			{
+				// Prize
+				if (pair.first != ChaoGardenCheck::CGC_CrabPool_3 &&
+					pair.first != ChaoGardenCheck::CGC_StumpValley_3 &&
+					pair.first != ChaoGardenCheck::CGC_MushroomForest_3 &&
+					pair.first != ChaoGardenCheck::CGC_BlockCanyon_3)
+				{
+					continue;
+				}
+			}
+
+			if (pair.second.CheckSent)
+			{
+				count++;
+			}
+		}
+
+		result.push_back(count);
+	}
+
+	return result;
+}
+
+std::vector<int> LocationManager::GetChaoChallengeRaceLocations()
+{
+	std::vector<int> result;
+
+	if (this->_chaoRaceEnabled > 1)
+	{
+		if (this->_racesPacked)
+		{
+			result.push_back(3);
+		}
+		else
+		{
+			result.push_back(12);
+		}
+
+		int count = 0;
+
+		for (auto& pair : this->_ChaoGardenData)
+		{
+			if (pair.first < ChaoGardenCheck::CGC_Challenge_1 || pair.first > ChaoGardenCheck::CGC_Challenge_12)
+			{
+				continue;
+			}
+
+			if (this->_racesPacked == 1)
+			{
+				// Prize
+				if (pair.first != ChaoGardenCheck::CGC_Challenge_4 &&
+					pair.first != ChaoGardenCheck::CGC_Challenge_8 &&
+					pair.first != ChaoGardenCheck::CGC_Challenge_12)
+				{
+					continue;
+				}
+			}
+
+			if (pair.second.CheckSent)
+			{
+				count++;
+			}
+		}
+
+		result.push_back(count);
+	}
+
+	return result;
+}
+
+std::vector<int> LocationManager::GetChaoHeroRaceLocations()
+{
+	std::vector<int> result;
+
+	if (this->_chaoRaceEnabled > 1)
+	{
+		if (this->_racesPacked)
+		{
+			result.push_back(2);
+		}
+		else
+		{
+			result.push_back(4);
+		}
+
+		int count = 0;
+
+		for (auto& pair : this->_ChaoGardenData)
+		{
+			if (pair.first < ChaoGardenCheck::CGC_Hero_1 || pair.first > ChaoGardenCheck::CGC_Hero_4)
+			{
+				continue;
+			}
+
+			if (this->_racesPacked == 1)
+			{
+				// Prize
+				if (pair.first != ChaoGardenCheck::CGC_Hero_2 &&
+					pair.first != ChaoGardenCheck::CGC_Hero_4)
+				{
+					continue;
+				}
+			}
+
+			if (pair.second.CheckSent)
+			{
+				count++;
+			}
+		}
+
+		result.push_back(count);
+	}
+
+	return result;
+}
+
+std::vector<int> LocationManager::GetChaoDarkRaceLocations()
+{
+	std::vector<int> result;
+
+	if (this->_chaoRaceEnabled > 1)
+	{
+		if (this->_racesPacked)
+		{
+			result.push_back(2);
+		}
+		else
+		{
+			result.push_back(4);
+		}
+
+		int count = 0;
+
+		for (auto& pair : this->_ChaoGardenData)
+		{
+			if (pair.first < ChaoGardenCheck::CGC_Dark_1 || pair.first > ChaoGardenCheck::CGC_Dark_4)
+			{
+				continue;
+			}
+
+			if (this->_racesPacked == 1)
+			{
+				// Prize
+				if (pair.first != ChaoGardenCheck::CGC_Dark_2 &&
+					pair.first != ChaoGardenCheck::CGC_Dark_4)
+				{
+					continue;
+				}
+			}
+
+			if (pair.second.CheckSent)
+			{
+				count++;
+			}
+		}
+
+		result.push_back(count);
+	}
+
+	return result;
+}
+
+std::vector<int> LocationManager::GetChaoJewelRaceLocations(JewelRaceCategory jewel)
+{
+	std::vector<int> result;
+
+	if (this->_chaoRaceEnabled > 2)
+	{
+		if (this->_racesPacked)
+		{
+			result.push_back(1);
+		}
+		else
+		{
+			result.push_back(5);
+		}
+
+		int count = 0;
+
+		for (auto& pair : this->_ChaoGardenData)
+		{
+			if (pair.first < (ChaoGardenCheck::CGC_Aquamarine_1 + (5 * jewel)) ||
+			   (pair.first > (ChaoGardenCheck::CGC_Aquamarine_5 + (5 * jewel))))
+			{
+				continue;
+			}
+
+			if (this->_racesPacked == 1)
+			{
+				// Prize
+				if (pair.first != (ChaoGardenCheck::CGC_Aquamarine_5 + (5 * jewel)))
+				{
+					continue;
+				}
+			}
+
+			if (pair.second.CheckSent)
+			{
+				count++;
+			}
+		}
+
+		result.push_back(count);
+	}
+
+	return result;
+}
+
+std::vector<int> LocationManager::GetChaoKarateLocations()
+{
+	std::vector<int> result;
+
+	if (this->_chaoKarateEnabled > 0)
+	{
+		if (this->_racesPacked)
+		{
+			result.push_back(this->_chaoKarateEnabled);
+		}
+		else
+		{
+			result.push_back(this->_chaoKarateEnabled * 5);
+		}
+
+		int count = 0;
+
+		for (auto& pair : this->_ChaoGardenData)
+		{
+			if (pair.first < ChaoGardenCheck::CGC_BEGIN_KARATE || pair.first > ChaoGardenCheck::CGC_END_KARATE)
+			{
+				continue;
+			}
+
+			if (this->_racesPacked == 1)
+			{
+				// Prize
+				if (pair.first != ChaoGardenCheck::CGC_Beginner_Karate_5 &&
+					pair.first != ChaoGardenCheck::CGC_Intermediate_Karate_5 &&
+					pair.first != ChaoGardenCheck::CGC_Expert_Karate_5 &&
+					pair.first != ChaoGardenCheck::CGC_Super_Karate_5)
+				{
+					continue;
+				}
+			}
+
+			if (pair.second.CheckSent)
+			{
+				count++;
+			}
+		}
+
+		result.push_back(count);
+	}
+
+	return result;
+}
+
+std::vector<int> LocationManager::GetChaoStatLocations(ChaoStatCheckType stat)
+{
+	std::vector<int> result;
+
+	if (this->_chaoStatsEnabled > 0)
+	{
+		if (stat == ChaoStatCheckType::CSCT_Stamina && !this->_chaoStatsStaminaEnabled)
+		{
+			return result;
+		}
+
+		if ((stat == ChaoStatCheckType::CSCT_Luck || stat == ChaoStatCheckType::CSCT_Intelligence) && !this->_chaoStatsHiddenEnabled)
+		{
+			return result;
+		}
+
+		result.push_back(this->_chaoStatsEnabled);
+		int countDone = 0;
+
+		int locID = ChaoStatCheck::CSC_BEGIN + (0x80 * stat) + 1;
+		if (this->_ChaoStatData.find(locID) != this->_ChaoStatData.end())
+		{
+			ChaoStatCheckData& checkData = this->_ChaoStatData[locID];
+			char dataValue = *(char*)checkData.Address;
+			countDone = (int)dataValue;
+			result.push_back(countDone);
+		}
+	}
+
+	return result;
+}
+
+std::vector<int> LocationManager::GetChaoAnimalPartLocations(ChaoBodyPartAnimal animal)
+{
+	std::vector<int> result;
+
+	if (this->_chaoBodyPartsEnabled)
+	{
+		int countTotal = 0;
+		int countDone = 0;
+
+		for (int i = (ChaoBodyPartCheck::CBPC_BEGIN + (8 * animal)); i < (ChaoBodyPartCheck::CBPC_BEGIN + (8 * (animal + 1))); i++)
+		{
+			if (this->_ChaoBodyPartData.find(i) != this->_ChaoBodyPartData.end())
+			{
+				countTotal++;
+
+				ChaoBodyPartCheckData& checkData = this->_ChaoBodyPartData[i];
+				if (checkData.CheckSent)
+				{
+					countDone++;
+				}
+			}
+		}
+
+		if (countTotal > 0)
+		{
+			result.push_back(countTotal);
+			result.push_back(countDone);
+		}
+	}
+
+	return result;
+}
+
+std::vector<int> LocationManager::GetChaoLessonLocations(ChaoLessonType lesson)
+{
+	std::vector<int> result;
+
+	if (this->_chaoKindergartenEnabled == 2)
+	{
+		int countTotal = 0;
+		int countDone = 0;
+
+		for (int i = (ChaoKindergartenCheck::CKgC_BEGIN + (0x8 * lesson)); i < (ChaoKindergartenCheck::CKgC_BEGIN + (0x8 * (lesson + 1))); i++)
+		{
+			if (this->_ChaoKindergartenData.find(i) != this->_ChaoKindergartenData.end())
+			{
+				countTotal++;
+
+				ChaoKindergartenCheckData& checkData = this->_ChaoKindergartenData[i];
+				if (checkData.CheckSent)
+				{
+					countDone++;
+				}
+			}
+		}
+
+		result.push_back(countTotal);
+		result.push_back(countDone);
+	}
+	else if (this->_chaoKindergartenEnabled == 1)
+	{
+		int countTotal = 0;
+		int countDone = 0;
+
+		if (this->_ChaoKindergartenData.find(ChaoKindergartenCheck::CKgC_AnyDrawing + lesson) != this->_ChaoKindergartenData.end())
+		{
+			countTotal++;
+
+			ChaoKindergartenCheckData& checkData = this->_ChaoKindergartenData[ChaoKindergartenCheck::CKgC_AnyDrawing + lesson];
+			if (checkData.CheckSent)
+			{
+				countDone++;
+			}
+		}
+
+		result.push_back(countTotal);
+		result.push_back(countDone);
+	}
+
+	return result;
+}
+
+std::vector<int> LocationManager::GetCompletedBlackMarketLocations()
+{
+	std::vector<int> result;
+
+	if (this->_blackMarketSlots > 0)
+	{
+		int countTotal = 0;
+		int countDone = 0;
+
+		for (int i = (BlackMarketCheck::BMC_BEGIN + 1); i <= (BlackMarketCheck::BMC_BEGIN + this->_blackMarketSlots); i++)
+		{
+			if (this->_BlackMarketLocationData.find(i) != this->_BlackMarketLocationData.end())
+			{
+				countTotal++;
+
+				BlackMarketCheckData& checkData = this->_BlackMarketLocationData[i];
+				if (checkData.CheckSent)
+				{
+					countDone++;
+				}
+			}
+		}
+
+		result.push_back(countTotal);
+		result.push_back(countDone);
+	}
+
+	return result;
+}
+
+std::vector<int> LocationManager::GetAvailableBlackMarketLocations()
+{
+	std::vector<int> result;
+
+	if (this->_blackMarketSlots > 0)
+	{
+		for (int i = 0; i < this->_blackMarketSlots; i++)
+		{
+			if (this->_BlackMarketLocationData.find(BlackMarketCheck::BMC_BEGIN + 1 + i) != this->_BlackMarketLocationData.end())
+			{
+				if (BlackMarketTokenCount >= this->_blackMarketUnlockCosts[i])
+				{
+					BlackMarketCheckData& checkData = this->_BlackMarketLocationData[BlackMarketCheck::BMC_BEGIN + 1 + i];
+					if (!checkData.CheckSent)
+					{
+						result.push_back(i);
+					}
+				}
+			}
+		}
+	}
+
+	return result;
 }

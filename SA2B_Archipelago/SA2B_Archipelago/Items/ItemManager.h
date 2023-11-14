@@ -14,6 +14,9 @@ constexpr unsigned int TRAP_DURATION = 600;
 constexpr unsigned int TRAP_COOLDOWN = 60;
 constexpr unsigned int JUNK_COOLDOWN = 210;
 
+constexpr unsigned int IM_CHAO_MEMORY_CHECK_ENTRY_TIME = 180;
+constexpr unsigned int ANIMAL_DROPOFF_COOLDOWN = 90;
+
 class ItemManager
 {
 public:
@@ -42,6 +45,7 @@ private:
 	void HandleTrap(int item_id);
 	bool IsActiveTrapValid();
 	void ResetTrapData();
+
 	void OnFrameJunkQueue();
 	void OnFrameTrapQueue();
 	void OnFrameDialogueQueue();
@@ -50,21 +54,50 @@ private:
 	void AddRandomDialogueToQueue();
 	void AddRandomCutsceneToQueue();
 
+	void OnFrameChaoGardenQueue();
+	void HandleEgg(int item_id);
+	void HandleFruit(int item_id);
+	void HandleSeed(int item_id);
+	void HandleHat(int item_id);
+	void HandleAnimal(int item_id);
+
 	const HelperFunctions* _helperFunctions;
 
 	std::map<int, ItemData> _ItemData;
 	int _thisSessionChecksReceived = 0;
 	unsigned int _EmblemsReceived = 0;
+	unsigned int _BlackMarketTokensReceived = 0;
 
 	std::queue<int> _JunkQueue;
 	std::queue<int> _TrapQueue;
 	std::queue<DialogueData> _DialogueQueue;
+
+	std::vector<ChaoGardenObject> _ChaoEggQueue;
+	unsigned int _ChaoEggsUsed = 0;
+
+	std::vector<ChaoGardenObject> _ChaoFruitQueue;
+	unsigned int _ChaoFruitsUsed = 0;
+
+	std::vector<ChaoGardenObject> _ChaoSeedQueue;
+	unsigned int _ChaoSeedsUsed = 0;
+
+	std::vector<ChaoGardenObject> _ChaoHatQueue;
+	unsigned int _ChaoHatsUsed = 0;
+
+	std::vector<ChaoGardenObject> _ChaoAnimalQueue;
+	unsigned int _ChaoAnimalsUsed = 0;
 
 	int _ActiveTrap = 0;
 	int _ActiveTrapTimer = 0;
 	int _TrapCooldownTimer = TRAP_COOLDOWN;
 	int _JunkCooldownTimer = 0;
 	int _ActiveDialogueTimer = 0;
+
+	bool _ReverseTrapActive = false;
+
+	int _chaoEntryTimer = 0;
+	int _animalDropoffTimer = ANIMAL_DROPOFF_COOLDOWN;
+	char _lastAnimalCount = 0;
 
 	int _ChaosControlCooldown = TRAP_COOLDOWN;
 

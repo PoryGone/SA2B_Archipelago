@@ -1050,6 +1050,7 @@ void InitializeAnimalChecks(std::map<int, AnimalCheckData>& outAnimalChecks)
     outAnimalChecks[AnimalCheck::AC_DryLagoon_Animal_8]  = AnimalCheckData(0x01DEED6C, 0x07, 0x07, LevelIDs_DryLagoon);
     outAnimalChecks[AnimalCheck::AC_DryLagoon_Animal_9]  = AnimalCheckData(0x01DEED6D, 0x00, 0x08, LevelIDs_DryLagoon);
     outAnimalChecks[AnimalCheck::AC_DryLagoon_Animal_10] = AnimalCheckData(0x01DEED6D, 0x01, 0x09, LevelIDs_DryLagoon);
+    outAnimalChecks[AnimalCheck::AC_DryLagoon_Animal_11] = AnimalCheckData(0x01DEED6D, 0x02, 0x0A, LevelIDs_DryLagoon);
 
     outAnimalChecks[AnimalCheck::AC_SandOcean_Animal_1]  = AnimalCheckData(0x01DEED6E, 0x00, 0x00, LevelIDs_SandOcean);
     outAnimalChecks[AnimalCheck::AC_SandOcean_Animal_2]  = AnimalCheckData(0x01DEED6E, 0x01, 0x01, LevelIDs_SandOcean);
@@ -1339,10 +1340,26 @@ void InitializeChaoGardenChecks(std::map<int, ChaoGardenCheckData>& outChaoGarde
     outChaoGardenChecks[ChaoGardenCheck::CGC_Dark_3] = ChaoGardenCheckData(0x01A0F99F, 2);
     outChaoGardenChecks[ChaoGardenCheck::CGC_Dark_4] = ChaoGardenCheckData(0x01A0F99F, 3);
 
-    outChaoGardenChecks[ChaoGardenCheck::CGC_Beginner_Karate]     = ChaoGardenCheckData(0x01DEF831, 0);
-    outChaoGardenChecks[ChaoGardenCheck::CGC_Intermediate_Karate] = ChaoGardenCheckData(0x01DEF832, 0);
-    outChaoGardenChecks[ChaoGardenCheck::CGC_Expert_Karate]       = ChaoGardenCheckData(0x01DEF833, 0);
-    outChaoGardenChecks[ChaoGardenCheck::CGC_Super_Karate]        = ChaoGardenCheckData(0x01DEF834, 0);
+    outChaoGardenChecks[ChaoGardenCheck::CGC_Beginner_Karate_1]     = ChaoGardenCheckData(0x01DEF831, 0);
+    outChaoGardenChecks[ChaoGardenCheck::CGC_Beginner_Karate_2]     = ChaoGardenCheckData(0x01DEF831, 1);
+    outChaoGardenChecks[ChaoGardenCheck::CGC_Beginner_Karate_3]     = ChaoGardenCheckData(0x01DEF831, 2);
+    outChaoGardenChecks[ChaoGardenCheck::CGC_Beginner_Karate_4]     = ChaoGardenCheckData(0x01DEF831, 3);
+    outChaoGardenChecks[ChaoGardenCheck::CGC_Beginner_Karate_5]     = ChaoGardenCheckData(0x01DEF831, 4);
+    outChaoGardenChecks[ChaoGardenCheck::CGC_Intermediate_Karate_1] = ChaoGardenCheckData(0x01DEF832, 0);
+    outChaoGardenChecks[ChaoGardenCheck::CGC_Intermediate_Karate_2] = ChaoGardenCheckData(0x01DEF832, 1);
+    outChaoGardenChecks[ChaoGardenCheck::CGC_Intermediate_Karate_3] = ChaoGardenCheckData(0x01DEF832, 2);
+    outChaoGardenChecks[ChaoGardenCheck::CGC_Intermediate_Karate_4] = ChaoGardenCheckData(0x01DEF832, 3);
+    outChaoGardenChecks[ChaoGardenCheck::CGC_Intermediate_Karate_5] = ChaoGardenCheckData(0x01DEF832, 4);
+    outChaoGardenChecks[ChaoGardenCheck::CGC_Expert_Karate_1]       = ChaoGardenCheckData(0x01DEF833, 0);
+    outChaoGardenChecks[ChaoGardenCheck::CGC_Expert_Karate_2]       = ChaoGardenCheckData(0x01DEF833, 1);
+    outChaoGardenChecks[ChaoGardenCheck::CGC_Expert_Karate_3]       = ChaoGardenCheckData(0x01DEF833, 2);
+    outChaoGardenChecks[ChaoGardenCheck::CGC_Expert_Karate_4]       = ChaoGardenCheckData(0x01DEF833, 3);
+    outChaoGardenChecks[ChaoGardenCheck::CGC_Expert_Karate_5]       = ChaoGardenCheckData(0x01DEF833, 4);
+    outChaoGardenChecks[ChaoGardenCheck::CGC_Super_Karate_1]        = ChaoGardenCheckData(0x01DEF834, 0);
+    outChaoGardenChecks[ChaoGardenCheck::CGC_Super_Karate_2]        = ChaoGardenCheckData(0x01DEF834, 1);
+    outChaoGardenChecks[ChaoGardenCheck::CGC_Super_Karate_3]        = ChaoGardenCheckData(0x01DEF834, 2);
+    outChaoGardenChecks[ChaoGardenCheck::CGC_Super_Karate_4]        = ChaoGardenCheckData(0x01DEF834, 3);
+    outChaoGardenChecks[ChaoGardenCheck::CGC_Super_Karate_5]        = ChaoGardenCheckData(0x01DEF834, 4);
 }
 
 void InitializeChaoRacePacks(std::map<int, std::vector<int>>& outChaoRacePacks)
@@ -1370,6 +1387,168 @@ void InitializeChaoRacePacks(std::map<int, std::vector<int>>& outChaoRacePacks)
 
     outChaoRacePacks[ChaoGardenCheck::CGC_Dark_2] = std::vector<int>{ CGC_Dark_1 };
     outChaoRacePacks[ChaoGardenCheck::CGC_Dark_4] = std::vector<int>{ CGC_Dark_3 };
+
+    outChaoRacePacks[ChaoGardenCheck::CGC_Beginner_Karate_5]     = std::vector<int>{ CGC_Beginner_Karate_1, CGC_Beginner_Karate_2, CGC_Beginner_Karate_3, CGC_Beginner_Karate_4 };
+    outChaoRacePacks[ChaoGardenCheck::CGC_Intermediate_Karate_5] = std::vector<int>{ CGC_Intermediate_Karate_1, CGC_Intermediate_Karate_2, CGC_Intermediate_Karate_3, CGC_Intermediate_Karate_4 };
+    outChaoRacePacks[ChaoGardenCheck::CGC_Expert_Karate_5]       = std::vector<int>{ CGC_Expert_Karate_1, CGC_Expert_Karate_2, CGC_Expert_Karate_3, CGC_Expert_Karate_4 };
+    outChaoRacePacks[ChaoGardenCheck::CGC_Super_Karate_5]        = std::vector<int>{ CGC_Super_Karate_1, CGC_Super_Karate_2, CGC_Super_Karate_3, CGC_Super_Karate_4 };
+}
+
+void InitializeChaoStatChecks(std::map<int, ChaoStatCheckData>& outChaoStatChecks)
+{
+    outChaoStatChecks.clear();
+
+    for (int i = 1; i <= 99; i++)
+    {
+        outChaoStatChecks[ChaoStatCheck::CSC_Swim_BEGIN         + i] = ChaoStatCheckData(0x01DEC7CE, ChaoStatCheckType::CSCT_Swim, i);
+        outChaoStatChecks[ChaoStatCheck::CSC_Fly_BEGIN          + i] = ChaoStatCheckData(0x01DEC7CF, ChaoStatCheckType::CSCT_Fly, i);
+        outChaoStatChecks[ChaoStatCheck::CSC_Run_BEGIN          + i] = ChaoStatCheckData(0x01DEC7D0, ChaoStatCheckType::CSCT_Run, i);
+        outChaoStatChecks[ChaoStatCheck::CSC_Power_BEGIN        + i] = ChaoStatCheckData(0x01DEC7D1, ChaoStatCheckType::CSCT_Power, i);
+        outChaoStatChecks[ChaoStatCheck::CSC_Stamina_BEGIN      + i] = ChaoStatCheckData(0x01DEC7D2, ChaoStatCheckType::CSCT_Stamina, i);
+        outChaoStatChecks[ChaoStatCheck::CSC_Luck_BEGIN         + i] = ChaoStatCheckData(0x01DEC7D3, ChaoStatCheckType::CSCT_Luck, i);
+        outChaoStatChecks[ChaoStatCheck::CSC_Intelligence_BEGIN + i] = ChaoStatCheckData(0x01DEC7D4, ChaoStatCheckType::CSCT_Intelligence, i);
+    }
+}
+
+void InitializeChaoBodyPartChecks(std::map<int, ChaoBodyPartCheckData>& outChaoBodyPartChecks)
+{
+    outChaoBodyPartChecks.clear();
+
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_PenguinArms]     = ChaoBodyPartCheckData(0x01DEC7D5, SA2BAnimal_Penguin, ChaoBodyPart::CBP_Arms);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_PenguinForehead] = ChaoBodyPartCheckData(0x01DEC7D5, SA2BAnimal_Penguin, ChaoBodyPart::CBP_Forehead);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_PenguinLegs]     = ChaoBodyPartCheckData(0x01DEC7D5, SA2BAnimal_Penguin, ChaoBodyPart::CBP_Legs);
+
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_SealArms] = ChaoBodyPartCheckData(0x01DEC7D6, SA2BAnimal_Seal, ChaoBodyPart::CBP_Arms);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_SealTail] = ChaoBodyPartCheckData(0x01DEC7D6, SA2BAnimal_Seal, ChaoBodyPart::CBP_Tail);
+
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_OtterArms] = ChaoBodyPartCheckData(0x01DEC7D7, SA2BAnimal_Otter, ChaoBodyPart::CBP_Arms);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_OtterEars] = ChaoBodyPartCheckData(0x01DEC7D7, SA2BAnimal_Otter, ChaoBodyPart::CBP_Ears);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_OtterFace] = ChaoBodyPartCheckData(0x01DEC7D7, SA2BAnimal_Otter, ChaoBodyPart::CBP_Face);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_OtterLegs] = ChaoBodyPartCheckData(0x01DEC7D7, SA2BAnimal_Otter, ChaoBodyPart::CBP_Legs);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_OtterTail] = ChaoBodyPartCheckData(0x01DEC7D7, SA2BAnimal_Otter, ChaoBodyPart::CBP_Tail);
+
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_RabbitArms] = ChaoBodyPartCheckData(0x01DEC7DC, SA2BAnimal_Rabbit, ChaoBodyPart::CBP_Arms);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_RabbitEars] = ChaoBodyPartCheckData(0x01DEC7DC, SA2BAnimal_Rabbit, ChaoBodyPart::CBP_Ears);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_RabbitLegs] = ChaoBodyPartCheckData(0x01DEC7DC, SA2BAnimal_Rabbit, ChaoBodyPart::CBP_Legs);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_RabbitTail] = ChaoBodyPartCheckData(0x01DEC7DC, SA2BAnimal_Rabbit, ChaoBodyPart::CBP_Tail);
+
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_CheetahArms] = ChaoBodyPartCheckData(0x01DEC7DD, SA2BAnimal_Cheetah, ChaoBodyPart::CBP_Arms);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_CheetahEars] = ChaoBodyPartCheckData(0x01DEC7DD, SA2BAnimal_Cheetah, ChaoBodyPart::CBP_Ears);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_CheetahLegs] = ChaoBodyPartCheckData(0x01DEC7DD, SA2BAnimal_Cheetah, ChaoBodyPart::CBP_Legs);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_CheetahTail] = ChaoBodyPartCheckData(0x01DEC7DD, SA2BAnimal_Cheetah, ChaoBodyPart::CBP_Tail);
+
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_WarthogArms] = ChaoBodyPartCheckData(0x01DEC7DE, SA2BAnimal_Warthog, ChaoBodyPart::CBP_Arms);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_WarthogEars] = ChaoBodyPartCheckData(0x01DEC7DE, SA2BAnimal_Warthog, ChaoBodyPart::CBP_Ears);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_WarthogFace] = ChaoBodyPartCheckData(0x01DEC7DE, SA2BAnimal_Warthog, ChaoBodyPart::CBP_Face);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_WarthogLegs] = ChaoBodyPartCheckData(0x01DEC7DE, SA2BAnimal_Warthog, ChaoBodyPart::CBP_Legs);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_WarthogTail] = ChaoBodyPartCheckData(0x01DEC7DE, SA2BAnimal_Warthog, ChaoBodyPart::CBP_Tail);
+
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_BearArms] = ChaoBodyPartCheckData(0x01DEC7DF, SA2BAnimal_Bear, ChaoBodyPart::CBP_Arms);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_BearEars] = ChaoBodyPartCheckData(0x01DEC7DF, SA2BAnimal_Bear, ChaoBodyPart::CBP_Ears);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_BearLegs] = ChaoBodyPartCheckData(0x01DEC7DF, SA2BAnimal_Bear, ChaoBodyPart::CBP_Legs);
+
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_TigerArms] = ChaoBodyPartCheckData(0x01DEC7E0, SA2BAnimal_Tiger, ChaoBodyPart::CBP_Arms);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_TigerEars] = ChaoBodyPartCheckData(0x01DEC7E0, SA2BAnimal_Tiger, ChaoBodyPart::CBP_Ears);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_TigerLegs] = ChaoBodyPartCheckData(0x01DEC7E0, SA2BAnimal_Tiger, ChaoBodyPart::CBP_Legs);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_TigerTail] = ChaoBodyPartCheckData(0x01DEC7E0, SA2BAnimal_Tiger, ChaoBodyPart::CBP_Tail);
+
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_GorillaArms]     = ChaoBodyPartCheckData(0x01DEC7E1, SA2BAnimal_Gorilla, ChaoBodyPart::CBP_Arms);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_GorillaEars]     = ChaoBodyPartCheckData(0x01DEC7E1, SA2BAnimal_Gorilla, ChaoBodyPart::CBP_Ears);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_GorillaForehead] = ChaoBodyPartCheckData(0x01DEC7E1, SA2BAnimal_Gorilla, ChaoBodyPart::CBP_Forehead);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_GorillaLegs]     = ChaoBodyPartCheckData(0x01DEC7E1, SA2BAnimal_Gorilla, ChaoBodyPart::CBP_Legs);
+
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_PeacockForehead] = ChaoBodyPartCheckData(0x01DEC7E2, SA2BAnimal_Peacock, ChaoBodyPart::CBP_Forehead);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_PeacockLegs]     = ChaoBodyPartCheckData(0x01DEC7E2, SA2BAnimal_Peacock, ChaoBodyPart::CBP_Legs);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_PeacockTail]     = ChaoBodyPartCheckData(0x01DEC7E2, SA2BAnimal_Peacock, ChaoBodyPart::CBP_Tail);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_PeacockWings]    = ChaoBodyPartCheckData(0x01DEC7E2, SA2BAnimal_Peacock, ChaoBodyPart::CBP_Wings);
+
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_ParrotForehead] = ChaoBodyPartCheckData(0x01DEC7E3, SA2BAnimal_Parrot, ChaoBodyPart::CBP_Forehead);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_ParrotLegs]     = ChaoBodyPartCheckData(0x01DEC7E3, SA2BAnimal_Parrot, ChaoBodyPart::CBP_Legs);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_ParrotTail]     = ChaoBodyPartCheckData(0x01DEC7E3, SA2BAnimal_Parrot, ChaoBodyPart::CBP_Tail);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_ParrotWings]    = ChaoBodyPartCheckData(0x01DEC7E3, SA2BAnimal_Parrot, ChaoBodyPart::CBP_Wings);
+
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_CondorEars]  = ChaoBodyPartCheckData(0x01DEC7E8, SA2BAnimal_Condor, ChaoBodyPart::CBP_Ears);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_CondorLegs]  = ChaoBodyPartCheckData(0x01DEC7E8, SA2BAnimal_Condor, ChaoBodyPart::CBP_Legs);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_CondorTail]  = ChaoBodyPartCheckData(0x01DEC7E8, SA2BAnimal_Condor, ChaoBodyPart::CBP_Tail);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_CondorWings] = ChaoBodyPartCheckData(0x01DEC7E8, SA2BAnimal_Condor, ChaoBodyPart::CBP_Wings);
+
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_SkunkArms]     = ChaoBodyPartCheckData(0x01DEC7E9, SA2BAnimal_Skunk, ChaoBodyPart::CBP_Arms);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_SkunkForehead] = ChaoBodyPartCheckData(0x01DEC7E9, SA2BAnimal_Skunk, ChaoBodyPart::CBP_Forehead);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_SkunkLegs]     = ChaoBodyPartCheckData(0x01DEC7E9, SA2BAnimal_Skunk, ChaoBodyPart::CBP_Legs);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_SkunkTail]     = ChaoBodyPartCheckData(0x01DEC7E9, SA2BAnimal_Skunk, ChaoBodyPart::CBP_Tail);
+
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_SheepArms] = ChaoBodyPartCheckData(0x01DEC7EA, SA2BAnimal_Sheep, ChaoBodyPart::CBP_Arms);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_SheepEars] = ChaoBodyPartCheckData(0x01DEC7EA, SA2BAnimal_Sheep, ChaoBodyPart::CBP_Ears);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_SheepLegs] = ChaoBodyPartCheckData(0x01DEC7EA, SA2BAnimal_Sheep, ChaoBodyPart::CBP_Legs);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_SheepHorn] = ChaoBodyPartCheckData(0x01DEC7EA, SA2BAnimal_Sheep, ChaoBodyPart::CBP_Horn);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_SheepTail] = ChaoBodyPartCheckData(0x01DEC7EA, SA2BAnimal_Sheep, ChaoBodyPart::CBP_Tail);
+
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_RaccoonArms] = ChaoBodyPartCheckData(0x01DEC7EB, SA2BAnimal_Raccoon, ChaoBodyPart::CBP_Arms);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_RaccoonEars] = ChaoBodyPartCheckData(0x01DEC7EB, SA2BAnimal_Raccoon, ChaoBodyPart::CBP_Ears);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_RaccoonLegs] = ChaoBodyPartCheckData(0x01DEC7EB, SA2BAnimal_Raccoon, ChaoBodyPart::CBP_Legs);
+
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_DragonArms]  = ChaoBodyPartCheckData(0x01DEC7ED, SA2BAnimal_Dragon, ChaoBodyPart::CBP_Arms);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_DragonEars]  = ChaoBodyPartCheckData(0x01DEC7ED, SA2BAnimal_Dragon, ChaoBodyPart::CBP_Ears);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_DragonLegs]  = ChaoBodyPartCheckData(0x01DEC7ED, SA2BAnimal_Dragon, ChaoBodyPart::CBP_Legs);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_DragonHorn]  = ChaoBodyPartCheckData(0x01DEC7ED, SA2BAnimal_Dragon, ChaoBodyPart::CBP_Horn);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_DragonTail]  = ChaoBodyPartCheckData(0x01DEC7ED, SA2BAnimal_Dragon, ChaoBodyPart::CBP_Tail);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_DragonWings] = ChaoBodyPartCheckData(0x01DEC7ED, SA2BAnimal_Dragon, ChaoBodyPart::CBP_Wings);
+
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_UnicornArms]     = ChaoBodyPartCheckData(0x01DEC7EE, SA2BAnimal_Unicorn, ChaoBodyPart::CBP_Arms);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_UnicornEars]     = ChaoBodyPartCheckData(0x01DEC7EE, SA2BAnimal_Unicorn, ChaoBodyPart::CBP_Ears);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_UnicornForehead] = ChaoBodyPartCheckData(0x01DEC7EE, SA2BAnimal_Unicorn, ChaoBodyPart::CBP_Forehead);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_UnicornLegs]     = ChaoBodyPartCheckData(0x01DEC7EE, SA2BAnimal_Unicorn, ChaoBodyPart::CBP_Legs);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_UnicornTail]     = ChaoBodyPartCheckData(0x01DEC7EE, SA2BAnimal_Unicorn, ChaoBodyPart::CBP_Tail);
+
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_PhoenixForehead] = ChaoBodyPartCheckData(0x01DEC7EF, SA2BAnimal_Phoenix, ChaoBodyPart::CBP_Forehead);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_PhoenixLegs]     = ChaoBodyPartCheckData(0x01DEC7EF, SA2BAnimal_Phoenix, ChaoBodyPart::CBP_Legs);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_PhoenixTail]     = ChaoBodyPartCheckData(0x01DEC7EF, SA2BAnimal_Phoenix, ChaoBodyPart::CBP_Tail);
+    outChaoBodyPartChecks[ChaoBodyPartCheck::CBPC_PhoenixWings]    = ChaoBodyPartCheckData(0x01DEC7EF, SA2BAnimal_Phoenix, ChaoBodyPart::CBP_Wings);
+}
+
+void InitializeChaoKindergartenChecks(std::map<int, ChaoKindergartenCheckData>& outChaoKindergartenChecks)
+{
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Drawing_1] = ChaoKindergartenCheckData(0x01DEC7F4, 0x00);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Drawing_2] = ChaoKindergartenCheckData(0x01DEC7F4, 0x01);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Drawing_3] = ChaoKindergartenCheckData(0x01DEC7F4, 0x02);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Drawing_4] = ChaoKindergartenCheckData(0x01DEC7F4, 0x03);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Drawing_5] = ChaoKindergartenCheckData(0x01DEC7F4, 0x04);
+
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Shake_Dance] = ChaoKindergartenCheckData(0x01DEC7F4, 0x08);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Spin_Dance]  = ChaoKindergartenCheckData(0x01DEC7F4, 0x09);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Step_Dance]  = ChaoKindergartenCheckData(0x01DEC7F4, 0x0A);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_GoGo_Dance]  = ChaoKindergartenCheckData(0x01DEC7F4, 0x0B);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Exercise]    = ChaoKindergartenCheckData(0x01DEC7F4, 0x0C);
+
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Song_1] = ChaoKindergartenCheckData(0x01DEC7F4, 0x10);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Song_2] = ChaoKindergartenCheckData(0x01DEC7F4, 0x11);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Song_3] = ChaoKindergartenCheckData(0x01DEC7F4, 0x12);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Song_4] = ChaoKindergartenCheckData(0x01DEC7F4, 0x13);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Song_5] = ChaoKindergartenCheckData(0x01DEC7F4, 0x14);
+
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Bell]       = ChaoKindergartenCheckData(0x01DEC7F4, 0x18);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Castanets]  = ChaoKindergartenCheckData(0x01DEC7F4, 0x19);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Cymbals]    = ChaoKindergartenCheckData(0x01DEC7F4, 0x1A);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Drum]       = ChaoKindergartenCheckData(0x01DEC7F4, 0x1B);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Flute]      = ChaoKindergartenCheckData(0x01DEC7F4, 0x1C);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Maracas]    = ChaoKindergartenCheckData(0x01DEC7F4, 0x1D);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Trumpet]    = ChaoKindergartenCheckData(0x01DEC7F4, 0x1E);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_Tambourine] = ChaoKindergartenCheckData(0x01DEC7F4, 0x1F);
+
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_AnyDrawing]    = ChaoKindergartenCheckData(0x01DEC7F8, 0x20);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_AnyDance]      = ChaoKindergartenCheckData(0x01DEC7F8, 0x21);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_AnySong]       = ChaoKindergartenCheckData(0x01DEC7F8, 0x22);
+    outChaoKindergartenChecks[ChaoKindergartenCheck::CKgC_AnyInstrument] = ChaoKindergartenCheckData(0x01DEC7F8, 0x23);
+}
+
+void InitializeBlackMarketChecks(std::map<int, BlackMarketCheckData>& outBlackMarketChecks)
+{
+    outBlackMarketChecks.clear();
+
+    for (int i = 1; i <= 64; i++)
+    {
+        outBlackMarketChecks[BlackMarketCheck::BMC_BEGIN + i] = BlackMarketCheckData(0x01DEC800, i);
+    }
 }
 
 void InitializeKartRaceChecks(std::map<int, KartRaceCheckData>& outKartRaceChecks)
