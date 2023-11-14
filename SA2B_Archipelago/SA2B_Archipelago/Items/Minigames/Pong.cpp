@@ -3,12 +3,6 @@
 #include "Pong.h"
 #include "Components/RotateSpriteNode.h"
 
-
-float DegToRad(float inDeg)
-{
-	return inDeg * 3.14159265358979323f / 180.0f;
-}
-
 void Pong::OnGameStart(MinigameManagerData data)
 {
 	this->CreateHierarchy(data);
@@ -17,8 +11,8 @@ void Pong::OnGameStart(MinigameManagerData data)
 	this->activeAISpeed     = PONG_AI_SPEED;
 
 	float startingAngle = 90.0f * ((rand() % 2) + 2) + ((rand() % 31) + 30);
-	this->ballSpeedX = sin(DegToRad(startingAngle)) * PONG_BALL_SPEED;
-	this->ballSpeedY = -cos(DegToRad(startingAngle)) * PONG_BALL_SPEED;
+	this->ballSpeedX = sin(NJM_DEG_RAD(startingAngle)) * PONG_BALL_SPEED;
+	this->ballSpeedY = -cos(NJM_DEG_RAD(startingAngle)) * PONG_BALL_SPEED;
 
 	if (data.difficulty == MinigameDifficulty::MGD_Easy)
 	{
@@ -97,8 +91,8 @@ void Pong::HandleCollision(MinigameManagerData data)
 			float normalizedDist = currentDist / maxDist;
 			float newAngle = ((normalizedDist + 1) * PONG_PADDLE_HIT_ANGLE_RANGE / 2.0f) + PONG_PADDLE_HIT_ANGLE_OFFSET;
 
-			this->ballSpeedX = sin(DegToRad(newAngle)) * PONG_BALL_SPEED;
-			this->ballSpeedY = -cos(DegToRad(newAngle)) * PONG_BALL_SPEED;
+			this->ballSpeedX = sin(NJM_DEG_RAD(newAngle)) * PONG_BALL_SPEED;
+			this->ballSpeedY = -cos(NJM_DEG_RAD(newAngle)) * PONG_BALL_SPEED;
 
 			PlaySoundProbably(PONG_SOUND_PLAYER_PADDLE, 0, 0, 0);
 		}
@@ -119,8 +113,8 @@ void Pong::HandleCollision(MinigameManagerData data)
 			float normalizedDist = currentDist / maxDist;
 			float newAngle = 180.0f + ((normalizedDist + 1) * PONG_PADDLE_HIT_ANGLE_RANGE / 2.0f) + PONG_PADDLE_HIT_ANGLE_OFFSET;
 
-			this->ballSpeedX = sin(DegToRad(newAngle)) * PONG_BALL_SPEED;
-			this->ballSpeedY = -cos(DegToRad(newAngle)) * PONG_BALL_SPEED;
+			this->ballSpeedX = sin(NJM_DEG_RAD(newAngle)) * PONG_BALL_SPEED;
+			this->ballSpeedY = -cos(NJM_DEG_RAD(newAngle)) * PONG_BALL_SPEED;
 
 			PlaySoundProbably(PONG_SOUND_AI_PADDLE, 0, 0, 0);
 		}
