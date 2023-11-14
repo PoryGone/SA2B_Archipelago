@@ -40,6 +40,8 @@ struct MinigameManagerData
 {
 public:
 	RawInputFlags input;
+	RawInputFlags inputPress;
+	RawInputFlags inputRelease;
 	MinigameState managerState;
 	MinigameIconData* icons;
 	MinigameDifficulty difficulty;

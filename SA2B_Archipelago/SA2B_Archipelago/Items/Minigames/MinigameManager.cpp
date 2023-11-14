@@ -57,6 +57,8 @@ void MinigameManager::OnFrameFunction()
 void MinigameManager::OnInputFunction()
 {
 	this->_data.input = (RawInputFlags)ControllersRaw->on;
+	this->_data.inputPress = (RawInputFlags)ControllersRaw->press;
+	this->_data.inputRelease = (RawInputFlags)ControllersRaw->release;
 }
 
 void MinigameManager::UpdateCurrentMinigame()
