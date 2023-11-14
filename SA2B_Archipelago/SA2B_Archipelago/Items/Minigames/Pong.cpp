@@ -11,8 +11,6 @@ float DegToRad(float inDeg)
 
 void Pong::OnGameStart(MinigameManagerData data)
 {
-	this->currentState = MinigameState::MGS_InProgress;
-
 	this->CreateHierarchy(data);
 
 	this->activePlayerSpeed = PONG_PLAYER_SPEED;

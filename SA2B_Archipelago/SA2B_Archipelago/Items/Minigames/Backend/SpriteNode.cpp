@@ -53,9 +53,44 @@ void SpriteNode::Translate(NJS_POINT3 delta)
 	SetPositionGlobal(pos);
 }
 
+void SpriteNode::SetEnabled(bool enabled)
+{
+	if (enabled != enabledSelf)
+	{
+		enabledSelf = enabled;
+		std::function<void(SpriteNode&)> func = [](SpriteNode& node) {node.SetEnabledDirty(); };
+		RunMethodOnHeirarchy(func);
+	}
+}
+
+bool SpriteNode::IsEnabledSelf()
+{
+	return enabledSelf;
+}
+
+bool SpriteNode::IsEnabled()
+{
+	if (isEnabledDirty)
+	{
+		enabledInHierarchy = true;
+		SpriteNode* ptr = this;
+		while (ptr->parent != nullptr)
+		{
+			ptr = ptr->parent;
+			if (!ptr->IsEnabled())
+			{
+				enabledInHierarchy = false;
+				break;
+			}
+		}
+		isEnabledDirty = false;
+	}
+	return enabledInHierarchy && enabledSelf;
+}
+
 void SpriteNode::Render(NJS_SPRITE& sprite)
 {
-	if (anim != nullptr)
+	if (anim != nullptr && IsEnabled())
 	{
 		NJS_TEXANIM* tempAnim = anim;
 		tempAnim--;
@@ -64,19 +99,16 @@ void SpriteNode::Render(NJS_SPRITE& sprite)
 		sprite.ang = NJM_DEG_ANG(rotation);
 		sprite.sx = displaySize.x / (float)anim->sx;
 		sprite.sy = displaySize.y / (float)anim->sy;
+		ConstantMaterial = color;
 		if (rotation != 0.0f) 
 		{
-			ConstantMaterial.a = 0.5f;
-			ConstantMaterial.r = 1.0f;
-			ConstantMaterial.g = 1.0f;
-			ConstantMaterial.b = 0.0f;
 			DrawSprite2D(&sprite, 1, 1.0f, NJD_SPRITE_ALPHA | NJD_SPRITE_ANGLE | NJD_SPRITE_COLOR);
-			ResetMaterial();
 		}
 		else
 		{
-			DrawSprite2D(&sprite);
+			DrawSprite2D(&sprite, 1, 1.0f, NJD_SPRITE_ALPHA | NJD_SPRITE_COLOR);
 		}
+		ResetMaterial();
 	}
 }
 
@@ -107,6 +139,11 @@ void SpriteNode::RunMethodOnHeirarchy(std::function<void(SpriteNode&)> func, boo
 void SpriteNode::SetPositionDirty()
 {
 	isGlobalPositionDirty = true;
+}
+
+void  SpriteNode::SetEnabledDirty()
+{
+	isEnabledDirty = true;
 }
 
 void SpriteNode::SetBranchDirty()
