@@ -25,6 +25,24 @@ DataPointer(int, StoryEventID_1, 0x173A154);
 DataPointer(char, StoryEventID_2, 0x173A158);
 DataPointer(char, StoryEventID_3, 0x173A159);
 
+// Chao Data
+DataArray(ChaoGardenObject, GardenItemInventory, 0x01DBEDA0, 5);
+DataPointer(char, GardenItemInventoryCount, 0x01DBEDAC);
+DataArray(ChaoAnimalSlot, HeroAnimalInventory, 0x1946F18, 10);
+DataPointer(char, HeroAnimalInventoryCount, 0x1946F68);
+DataArray(ChaoAnimalSlot, DarkAnimalInventory, 0x1946FCC, 10);
+DataPointer(char, DarkAnimalInventoryCount, 0x194701C);
+
+DataPointer(uint16_t, SavedChaoEggsUsed, 0x19F6462);
+DataPointer(uint16_t, SavedChaoFruitsUsed, 0x19F6464);
+DataPointer(uint16_t, SavedChaoSeedsUsed, 0x19F6466);
+DataPointer(uint16_t, SavedChaoHatsUsed, 0x19F6468);
+DataPointer(uint16_t, SavedChaoAnimalsUsed, 0x19F646A);
+
+DataArray(ChaoFruitSlot, RealChaoFruitSlots, 0x19F6528, 24);
+DataArray(ChaoSeedSlot, RealChaoSeedSlots, 0x19F6848, 12);
+DataArray(ChaoHatSlot, RealChaoHatSlots, 0x019F6938, 24);
+
 void* endLevelSave_ptr = (void*)0x4457df;
 void* updateSettingsSave_ptr = (void*)0x44390C;
 void* exitChaoGardenSave_ptr = (void*)0x4448E1;
@@ -65,6 +83,7 @@ void ItemManager::OnInitFunction(const char* path, const HelperFunctions& helper
 
 	this->_thisSessionChecksReceived = 0;
 	this->_EmblemsReceived = 0;
+	this->_BlackMarketTokensReceived = 0;
 
 	InitializeItemData(this->_ItemData);
 
@@ -94,7 +113,7 @@ void ItemManager::OnInitFunction(const char* path, const HelperFunctions& helper
 	WriteData((short*)0x724745, (short)0x9090);
 
 	// Cutscene Trap Setup
-	StoryEventID_1 = 0;
+	StoryEventID_1 = 2;
 }
 
 void ItemManager::OnInputFunction()
@@ -124,6 +143,64 @@ void ItemManager::OnInputFunction()
 		ControllersRaw->on    = 0;
 		ControllersRaw->press = 0;
 	}
+
+	if (this->_ReverseTrapActive &&
+		(GameState == GameStates::GameStates_Ingame || GameState == GameStates::GameStates_Pause))
+	{
+		Uint32 HeldButtons = ControllersRaw->on;
+		Uint32 PressedButtons = ControllersRaw->press;
+
+		Uint32 NewHeldButtons = 0;
+		Uint32 NewPressedButtons = 0;
+
+		if (HeldButtons & 0b10)  NewHeldButtons |= 0b100;
+		if (HeldButtons & 0b100) NewHeldButtons |= 0b10;
+
+		if (HeldButtons & 0b1000)  NewHeldButtons |= 0b1000;
+
+		if (HeldButtons & 0b10000)  NewHeldButtons |= 0b100000;
+		if (HeldButtons & 0b100000) NewHeldButtons |= 0b10000;
+
+		if (HeldButtons & 0b1000000)  NewHeldButtons |= 0b10000000;
+		if (HeldButtons & 0b10000000) NewHeldButtons |= 0b1000000;
+
+		if (HeldButtons & 0b1000000000)  NewHeldButtons |= 0b10000000000;
+		if (HeldButtons & 0b10000000000) NewHeldButtons |= 0b1000000000;
+
+		if (HeldButtons & 0b10000000000000000)  NewHeldButtons |= 0b100000000000000000;
+		if (HeldButtons & 0b100000000000000000) NewHeldButtons |= 0b10000000000000000;
+
+		if (PressedButtons & 0b10)  NewPressedButtons |= 0b100;
+		if (PressedButtons & 0b100) NewPressedButtons |= 0b10;
+
+		if (PressedButtons & 0b1000)  NewPressedButtons |= 0b1000;
+
+		if (PressedButtons & 0b10000)  NewPressedButtons |= 0b100000;
+		if (PressedButtons & 0b100000) NewPressedButtons |= 0b10000;
+
+		if (PressedButtons & 0b1000000)  NewPressedButtons |= 0b10000000;
+		if (PressedButtons & 0b10000000) NewPressedButtons |= 0b1000000;
+
+		if (PressedButtons & 0b1000000000)  NewPressedButtons |= 0b10000000000;
+		if (PressedButtons & 0b10000000000) NewPressedButtons |= 0b1000000000;
+
+		if (PressedButtons & 0b10000000000000000)  NewPressedButtons |= 0b100000000000000000;
+		if (PressedButtons & 0b100000000000000000) NewPressedButtons |= 0b10000000000000000;
+
+		ControllersRaw->on = NewHeldButtons;
+		ControllersRaw->press = NewPressedButtons;
+
+		ControllersRaw->x1 = -ControllersRaw->x1;
+		ControllersRaw->y1 = -ControllersRaw->y1;
+		ControllersRaw->x2 = -ControllersRaw->x2;
+		ControllersRaw->y2 = -ControllersRaw->y2;
+
+		Uint16 l = ControllersRaw->l;
+		Uint16 r = ControllersRaw->r;
+
+		ControllersRaw->r = l;
+		ControllersRaw->l = r;
+	}
 }
 
 void ItemManager::OnFrameFunction()
@@ -141,12 +218,14 @@ void ItemManager::OnFrameFunction()
 	this->OnFrameJunkQueue();
 	this->OnFrameTrapQueue();
 	this->OnFrameCutsceneQueue();
+	this->OnFrameChaoGardenQueue();
 }
 
 void ItemManager::ResetItems()
 {
 	this->_thisSessionChecksReceived = 0;
 	this->_EmblemsReceived = 0;
+	this->_BlackMarketTokensReceived = 0;
 	NewEmblemCount = 0;
 
 	for (int itemID = ItemValue::IV_WhiteChaosEmerald; itemID <= ItemValue::IV_BlueChaosEmerald; itemID++)
@@ -157,6 +236,11 @@ void ItemManager::ResetItems()
 			WriteData<1>((void*)itemToReset.Address, 0x00);
 		}
 	}
+
+	this->_ChaoEggQueue.clear();
+	this->_ChaoFruitQueue.clear();
+	this->_ChaoSeedQueue.clear();
+	this->_ChaoHatQueue.clear();
 }
 
 void ItemManager::ReceiveItem(int item_id, bool notify)
@@ -224,6 +308,32 @@ void ItemManager::ReceiveItem(int item_id, bool notify)
 			}
 		}
 	}
+	else if (item_id == ItemValue::IV_BlackMarketToken) // Black Market Tokens
+	{
+		ItemData& receivedItem = this->_ItemData[item_id];
+
+		if (this->_ItemData.find(item_id) != this->_ItemData.end())
+		{
+			ItemData& receivedItem = this->_ItemData[item_id];
+
+			unsigned int dataValue = *(unsigned int*)receivedItem.Address;
+
+			this->_BlackMarketTokensReceived++;
+			dataValue = this->_BlackMarketTokensReceived;
+			*(unsigned int*)receivedItem.Address = dataValue;
+
+			if (this->_thisSessionChecksReceived > SavedChecksReceived)
+			{
+				SavedChecksReceived = this->_thisSessionChecksReceived;
+
+				std::string message = std::string("New ");
+				message += receivedItem.DisplayName;
+				message += " Count: ";
+				message += std::to_string((unsigned int)dataValue);
+				messageQueue->AddMessage(message);
+			}
+		}
+	}
 	else if (item_id <= ItemValue::IV_END_JUNK) // Junk
 	{
 		if (this->_thisSessionChecksReceived > SavedChecksReceived)
@@ -272,6 +382,56 @@ void ItemManager::ReceiveItem(int item_id, bool notify)
 			// Don't recollect the trap items
 			this->HandleTrap(item_id);
 
+			SavedChecksReceived = this->_thisSessionChecksReceived;
+		}
+	}
+	else if (item_id <= ItemValue::IV_END_EGGS) // Chao Egg
+	{
+		// Don't recollect the Chao eggs
+		this->HandleEgg(item_id);
+
+		if (this->_thisSessionChecksReceived > SavedChecksReceived)
+		{
+			SavedChecksReceived = this->_thisSessionChecksReceived;
+		}
+	}
+	else if (item_id <= ItemValue::IV_END_FRUITS) // Chao Fruit
+	{
+		// Don't recollect the Chao fruits
+		this->HandleFruit(item_id);
+
+		if (this->_thisSessionChecksReceived > SavedChecksReceived)
+		{
+			SavedChecksReceived = this->_thisSessionChecksReceived;
+		}
+	}
+	else if (item_id <= ItemValue::IV_END_SEEDS) // Chao Seed
+	{
+		// Don't recollect the Chao seeds
+		this->HandleSeed(item_id);
+
+		if (this->_thisSessionChecksReceived > SavedChecksReceived)
+		{
+			SavedChecksReceived = this->_thisSessionChecksReceived;
+		}
+	}
+	else if (item_id <= ItemValue::IV_END_HATS) // Chao Hat
+	{
+		// Don't recollect the Chao hats
+		this->HandleHat(item_id);
+
+		if (this->_thisSessionChecksReceived > SavedChecksReceived)
+		{
+			SavedChecksReceived = this->_thisSessionChecksReceived;
+		}
+	}
+	else if (item_id <= ItemValue::IV_END_ANIMALS) // Chao Animals and Drives
+	{
+		// Don't recollect the Chao animals
+		this->HandleAnimal(item_id);
+
+		if (this->_thisSessionChecksReceived > SavedChecksReceived)
+		{
 			SavedChecksReceived = this->_thisSessionChecksReceived;
 		}
 	}
@@ -748,13 +908,19 @@ bool ItemManager::IsActiveTrapValid()
 			return false;
 		}
 		break;
-	case ItemValue::IV_PongTrap:
+	case ItemValue::IV_ReverseTrap:
 		if (GameMode != GameMode::GameMode_Level)
 		{
 			return false;
 		}
 
-		if (CurrentLevel == LevelIDs_ChaoWorld)
+		if (this->_ReverseTrapActive)
+		{
+			return false;
+		}
+		break;
+	case ItemValue::IV_PongTrap:
+		if (GameMode != GameMode::GameMode_Level)
 		{
 			return false;
 		}
@@ -827,8 +993,11 @@ void ItemManager::ResetTrapData()
 			MainCharObj2[0]->PhysData.RunBrake       = this->_StoredPhysicsData.RunBrake;
 		}
 
-		this->_StoredPhysicsData = PhysicsData();
 	}
+
+	this->_StoredPhysicsData = PhysicsData();
+
+	this->_ReverseTrapActive = false;
 }
 
 void ItemManager::OnFrameTrapQueue()
@@ -1000,6 +1169,10 @@ void ItemManager::OnFrameTrapQueue()
 	{
 		// Nothing
 	}
+	else if (this->_ActiveTrap == ItemValue::IV_ReverseTrap)
+	{
+		// Nothing
+	}
 	else if (this->_ActiveTrap == ItemValue::IV_PongTrap)
 	{
 		// Nothing
@@ -1136,6 +1309,10 @@ void ItemManager::OnFrameTrapQueue()
 		// Don't display Received text until the cutscene actually plays
 		return;
 		break;
+	case ItemValue::IV_ReverseTrap:
+		PlayUnshuffledVoice(2, 834);
+		this->_ReverseTrapActive = true;
+		break;
 	case ItemValue::IV_PongTrap:
 		MinigameManager* minigameManager = &MinigameManager::GetInstance();
 		minigameManager->StartMinigame(ItemValue::IV_PongTrap);
@@ -1251,4 +1428,357 @@ std::vector<int> ItemManager::GetChaosEmeraldAddresses()
 	}
 
 	return result;
+}
+
+bool AnimalSlotAvailable()
+{
+	int animalsInInventory = 0;
+
+	if (CurrentCharacter == Characters_Sonic ||
+		CurrentCharacter == Characters_Tails ||
+		CurrentCharacter == Characters_MechTails ||
+		CurrentCharacter == Characters_Knuckles)
+	{
+		animalsInInventory = HeroAnimalInventoryCount;
+	}
+	else
+	{
+		animalsInInventory = DarkAnimalInventoryCount;
+	}
+
+	return animalsInInventory < 10;
+}
+
+bool HatSlotAvailable()
+{
+	int emptySlotCount = 0;
+
+	for (int i = 0; i < 24; i++)
+	{
+		SA2BHat hatType = RealChaoHatSlots[i].Type;
+		if (hatType == (SA2BHat)-1)
+		{
+			// This slot is empty
+			emptySlotCount++;
+		}
+	}
+
+	int hatsInInventory = 0;
+
+	for (int i = 0; i < GardenItemInventoryCount; i++)
+	{
+		ChaoGardenObject gardenObject = GardenItemInventory[i];
+
+		if (gardenObject.ItemCategory == ChaoItemCategory::ChaoItemCategory_Hat)
+		{
+			// This is a hat
+			hatsInInventory++;
+		}
+	}
+
+	return (emptySlotCount - hatsInInventory) > 0;
+}
+
+bool SeedSlotAvailable()
+{
+	int emptySlotCount = 0;
+
+	for (int i = 0; i < 12; i++)
+	{
+		ChaoSeed fruitType = RealChaoSeedSlots[i].Type;
+		if (fruitType == ChaoSeed::ChaoSeed_None)
+		{
+			// This slot is empty
+			emptySlotCount++;
+		}
+	}
+
+	int seedsInInventory = 0;
+
+	for (int i = 0; i < GardenItemInventoryCount; i++)
+	{
+		ChaoGardenObject gardenObject = GardenItemInventory[i];
+
+		if (gardenObject.ItemCategory == ChaoItemCategory::ChaoItemCategory_Seed)
+		{
+			// This is a seed
+			seedsInInventory++;
+		}
+	}
+
+	return (emptySlotCount - seedsInInventory) > 0;
+}
+
+bool FruitSlotAvailable()
+{
+	int emptySlotCount = 0;
+
+	for (int i = 0; i < 20; i++)
+	{
+		SA2BFruit fruitType = RealChaoFruitSlots[i].Type;
+		if (fruitType == SA2BFruit::SA2BFruit_None)
+		{
+			// This slot is empty
+			emptySlotCount++;
+		}
+	}
+
+	int fruitsInInventory = 0;
+
+	for (int i = 0; i < GardenItemInventoryCount; i++)
+	{
+		ChaoGardenObject gardenObject = GardenItemInventory[i];
+
+		if (gardenObject.ItemCategory == ChaoItemCategory::ChaoItemCategory_Fruit)
+		{
+			// This is a fruit
+			fruitsInInventory++;
+		}
+	}
+
+	return (emptySlotCount - fruitsInInventory) > 0;
+}
+
+bool ChaoSlotAvailable()
+{
+	int emptySlotCount = 0;
+
+	for (int i = 0; i < 24; i++)
+	{
+		ChaoType chaoType = ChaoSlots[i].data.Type;
+		if (chaoType == ChaoType::ChaoType_Empty)
+		{
+			// This slot is empty
+			emptySlotCount++;
+		}
+	}
+
+	int eggsInInventory = 0;
+
+	for (int i = 0; i < GardenItemInventoryCount; i++)
+	{
+		ChaoGardenObject gardenObject = GardenItemInventory[i];
+
+		if (gardenObject.ItemCategory == ChaoItemCategory::ChaoItemCategory_Egg)
+		{
+			// This is an egg
+			eggsInInventory++;
+		}
+	}
+
+	return (emptySlotCount - eggsInInventory) > 0;
+}
+
+void ItemManager::OnFrameChaoGardenQueue()
+{
+	if (CurrentLevel != LevelIDs::LevelIDs_ChaoWorld)
+	{
+		this->_chaoEntryTimer = 0;
+		this->_lastAnimalCount = 10;
+		return;
+	}
+	else
+	{
+		this->_chaoEntryTimer++;
+	}
+
+	if (this->_chaoEntryTimer < IM_CHAO_MEMORY_CHECK_ENTRY_TIME)
+	{
+		// Only handle items while in Chao World, otherwise it may be wrong
+		return;
+	}
+
+	// Animal Handling
+	if (this->_ChaoAnimalsUsed < SavedChaoAnimalsUsed)
+	{
+		this->_ChaoAnimalsUsed = SavedChaoAnimalsUsed;
+	}
+
+	bool droppingAnimals = false;
+
+	if (this->_animalDropoffTimer < ANIMAL_DROPOFF_COOLDOWN)
+	{
+		droppingAnimals = true;
+		if (GameState != GameStates::GameStates_Pause)
+		{
+			this->_animalDropoffTimer++;
+		}
+	}
+	else if (CurrentCharacter == Characters_Sonic ||
+			 CurrentCharacter == Characters_Tails ||
+			 CurrentCharacter == Characters_MechTails ||
+			 CurrentCharacter == Characters_Knuckles)
+	{
+		if (this->_lastAnimalCount > HeroAnimalInventoryCount)
+		{
+			droppingAnimals = true;
+			this->_lastAnimalCount = HeroAnimalInventoryCount;
+			this->_animalDropoffTimer = 0;
+		}
+	}
+	else
+	{
+		if (this->_lastAnimalCount > DarkAnimalInventoryCount)
+		{
+			droppingAnimals = true;
+			this->_lastAnimalCount = DarkAnimalInventoryCount;
+			this->_animalDropoffTimer = 0;
+		}
+	}
+
+	if (this->_ChaoAnimalQueue.size() > this->_ChaoAnimalsUsed &&
+		!droppingAnimals &&
+		AnimalSlotAvailable())
+	{
+		ItemData& receivedItem = this->_ItemData[0x500 + this->_ChaoAnimalQueue[this->_ChaoAnimalsUsed].ItemType];
+
+		std::string message = std::string("Received ");
+		message += receivedItem.DisplayName;
+		MessageQueue::GetInstance().AddMessage(message);
+
+		if (CurrentCharacter == Characters_Sonic ||
+			CurrentCharacter == Characters_Tails ||
+			CurrentCharacter == Characters_MechTails ||
+			CurrentCharacter == Characters_Knuckles)
+		{
+			HeroAnimalInventory[HeroAnimalInventoryCount].Type = (SA2BAnimal)this->_ChaoAnimalQueue[this->_ChaoAnimalsUsed].ItemType;
+			HeroAnimalInventoryCount++;
+			this->_lastAnimalCount = HeroAnimalInventoryCount;
+		}
+		else
+		{
+			DarkAnimalInventory[DarkAnimalInventoryCount].Type = (SA2BAnimal)this->_ChaoAnimalQueue[this->_ChaoAnimalsUsed].ItemType;
+			DarkAnimalInventoryCount++;
+			this->_lastAnimalCount = HeroAnimalInventoryCount;
+		}
+
+		SavedChaoAnimalsUsed++;
+		this->_ChaoAnimalsUsed++;
+	}
+	// End Animal Handling
+
+	// Hat Handling
+	if (this->_ChaoHatsUsed < SavedChaoHatsUsed)
+	{
+		this->_ChaoHatsUsed = SavedChaoHatsUsed;
+	}
+
+	if (GardenItemInventoryCount < 5 &&
+		this->_ChaoHatQueue.size() > this->_ChaoHatsUsed &&
+		HatSlotAvailable())
+	{
+		ItemData& receivedItem = this->_ItemData[0x400 + this->_ChaoHatQueue[this->_ChaoHatsUsed].ItemType];
+
+		std::string message = std::string("Received ");
+		message += receivedItem.DisplayName;
+		MessageQueue::GetInstance().AddMessage(message);
+
+		GardenItemInventory[GardenItemInventoryCount].ItemCategory = this->_ChaoHatQueue[this->_ChaoHatsUsed].ItemCategory;
+		GardenItemInventory[GardenItemInventoryCount].ItemType     = this->_ChaoHatQueue[this->_ChaoHatsUsed].ItemType;
+
+		GardenItemInventoryCount++;
+		SavedChaoHatsUsed++;
+		this->_ChaoHatsUsed++;
+	}
+	// End Hat Handling
+
+	// Seed Handling
+	if (this->_ChaoSeedsUsed < SavedChaoSeedsUsed)
+	{
+		this->_ChaoSeedsUsed = SavedChaoSeedsUsed;
+	}
+
+	if (GardenItemInventoryCount < 5 &&
+		this->_ChaoSeedQueue.size() > this->_ChaoSeedsUsed &&
+		SeedSlotAvailable())
+	{
+		ItemData& receivedItem = this->_ItemData[0x300 + this->_ChaoSeedQueue[this->_ChaoSeedsUsed].ItemType];
+
+		std::string message = std::string("Received ");
+		message += receivedItem.DisplayName;
+		MessageQueue::GetInstance().AddMessage(message);
+
+		GardenItemInventory[GardenItemInventoryCount].ItemCategory = this->_ChaoSeedQueue[this->_ChaoSeedsUsed].ItemCategory;
+		GardenItemInventory[GardenItemInventoryCount].ItemType     = this->_ChaoSeedQueue[this->_ChaoSeedsUsed].ItemType;
+
+		GardenItemInventoryCount++;
+		SavedChaoSeedsUsed++;
+		this->_ChaoSeedsUsed++;
+	}
+	// End Seed Handling
+
+	// Fruit Handling
+	if (this->_ChaoFruitsUsed < SavedChaoFruitsUsed)
+	{
+		this->_ChaoFruitsUsed = SavedChaoFruitsUsed;
+	}
+
+	if (GardenItemInventoryCount < 5 &&
+		this->_ChaoFruitQueue.size() > this->_ChaoFruitsUsed &&
+		FruitSlotAvailable())
+	{
+		ItemData& receivedItem = this->_ItemData[0x200 + this->_ChaoFruitQueue[this->_ChaoFruitsUsed].ItemType];
+
+		std::string message = std::string("Received ");
+		message += receivedItem.DisplayName;
+		MessageQueue::GetInstance().AddMessage(message);
+
+		GardenItemInventory[GardenItemInventoryCount].ItemCategory = this->_ChaoFruitQueue[this->_ChaoFruitsUsed].ItemCategory;
+		GardenItemInventory[GardenItemInventoryCount].ItemType     = this->_ChaoFruitQueue[this->_ChaoFruitsUsed].ItemType;
+
+		GardenItemInventoryCount++;
+		SavedChaoFruitsUsed++;
+		this->_ChaoFruitsUsed++;
+	}
+	// End Fruit Handling
+
+	// Egg Handling
+	if (this->_ChaoEggsUsed < SavedChaoEggsUsed)
+	{
+		this->_ChaoEggsUsed = SavedChaoEggsUsed;
+	}
+
+	if (GardenItemInventoryCount < 5 &&
+		this->_ChaoEggQueue.size() > this->_ChaoEggsUsed &&
+		ChaoSlotAvailable())
+	{
+		ItemData& receivedItem = this->_ItemData[0x100 + this->_ChaoEggQueue[this->_ChaoEggsUsed].ItemType];
+
+		std::string message = std::string("Received ");
+		message += receivedItem.DisplayName;
+		MessageQueue::GetInstance().AddMessage(message);
+
+		GardenItemInventory[GardenItemInventoryCount].ItemCategory = this->_ChaoEggQueue[this->_ChaoEggsUsed].ItemCategory;
+		GardenItemInventory[GardenItemInventoryCount].ItemType     = this->_ChaoEggQueue[this->_ChaoEggsUsed].ItemType;
+
+		GardenItemInventoryCount++;
+		SavedChaoEggsUsed++;
+		this->_ChaoEggsUsed++;
+	}
+	// End Egg Handling
+}
+
+void ItemManager::HandleEgg(int item_id)
+{
+	this->_ChaoEggQueue.push_back(ChaoGardenObject(1, item_id - 0x100));
+}
+
+void ItemManager::HandleFruit(int item_id)
+{
+	this->_ChaoFruitQueue.push_back(ChaoGardenObject(3, item_id - 0x200));
+}
+
+void ItemManager::HandleSeed(int item_id)
+{
+	this->_ChaoSeedQueue.push_back(ChaoGardenObject(7, item_id - 0x300));
+}
+
+void ItemManager::HandleHat(int item_id)
+{
+	this->_ChaoHatQueue.push_back(ChaoGardenObject(9, item_id - 0x400));
+}
+
+void ItemManager::HandleAnimal(int item_id)
+{
+	this->_ChaoAnimalQueue.push_back(ChaoGardenObject(13, item_id - 0x500));
 }

@@ -45,6 +45,8 @@ enum ItemValue
 
     IV_Maria,
 
+    IV_BlackMarketToken = 0x1F,
+
     IV_FiveRings = 0x20,
     IV_TenRings,
     IV_TwentyRings,
@@ -64,7 +66,8 @@ enum ItemValue
     IV_IceTrap,
     IV_SlowTrap,
     IV_CutsceneTrap,
-    IV_END_TRAPS = IV_CutsceneTrap,
+    IV_ReverseTrap,
+    IV_END_TRAPS = IV_ReverseTrap,
 
     IV_WhiteChaosEmerald = 0x40,
     IV_RedChaosEmerald,
@@ -77,6 +80,135 @@ enum ItemValue
 
     IV_PongTrap = 0x50,
     IV_END_MINIGAMES = IV_PongTrap,
+
+    IV_NormalEgg = 0x100,
+    IV_YellowMonoToneEgg,
+    IV_WhiteMonoToneEgg,
+    IV_BrownMonoToneEgg,
+    IV_SkyBlueMonoToneEgg,
+    IV_PinkMonoToneEgg,
+    IV_BlueMonoToneEgg,
+    IV_GreyMonoToneEgg,
+    IV_GreenMonoToneEgg,
+    IV_RedMonoToneEgg,
+    IV_LimeGreenMonoToneEgg,
+    IV_PurpleMonoToneEgg,
+    IV_OrangeMonoToneEgg,
+    IV_BlackMonoToneEgg,
+    IV_YellowTwoToneEgg,
+    IV_WhiteTwoToneEgg,
+    IV_BrownTwoToneEgg,
+    IV_SkyBlueTwoToneEgg,
+    IV_PinkTwoToneEgg,
+    IV_BlueTwoToneEgg,
+    IV_GreyTwoToneEgg,
+    IV_GreenTwoToneEgg,
+    IV_RedTwoToneEgg,
+    IV_LimeGreenTwoToneEgg,
+    IV_PurpleTwoToneEgg,
+    IV_OrangeTwoToneEgg,
+    IV_BlackTwoToneEgg,
+    IV_NormalShinyEgg,
+    IV_YellowShinyEgg,
+    IV_WhiteShinyEgg,
+    IV_BrownShinyEgg,
+    IV_SkyBlueShinyEgg,
+    IV_PinkShinyEgg,
+    IV_BlueShinyEgg,
+    IV_GreyShinyEgg,
+    IV_GreenShinyEgg,
+    IV_RedShinyEgg,
+    IV_LimeGreenShinyEgg,
+    IV_PurpleShinyEgg,
+    IV_OrangeShinyEgg,
+    IV_BlackShinyEgg,
+    IV_END_EGGS = IV_BlackShinyEgg,
+
+    IV_ChaoGardenFruit = 0x200,
+    IV_HeroGardenFruit,
+    IV_DarkGardenFruit,
+
+    IV_StrongFruit,
+    IV_TastyFruit,
+    IV_HeroFruit,
+    IV_DarkFruit,
+    IV_RoundFruit,
+    IV_TriangleFruit,
+    IV_SquareFruit,
+    IV_HeartFruit,
+    IV_ChaoFruit,
+    IV_SmartFruit,
+
+    IV_OrangeFruit,
+    IV_BlueFruit,
+    IV_PinkFruit,
+    IV_GreenFruit,
+    IV_PurpleFruit,
+    IV_YellowFruit,
+    IV_RedFruit,
+
+    IV_Mushroom,
+    IV_SuperMushroom,
+    IV_MintCandy,
+    IV_Grapes,
+
+    IV_END_FRUITS = IV_Grapes,
+
+    IV_StrongSeed = 0x300,
+    IV_TastySeed,
+    IV_HeroSeed,
+    IV_DarkSeed,
+    IV_RoundSeed,
+    IV_TriangleSeed,
+    IV_SquareSeed,
+
+    IV_END_SEEDS = IV_SquareSeed,
+
+    IV_Pumpkin = 0x401,
+    IV_Skull,
+    IV_Apple,
+    IV_Bucket,
+    IV_EmptyCan,
+    IV_CardboardBox,
+    IV_FlowerPot,
+    IV_PaperBag,
+    IV_Pan,
+    IV_Stump,
+    IV_Watermelon,
+    IV_RedWoolBeanie,
+    IV_BlueWoolBeanie,
+    IV_BlackWoolBeanie,
+    IV_Pacifier,
+
+    IV_END_HATS = IV_Pacifier,
+
+    IV_Penguin = 0x500,
+    IV_Seal,
+    IV_Otter,
+    IV_Rabbit,
+    IV_Cheetah,
+    IV_Warthog,
+    IV_Bear,
+    IV_Tiger,
+    IV_Gorilla,
+    IV_Peacock,
+    IV_Parrot,
+    IV_Condor,
+    IV_Skunk,
+    IV_Sheep,
+    IV_Raccoon,
+    IV_HalfFish,
+    IV_SkeletonDog,
+    IV_Bat,
+    IV_Dragon,
+    IV_Unicorn,
+    IV_Phoenix,
+    IV_YellowChaosDrive,
+    IV_GreenChaosDrive,
+    IV_RedChaosDrive,
+    IV_PurpleChaosDrive,
+
+    IV_END_ANIMALS = IV_PurpleChaosDrive,
 
     IV_NUM_ITEMS
 };
@@ -115,4 +247,50 @@ struct CutsceneData
 
     char LowID = 0;
     char HighID = 0;
+};
+
+
+struct ChaoGardenObject
+{
+    ChaoGardenObject() : ItemCategory(0x00), ItemType(0xFF) {}
+    ChaoGardenObject(int itemCategory, int itemType) : ItemCategory(itemCategory), ItemType(itemType) {}
+
+    char ItemCategory = 0x00;
+    char ItemType = 0xFF;
+};
+
+
+struct ChaoFruitSlot
+{
+    SA2BFruit Type;
+    char gap_1;
+    uint16_t Garden;
+    uint16_t Size;
+    uint16_t Age;
+    char gap_8[12];
+};
+
+
+struct ChaoSeedSlot
+{
+    ChaoSeed Type;
+    char gap_1;
+    uint16_t Garden;
+    char gap_8[16];
+};
+
+
+struct ChaoHatSlot
+{
+    SA2BHat Type;
+    char gap_1;
+    uint16_t Garden;
+    char gap_8[16];
+};
+
+
+struct ChaoAnimalSlot
+{
+    SA2BAnimal Type;
+    char gap_1[7];
 };

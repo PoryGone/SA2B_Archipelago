@@ -260,6 +260,16 @@ struct BossRushCheckData
 void InitializeBossRushChecks(std::map<int, BossRushCheckData>& outBossRushChecks);
 
 
+enum JewelRaceCategory
+{
+    JRC_Aquamarine = 0,
+    JRC_Topaz,
+    JRC_Peridot,
+    JRC_Garnet,
+    JRC_Onyx,
+    JRC_Diamond,
+};
+
 enum ChaoGardenCheck
 {
     CGC_BEGIN = 0x200,
@@ -332,10 +342,29 @@ enum ChaoGardenCheck
 
     CGC_END_RACE = CGC_Dark_4,
 
-    CGC_Beginner_Karate     = 0x300,
-    CGC_Intermediate_Karate = 0x301,
-    CGC_Expert_Karate       = 0x302,
-    CGC_Super_Karate        = 0x303,
+    CGC_BEGIN_KARATE = 0x300,
+    CGC_Beginner_Karate_1 = CGC_BEGIN_KARATE,
+    CGC_Beginner_Karate_2,
+    CGC_Beginner_Karate_3,
+    CGC_Beginner_Karate_4,
+    CGC_Beginner_Karate_5,
+    CGC_Intermediate_Karate_1,
+    CGC_Intermediate_Karate_2,
+    CGC_Intermediate_Karate_3,
+    CGC_Intermediate_Karate_4,
+    CGC_Intermediate_Karate_5,
+    CGC_Expert_Karate_1,
+    CGC_Expert_Karate_2,
+    CGC_Expert_Karate_3,
+    CGC_Expert_Karate_4,
+    CGC_Expert_Karate_5,
+    CGC_Super_Karate_1,
+    CGC_Super_Karate_2,
+    CGC_Super_Karate_3,
+    CGC_Super_Karate_4,
+    CGC_Super_Karate_5,
+
+    CGC_END_KARATE = CGC_Super_Karate_5,
 
 };
 
@@ -349,9 +378,281 @@ struct ChaoGardenCheckData
     bool CheckSent = false;
 };
 
+struct ChaoKarateManager
+{
+    char gap_0[6];
+    char Difficulty;
+    char CurrentWins;
+    char gap_7[3];
+    char DifficultyMenu;
+    char gap_B;
+    char Timer;
+};
+
 void InitializeChaoGardenChecks(std::map<int, ChaoGardenCheckData>& outChaoGardenChecks);
 
 void InitializeChaoRacePacks(std::map<int, std::vector<int>>& outChaoRacePacks);
+
+
+enum ChaoStatCheck
+{
+    CSC_BEGIN = 0xE00,
+
+    CSC_Swim_BEGIN         = 0xE00,
+    CSC_Fly_BEGIN          = 0xE80,
+    CSC_Run_BEGIN          = 0xF00,
+    CSC_Power_BEGIN        = 0xF80,
+    CSC_Stamina_BEGIN      = 0x1000,
+    CSC_Luck_BEGIN         = 0x1080,
+    CSC_Intelligence_BEGIN = 0x1100,
+};
+
+enum ChaoStatCheckType
+{
+    CSCT_Swim = 0,
+    CSCT_Fly,
+    CSCT_Run,
+    CSCT_Power,
+    CSCT_Stamina,
+    CSCT_Luck,
+    CSCT_Intelligence,
+};
+
+struct ChaoStatCheckData
+{
+    ChaoStatCheckData() : Address(0x00), StatType(ChaoStatCheckType::CSCT_Swim), Level(0x00) {}
+    ChaoStatCheckData(int address, ChaoStatCheckType statType, int level) : Address(address), StatType(statType), Level(level) {}
+
+    int Address;
+    ChaoStatCheckType StatType;
+    int Level;
+    bool CheckSent = false;
+};
+
+void InitializeChaoStatChecks(std::map<int, ChaoStatCheckData>& outChaoStatChecks);
+
+
+enum ChaoBodyPart
+{
+    CBP_Arms = 0,
+    CBP_Ears,
+    CBP_Forehead,
+    CBP_Face,
+    CBP_Legs,
+    CBP_Horn,
+    CBP_Tail,
+    CBP_Wings,
+};
+
+enum ChaoBodyPartAnimal
+{
+    CBPA_Penguin,
+    CBPA_Seal,
+    CBPA_Otter,
+    CBPA_Rabbit,
+    CBPA_Cheetah,
+    CBPA_Warthog,
+    CBPA_Bear,
+    CBPA_Tiger,
+    CBPA_Gorilla,
+    CBPA_Peacock,
+    CBPA_Parrot,
+    CBPA_Condor,
+    CBPA_Skunk,
+    CBPA_Sheep,
+    CBPA_Raccoon,
+    CBPA_Dragon = 16,
+    CBPA_Unicorn,
+    CBPA_Phoenix,
+};
+
+enum ChaoBodyPartCheck
+{
+    CBPC_BEGIN = 0x1220,
+
+    CBPC_PenguinArms     = 0x1220,
+    CBPC_PenguinForehead = 0x1222,
+    CBPC_PenguinLegs     = 0x1224,
+
+    CBPC_SealArms     = 0x1228,
+    CBPC_SealTail     = 0x122E,
+
+    CBPC_OtterArms = 0x1230,
+    CBPC_OtterEars = 0x1231,
+    CBPC_OtterFace = 0x1233,
+    CBPC_OtterLegs = 0x1234,
+    CBPC_OtterTail = 0x1236,
+
+    CBPC_RabbitArms = 0x1238,
+    CBPC_RabbitEars = 0x1239,
+    CBPC_RabbitLegs = 0x123C,
+    CBPC_RabbitTail = 0x123E,
+
+    CBPC_CheetahArms = 0x1240,
+    CBPC_CheetahEars = 0x1241,
+    CBPC_CheetahLegs = 0x1244,
+    CBPC_CheetahTail = 0x1246,
+
+    CBPC_WarthogArms = 0x1248,
+    CBPC_WarthogEars = 0x1249,
+    CBPC_WarthogFace = 0x124B,
+    CBPC_WarthogLegs = 0x124C,
+    CBPC_WarthogTail = 0x124E,
+
+    CBPC_BearArms = 0x1250,
+    CBPC_BearEars = 0x1251,
+    CBPC_BearLegs = 0x1254,
+
+    CBPC_TigerArms = 0x1258,
+    CBPC_TigerEars = 0x1259,
+    CBPC_TigerLegs = 0x125C,
+    CBPC_TigerTail = 0x125E,
+
+    CBPC_GorillaArms     = 0x1260,
+    CBPC_GorillaEars     = 0x1261,
+    CBPC_GorillaForehead = 0x1262,
+    CBPC_GorillaLegs     = 0x1264,
+
+    CBPC_PeacockForehead = 0x126A,
+    CBPC_PeacockLegs     = 0x126C,
+    CBPC_PeacockTail     = 0x126E,
+    CBPC_PeacockWings    = 0x126F,
+
+    CBPC_ParrotForehead = 0x1272,
+    CBPC_ParrotLegs     = 0x1274,
+    CBPC_ParrotTail     = 0x1276,
+    CBPC_ParrotWings    = 0x1277,
+
+    CBPC_CondorEars  = 0x1279,
+    CBPC_CondorLegs  = 0x127C,
+    CBPC_CondorTail  = 0x127E,
+    CBPC_CondorWings = 0x127F,
+
+    CBPC_SkunkArms     = 0x1280,
+    CBPC_SkunkForehead = 0x1282,
+    CBPC_SkunkLegs     = 0x1284,
+    CBPC_SkunkTail     = 0x1286,
+
+    CBPC_SheepArms = 0x1288,
+    CBPC_SheepEars = 0x1289,
+    CBPC_SheepLegs = 0x128C,
+    CBPC_SheepHorn = 0x128D,
+    CBPC_SheepTail = 0x128E,
+
+    CBPC_RaccoonArms = 0x1290,
+    CBPC_RaccoonEars = 0x1291,
+    CBPC_RaccoonLegs = 0x1294,
+
+    CBPC_DragonArms  = 0x12A0,
+    CBPC_DragonEars  = 0x12A1,
+    CBPC_DragonLegs  = 0x12A4,
+    CBPC_DragonHorn  = 0x12A5,
+    CBPC_DragonTail  = 0x12A6,
+    CBPC_DragonWings = 0x12A7,
+
+    CBPC_UnicornArms     = 0x12A8,
+    CBPC_UnicornEars     = 0x12A9,
+    CBPC_UnicornForehead = 0x12AA,
+    CBPC_UnicornLegs     = 0x12AC,
+    CBPC_UnicornTail     = 0x12AE,
+
+    CBPC_PhoenixForehead = 0x12B2,
+    CBPC_PhoenixLegs     = 0x12B4,
+    CBPC_PhoenixTail     = 0x12B6,
+    CBPC_PhoenixWings    = 0x12B7,
+
+    CBPC_NUM_CHECKS = 0x12B8,
+};
+
+struct ChaoBodyPartCheckData
+{
+    ChaoBodyPartCheckData() : Address(0x00), AnimalType(SA2BAnimal_Penguin), BodyPart(ChaoBodyPart::CBP_Arms) {}
+    ChaoBodyPartCheckData(int address, SA2BAnimal animalType, ChaoBodyPart bodyPart) : Address(address), AnimalType(animalType), BodyPart(bodyPart) {}
+
+    int Address;
+    SA2BAnimal AnimalType;
+    ChaoBodyPart BodyPart;
+    bool CheckSent = false;
+};
+
+void InitializeChaoBodyPartChecks(std::map<int, ChaoBodyPartCheckData>& outChaoBodyPartChecks);
+
+
+enum ChaoLessonType
+{
+    CLT_Drawing,
+    CLT_Dance,
+    CLT_Song,
+    CLT_Instrument,
+};
+
+enum ChaoKindergartenCheck
+{
+    CKgC_BEGIN = 0x12D0,
+
+    CKgC_Drawing_1 = 0x12D0,
+    CKgC_Drawing_2 = 0x12D1,
+    CKgC_Drawing_3 = 0x12D2,
+    CKgC_Drawing_4 = 0x12D3,
+    CKgC_Drawing_5 = 0x12D4,
+
+    CKgC_Shake_Dance = 0x12D8,
+    CKgC_Spin_Dance  = 0x12D9,
+    CKgC_Step_Dance  = 0x12DA,
+    CKgC_GoGo_Dance  = 0x12DB,
+    CKgC_Exercise    = 0x12DC,
+
+    CKgC_Song_1 = 0x12E0,
+    CKgC_Song_2 = 0x12E1,
+    CKgC_Song_3 = 0x12E2,
+    CKgC_Song_4 = 0x12E3,
+    CKgC_Song_5 = 0x12E4,
+
+    CKgC_Bell       = 0x12E8,
+    CKgC_Castanets  = 0x12E9,
+    CKgC_Cymbals    = 0x12EA,
+    CKgC_Drum       = 0x12EB,
+    CKgC_Flute      = 0x12EC,
+    CKgC_Maracas    = 0x12ED,
+    CKgC_Trumpet    = 0x12EE,
+    CKgC_Tambourine = 0x12EF,
+
+    CKgC_AnyDrawing    = 0x12F0,
+    CKgC_AnyDance      = 0x12F1,
+    CKgC_AnySong       = 0x12F2,
+    CKgC_AnyInstrument = 0x12F3,
+
+    CKgC_NUM_CHECKS = 0x12F4,
+};
+
+struct ChaoKindergartenCheckData
+{
+    ChaoKindergartenCheckData() : Address(0x00), LessonNum(0x00) {}
+    ChaoKindergartenCheckData(int address, char lessonNum) : Address(address), LessonNum(lessonNum) {}
+
+    int Address;
+    char LessonNum;
+    bool CheckSent = false;
+};
+
+void InitializeChaoKindergartenChecks(std::map<int, ChaoKindergartenCheckData>& outChaoKindergartenChecks);
+
+enum BlackMarketCheck
+{
+    BMC_BEGIN = 0x1300,
+};
+
+struct BlackMarketCheckData
+{
+    BlackMarketCheckData() : Address(0x00), SlotNum(0x00) {}
+    BlackMarketCheckData(int address, char slotNum) : Address(address), SlotNum(slotNum) {}
+
+    int Address;
+    char SlotNum;
+    bool CheckSent = false;
+};
+
+void InitializeBlackMarketChecks(std::map<int, BlackMarketCheckData>& outBlackMarketChecks);
 
 
 enum ChaoKeyCheck
