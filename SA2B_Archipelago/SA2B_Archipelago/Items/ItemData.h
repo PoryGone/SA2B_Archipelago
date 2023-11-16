@@ -79,7 +79,8 @@ enum ItemValue
     IV_END_CHAOS_EMERALDS = IV_BlueChaosEmerald,
 
     IV_PongTrap = 0x50,
-    IV_END_MINIGAMES = IV_PongTrap,
+    IV_PlatformerTrap,
+    IV_END_MINIGAMES = IV_PlatformerTrap,
 
     IV_NormalEgg = 0x100,
     IV_YellowMonoToneEgg,

@@ -74,7 +74,8 @@ void InitializeItemData(std::map<int, ItemData> &outItemData)
     outItemData[ItemValue::IV_YellowChaosEmerald] = ItemData(0x01DEEAFD, std::string("Yellow Chaos Emerald"), std::string(), 0);
     outItemData[ItemValue::IV_BlueChaosEmerald]   = ItemData(0x01DEEAFE, std::string("Blue Chaos Emerald"), std::string(), 0);
 
-    outItemData[ItemValue::IV_PongTrap] = ItemData(0x0000000, std::string("Pong Trap"), std::string(), 0);
+    outItemData[ItemValue::IV_PongTrap]       = ItemData(0x0000000, std::string("Pong Trap"), std::string(), 0);
+    outItemData[ItemValue::IV_PlatformerTrap] = ItemData(0x0000000, std::string("Platformer Trap"), std::string(), 0);
 
     outItemData[ItemValue::IV_NormalEgg]            = ItemData(0x0000000, std::string("Normal Egg"), std::string(), 1);
     outItemData[ItemValue::IV_YellowMonoToneEgg]    = ItemData(0x0000000, std::string("Yellow Mono-Tone Egg"), std::string(), 1);

@@ -1,8 +1,11 @@
 #pragma once
-#include "MinigameBase.h"
-#include "Pong.h"
-#include "../ItemData.h"
 #include <ctime>
+
+#include "MinigameBase.h"
+#include "../ItemData.h"
+
+#include "Minigames/Pong.h"
+#include "Minigames/Platformer.h"
 
 
 
@@ -40,5 +43,6 @@ private:
 	std::clock_t minigameStart;
 
 	//Minigames
-	Pong pong = Pong();
+	Pong pong             = Pong();
+	Platformer platformer = Platformer();
 };

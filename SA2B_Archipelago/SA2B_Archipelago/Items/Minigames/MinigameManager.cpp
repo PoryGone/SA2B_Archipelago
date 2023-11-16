@@ -121,6 +121,9 @@ void MinigameManager::StartMinigame(ItemValue item)
 	case ItemValue::IV_PongTrap:
 		this->currentMinigame = &this->pong;
 		break;
+	case ItemValue::IV_PlatformerTrap:
+		this->currentMinigame = &this->platformer;
+		break;
 	}
 }
 

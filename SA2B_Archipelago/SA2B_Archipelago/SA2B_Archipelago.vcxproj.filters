@@ -111,9 +111,6 @@
     <ClInclude Include="Items\Minigames\MinigameBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Items\Minigames\Pong.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Utilities\SpriteUtilities.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -166,6 +163,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Items\Minigames\Backend\Time\TimeUtilities.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Items\Minigames\Minigames\Pong.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Items\Minigames\Minigames\Platformer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -230,9 +233,6 @@
     <ClCompile Include="Items\Minigames\MinigameManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Items\Minigames\Pong.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Utilities\SpriteUtilities.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -279,6 +279,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Items\Minigames\Backend\Time\TimeUtilities.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Items\Minigames\Minigames\Platformer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Items\Minigames\Minigames\Pong.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

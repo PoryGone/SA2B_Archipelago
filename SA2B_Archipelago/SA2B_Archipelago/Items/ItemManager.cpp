@@ -932,6 +932,19 @@ bool ItemManager::IsActiveTrapValid()
 		}
 
 		break;
+	case ItemValue::IV_PlatformerTrap:
+		if (GameMode != GameMode::GameMode_Level)
+		{
+			return false;
+		}
+
+		if (minigameManager->state != MinigameState::MGS_None)
+		{
+			// Another minigame is already in-progress
+			return false;
+		}
+
+		break;
 	}
 
 	return true;
@@ -1177,6 +1190,10 @@ void ItemManager::OnFrameTrapQueue()
 	{
 		// Nothing
 	}
+	else if (this->_ActiveTrap == ItemValue::IV_PlatformerTrap)
+	{
+	// Nothing
+	}
 
 	if (this->_ActiveTrapTimer > 0)
 	{
@@ -1314,8 +1331,9 @@ void ItemManager::OnFrameTrapQueue()
 		this->_ReverseTrapActive = true;
 		break;
 	case ItemValue::IV_PongTrap:
+	case ItemValue::IV_PlatformerTrap:
 		MinigameManager* minigameManager = &MinigameManager::GetInstance();
-		minigameManager->StartMinigame(ItemValue::IV_PongTrap);
+		minigameManager->StartMinigame((ItemValue)this->_ActiveTrap);
 		break;
 	}
 

@@ -180,8 +180,9 @@
     <ClInclude Include="Items\Minigames\Components\RotateSpriteNode.h" />
     <ClInclude Include="Items\Minigames\MinigameBase.h" />
     <ClInclude Include="Items\Minigames\MinigameIconData.h" />
+    <ClInclude Include="Items\Minigames\Minigames\Platformer.h" />
+    <ClInclude Include="Items\Minigames\Minigames\Pong.h" />
     <ClInclude Include="Items\Minigames\MinigameUtilities.h" />
-    <ClInclude Include="Items\Minigames\Pong.h" />
     <ClInclude Include="Locations\ChaoGardenManager.h" />
     <ClInclude Include="Locations\LocationData.h" />
     <ClInclude Include="Locations\LocationManager.h" />
@@ -318,13 +319,15 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../../pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../../pch.h</PrecompiledHeaderFile>
     </ClCompile>
-    <ClCompile Include="Items\Minigames\MinigameUtilities.cpp">
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../pch.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../pch.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../../pch.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../../pch.h</PrecompiledHeaderFile>
+    <ClCompile Include="Items\Minigames\Minigames\Platformer.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../../pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../../pch.h</PrecompiledHeaderFile>
     </ClCompile>
-    <ClCompile Include="Items\Minigames\Pong.cpp">
+    <ClCompile Include="Items\Minigames\Minigames\Pong.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../../pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../../pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="Items\Minigames\MinigameUtilities.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../../pch.h</PrecompiledHeaderFile>
