@@ -1,7 +1,7 @@
-#include "../../pch.h"
+#include "../../../pch.h"
 #include <cstdlib>
 #include "Pong.h"
-#include "Components/RotateSpriteNode.h"
+#include "../Components/RotateSpriteNode.h"
 
 void Pong::OnGameStart(MinigameManagerData data)
 {

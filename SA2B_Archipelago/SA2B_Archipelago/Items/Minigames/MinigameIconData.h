@@ -13,6 +13,8 @@ enum MinigameIcon
 	MGI_DPad_Inactive			= 8,
 	MGI_DPad_Active				= 9,
 	MGI_Spinball				= 10,
+	MGI_Circle					= 11,
+	MGI_Circle_Outline			= 12,
 };
 
 class MinigameIconData

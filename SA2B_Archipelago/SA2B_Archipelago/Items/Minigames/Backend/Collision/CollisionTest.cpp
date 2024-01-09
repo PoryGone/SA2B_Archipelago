@@ -178,6 +178,32 @@ void CollisionTest::RunTests()
 
 	colManager.Reset();
 
+	spr2->SetPositionGlobal({ 0.0f,0.0f,0.0f });
+
+	colManager.AddCollision(spr1, std::make_shared<PolygonCollider>(NJS_POINT3({ 1.0f,1.0f,1.0f })));
+	colManager.AddCollision(spr2, std::make_shared<PolygonCollider>(NJS_POINT3({ 1.0f,1.0f,1.0f })));
+
+	AssertTrue(colManager.IsColliding(spr1, spr2), "Manager_OverlappingPolygonsResultsInCollision");
+
+	spr2->SetPositionGlobal({ 3.0f,0.0f,0.0f });
+
+	AssertFalse(colManager.IsColliding(spr1, spr2), "Manager_ApartPolygonsResultsInNoCollision");
+
+	colManager.Reset();
+
+	spr2->SetPositionGlobal({ 0.0f,0.0f,0.0f });
+
+	colManager.AddCollision(spr1, std::make_shared<CircleCollider>(1.0f));
+	colManager.AddCollision(spr2, std::make_shared<PolygonCollider>(NJS_POINT3({ 1.0f,1.0f,1.0f })));
+
+	AssertTrue(colManager.IsColliding(spr1, spr2), "Manager_OverlappingCircleAndPolygonResultsInCollision");
+	AssertTrue(colManager.IsColliding(spr2, spr1), "Manager_OverlappingCircleAndPolygonResultsInCollision_Reverse");
+
+	spr2->SetPositionGlobal({ 3.0f,0.0f,0.0f });
+
+	AssertFalse(colManager.IsColliding(spr1, spr2), "Manager_ApartCircleAndPolygonResultsInNoCollision");
+	AssertFalse(colManager.IsColliding(spr2, spr1), "Manager_ApartCircleAndPolygonResultsInNoCollision_Reverse");
+
 	PrintDebug("-----Run Tests End-----");
 	hasRun = true;
 }

@@ -2,6 +2,8 @@
 #include "MinigameIconData.h"
 #include "../../Utilities/SpriteUtilities.h"
 #include "Backend/MinigameBackend.h"
+#include "Backend/Time/TimeUtilities.h"
+#include <vector>
 
 enum RawInputFlags
 {
@@ -47,6 +49,9 @@ public:
 	MinigameDifficulty difficulty;
 	SpriteHierarchy* hierarchy;
 	CollisionManager* collision;
+
+	std::vector<Timer>* timers;
+	std::vector<Stopwatch>* stopwatches;
 };
 
 class MinigameBase
