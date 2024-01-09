@@ -49,6 +49,6 @@ public:
 
 private:
 	FishingEasy easy;
-	FishingMedium medium;
-	FishingHard hard;
+	FishingEasy medium;
+	FishingEasy hard;
 };

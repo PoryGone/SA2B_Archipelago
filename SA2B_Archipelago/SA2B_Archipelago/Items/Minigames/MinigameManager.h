@@ -1,6 +1,7 @@
 #pragma once
 #include "MinigameBase.h"
 #include "Games/Pong.h"
+#include "Games//Fishing.h"
 #include "../ItemData.h"
 #include "Backend/Time/TimeUtilities.h"
 #include <ctime>
@@ -50,4 +51,5 @@ private:
 
 	//Minigames
 	Pong pong = Pong();
+	Fishing fishing = Fishing();
 };

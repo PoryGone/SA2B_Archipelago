@@ -3,8 +3,9 @@
 
 void FishingEasy::OnGameStart(MinigameManagerData data)
 {
+	currentState = MGS_None;
 	zoneSize = 50.0f;
-	ringSize = 100.0f;
+	ringSize = 200.0f;
 
 	CreateHierarchy(data);
 }
@@ -33,8 +34,8 @@ void FishingEasy::OnFrame(MinigameManagerData data)
 
 void FishingEasy::CreateHierarchy(MinigameManagerData data)
 {
-	zone = data.hierarchy->CreateNode("Zone", data.icons->GetAnim(MGI_Circle), { zoneSize, zoneSize, 0.0f }, { 320.0f, 190.0f, 0.0f }, nullptr);
-	ring = data.hierarchy->CreateNode("Ring", data.icons->GetAnim(MGI_Circle_Outline), { ringSize, ringSize, 0.0f }, { 320.0f, 190.0f, 0.0f }, nullptr);
-	zone->color = { 0.5f, 0.0f, 0.0f, 0.0f };
+	zone = data.hierarchy->CreateNode("Zone", data.icons->GetAnim(MGI_Circle), { zoneSize, zoneSize, 0.0f }, { 320.0f, 290.0f, 0.0f }, nullptr);
+	ring = data.hierarchy->CreateNode("Ring", data.icons->GetAnim(MGI_Circle_Outline), { ringSize, ringSize, 0.0f }, { 320.0f, 290.0f, 0.0f }, nullptr);
+	zone->color = { 0.7f, 0.91f, 0.58f, 0.03f };
 	ring->color = { 1.0f, 0.0f, 0.0f, 1.0f };
 }

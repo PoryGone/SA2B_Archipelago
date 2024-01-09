@@ -112,6 +112,14 @@ void MinigameManager::UpdateCurrentMinigame()
 			this->EndMinigame();
 		}
 	}
+	//Debug Test Minigame
+	else
+	{
+		if (_data.inputPress & RIF_Down)
+		{
+			this->currentMinigame = &this->fishing;
+		}
+	}
 }
 
 void MinigameManager::EndMinigame()
