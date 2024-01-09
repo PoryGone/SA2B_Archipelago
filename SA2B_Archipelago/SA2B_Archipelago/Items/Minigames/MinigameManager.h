@@ -1,11 +1,13 @@
 #pragma once
 #include <ctime>
+#include <vector>
 
 #include "MinigameBase.h"
+#include "Games/Pong.h"
+#include "Games/Fishing.h"
+#include "Games/Platformer.h"
 #include "../ItemData.h"
-
-#include "Minigames/Pong.h"
-#include "Minigames/Platformer.h"
+#include <ctime>
 
 
 
@@ -31,18 +33,26 @@ public:
 
 	void SetDifficulty(int difficulty);
 
+	void Pause();
+	void Resume();
+
 	MinigameState state = MinigameState::MGS_None;
 	ObjectMaster* IconObjPtr;
 	MinigameIconData iconData = MinigameIconData();
 	SpriteHierarchy spriteHierarchy = SpriteHierarchy();
 	CollisionManager collisionManager = CollisionManager();
 
+	std::vector<Timer> timers = std::vector<Timer>();
+	std::vector<Stopwatch> stopwatches = std::vector<Stopwatch>();
+
 private:
 	MinigameBase* currentMinigame;
 	MinigameManagerData _data = MinigameManagerData();
 	std::clock_t minigameStart;
+	bool isPaused = false;
 
 	//Minigames
 	Pong pong             = Pong();
+	Fishing fishing       = Fishing();
 	Platformer platformer = Platformer();
 };

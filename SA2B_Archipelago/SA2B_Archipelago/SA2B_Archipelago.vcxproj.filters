@@ -111,6 +111,9 @@
     <ClInclude Include="Items\Minigames\MinigameBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Items\Minigames\Games\Pong.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Utilities\SpriteUtilities.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -165,10 +168,10 @@
     <ClInclude Include="Items\Minigames\Backend\Time\TimeUtilities.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Items\Minigames\Minigames\Pong.h">
+    <ClInclude Include="Items\Minigames\Games\Platformer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Items\Minigames\Minigames\Platformer.h">
+    <ClInclude Include="Items\Minigames\Games\Fishing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -233,6 +236,9 @@
     <ClCompile Include="Items\Minigames\MinigameManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Items\Minigames\Games\Pong.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Utilities\SpriteUtilities.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -281,10 +287,19 @@
     <ClCompile Include="Items\Minigames\Backend\Time\TimeUtilities.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Items\Minigames\Minigames\Platformer.cpp">
+    <ClCompile Include="Items\Minigames\Games\Platformer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Items\Minigames\Minigames\Pong.cpp">
+    <ClCompile Include="Items\Minigames\Games\Fishing.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Items\Minigames\Games\FishingEasy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Items\Minigames\Games\FishingMedium.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Items\Minigames\Games\FishingHard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

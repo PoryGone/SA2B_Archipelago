@@ -14,7 +14,12 @@ void DrawUpgradeIcon_MG(ObjectMaster* obj)
 {
 	if (GameState == GameStates_Ingame)
 	{
+		MinigameManager::GetInstance().Resume();
 		MinigameManager::GetInstance().UpdateCurrentMinigame();
+	} 
+	else
+	{
+		MinigameManager::GetInstance().Pause();
 	}
 }
 
@@ -46,11 +51,17 @@ void MinigameManager::OnFrameFunction()
 		this->_data.hierarchy = &this->spriteHierarchy;
 		this->_data.collision = &this->collisionManager;
 		this->_data.hierarchy->iconData = &this->iconData;
+		this->_data.timers = &this->timers;
+		this->_data.stopwatches = &this->stopwatches;
 		this->IconObjPtr = LoadObject(0, "MinigameIcons", DrawUpgradeIconMain_MG, LoadObj_Data1 | LoadObj_Data2);
 		this->IconObjPtr->DeleteSub = DeleteUpgradeIcon_MG;
 		this->IconObjPtr->MainSub = DrawUpgradeIconMain_MG;
 		this->IconObjPtr->DisplaySub_Delayed3 = DrawUpgradeIcon_MG;
 		this->IconObjPtr->Data1.Entity->Action = 1;
+	}
+	else if (GameState != GameStates_Ingame)
+	{
+		Pause();
 	}
 }
 
@@ -67,6 +78,8 @@ void MinigameManager::UpdateCurrentMinigame()
 	{
 		if (this->state == MinigameState::MGS_None)
 		{
+			this->_data.timers->clear();
+			this->_data.stopwatches->clear();
 			this->currentMinigame->OnGameStart(this->_data);
 			this->minigameStart = std::clock();
 			this->state = MinigameState::MGS_PreGame;
@@ -97,6 +110,14 @@ void MinigameManager::UpdateCurrentMinigame()
 				this->HandleLoss();
 			}
 			this->EndMinigame();
+		}
+	}
+	//Debug Test Minigame
+	else
+	{
+		if (_data.inputPress & RIF_Down)
+		{
+			this->currentMinigame = &this->fishing;
 		}
 	}
 }
@@ -153,4 +174,36 @@ void MinigameManager::HandleLoss()
 void MinigameManager::SetDifficulty(int difficulty)
 {
 	this->_data.difficulty = (MinigameDifficulty)difficulty;
+}
+
+void MinigameManager::Pause()
+{
+	if (!this->isPaused)
+	{
+		this->isPaused = true;
+		for (int i = 0; i < this->timers.size(); i++)
+		{
+			timers[i].Pause();
+		}
+		for (int i = 0; i < this->stopwatches.size(); i++)
+		{
+			stopwatches[i].Pause();
+		}
+	}
+}
+
+void MinigameManager::Resume()
+{
+	if (this->isPaused)
+	{
+		this->isPaused = false;
+		for (int i = 0; i < this->timers.size(); i++)
+		{
+			timers[i].Resume();
+		}
+		for (int i = 0; i < this->stopwatches.size(); i++)
+		{
+			stopwatches[i].Resume();
+		}
+	}
 }
