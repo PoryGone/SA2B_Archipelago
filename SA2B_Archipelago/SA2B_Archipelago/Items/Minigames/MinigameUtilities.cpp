@@ -54,3 +54,21 @@ void AddDPadToHierarchy(RawInputFlags activeButtons, NJS_POINT3 position, float 
 	dpadRight->SetPosition({ offset, 0.0f, 0.0f });
 	dpadRight->rotation = 270.0f;
 }
+
+std::default_random_engine& RNG()
+{
+	static std::default_random_engine engine{};
+	return engine;
+}
+
+float RandomFloat(float min, float max)
+{
+	std::uniform_real_distribution<> rDist(min, max);
+	return rDist(RNG());
+}
+
+float RandomInt(int minInc, int maxExcl)
+{
+	std::uniform_int_distribution<> iDist(minInc, maxExcl);
+	return iDist(RNG());
+}

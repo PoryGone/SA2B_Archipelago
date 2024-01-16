@@ -4,8 +4,7 @@
 void FishingEasy::OnGameStart(MinigameManagerData data)
 {
 	currentState = MGS_None;
-	zoneSize = 50.0f;
-	ringSize = 200.0f;
+	fs_state = FES_None;
 
 	CreateHierarchy(data);
 }
@@ -14,28 +13,61 @@ void FishingEasy::OnFrame(MinigameManagerData data)
 {
 	if (data.managerState == MGS_InProgress)
 	{
-		ringSize -= 1.0f;
-		ring->displaySize = { ringSize, ringSize, 0.0f };
-		if (ringSize <= zoneSize)
+		switch (fs_state)
 		{
-			ring->color = { 1.0f, 0.0f, 1.0f, 0.0f };
-		}
-		if (ringSize <= 0.0f)
-		{
-			currentState = MGS_Loss;
-			return;
-		}
-		if (data.inputPress & anyDPad)
-		{
-			currentState = ringSize <= zoneSize ? MGS_Victory : MGS_Loss;
+		case FishingEasy::FES_None:
+			timer.Start(RandomFloat(0.5f, 6.0f));
+			fs_state = FES_WaitForFish;
+			break;
+		case FishingEasy::FES_WaitForFish:
+			if (data.inputPress & anyDPad)
+			{
+				FishEscaped();
+			}
+			else if (timer.IsElapsed())
+			{
+				biteIndicator->color = { 1.0f, 0.0f, 0.0f, 1.0f };
+				timer.Start(1.0f);
+				fs_state = FES_FishOnLine;
+			}
+			break;
+		case FishingEasy::FES_FishOnLine:
+			if (data.inputPress & anyDPad)
+			{
+				biteIndicator->color = { 1.0f, 0.0f, 1.0f, 0.0f };
+				timer.Start(2.0f);
+				fs_state = FES_Caught;
+			}
+			else if (timer.IsElapsed())
+			{
+				FishEscaped();
+			}
+			break;
+		case FishingEasy::FES_Caught:
+			if (timer.IsElapsed())
+			{
+				currentState = MGS_Victory;
+			}
+			break;
+		case FishingEasy::FES_Escaped:
+			if (timer.IsElapsed())
+			{
+				currentState = MGS_Loss;
+			}
+			break;
 		}
 	}
 }
 
 void FishingEasy::CreateHierarchy(MinigameManagerData data)
 {
-	zone = data.hierarchy->CreateNode("Zone", data.icons->GetAnim(MGI_Circle), { zoneSize, zoneSize, 0.0f }, { 320.0f, 290.0f, 0.0f }, nullptr);
-	ring = data.hierarchy->CreateNode("Ring", data.icons->GetAnim(MGI_Circle_Outline), { ringSize, ringSize, 0.0f }, { 320.0f, 290.0f, 0.0f }, nullptr);
-	zone->color = { 0.7f, 0.91f, 0.58f, 0.03f };
-	ring->color = { 1.0f, 0.0f, 0.0f, 1.0f };
+	biteIndicator = data.hierarchy->CreateNode("Indicator", data.icons->GetAnim(MGI_Circle), { 100, 100, 0.0f }, { data.icons->xCenter, data.icons->yCenter, 0.0f }, nullptr);
+	biteIndicator->color = { 1.0f, 0.5f, 0.5f, 0.5f };
+}
+
+void FishingEasy::FishEscaped()
+{
+	biteIndicator->color = { 1.0f, 1.0f, 0.0f, 0.0f };
+	timer.Start(2.0f);
+	fs_state = FES_Escaped;
 }

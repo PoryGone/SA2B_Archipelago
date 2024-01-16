@@ -5,6 +5,32 @@
 
 class FishingEasy 
 {
+	enum FishingState
+	{
+		FES_None,
+		FES_WaitForFish,
+		FES_FishOnLine,
+		FES_Caught,
+		FES_Escaped,
+	};
+
+public:
+	void OnGameStart(MinigameManagerData data);
+	void OnFrame(MinigameManagerData data);
+	MinigameState currentState = MGS_None;
+
+private:
+	void CreateHierarchy(MinigameManagerData data);
+	void FishEscaped();
+	SpriteNode* biteIndicator = nullptr;
+	float ringSize;
+	Timer timer;
+	RawInputFlags anyDPad = RIF_Up | RIF_Down | RIF_Left | RIF_Right;
+	FishingState fs_state;
+};
+
+class FishingMedium
+{
 public:
 	void OnGameStart(MinigameManagerData data);
 	void OnFrame(MinigameManagerData data);
@@ -17,17 +43,6 @@ private:
 	float ringSize;
 	float zoneSize;
 	RawInputFlags anyDPad = RIF_Up | RIF_Down | RIF_Left | RIF_Right;
-};
-
-class FishingMedium
-{
-public:
-	void OnGameStart(MinigameManagerData data);
-	void OnFrame(MinigameManagerData data);
-	MinigameState currentState = MGS_None;
-
-private:
-	void CreateHierarchy(MinigameManagerData data);
 };
 
 class FishingHard
