@@ -168,10 +168,16 @@
     <ClInclude Include="Items\Minigames\Backend\Time\TimeUtilities.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Items\Minigames\Games\Platformer.h">
+    <ClInclude Include="Items\Minigames\Games\Fishing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Items\Minigames\Games\Fishing.h">
+    <ClInclude Include="Items\Minigames\Minigames\Platformer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Items\Minigames\Minigames\Pong.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Items\Minigames\Games\Platformer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

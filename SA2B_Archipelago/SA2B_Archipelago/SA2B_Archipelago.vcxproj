@@ -179,6 +179,7 @@
     <ClInclude Include="Items\Minigames\Backend\Time\TimeUtilities.h" />
     <ClInclude Include="Items\Minigames\Components\RotateSpriteNode.h" />
     <ClInclude Include="Items\Minigames\Games\Fishing.h" />
+    <ClInclude Include="Items\Minigames\Games\Platformer.h" />
     <ClInclude Include="Items\Minigames\MinigameBase.h" />
     <ClInclude Include="Items\Minigames\MinigameIconData.h" />
     <ClInclude Include="Items\Minigames\Minigames\Platformer.h" />
@@ -355,7 +356,7 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../../pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../../pch.h</PrecompiledHeaderFile>
     </ClCompile>
-	<ClCompile Include="Items\Minigames\Games\Pong.cpp">
+    <ClCompile Include="Items\Minigames\Games\Pong.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../../pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../../pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../../../pch.h</PrecompiledHeaderFile>
