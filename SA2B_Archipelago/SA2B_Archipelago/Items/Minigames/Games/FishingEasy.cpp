@@ -5,6 +5,7 @@ void FishingEasy::OnGameStart(MinigameManagerData data)
 {
 	currentState = MGS_None;
 	fs_state = FES_None;
+	data.timers->push_back(&timer);
 
 	CreateHierarchy(data);
 }

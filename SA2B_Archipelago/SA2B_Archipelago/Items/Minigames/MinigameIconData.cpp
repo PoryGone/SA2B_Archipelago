@@ -19,15 +19,19 @@ static NJS_TEXANIM MGAnim[] = {
 	{64, 64, 32, 32, 0x00, 0x00, 0x100, 0x100, 1, 0},
 	{128, 128, 64, 64, 0x00, 0x00, 0x100, 0x100, 4, 0},
 	{128, 128, 64, 64, 0x00, 0x00, 0x100, 0x100, 5, 0},
+	{128, 128, 64, 64, 0x00, 0x00, 0x100, 0x100, 6, 0},
+	{128, 128, 64, 64, 0x00, 0x00, 0x100, 0x100, 7, 0},
+	{128, 128, 64, 64, 0x00, 0x00, 0x100, 0x100, 8, 0},
+	{128, 128, 64, 64, 0x00, 0x00, 0x100, 0x100, 9, 0},
 	//Padding
 	{40, 32, 20, 16, 0x0A, 0x10, 0x34, 0x30, 0, 0},
 };
 
-static const int MinigameAnimLength = 13;
+static const int MinigameAnimLength = 17;
 
 FunctionPointer(void, ReleaseTextureList, (NJS_TEXLIST* a1), 0x77F9F0);
 
-static const int MinigameTexCount = 6;
+static const int MinigameTexCount = 10;
 
 static NJS_TEXNAME MinigameTexName[MinigameTexCount];
 static NJS_TEXLIST MinigameTexList = { MinigameTexName, MinigameTexCount };

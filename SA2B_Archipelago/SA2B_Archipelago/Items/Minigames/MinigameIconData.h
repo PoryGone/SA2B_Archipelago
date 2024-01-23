@@ -15,6 +15,10 @@ enum MinigameIcon
 	MGI_Spinball				= 10,
 	MGI_Circle					= 11,
 	MGI_Circle_Outline			= 12,
+	MGI_Square					= 13,
+	MGI_Square_Outline			= 14,
+	MGI_Triangle				= 15,
+	MGI_Triangle_Outline		= 16,
 };
 
 class MinigameIconData

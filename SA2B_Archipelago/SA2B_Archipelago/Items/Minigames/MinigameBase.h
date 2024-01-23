@@ -50,8 +50,8 @@ public:
 	SpriteHierarchy* hierarchy;
 	CollisionManager* collision;
 
-	std::vector<Timer>* timers;
-	std::vector<Stopwatch>* stopwatches;
+	std::vector<Timer*>* timers;
+	std::vector<Stopwatch*>* stopwatches;
 };
 
 class MinigameBase

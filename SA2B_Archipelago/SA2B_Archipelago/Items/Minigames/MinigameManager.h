@@ -42,8 +42,8 @@ public:
 	SpriteHierarchy spriteHierarchy = SpriteHierarchy();
 	CollisionManager collisionManager = CollisionManager();
 
-	std::vector<Timer> timers = std::vector<Timer>();
-	std::vector<Stopwatch> stopwatches = std::vector<Stopwatch>();
+	std::vector<Timer*> timers = std::vector<Timer*>();
+	std::vector<Stopwatch*> stopwatches = std::vector<Stopwatch*>();
 
 private:
 	MinigameBase* currentMinigame;

@@ -5,6 +5,9 @@ void FishingMedium::OnGameStart(MinigameManagerData data)
 {
 	currentState = MGS_None;
 	fs_state = FMS_Fishing;
+	data.timers->push_back(&endTimer);
+	data.timers->push_back(&timers[0]);
+	data.timers->push_back(&timers[1]);
 	successCount = 0;
 	for (int i = 0; i < 3; i++)
 	{

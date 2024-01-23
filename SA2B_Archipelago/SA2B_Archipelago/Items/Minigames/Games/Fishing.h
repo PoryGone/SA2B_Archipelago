@@ -62,6 +62,13 @@ private:
 
 class FishingHard
 {
+	enum FishingState
+	{
+		FHS_Fishing,
+		FHS_Caught,
+		FHS_Escaped,
+	};
+
 public:
 	void OnGameStart(MinigameManagerData data);
 	void OnFrame(MinigameManagerData data);
@@ -69,6 +76,9 @@ public:
 
 private:
 	void CreateHierarchy(MinigameManagerData data);
+	SpriteNode* fish;
+	SpriteNode* catchZone;
+	SpriteNode* progressBar;
 };
 
 class Fishing : public MinigameBase

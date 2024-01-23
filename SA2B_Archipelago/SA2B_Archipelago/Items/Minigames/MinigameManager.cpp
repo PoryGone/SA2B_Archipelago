@@ -183,11 +183,11 @@ void MinigameManager::Pause()
 		this->isPaused = true;
 		for (int i = 0; i < this->timers.size(); i++)
 		{
-			timers[i].Pause();
+			timers[i]->Pause();
 		}
 		for (int i = 0; i < this->stopwatches.size(); i++)
 		{
-			stopwatches[i].Pause();
+			stopwatches[i]->Pause();
 		}
 	}
 }
@@ -199,11 +199,11 @@ void MinigameManager::Resume()
 		this->isPaused = false;
 		for (int i = 0; i < this->timers.size(); i++)
 		{
-			timers[i].Resume();
+			timers[i]->Resume();
 		}
 		for (int i = 0; i < this->stopwatches.size(); i++)
 		{
-			stopwatches[i].Resume();
+			stopwatches[i]->Resume();
 		}
 	}
 }
