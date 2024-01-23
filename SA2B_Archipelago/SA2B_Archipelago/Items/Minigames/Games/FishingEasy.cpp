@@ -61,6 +61,8 @@ void FishingEasy::OnFrame(MinigameManagerData data)
 
 void FishingEasy::CreateHierarchy(MinigameManagerData data)
 {
+	AddDPadToHierarchy(anyDPad, { 65.0f, 130.0f, 0.0f }, 45.0f, *data.icons, *data.hierarchy);
+
 	biteIndicator = data.hierarchy->CreateNode("Indicator", data.icons->GetAnim(MGI_Circle), { 100, 100, 0.0f }, { data.icons->xCenter, data.icons->yCenter, 0.0f }, nullptr);
 	biteIndicator->color = { 1.0f, 0.5f, 0.5f, 0.5f };
 }

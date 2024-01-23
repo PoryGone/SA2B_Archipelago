@@ -13,4 +13,4 @@ std::default_random_engine& RNG();
 
 float RandomFloat(float min, float max);
 
-float RandomInt(int minInc, int maxExcl);
+int RandomInt(int minInc, int maxExcl);

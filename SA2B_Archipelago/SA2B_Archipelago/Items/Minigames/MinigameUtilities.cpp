@@ -67,8 +67,8 @@ float RandomFloat(float min, float max)
 	return rDist(RNG());
 }
 
-float RandomInt(int minInc, int maxExcl)
+int RandomInt(int minInc, int maxExcl)
 {
-	std::uniform_int_distribution<> iDist(minInc, maxExcl);
+	std::uniform_int_distribution<> iDist(minInc, maxExcl - 1);
 	return iDist(RNG());
 }
