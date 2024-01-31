@@ -53,6 +53,138 @@ static void __cdecl GoldBeetleDestroyed()
 }
 // End Gold Beetle "Trampoline"
 
+// Item Box "Trampolines"
+static void __cdecl ActivatedFloatingItemBox(int pnum, int tnum)
+{
+	__asm
+	{
+		push ebx
+		push edi
+		push ebp
+	}
+
+	ObjectMaster* itemBox;
+	__asm
+	{
+		mov itemBox, edx
+	}
+
+	LocationManager::getInstance().SendItemBoxLocationCheck(itemBox);
+
+	__asm
+	{
+		pop ebp
+		pop edi
+		pop ebx
+	}
+
+	DisplayItemBoxItem(pnum, tnum);
+
+	__asm
+	{
+		movzx ecx, byte ptr[ebx + 3h]
+	}
+}
+
+static void __cdecl ActivatedGroundedItemBox(int pnum, int tnum)
+{
+	__asm
+	{
+		push ebx
+		push edi
+		push ebp
+	}
+
+	ObjectMaster* itemBox;
+	__asm
+	{
+		mov itemBox, edx
+	}
+
+	LocationManager::getInstance().SendItemBoxLocationCheck(itemBox);
+
+	__asm
+	{
+		pop ebp
+		pop edi
+		pop ebx
+	}
+
+	DisplayItemBoxItem(pnum, tnum);
+
+	__asm
+	{
+		mov	ecx, dword ptr[edi + 3Ch]
+	}
+}
+
+static void __cdecl ActivatedBalloonItemBox(int pnum, int tnum)
+{
+	__asm
+	{
+		push edx
+		push ecx
+		push ebx
+		push edi
+	}
+
+	ObjectMaster* itemBox;
+	__asm
+	{
+		mov itemBox, edx
+	}
+
+	LocationManager::getInstance().SendItemBoxLocationCheck(itemBox);
+
+	__asm
+	{
+		pop edi
+		pop ebx
+		pop ecx
+	}
+
+	DisplayItemBoxItem(pnum, tnum);
+
+	__asm
+	{
+		pop edx
+		mov	ecx, dword ptr[edx + 3Ch]
+	}
+}
+
+static void __cdecl ActivatedSunglassesItemBox(int pnum, int tnum)
+{
+	__asm
+	{
+		push ebx
+		push edi
+		push ebp
+	}
+
+	ObjectMaster* itemBox;
+	__asm
+	{
+		mov itemBox, edx
+	}
+
+	LocationManager::getInstance().SendItemBoxLocationCheck(itemBox);
+
+	__asm
+	{
+		pop ebp
+		pop edi
+		pop ebx
+	}
+
+	DisplayItemBoxItem(pnum, tnum);
+
+	__asm
+	{
+		mov	ecx, dword ptr[esi + 3Ch]
+	}
+}
+// End Item Box "Trampolines"
+
 // Animal Count
 struct AnimalCountObj
 {
@@ -84,8 +216,34 @@ void LocationManager::OnInitFunction(const char* path, const HelperFunctions& he
 
 	// Gold Beetle "Trampoline"
 	WriteCall(static_cast<void*>((void*)0x00505F48), &GoldBeetleDestroyed);
+
 	WriteCall(static_cast<void*>((void*)0x006BE973), &ActivatedOmochao);
 	WriteData<4>((void*)0x006BE978, '\x90');
+
+	// Floating Item Boxes
+	WriteData<1>((void*)0x006C9273, '\x89');
+	WriteData<1>((void*)0x006C9274, '\xea');
+	WriteData<2>((void*)0x006C9275, '\x90');
+	WriteCall(static_cast<void*>((void*)0x006C9277), &ActivatedFloatingItemBox);
+
+	// Grounded Item Boxes
+	WriteData<1>((void*)0x006C810D, '\x89');
+	WriteData<1>((void*)0x006C810E, '\xfa');
+	WriteData<1>((void*)0x006C810F, '\x90');
+	WriteCall(static_cast<void*>((void*)0x006C8110), &ActivatedGroundedItemBox);
+
+	// Balloon Item Boxes
+	WriteData<1>((void*)0x006DB297, '\x89');
+	WriteData<1>((void*)0x006DB298, '\xea');
+	WriteData<1>((void*)0x006DB299, '\x90');
+	WriteCall(static_cast<void*>((void*)0x006DB29A), &ActivatedBalloonItemBox);
+
+	// Sunglasses Item Boxes
+	WriteData<1>((void*)0x006EAE00, '\x89');
+	WriteData<1>((void*)0x006EAE01, '\xf2');
+	WriteData<1>((void*)0x006EAE02, '\x90');
+	WriteCall(static_cast<void*>((void*)0x006EAE03), &ActivatedSunglassesItemBox);
+
 
 	InitializeLevelClearChecks(this->_LevelClearData);
 	InitializeBossRushChecks(this->_BossRushData);
@@ -1725,6 +1883,43 @@ void LocationManager::SendAnimalLocationCheck()
 			}
 		}
 	}
+}
+
+void LocationManager::SendItemBoxLocationCheck(ObjectMaster* itemBox)
+{
+	if (!itemBox)
+	{
+		return;
+	}
+
+	NJS_VECTOR Position = NJS_VECTOR();
+	short ID = 0;
+	if (itemBox->SETData && itemBox->SETData->SETEntry)
+	{
+		Position = itemBox->SETData->SETEntry->Position;
+		ID = itemBox->SETData->SETEntry->ID;
+	}
+	else if (itemBox->Data1.Entity)
+	{
+		Position = itemBox->Data1.Entity->Position;
+	}
+	else
+	{
+		// Couldn't Determine Position Data
+		return;
+	}
+
+#if 0
+	std::string message = std::string("Item Box Pos: ");
+	message += std::to_string(ID);
+	message += std::string(" | ");
+	message += std::to_string(int(Position.x));
+	message += std::string(" | ");
+	message += std::to_string(int(Position.y));
+	message += std::string(" | ");
+	message += std::to_string(int(Position.z));
+	MessageQueue::GetInstance().AddMessage(message);
+#endif
 }
 
 void LocationManager::SendBlackMarketLocationCheck(int menuSelection)

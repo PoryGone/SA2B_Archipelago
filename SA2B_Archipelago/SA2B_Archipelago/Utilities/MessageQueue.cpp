@@ -51,6 +51,7 @@ void MessageQueue::OnFrameFunction()
 			currentMessages[i] = messages.front();
 			messages.pop();
 			currentMessages[i].start = std::clock();
+			PrintDebug(currentMessages[i].message.c_str());
 		}
 	}
 	//Display Messages

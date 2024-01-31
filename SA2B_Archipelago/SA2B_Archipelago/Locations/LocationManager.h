@@ -69,6 +69,7 @@ public:
 	void SendGoldBeetleLocationCheck();
 	void SendOmochaoLocationCheck();
 	void SendAnimalLocationCheck();
+	void SendItemBoxLocationCheck(ObjectMaster* itemBox);
 	void SendBlackMarketLocationCheck(int menuSelection);
 
 	std::vector<int> GetChaoKeyLocationsForLevel(int levelID);
