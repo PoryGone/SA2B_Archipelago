@@ -31,6 +31,7 @@ public:
 	NJS_TEXLIST* MinigameTex;
 	int AnimLength;
 
+	//600 x 480 of usuable space, but using 600 x 380 for standard minigames removing 100 at the top
 	float xMin;
 	float xMax;
 	float xCenter;
