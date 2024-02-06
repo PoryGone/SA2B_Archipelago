@@ -116,7 +116,6 @@ void FishingHard::UpdateZone()
 
 void FishingHard::UpdateProgress(MinigameManagerData data)
 {
-	PrintDebug(std::to_string(data.collision->IsColliding(fish, catchZone)).c_str());
 	if (data.collision->IsColliding(fish, catchZone))
 	{
 		progress += progressChangeRate * progressIncreaseMultiplier;

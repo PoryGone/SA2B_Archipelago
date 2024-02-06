@@ -106,7 +106,7 @@ public:
 	void OnFrame(MinigameManagerData data) override;
 
 private:
-	FishingHard easy;
-	FishingHard medium;
+	FishingEasy easy;
+	FishingMedium medium;
 	FishingHard hard;
 };

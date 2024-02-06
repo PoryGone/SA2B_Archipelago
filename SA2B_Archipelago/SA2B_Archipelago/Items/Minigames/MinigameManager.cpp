@@ -113,6 +113,7 @@ void MinigameManager::UpdateCurrentMinigame()
 		}
 	}
 	//Debug Test Minigame
+	/*
 	else
 	{
 		if (_data.inputPress & RIF_Down)
@@ -120,6 +121,7 @@ void MinigameManager::UpdateCurrentMinigame()
 			this->currentMinigame = &this->fishing;
 		}
 	}
+	*/
 }
 
 void MinigameManager::EndMinigame()
