@@ -220,30 +220,6 @@ void LocationManager::OnInitFunction(const char* path, const HelperFunctions& he
 	WriteCall(static_cast<void*>((void*)0x006BE973), &ActivatedOmochao);
 	WriteData<4>((void*)0x006BE978, '\x90');
 
-	// Floating Item Boxes
-	WriteData<1>((void*)0x006C9273, '\x89');
-	WriteData<1>((void*)0x006C9274, '\xea');
-	WriteData<2>((void*)0x006C9275, '\x90');
-	WriteCall(static_cast<void*>((void*)0x006C9277), &ActivatedFloatingItemBox);
-
-	// Grounded Item Boxes
-	WriteData<1>((void*)0x006C810D, '\x89');
-	WriteData<1>((void*)0x006C810E, '\xfa');
-	WriteData<1>((void*)0x006C810F, '\x90');
-	WriteCall(static_cast<void*>((void*)0x006C8110), &ActivatedGroundedItemBox);
-
-	// Balloon Item Boxes
-	WriteData<1>((void*)0x006DB297, '\x89');
-	WriteData<1>((void*)0x006DB298, '\xea');
-	WriteData<1>((void*)0x006DB299, '\x90');
-	WriteCall(static_cast<void*>((void*)0x006DB29A), &ActivatedBalloonItemBox);
-
-	// Sunglasses Item Boxes
-	WriteData<1>((void*)0x006EAE00, '\x89');
-	WriteData<1>((void*)0x006EAE01, '\xf2');
-	WriteData<1>((void*)0x006EAE02, '\x90');
-	WriteCall(static_cast<void*>((void*)0x006EAE03), &ActivatedSunglassesItemBox);
-
 
 	InitializeLevelClearChecks(this->_LevelClearData);
 	InitializeBossRushChecks(this->_BossRushData);
@@ -253,6 +229,7 @@ void LocationManager::OnInitFunction(const char* path, const HelperFunctions& he
 	InitializeGoldBeetleChecks(this->_GoldBeetleData);
 	InitializeOmochaoChecks(this->_OmochaoData);
 	InitializeAnimalChecks(this->_AnimalData);
+	InitializeItemBoxChecks(this->_ItemBoxData);
 
 	InitializeChaoGardenChecks(this->_ChaoGardenData);
 	InitializeChaoStatChecks(this->_ChaoStatData);
@@ -294,6 +271,7 @@ void LocationManager::OnFrameFunction()
 		this->OnFrameGoldBeetles();
 		this->OnFrameOmochao();
 		this->OnFrameAnimals();
+		this->OnFrameItemBoxes();
 		this->OnFrameKartRace();
 	}
 }
@@ -686,6 +664,54 @@ void LocationManager::OnFrameAnimals()
 	if (GameState == GameStates::GameStates_Ingame || GameState == GameStates::GameStates_Pause)
 	{
 		AnimalCounter->AnimalCount->MaxAnimalCount = this->GetTotalAnimalLocationsForLevel(TileIDtoStageIndex[SS_SelectedTile]);
+	}
+}
+
+void LocationManager::OnFrameItemBoxes()
+{
+	if (!this->_itemBoxesEnabled)
+	{
+		return;
+	}
+
+	for (int i = ItemBoxCheck::IBC_BEGIN; i < ItemBoxCheck::IBC_NUM_CHECKS; i++)
+	{
+		if (this->_ItemBoxData.find(i) != this->_ItemBoxData.end())
+		{
+			ItemBoxCheckData& checkData = this->_ItemBoxData[i];
+
+			if (!checkData.CheckSent)
+			{
+				// DataPointer macro creates a static field, which doesn't work for this case
+				char dataValue = *(char*)checkData.Address;
+
+				char bitFlag = (char)(0x01 << checkData.AddressBit);
+
+				if ((dataValue & bitFlag) != 0x00)
+				{
+					if (this->_archipelagoManager)
+					{
+						this->_archipelagoManager->SendItem(i);
+
+						checkData.CheckSent = true;
+					}
+				}
+			}
+			else
+			{
+				// Capture offline collects
+				char dataValue = *(char*)checkData.Address;
+
+				char bitFlag = (char)(0x01 << checkData.AddressBit);
+
+				if ((dataValue & bitFlag) == 0x00)
+				{
+					char newDataValue = dataValue | bitFlag;
+
+					WriteData<1>((void*)checkData.Address, newDataValue);
+				}
+			}
+		}
 	}
 }
 
@@ -1411,6 +1437,18 @@ void LocationManager::CheckLocation(int location_id)
 
 		WriteData<1>((void*)checkData.Address, newDataValue);
 	}
+	else if (this->_ItemBoxData.find(location_id) != this->_ItemBoxData.end())
+	{
+		ItemBoxCheckData& checkData = this->_ItemBoxData[location_id];
+
+		checkData.CheckSent = true;
+
+		char dataValue = *(char*)checkData.Address;
+		char bitFlag = (char)(0x01 << checkData.AddressBit);
+		char newDataValue = dataValue | bitFlag;
+
+		WriteData<1>((void*)checkData.Address, newDataValue);
+	}
 	else if (this->_KartRaceData.find(location_id) != this->_KartRaceData.end())
 	{
 		KartRaceCheckData& checkData = this->_KartRaceData[location_id];
@@ -1486,6 +1524,38 @@ void LocationManager::SetOmochaoEnabled(bool omochaoEnabled)
 void LocationManager::SetAnimalsEnabled(bool animalsEnabled)
 {
 	this->_animalsEnabled = animalsEnabled;
+}
+
+void LocationManager::SetItemBoxesEnabled(bool itemBoxesEnabled)
+{
+	this->_itemBoxesEnabled = itemBoxesEnabled;
+
+	if (this->_itemBoxesEnabled)
+	{
+		// Floating Item Boxes
+		WriteData<1>((void*)0x006C9273, '\x89');
+		WriteData<1>((void*)0x006C9274, '\xea');
+		WriteData<2>((void*)0x006C9275, '\x90');
+		WriteCall(static_cast<void*>((void*)0x006C9277), &ActivatedFloatingItemBox);
+
+		// Grounded Item Boxes
+		WriteData<1>((void*)0x006C810D, '\x89');
+		WriteData<1>((void*)0x006C810E, '\xfa');
+		WriteData<1>((void*)0x006C810F, '\x90');
+		WriteCall(static_cast<void*>((void*)0x006C8110), &ActivatedGroundedItemBox);
+
+		// Balloon Item Boxes
+		WriteData<1>((void*)0x006DB297, '\x89');
+		WriteData<1>((void*)0x006DB298, '\xea');
+		WriteData<1>((void*)0x006DB299, '\x90');
+		WriteCall(static_cast<void*>((void*)0x006DB29A), &ActivatedBalloonItemBox);
+
+		// Sunglasses Item Boxes
+		WriteData<1>((void*)0x006EAE00, '\x89');
+		WriteData<1>((void*)0x006EAE01, '\xf2');
+		WriteData<1>((void*)0x006EAE02, '\x90');
+		WriteCall(static_cast<void*>((void*)0x006EAE03), &ActivatedSunglassesItemBox);
+	}
 }
 
 void LocationManager::SetKartRacesEnabled(int kartRacesEnabled)
@@ -1652,6 +1722,11 @@ void LocationManager::ResetLocations()
 	}
 
 	for (auto& pair : this->_AnimalData)
+	{
+		pair.second.CheckSent = false;
+	}
+
+	for (auto& pair : this->_ItemBoxData)
 	{
 		pair.second.CheckSent = false;
 	}
@@ -1887,6 +1962,11 @@ void LocationManager::SendAnimalLocationCheck()
 
 void LocationManager::SendItemBoxLocationCheck(ObjectMaster* itemBox)
 {
+	if (!this->_itemBoxesEnabled)
+	{
+		return;
+	}
+
 	if (!itemBox)
 	{
 		return;
@@ -1920,6 +2000,35 @@ void LocationManager::SendItemBoxLocationCheck(ObjectMaster* itemBox)
 	message += std::to_string(int(Position.z));
 	MessageQueue::GetInstance().AddMessage(message);
 #endif
+
+	for (int i = ItemBoxCheck::IBC_BEGIN; i < ItemBoxCheck::IBC_NUM_CHECKS; i++)
+	{
+		if (this->_ItemBoxData.find(i) != this->_ItemBoxData.end())
+		{
+			ItemBoxCheckData& checkData = this->_ItemBoxData[i];
+
+			if (checkData.LevelID == CurrentLevel)
+			{
+				if (dist(checkData.Position, Position) < checkData.Range)
+				{
+					char dataValue = *(char*)checkData.Address;
+
+					char bitFlag = (char)(0x01 << checkData.AddressBit);
+
+					if ((dataValue & bitFlag) == 0x00)
+					{
+						char dataValue = *(char*)checkData.Address;
+						char bitFlag = (char)(0x01 << checkData.AddressBit);
+						char newDataValue = dataValue | bitFlag;
+
+						WriteData<1>((void*)checkData.Address, newDataValue);
+					}
+
+					return;
+				}
+			}
+		}
+	}
 }
 
 void LocationManager::SendBlackMarketLocationCheck(int menuSelection)
@@ -2114,6 +2223,72 @@ int LocationManager::GetTotalAnimalLocationsForLevel(int levelID)
 			else
 			{
 				break;
+			}
+		}
+	}
+
+	return result;
+}
+
+std::vector<int> LocationManager::GetLifeBoxLocationsForLevel(int levelID)
+{
+	std::vector<int> result;
+
+	if (this->_itemBoxesEnabled)
+	{
+		int checkOffset = 0x1400;
+
+		for (int j = 0; j < 13; j++)
+		{
+			int locationID = checkOffset + (j * 0x20) + levelID;
+			if (this->_ItemBoxData.find(locationID) != this->_ItemBoxData.end())
+			{
+				ItemBoxCheckData& checkData = this->_ItemBoxData[locationID];
+				char dataValue = *(char*)checkData.Address;
+
+				char bitFlag = (char)(0x01 << checkData.AddressBit);
+
+				if ((dataValue & bitFlag) == 0x00)
+				{
+					result.push_back(0x00);
+				}
+				else
+				{
+					result.push_back(0x01);
+				}
+			}
+		}
+	}
+
+	return result;
+}
+
+std::vector<int> LocationManager::GetItemBoxLocationsForLevel(int levelID)
+{
+	std::vector<int> result;
+
+	if (this->_itemBoxesEnabled)
+	{
+		int checkOffset = 0x1600;
+
+		for (int j = 0; j < 40; j++)
+		{
+			int locationID = checkOffset + (j * 0x20) + levelID;
+			if (this->_ItemBoxData.find(locationID) != this->_ItemBoxData.end())
+			{
+				ItemBoxCheckData& checkData = this->_ItemBoxData[locationID];
+				char dataValue = *(char*)checkData.Address;
+
+				char bitFlag = (char)(0x01 << checkData.AddressBit);
+
+				if ((dataValue & bitFlag) == 0x00)
+				{
+					result.push_back(0x00);
+				}
+				else
+				{
+					result.push_back(0x01);
+				}
 			}
 		}
 	}

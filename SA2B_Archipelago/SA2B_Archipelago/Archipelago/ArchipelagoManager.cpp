@@ -837,6 +837,21 @@ void SA2_SetAnimalChecks(int animalChecks)
     }
 }
 
+void SA2_SetItemBoxChecks(int itemBoxChecks)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    if (itemBoxChecks > 0)
+    {
+        LocationManager* locationManager = &LocationManager::getInstance();
+
+        locationManager->SetItemBoxesEnabled(true);
+    }
+}
+
 void SA2_SetKartRaceChecks(int kartRaceChecks)
 {
     if (!ArchipelagoManager::getInstance().IsInit())
@@ -969,6 +984,7 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_RegisterSlotDataIntCallback("GoldBeetles", &SA2_SetGoldBeetles);
     AP_RegisterSlotDataIntCallback("OmochaoChecks", &SA2_SetOmochaoChecks);
     AP_RegisterSlotDataIntCallback("AnimalChecks", &SA2_SetAnimalChecks);
+    AP_RegisterSlotDataIntCallback("ItemBoxChecks", &SA2_SetItemBoxChecks);
     AP_RegisterSlotDataIntCallback("KartRaceChecks", &SA2_SetKartRaceChecks);
     AP_RegisterSlotDataIntCallback("ChaoStadiumChecks", &SA2_SetChaoPacks);
     AP_RegisterSlotDataIntCallback("ChaoRaceDifficulty", &SA2_SetChaoRaceDifficulty);

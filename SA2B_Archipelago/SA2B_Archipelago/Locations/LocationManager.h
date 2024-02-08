@@ -32,6 +32,7 @@ public:
 	void OnFrameGoldBeetles();
 	void OnFrameOmochao();
 	void OnFrameAnimals();
+	void OnFrameItemBoxes();
 	void OnFrameKartRace();
 	void OnFrameChaoGarden();
 
@@ -48,6 +49,7 @@ public:
 	void SetGoldBeetlesEnabled(bool goldBeetlesEnabled);
 	void SetOmochaoEnabled(bool omochaoEnabled);
 	void SetAnimalsEnabled(bool animalsEnabled);
+	void SetItemBoxesEnabled(bool itemboxesEnabled);
 	void SetKartRacesEnabled(int kartRacesEnabled);
 
 	void SetRacesPacked(bool racesPacked);
@@ -79,6 +81,8 @@ public:
 	std::vector<int> GetOmochaoLocationsForLevel(int levelID);
 	int GetCompletedAnimalLocationsForLevel(int levelID);
 	int GetTotalAnimalLocationsForLevel(int levelID);
+	std::vector<int> GetLifeBoxLocationsForLevel(int levelID);
+	std::vector<int> GetItemBoxLocationsForLevel(int levelID);
 	int GetMaxMarketTokens();
 
 	std::vector<int> GetChaoBeginnerRaceLocations();
@@ -118,6 +122,7 @@ private:
 	bool _goldBeetlesEnabled = false;
 	bool _omochaoEnabled = false;
 	bool _animalsEnabled = false;
+	bool _itemBoxesEnabled = false;
 	int _kartRacesEnabled = 0;
 
 	bool _racesPacked = false;
@@ -150,6 +155,7 @@ private:
 	std::map<int, GoldBeetleCheckData> _GoldBeetleData;
 	std::map<int, OmochaoCheckData> _OmochaoData;
 	std::map<int, AnimalCheckData> _AnimalData;
+	std::map<int, ItemBoxCheckData> _ItemBoxData;
 	std::map<int, KartRaceCheckData> _KartRaceData;
 
 	std::map<int, std::vector<int>> _ChaoRacePacks;

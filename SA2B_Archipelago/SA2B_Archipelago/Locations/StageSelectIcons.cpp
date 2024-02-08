@@ -99,6 +99,7 @@ static NJS_SPRITE StageSelectSprite = { { -32.0f, 0.0f, 0.0f }, 1.0f, 1.0f, 0, &
 static NJS_SPRITE NumSprite = { { -32.0f, 0.0f, 0.0f }, 1.0f, 1.0f, 0, &NumTex, &NumAnim[0] };
 
 static int omochaoIconsPerRow = 14;
+static int itemBoxIconsPerRow = 14;
 
 static const float maxCCUnlockOffset = 5.0f;
 static int currentCCUnlockFrame = 0;
@@ -384,6 +385,8 @@ void UpdateLevelCheckIcons()
 		std::vector<int> hiddens = locMan->GetHiddenLocationsForLevel(currentTileStageIndex);
 		std::vector<int> beetles = locMan->GetGoldBeetleLocationsForLevel(currentTileStageIndex);
 		std::vector<int> omochao = locMan->GetOmochaoLocationsForLevel(currentTileStageIndex);
+		std::vector<int> lifeBoxes = locMan->GetLifeBoxLocationsForLevel(currentTileStageIndex);
+		std::vector<int> itemBoxes = locMan->GetItemBoxLocationsForLevel(currentTileStageIndex);
 		int animalsFound = locMan->GetCompletedAnimalLocationsForLevel(currentTileStageIndex);
 		int animalsTotal = locMan->GetTotalAnimalLocationsForLevel(currentTileStageIndex);
 
@@ -508,6 +511,83 @@ void UpdateLevelCheckIcons()
 					yPos -= 24.0f;
 					numInRow = omochaoIconsPerRow;
 				}
+			}
+			for (int omoRows = 0; omoRows < ((float)omochao.size() / (float)omochaoIconsPerRow) + 1; omoRows++)
+			{
+				yPos += 24.0f;
+				xCount = 0;
+			}
+		}
+		if (lifeBoxes.size() > 0)
+		{
+			itemCount = lifeBoxes.size();
+			int rows = 0;
+			for (int i = itemCount; i > 0; i -= itemBoxIconsPerRow)
+			{
+				rows++;
+			}
+			int numInRow = itemCount % itemBoxIconsPerRow;
+			numInRow = numInRow == 0 ? itemBoxIconsPerRow : numInRow;
+			yPos += (rows - 1) * 24.0f;
+			while (itemCount > 0)
+			{
+				int lifeBoxIcon = lifeBoxes[itemCount - 1] == 0x01 ? SSI_Pipe : SSI_PipeDisabled;
+				float x = maxXPos - ((xCount + 1) * 24.0f);
+				StageSelectSprite.tanim = &StageSelectAnim[lifeBoxIcon];
+				StageSelectSprite.p = { x, yPos, 0.0f };
+				DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+				x += 2;
+				DrawString(std::to_string(itemCount), x, yPos + 18.0f, 0.1875f);
+				xCount++;
+				itemCount--;
+				numInRow--;
+				if (numInRow <= 0)
+				{
+					xCount = 0;
+					yPos -= 24.0f;
+					numInRow = itemBoxIconsPerRow;
+				}
+			}
+			for (int lifeBoxRows = 0; lifeBoxRows < ceil((float)lifeBoxes.size() / (float)itemBoxIconsPerRow) + 1; lifeBoxRows++)
+			{
+				yPos += 24.0f;
+				xCount = 0;
+			}
+		}
+		if (itemBoxes.size() > 0)
+		{
+			itemCount = itemBoxes.size();
+			int rows = 0;
+			for (int i = itemCount; i > 0; i -= itemBoxIconsPerRow)
+			{
+				rows++;
+			}
+			int numInRow = itemCount % itemBoxIconsPerRow;
+			numInRow = numInRow == 0 ? itemBoxIconsPerRow : numInRow;
+			yPos += (rows - 1) * 24.0f;
+			while (itemCount > 0)
+			{
+				int itemBoxIcon = itemBoxes[itemCount - 1] == 0x01 ? SSI_Hidden : SSI_HiddenDisabled;
+				float x = maxXPos - ((xCount + 1) * 24.0f);
+				StageSelectSprite.tanim = &StageSelectAnim[itemBoxIcon];
+				StageSelectSprite.p = { x, yPos, 0.0f };
+				DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+				x += 2;
+				DrawString(std::to_string(itemCount), x, yPos + 18.0f, 0.1875f);
+				xCount++;
+				itemCount--;
+				numInRow--;
+				if (numInRow <= 0)
+				{
+					xCount = 0;
+					yPos -= 24.0f;
+					numInRow = itemBoxIconsPerRow;
+				}
+			}
+			for (int itemBoxRows = 0; itemBoxRows < ceil((float)itemBoxes.size() / (float)itemBoxIconsPerRow) + 1; itemBoxRows++)
+			{
+				yPos += 24.0f;
+				xCount = 0;
 			}
 		}
 	}
