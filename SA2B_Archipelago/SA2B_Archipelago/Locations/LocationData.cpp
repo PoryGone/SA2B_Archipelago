@@ -1284,7 +1284,7 @@ void InitializeItemBoxChecks(std::map<int, ItemBoxCheckData>& outItemBoxChecks)
     outItemBoxChecks[ItemBoxCheck::IBC_GreenForest_ItemBox_5]  = ItemBoxCheckData(0x01DEEDA9, 0x04, LevelIDs_GreenForest, { 5890,	-2073,	7565 });
     outItemBoxChecks[ItemBoxCheck::IBC_GreenForest_ItemBox_6]  = ItemBoxCheckData(0x01DEEDA9, 0x05, LevelIDs_GreenForest, { 8212,	-1797,	7838 });
     outItemBoxChecks[ItemBoxCheck::IBC_GreenForest_ItemBox_7]  = ItemBoxCheckData(0x01DEEDA9, 0x06, LevelIDs_GreenForest, { 8214,	-2122,	7774 });
-    outItemBoxChecks[ItemBoxCheck::IBC_GreenForest_ItemBox_8]  = ItemBoxCheckData(0x01DEEDA9, 0x07, LevelIDs_GreenForest, { 8282,	-2212,	8036 });
+    outItemBoxChecks[ItemBoxCheck::IBC_GreenForest_ItemBox_8]  = ItemBoxCheckData(0x01DEEDA9, 0x07, LevelIDs_GreenForest, { 8282,	-2122,	8036 });
     outItemBoxChecks[ItemBoxCheck::IBC_GreenForest_ItemBox_9]  = ItemBoxCheckData(0x01DEEDAA, 0x00, LevelIDs_GreenForest, { 8224,	-1404,	7995 });
     outItemBoxChecks[ItemBoxCheck::IBC_GreenForest_ItemBox_10] = ItemBoxCheckData(0x01DEEDAA, 0x01, LevelIDs_GreenForest, { 8233,	 -725,	7790 });
     outItemBoxChecks[ItemBoxCheck::IBC_GreenForest_ItemBox_11] = ItemBoxCheckData(0x01DEEDAA, 0x02, LevelIDs_GreenForest, { 8370,	 -499,	7434 });
@@ -1319,7 +1319,7 @@ void InitializeItemBoxChecks(std::map<int, ItemBoxCheckData>& outItemBoxChecks)
     outItemBoxChecks[ItemBoxCheck::IBC_SkyRail_LifeBox_3]  = ItemBoxCheckData(0x01DEEDB4, 0x02, LevelIDs_SkyRail, { -3279,	-1500,	3162 });
     outItemBoxChecks[ItemBoxCheck::IBC_SkyRail_LifeBox_4]  = ItemBoxCheckData(0x01DEEDB4, 0x03, LevelIDs_SkyRail, { -2879,	-1762,	3900 });
     outItemBoxChecks[ItemBoxCheck::IBC_SkyRail_LifeBox_5]  = ItemBoxCheckData(0x01DEEDB4, 0x04, LevelIDs_SkyRail, { -2080,	-2330,	4685 });
-    outItemBoxChecks[ItemBoxCheck::IBC_SkyRail_LifeBox_6]  = ItemBoxCheckData(0x01DEEDB4, 0x05, LevelIDs_SkyRail, { -2084,	-2070,	4681 });
+    outItemBoxChecks[ItemBoxCheck::IBC_SkyRail_LifeBox_6]  = ItemBoxCheckData(0x01DEEDB4, 0x05, LevelIDs_SkyRail, { -2084,	-2070,	4681 }, 10.0f);
     outItemBoxChecks[ItemBoxCheck::IBC_SkyRail_LifeBox_7]  = ItemBoxCheckData(0x01DEEDB4, 0x06, LevelIDs_SkyRail, { -1941,	-1850,	4601 });
     outItemBoxChecks[ItemBoxCheck::IBC_SkyRail_LifeBox_8]  = ItemBoxCheckData(0x01DEEDB4, 0x07, LevelIDs_SkyRail, { -2094,	-1920,	4502 });
     outItemBoxChecks[ItemBoxCheck::IBC_SkyRail_LifeBox_9]  = ItemBoxCheckData(0x01DEEDB5, 0x00, LevelIDs_SkyRail, { -2266,	-3759,	8915 });
@@ -1336,7 +1336,7 @@ void InitializeItemBoxChecks(std::map<int, ItemBoxCheckData>& outItemBoxChecks)
     outItemBoxChecks[ItemBoxCheck::IBC_SkyRail_ItemBox_11] = ItemBoxCheckData(0x01DEEDB7, 0x02, LevelIDs_SkyRail, { -2698,	-1841,	3848 });
     outItemBoxChecks[ItemBoxCheck::IBC_SkyRail_ItemBox_12] = ItemBoxCheckData(0x01DEEDB7, 0x03, LevelIDs_SkyRail, { -2075,	-2180,	4424 });
     outItemBoxChecks[ItemBoxCheck::IBC_SkyRail_ItemBox_13] = ItemBoxCheckData(0x01DEEDB7, 0x04, LevelIDs_SkyRail, { -2166,	-2250,	4415 });
-    outItemBoxChecks[ItemBoxCheck::IBC_SkyRail_ItemBox_14] = ItemBoxCheckData(0x01DEEDB7, 0x05, LevelIDs_SkyRail, { -2073,	-2070,	4687 });
+    outItemBoxChecks[ItemBoxCheck::IBC_SkyRail_ItemBox_14] = ItemBoxCheckData(0x01DEEDB7, 0x05, LevelIDs_SkyRail, { -2073,	-2070,	4687 }, 10.0f);
     outItemBoxChecks[ItemBoxCheck::IBC_SkyRail_ItemBox_15] = ItemBoxCheckData(0x01DEEDB7, 0x06, LevelIDs_SkyRail, { -2002,	-1880,	4723 });
     outItemBoxChecks[ItemBoxCheck::IBC_SkyRail_ItemBox_16] = ItemBoxCheckData(0x01DEEDB7, 0x07, LevelIDs_SkyRail, { -2183,	-2018,	5281 });
     outItemBoxChecks[ItemBoxCheck::IBC_SkyRail_ItemBox_17] = ItemBoxCheckData(0x01DEEDB8, 0x00, LevelIDs_SkyRail, { -2362,	-3057,	6552 });
@@ -1435,7 +1435,7 @@ void InitializeItemBoxChecks(std::map<int, ItemBoxCheckData>& outItemBoxChecks)
     outItemBoxChecks[ItemBoxCheck::IBC_CityEscape_ItemBox_2] = ItemBoxCheckData(0x01DEEDD1, 0x01, LevelIDs_CityEscape, { -1540,	 -6020,	8838 });
     outItemBoxChecks[ItemBoxCheck::IBC_CityEscape_ItemBox_3] = ItemBoxCheckData(0x01DEEDD1, 0x02, LevelIDs_CityEscape, {  -647,	 -6238,	9814 });
     outItemBoxChecks[ItemBoxCheck::IBC_CityEscape_ItemBox_4] = ItemBoxCheckData(0x01DEEDD1, 0x03, LevelIDs_CityEscape, {   345,	 -6466,	9842 });
-    outItemBoxChecks[ItemBoxCheck::IBC_CityEscape_ItemBox_5] = ItemBoxCheckData(0x01DEEDD1, 0x04, LevelIDs_CityEscape, {   827,	   -78,	6325 });
+    outItemBoxChecks[ItemBoxCheck::IBC_CityEscape_ItemBox_5] = ItemBoxCheckData(0x01DEEDD1, 0x04, LevelIDs_CityEscape, {   827,	 -8079,	6325 });
     outItemBoxChecks[ItemBoxCheck::IBC_CityEscape_ItemBox_6] = ItemBoxCheckData(0x01DEEDD1, 0x05, LevelIDs_CityEscape, {  4024,	 -8901,	6413 });
     outItemBoxChecks[ItemBoxCheck::IBC_CityEscape_ItemBox_7] = ItemBoxCheckData(0x01DEEDD1, 0x06, LevelIDs_CityEscape, {  5986,	-10718,	4812 });
     outItemBoxChecks[ItemBoxCheck::IBC_CityEscape_ItemBox_8] = ItemBoxCheckData(0x01DEEDD1, 0x07, LevelIDs_CityEscape, {  7302,	-11302,	4729 });
@@ -1505,12 +1505,12 @@ void InitializeItemBoxChecks(std::map<int, ItemBoxCheckData>& outItemBoxChecks)
     outItemBoxChecks[ItemBoxCheck::IBC_CrazyGadget_ItemBox_3]  = ItemBoxCheckData(0x01DEEDE7, 0x02, LevelIDs_CrazyGadget, {   -800,	   20,	 -380 });
     outItemBoxChecks[ItemBoxCheck::IBC_CrazyGadget_ItemBox_4]  = ItemBoxCheckData(0x01DEEDE7, 0x03, LevelIDs_CrazyGadget, {  -3133,	  302,	 -550 });
     outItemBoxChecks[ItemBoxCheck::IBC_CrazyGadget_ItemBox_5]  = ItemBoxCheckData(0x01DEEDE7, 0x04, LevelIDs_CrazyGadget, {  -3569,	  152,	 -650 });
-    outItemBoxChecks[ItemBoxCheck::IBC_CrazyGadget_ItemBox_6]  = ItemBoxCheckData(0x01DEEDE7, 0x05, LevelIDs_CrazyGadget, {  -3856,	    0,	-1355 });
+    outItemBoxChecks[ItemBoxCheck::IBC_CrazyGadget_ItemBox_6]  = ItemBoxCheckData(0x01DEEDE7, 0x05, LevelIDs_CrazyGadget, {  -3829,	  170,	 -730 });
     outItemBoxChecks[ItemBoxCheck::IBC_CrazyGadget_ItemBox_7]  = ItemBoxCheckData(0x01DEEDE7, 0x06, LevelIDs_CrazyGadget, {  -3956,	    0,	-1355 });
     outItemBoxChecks[ItemBoxCheck::IBC_CrazyGadget_ItemBox_8]  = ItemBoxCheckData(0x01DEEDE7, 0x07, LevelIDs_CrazyGadget, {  -4404,	 -528,	-1355 });
-    outItemBoxChecks[ItemBoxCheck::IBC_CrazyGadget_ItemBox_9]  = ItemBoxCheckData(0x01DEEDE8, 0x00, LevelIDs_CrazyGadget, { -10934,	-1067,	-3375 });
-    outItemBoxChecks[ItemBoxCheck::IBC_CrazyGadget_ItemBox_10] = ItemBoxCheckData(0x01DEEDE8, 0x01, LevelIDs_CrazyGadget, { -10949,	-1067,	-3375 });
-    outItemBoxChecks[ItemBoxCheck::IBC_CrazyGadget_ItemBox_11] = ItemBoxCheckData(0x01DEEDE8, 0x02, LevelIDs_CrazyGadget, { -10964,	-1067,	-3375 });
+    outItemBoxChecks[ItemBoxCheck::IBC_CrazyGadget_ItemBox_9]  = ItemBoxCheckData(0x01DEEDE8, 0x00, LevelIDs_CrazyGadget, { -10934,	-1067,	-3375 }, 10.0f);
+    outItemBoxChecks[ItemBoxCheck::IBC_CrazyGadget_ItemBox_10] = ItemBoxCheckData(0x01DEEDE8, 0x01, LevelIDs_CrazyGadget, { -10949,	-1067,	-3375 }, 10.0f);
+    outItemBoxChecks[ItemBoxCheck::IBC_CrazyGadget_ItemBox_11] = ItemBoxCheckData(0x01DEEDE8, 0x02, LevelIDs_CrazyGadget, { -10964,	-1067,	-3375 }, 10.0f);
     outItemBoxChecks[ItemBoxCheck::IBC_CrazyGadget_ItemBox_12] = ItemBoxCheckData(0x01DEEDE8, 0x03, LevelIDs_CrazyGadget, { -10949,	-1227,	-3375 });
     outItemBoxChecks[ItemBoxCheck::IBC_CrazyGadget_ItemBox_13] = ItemBoxCheckData(0x01DEEDE8, 0x04, LevelIDs_CrazyGadget, {  -9580,	-1097,	-2455 });
     outItemBoxChecks[ItemBoxCheck::IBC_CrazyGadget_ItemBox_14] = ItemBoxCheckData(0x01DEEDE8, 0x05, LevelIDs_CrazyGadget, {  -9580,	 -816,	-2537 });
@@ -1523,7 +1523,7 @@ void InitializeItemBoxChecks(std::map<int, ItemBoxCheckData>& outItemBoxChecks)
     outItemBoxChecks[ItemBoxCheck::IBC_HiddenBase_ItemBox_5] = ItemBoxCheckData(0x01DEEDEA, 0x04, LevelIDs_HiddenBase, { -3930,	610,	-4557 });
 
     outItemBoxChecks[ItemBoxCheck::IBC_EternalEngine_LifeBox_1]  = ItemBoxCheckData(0x01DEEDEB, 0x00, LevelIDs_EternalEngine, { -2795,	 836,	-5130 });
-    outItemBoxChecks[ItemBoxCheck::IBC_EternalEngine_LifeBox_2]  = ItemBoxCheckData(0x01DEEDEB, 0x01, LevelIDs_EternalEngine, { -2054,	 736,	-7070 });
+    outItemBoxChecks[ItemBoxCheck::IBC_EternalEngine_LifeBox_2]  = ItemBoxCheckData(0x01DEEDEB, 0x01, LevelIDs_EternalEngine, { -2054,	 736,	-7070 }, 10.0f);
     outItemBoxChecks[ItemBoxCheck::IBC_EternalEngine_ItemBox_1]  = ItemBoxCheckData(0x01DEEDF0, 0x00, LevelIDs_EternalEngine, {   249,	 578,	-2200 });
     outItemBoxChecks[ItemBoxCheck::IBC_EternalEngine_ItemBox_2]  = ItemBoxCheckData(0x01DEEDF0, 0x01, LevelIDs_EternalEngine, {  -653,	 578,	-3707 });
     outItemBoxChecks[ItemBoxCheck::IBC_EternalEngine_ItemBox_3]  = ItemBoxCheckData(0x01DEEDF0, 0x02, LevelIDs_EternalEngine, {  -609,	 323,	-4789 });
@@ -1531,8 +1531,8 @@ void InitializeItemBoxChecks(std::map<int, ItemBoxCheckData>& outItemBoxChecks)
     outItemBoxChecks[ItemBoxCheck::IBC_EternalEngine_ItemBox_5]  = ItemBoxCheckData(0x01DEEDF0, 0x04, LevelIDs_EternalEngine, { -2119,	 835,	-5300 });
     outItemBoxChecks[ItemBoxCheck::IBC_EternalEngine_ItemBox_6]  = ItemBoxCheckData(0x01DEEDF0, 0x05, LevelIDs_EternalEngine, { -2795,	 836,	-5270 });
     outItemBoxChecks[ItemBoxCheck::IBC_EternalEngine_ItemBox_7]  = ItemBoxCheckData(0x01DEEDF0, 0x06, LevelIDs_EternalEngine, { -2055,	1036,	-7164 });
-    outItemBoxChecks[ItemBoxCheck::IBC_EternalEngine_ItemBox_8]  = ItemBoxCheckData(0x01DEEDF0, 0x07, LevelIDs_EternalEngine, { -2039,	 736,	-7070 });
-    outItemBoxChecks[ItemBoxCheck::IBC_EternalEngine_ItemBox_9]  = ItemBoxCheckData(0x01DEEDF1, 0x00, LevelIDs_EternalEngine, { -2069,	 736,	-7070 });
+    outItemBoxChecks[ItemBoxCheck::IBC_EternalEngine_ItemBox_8]  = ItemBoxCheckData(0x01DEEDF0, 0x07, LevelIDs_EternalEngine, { -2039,	 736,	-7070 }, 10.0f);
+    outItemBoxChecks[ItemBoxCheck::IBC_EternalEngine_ItemBox_9]  = ItemBoxCheckData(0x01DEEDF1, 0x00, LevelIDs_EternalEngine, { -2069,	 736,	-7070 }, 10.0f);
     outItemBoxChecks[ItemBoxCheck::IBC_EternalEngine_ItemBox_10] = ItemBoxCheckData(0x01DEEDF1, 0x01, LevelIDs_EternalEngine, { -2054,	 604,	-7744 });
     outItemBoxChecks[ItemBoxCheck::IBC_EternalEngine_ItemBox_11] = ItemBoxCheckData(0x01DEEDF1, 0x02, LevelIDs_EternalEngine, { -2174,	 336,	-7664 });
     outItemBoxChecks[ItemBoxCheck::IBC_EternalEngine_ItemBox_12] = ItemBoxCheckData(0x01DEEDF1, 0x03, LevelIDs_EternalEngine, { -1934,	 336,	-7664 });
@@ -1540,7 +1540,6 @@ void InitializeItemBoxChecks(std::map<int, ItemBoxCheckData>& outItemBoxChecks)
     outItemBoxChecks[ItemBoxCheck::IBC_EternalEngine_ItemBox_14] = ItemBoxCheckData(0x01DEEDF1, 0x05, LevelIDs_EternalEngine, {  -106,	-530,	-9150 });
 
     outItemBoxChecks[ItemBoxCheck::IBC_DeathChamber_LifeBox_1]  = ItemBoxCheckData(0x01DEEDF2, 0x00, LevelIDs_DeathChamber, { -684,	 -84,	-952 });
-    outItemBoxChecks[ItemBoxCheck::IBC_DeathChamber_LifeBox_2]  = ItemBoxCheckData(0x01DEEDF2, 0x01, LevelIDs_DeathChamber, { -855,	  85,	-855 });
     outItemBoxChecks[ItemBoxCheck::IBC_DeathChamber_ItemBox_1]  = ItemBoxCheckData(0x01DEEDF3, 0x00, LevelIDs_DeathChamber, {    0,	   0,	-351 });
     outItemBoxChecks[ItemBoxCheck::IBC_DeathChamber_ItemBox_2]  = ItemBoxCheckData(0x01DEEDF3, 0x01, LevelIDs_DeathChamber, { -467,	  20,	 540 });
     outItemBoxChecks[ItemBoxCheck::IBC_DeathChamber_ItemBox_3]  = ItemBoxCheckData(0x01DEEDF3, 0x02, LevelIDs_DeathChamber, {  980,	  80,	-390 });
@@ -1566,10 +1565,10 @@ void InitializeItemBoxChecks(std::map<int, ItemBoxCheckData>& outItemBoxChecks)
     outItemBoxChecks[ItemBoxCheck::IBC_EggQuarters_ItemBox_10] = ItemBoxCheckData(0x01DEEDF7, 0x01, LevelIDs_EggQuarters, {  -659,	 40,	2840 });
     outItemBoxChecks[ItemBoxCheck::IBC_EggQuarters_ItemBox_11] = ItemBoxCheckData(0x01DEEDF7, 0x02, LevelIDs_EggQuarters, { -1640,	-20,	2760 });
 
-    outItemBoxChecks[ItemBoxCheck::IBC_LostColony_LifeBox_1] = ItemBoxCheckData(0x01DEEDFC, 0x00, LevelIDs_LostColony, { -1400,	-633,	-1265 }, 10f);
+    outItemBoxChecks[ItemBoxCheck::IBC_LostColony_LifeBox_1] = ItemBoxCheckData(0x01DEEDFC, 0x00, LevelIDs_LostColony, { -1400,	-633,	-1265 }, 10.0f);
     outItemBoxChecks[ItemBoxCheck::IBC_LostColony_ItemBox_1] = ItemBoxCheckData(0x01DEEDFD, 0x00, LevelIDs_LostColony, {  -420,	-642,	 -650 });
-    outItemBoxChecks[ItemBoxCheck::IBC_LostColony_ItemBox_2] = ItemBoxCheckData(0x01DEEDFD, 0x01, LevelIDs_LostColony, { -1415,	-633,	-1265 }, 10f);
-    outItemBoxChecks[ItemBoxCheck::IBC_LostColony_ItemBox_3] = ItemBoxCheckData(0x01DEEDFD, 0x02, LevelIDs_LostColony, { -1385,	-633,	-1265 }, 10f);
+    outItemBoxChecks[ItemBoxCheck::IBC_LostColony_ItemBox_2] = ItemBoxCheckData(0x01DEEDFD, 0x01, LevelIDs_LostColony, { -1415,	-633,	-1265 }, 10.0f);
+    outItemBoxChecks[ItemBoxCheck::IBC_LostColony_ItemBox_3] = ItemBoxCheckData(0x01DEEDFD, 0x02, LevelIDs_LostColony, { -1385,	-633,	-1265 }, 10.0f);
     outItemBoxChecks[ItemBoxCheck::IBC_LostColony_ItemBox_4] = ItemBoxCheckData(0x01DEEDFD, 0x03, LevelIDs_LostColony, { -1400,	-578,	-2040 });
     outItemBoxChecks[ItemBoxCheck::IBC_LostColony_ItemBox_5] = ItemBoxCheckData(0x01DEEDFD, 0x04, LevelIDs_LostColony, { -1570,	-613,	-2109 });
     outItemBoxChecks[ItemBoxCheck::IBC_LostColony_ItemBox_6] = ItemBoxCheckData(0x01DEEDFD, 0x05, LevelIDs_LostColony, { -1540,	-528,	-2330 });
@@ -1696,7 +1695,7 @@ void InitializeItemBoxChecks(std::map<int, ItemBoxCheckData>& outItemBoxChecks)
     outItemBoxChecks[ItemBoxCheck::IBC_FinalChase_LifeBox_8]  = ItemBoxCheckData(0x01DEEE13, 0x07, LevelIDs_FinalChase, {  230,	 -9009,	11943 });
     outItemBoxChecks[ItemBoxCheck::IBC_FinalChase_LifeBox_9]  = ItemBoxCheckData(0x01DEEE14, 0x00, LevelIDs_FinalChase, { -144,	 -8920,	10493 });
     outItemBoxChecks[ItemBoxCheck::IBC_FinalChase_ItemBox_1]  = ItemBoxCheckData(0x01DEEE15, 0x00, LevelIDs_FinalChase, { 3173,	 -4045,	 2303 });
-    outItemBoxChecks[ItemBoxCheck::IBC_FinalChase_ItemBox_2]  = ItemBoxCheckData(0x01DEEE15, 0x01, LevelIDs_FinalChase, { 3195,	 -4045,	 2303 });
+    outItemBoxChecks[ItemBoxCheck::IBC_FinalChase_ItemBox_2]  = ItemBoxCheckData(0x01DEEE15, 0x01, LevelIDs_FinalChase, { 3210,	 -4045,	 2303 });
     outItemBoxChecks[ItemBoxCheck::IBC_FinalChase_ItemBox_3]  = ItemBoxCheckData(0x01DEEE15, 0x02, LevelIDs_FinalChase, { 3195,	 -4398,	 2910 });
     outItemBoxChecks[ItemBoxCheck::IBC_FinalChase_ItemBox_4]  = ItemBoxCheckData(0x01DEEE15, 0x03, LevelIDs_FinalChase, { 3244,	 -4537,	 3606 });
     outItemBoxChecks[ItemBoxCheck::IBC_FinalChase_ItemBox_5]  = ItemBoxCheckData(0x01DEEE15, 0x04, LevelIDs_FinalChase, { 3712,	 -4575,	 3492 });
@@ -1787,10 +1786,10 @@ void InitializeItemBoxChecks(std::map<int, ItemBoxCheckData>& outItemBoxChecks)
     outItemBoxChecks[ItemBoxCheck::IBC_GreenHill_ItemBox_1]  = ItemBoxCheckData(0x01DEEE26, 0x00, LevelIDs_GreenHill, {   -61,	  70,	 -430 });
     outItemBoxChecks[ItemBoxCheck::IBC_GreenHill_ItemBox_2]  = ItemBoxCheckData(0x01DEEE26, 0x01, LevelIDs_GreenHill, {  -203,	 147,	-1100 });
     outItemBoxChecks[ItemBoxCheck::IBC_GreenHill_ItemBox_3]  = ItemBoxCheckData(0x01DEEE26, 0x02, LevelIDs_GreenHill, {  -970,	 130,	-3000 });
-    outItemBoxChecks[ItemBoxCheck::IBC_GreenHill_ItemBox_4]  = ItemBoxCheckData(0x01DEEE26, 0x03, LevelIDs_GreenHill, {  -689,	-140,	-3157 });
-    outItemBoxChecks[ItemBoxCheck::IBC_GreenHill_ItemBox_5]  = ItemBoxCheckData(0x01DEEE26, 0x04, LevelIDs_GreenHill, {  -689,	-140,	-3172 });
-    outItemBoxChecks[ItemBoxCheck::IBC_GreenHill_ItemBox_6]  = ItemBoxCheckData(0x01DEEE26, 0x05, LevelIDs_GreenHill, {  -689,	-140,	-3187 });
-    outItemBoxChecks[ItemBoxCheck::IBC_GreenHill_ItemBox_7]  = ItemBoxCheckData(0x01DEEE26, 0x06, LevelIDs_GreenHill, {  -689,	-140,	-3202 });
+    outItemBoxChecks[ItemBoxCheck::IBC_GreenHill_ItemBox_4]  = ItemBoxCheckData(0x01DEEE26, 0x03, LevelIDs_GreenHill, {  -689,	-140,	-3157 }, 10.0f);
+    outItemBoxChecks[ItemBoxCheck::IBC_GreenHill_ItemBox_5]  = ItemBoxCheckData(0x01DEEE26, 0x04, LevelIDs_GreenHill, {  -689,	-140,	-3172 }, 10.0f);
+    outItemBoxChecks[ItemBoxCheck::IBC_GreenHill_ItemBox_6]  = ItemBoxCheckData(0x01DEEE26, 0x05, LevelIDs_GreenHill, {  -689,	-140,	-3187 }, 10.0f);
+    outItemBoxChecks[ItemBoxCheck::IBC_GreenHill_ItemBox_7]  = ItemBoxCheckData(0x01DEEE26, 0x06, LevelIDs_GreenHill, {  -689,	-140,	-3202 }, 10.0f);
     outItemBoxChecks[ItemBoxCheck::IBC_GreenHill_ItemBox_8]  = ItemBoxCheckData(0x01DEEE26, 0x07, LevelIDs_GreenHill, {  -934,	 125,	-3656 });
     outItemBoxChecks[ItemBoxCheck::IBC_GreenHill_ItemBox_9]  = ItemBoxCheckData(0x01DEEE27, 0x00, LevelIDs_GreenHill, { -1395,	-348,	-5109 });
     outItemBoxChecks[ItemBoxCheck::IBC_GreenHill_ItemBox_10] = ItemBoxCheckData(0x01DEEE27, 0x01, LevelIDs_GreenHill, { -2129,	-810,	-5819 });
