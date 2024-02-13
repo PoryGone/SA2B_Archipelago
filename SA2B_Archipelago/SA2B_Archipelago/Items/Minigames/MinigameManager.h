@@ -39,6 +39,7 @@ public:
 	MinigameState state = MinigameState::MGS_None;
 	ObjectMaster* IconObjPtr;
 	MinigameIconData iconData = MinigameIconData();
+	TextDisplayData textData = TextDisplayData();
 	SpriteHierarchy spriteHierarchy = SpriteHierarchy();
 	CollisionManager collisionManager = CollisionManager();
 

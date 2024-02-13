@@ -1,5 +1,6 @@
 #pragma once
 #include "MinigameIconData.h"
+#include "TextDisplayData.h"
 #include "../../Utilities/SpriteUtilities.h"
 #include "Backend/MinigameBackend.h"
 #include "Backend/Time/TimeUtilities.h"
@@ -46,6 +47,7 @@ public:
 	RawInputFlags inputRelease;
 	MinigameState managerState;
 	MinigameIconData* icons;
+	TextDisplayData* text;
 	MinigameDifficulty difficulty;
 	SpriteHierarchy* hierarchy;
 	CollisionManager* collision;

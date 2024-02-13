@@ -1,5 +1,6 @@
 #include "../../../pch.h"
 #include "Fishing.h"
+#include "../Components/TextBox.h"
 
 void FishingHard::OnGameStart(MinigameManagerData data)
 {
@@ -67,6 +68,10 @@ void FishingHard::CreateHierarchy(MinigameManagerData data)
 
 	data.collision->AddCollision(catchZone, std::make_shared<PolygonCollider>(NJS_POINT3({ 20.0f, 65.0f, 0.0f })));
 	data.collision->AddCollision(fish, std::make_shared<PolygonCollider>(NJS_POINT3({ 24.0f, 24.0f, 0.0f })));
+
+	SpriteNode* textOne = data.hierarchy->CreateNode("Haha_One");
+	textOne->SetPositionGlobal({ 320.0f, 290.0f, 0.0f });
+	textOne->renderComponents.push_back(new TextBox("1", 30.0f, data.text));
 }
 
 void FishingHard::SetFillAmount(float amount)

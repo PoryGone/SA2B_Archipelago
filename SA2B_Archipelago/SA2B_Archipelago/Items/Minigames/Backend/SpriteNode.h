@@ -13,6 +13,12 @@ public:
 	virtual void OnFrame(SpriteNode& node) = 0;
 };
 
+class SpriteRenderComponent
+{
+public:
+	virtual void OnRender(SpriteNode& node) = 0;
+};
+
 class SpriteNode
 {
 public:
@@ -20,6 +26,7 @@ public:
 	SpriteNode* parent;
 	std::vector<SpriteNode*> children;
 	std::vector<SpriteComponent*> components;
+	std::vector<SpriteRenderComponent*> renderComponents;
 
 	NJS_POINT3 displaySize;
 	NJS_POINT3 scale;

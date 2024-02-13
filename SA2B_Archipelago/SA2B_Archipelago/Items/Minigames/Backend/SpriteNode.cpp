@@ -110,6 +110,14 @@ void SpriteNode::Render(NJS_SPRITE& sprite)
 		}
 		ResetMaterial();
 	}
+
+	if (IsEnabled())
+	{
+		for (auto& component : this->renderComponents)
+		{
+			component->OnRender(*this);
+		}
+	}
 }
 
 void SpriteNode::OnFrame()

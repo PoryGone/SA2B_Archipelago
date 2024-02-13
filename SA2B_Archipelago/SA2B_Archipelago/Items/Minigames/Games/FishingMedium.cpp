@@ -1,5 +1,6 @@
 #include "../../../pch.h"
 #include "Fishing.h"
+#include "../Components/TextBox.h"
 
 void FishingMedium::OnGameStart(MinigameManagerData data)
 {
@@ -128,4 +129,8 @@ void FishingMedium::CreateHierarchy(MinigameManagerData data)
 	}
 
 	AddDPadToHierarchy(anyDPad, { 65.0f, 130.0f, 0.0f }, 45.0f, *data.icons, *data.hierarchy);
+
+	SpriteNode* textOne = data.hierarchy->CreateNode("Haha_One");
+	textOne->SetPositionGlobal({ 320.0f, 290.0f, 0.0f });
+	textOne->renderComponents.push_back(new TextBox("1", 30.0f, data.text));
 }
