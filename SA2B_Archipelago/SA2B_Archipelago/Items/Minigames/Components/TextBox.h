@@ -14,5 +14,5 @@ private:
 	std::string text;
 	float fontSize;
 	TextDisplayData* textData;
-	char character = ' ';
+	char character = '1';
 };
