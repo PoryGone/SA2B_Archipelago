@@ -12,6 +12,14 @@ struct TextCharacterData
 	float yOffset;
 };
 
+struct TextDataAndAnim
+{
+	TextDataAndAnim(NJS_TEXANIM* _anim, TextCharacterData* _data) : anim(_anim), data(_data) {}
+
+	NJS_TEXANIM* anim;
+	TextCharacterData* data;
+};
+
 class TextDisplayData
 {
 public:
@@ -19,6 +27,7 @@ public:
 	void ReleaseIcons();
 	NJS_TEXANIM* GetAnim(char character);
 	TextCharacterData* GetCharacterData(char character);
+	TextDataAndAnim GetAnimAndData(char character);
 	NJS_TEXANIM* FontAnims;
 	NJS_TEXLIST* FontTex;
 	int AnimLength;

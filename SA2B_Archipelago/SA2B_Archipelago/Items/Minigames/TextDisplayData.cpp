@@ -104,100 +104,100 @@ static NJS_TEXANIM FontAnim[] = {
 
 TextCharacterData TextVec[] = {
 	TextCharacterData(9.0f, 9.0f, 1.00, 0.0f, 0.0f),
-	TextCharacterData(12.0f, 35.0f, 0.34, 0.0f, 0.0f),
-	TextCharacterData(18.0f, 19.0f, 0.95, 0.0f, 0.0f),
-	TextCharacterData(35.0f, 34.0f, 1.03, 0.0f, 0.0f),
-	TextCharacterData(26.0f, 42.0f, 0.62, 0.0f, 0.0f),
-	TextCharacterData(31.0f, 35.0f, 0.89, 0.0f, 0.0f),
-	TextCharacterData(27.0f, 34.0f, 0.79, 0.0f, 0.0f),
-	TextCharacterData(11.0f, 17.0f, 0.65, 0.0f, 0.0f),
-	TextCharacterData(18.0f, 40.0f, 0.45, 0.0f, 0.0f),
-	TextCharacterData(18.0f, 40.0f, 0.45, 0.0f, 0.0f),
-	TextCharacterData(23.0f, 21.0f, 1.10, 0.0f, 0.0f),
-	TextCharacterData(22.0f, 21.0f, 1.05, 0.0f, 0.0f),
-	TextCharacterData(13.0f, 16.0f, 0.81, 0.0f, 0.0f),
-	TextCharacterData(19.0f, 11.0f, 1.73, 0.0f, 0.0f),
-	TextCharacterData(12.0f, 12.0f, 1.00, 0.0f, 0.0f),
-	TextCharacterData(22.0f, 35.0f, 0.63, 0.0f, 0.0f),
-	TextCharacterData(26.0f, 33.0f, 0.79, 0.0f, 0.0f),
-	TextCharacterData(19.0f, 33.0f, 0.58, 0.0f, 0.0f),
-	TextCharacterData(23.0f, 33.0f, 0.70, 0.0f, 0.0f),
-	TextCharacterData(23.0f, 33.0f, 0.70, 0.0f, 0.0f),
-	TextCharacterData(26.0f, 33.0f, 0.79, 0.0f, 0.0f),
-	TextCharacterData(25.0f, 34.0f, 0.74, 0.0f, 0.0f),
-	TextCharacterData(24.0f, 34.0f, 0.71, 0.0f, 0.0f),
-	TextCharacterData(26.0f, 33.0f, 0.79, 0.0f, 0.0f),
-	TextCharacterData(24.0f, 33.0f, 0.73, 0.0f, 0.0f),
-	TextCharacterData(25.0f, 34.0f, 0.74, 0.0f, 0.0f),
-	TextCharacterData(12.0f, 24.0f, 0.50, 0.0f, 0.0f),
-	TextCharacterData(14.0f, 29.0f, 0.48, 0.0f, 0.0f),
-	TextCharacterData(18.0f, 22.0f, 0.82, 0.0f, 0.0f),
-	TextCharacterData(21.0f, 20.0f, 1.05, 0.0f, 0.0f),
-	TextCharacterData(19.0f, 23.0f, 0.83, 0.0f, 0.0f),
-	TextCharacterData(23.0f, 33.0f, 0.70, 0.0f, 0.0f),
-	TextCharacterData(34.0f, 36.0f, 0.94, 0.0f, 0.0f),
-	TextCharacterData(28.0f, 32.0f, 0.88, 0.0f, 0.0f),
-	TextCharacterData(24.0f, 34.0f, 0.71, 0.0f, 0.0f),
-	TextCharacterData(26.0f, 33.0f, 0.79, 0.0f, 0.0f),
-	TextCharacterData(27.0f, 34.0f, 0.79, 0.0f, 0.0f),
-	TextCharacterData(25.0f, 35.0f, 0.71, 0.0f, 0.0f),
-	TextCharacterData(25.0f, 35.0f, 0.71, 0.0f, 0.0f),
-	TextCharacterData(28.0f, 34.0f, 0.82, 0.0f, 0.0f),
-	TextCharacterData(29.0f, 34.0f, 0.85, 0.0f, 0.0f),
-	TextCharacterData(24.0f, 32.0f, 0.75, 0.0f, 0.0f),
-	TextCharacterData(27.0f, 34.0f, 0.79, 0.0f, 0.0f),
-	TextCharacterData(25.0f, 34.0f, 0.74, 0.0f, 0.0f),
-	TextCharacterData(24.0f, 34.0f, 0.71, 0.0f, 0.0f),
-	TextCharacterData(34.0f, 34.0f, 1.00, 0.0f, 0.0f),
-	TextCharacterData(31.0f, 34.0f, 0.91, 0.0f, 0.0f),
-	TextCharacterData(31.0f, 33.0f, 0.94, 0.0f, 0.0f),
-	TextCharacterData(23.0f, 33.0f, 0.70, 0.0f, 0.0f),
-	TextCharacterData(35.0f, 39.0f, 0.90, 0.0f, 0.0f),
-	TextCharacterData(26.0f, 33.0f, 0.79, 0.0f, 0.0f),
-	TextCharacterData(27.0f, 32.0f, 0.84, 0.0f, 0.0f),
-	TextCharacterData(29.0f, 32.0f, 0.91, 0.0f, 0.0f),
-	TextCharacterData(28.0f, 33.0f, 0.85, 0.0f, 0.0f),
-	TextCharacterData(27.0f, 34.0f, 0.79, 0.0f, 0.0f),
-	TextCharacterData(39.0f, 34.0f, 1.15, 0.0f, 0.0f),
-	TextCharacterData(29.0f, 34.0f, 0.85, 0.0f, 0.0f),
-	TextCharacterData(27.0f, 33.0f, 0.82, 0.0f, 0.0f),
-	TextCharacterData(29.0f, 33.0f, 0.88, 0.0f, 0.0f),
-	TextCharacterData(17.0f, 39.0f, 0.44, 0.0f, 0.0f),
-	TextCharacterData(22.0f, 34.0f, 0.65, 0.0f, 0.0f),
-	TextCharacterData(17.0f, 39.0f, 0.44, 0.0f, 0.0f),
-	TextCharacterData(21.0f, 17.0f, 1.24, 0.0f, 0.0f),
-	TextCharacterData(30.0f, 11.0f, 2.73, 0.0f, 0.0f),
-	TextCharacterData(15.0f, 16.0f, 0.94, 0.0f, 0.0f),
-	TextCharacterData(23.0f, 26.0f, 0.88, 0.0f, 0.0f),
-	TextCharacterData(24.0f, 34.0f, 0.71, 0.0f, 0.0f),
-	TextCharacterData(22.0f, 26.0f, 0.85, 0.0f, 0.0f),
-	TextCharacterData(24.0f, 34.0f, 0.71, 0.0f, 0.0f),
-	TextCharacterData(24.0f, 26.0f, 0.92, 0.0f, 0.0f),
-	TextCharacterData(22.0f, 36.0f, 0.61, 0.0f, 0.0f),
-	TextCharacterData(23.0f, 33.0f, 0.70, 0.0f, 0.0f),
-	TextCharacterData(23.0f, 35.0f, 0.66, 0.0f, 0.0f),
-	TextCharacterData(13.0f, 32.0f, 0.41, 0.0f, 0.0f),
-	TextCharacterData(19.0f, 41.0f, 0.46, 0.0f, 0.0f),
-	TextCharacterData(23.0f, 34.0f, 0.68, 0.0f, 0.0f),
-	TextCharacterData(12.0f, 34.0f, 0.35, 0.0f, 0.0f),
-	TextCharacterData(30.0f, 28.0f, 1.07, 0.0f, 0.0f),
-	TextCharacterData(22.0f, 27.0f, 0.81, 0.0f, 0.0f),
-	TextCharacterData(23.0f, 26.0f, 0.88, 0.0f, 0.0f),
-	TextCharacterData(22.0f, 35.0f, 0.63, 0.0f, 0.0f),
-	TextCharacterData(22.0f, 34.0f, 0.65, 0.0f, 0.0f),
-	TextCharacterData(21.0f, 26.0f, 0.81, 0.0f, 0.0f),
-	TextCharacterData(22.0f, 27.0f, 0.81, 0.0f, 0.0f),
-	TextCharacterData(22.0f, 31.0f, 0.71, 0.0f, 0.0f),
-	TextCharacterData(22.0f, 26.0f, 0.85, 0.0f, 0.0f),
-	TextCharacterData(23.0f, 26.0f, 0.88, 0.0f, 0.0f),
-	TextCharacterData(28.0f, 26.0f, 1.08, 0.0f, 0.0f),
-	TextCharacterData(26.0f, 26.0f, 1.00, 0.0f, 0.0f),
-	TextCharacterData(25.0f, 34.0f, 0.74, 0.0f, 0.0f),
-	TextCharacterData(23.0f, 26.0f, 0.88, 0.0f, 0.0f),
-	TextCharacterData(19.0f, 40.0f, 0.47, 0.0f, 0.0f),
-	TextCharacterData(11.0f, 41.0f, 0.27, 0.0f, 0.0f),
-	TextCharacterData(19.0f, 40.0f, 0.47, 0.0f, 0.0f),
-	TextCharacterData(25.0f, 16.0f, 1.56, 0.0f, 0.0f),
+	TextCharacterData(12.0f, 35.0f, 0.34, 0.0f, 0.0f),	// !
+	TextCharacterData(18.0f, 19.0f, 0.95, 0.0f, 0.0f),	// "
+	TextCharacterData(35.0f, 34.0f, 1.03, 0.0f, 0.0f),	// #
+	TextCharacterData(26.0f, 42.0f, 0.62, 0.0f, 0.0f),	// $
+	TextCharacterData(31.0f, 35.0f, 0.89, 0.0f, 0.0f),	// %
+	TextCharacterData(27.0f, 34.0f, 0.79, 0.0f, 0.0f),	// &
+	TextCharacterData(11.0f, 17.0f, 0.65, 0.0f, 0.0f),	// '
+	TextCharacterData(18.0f, 40.0f, 0.45, 0.0f, 0.0f),	// (
+	TextCharacterData(18.0f, 40.0f, 0.45, 0.0f, 0.0f),	// )
+	TextCharacterData(23.0f, 21.0f, 1.10, 0.0f, 0.0f),	// *
+	TextCharacterData(22.0f, 21.0f, 1.05, 0.0f, 0.0f),	// +
+	TextCharacterData(13.0f, 16.0f, 0.81, 0.0f, 0.0f),	// ,
+	TextCharacterData(19.0f, 11.0f, 1.73, 0.0f, 0.0f),	// -
+	TextCharacterData(12.0f, 12.0f, 1.00, 0.0f, 0.0f),	// .
+	TextCharacterData(22.0f, 35.0f, 0.63, 0.0f, 0.0f),	// /
+	TextCharacterData(26.0f, 33.0f, 0.79, 0.0f, 0.0f),	// 0
+	TextCharacterData(19.0f, 33.0f, 0.58, 0.0f, 0.0f),	// 1
+	TextCharacterData(23.0f, 33.0f, 0.70, 0.0f, 0.0f),	// 2
+	TextCharacterData(23.0f, 33.0f, 0.70, 0.0f, 0.0f),	// 3
+	TextCharacterData(26.0f, 33.0f, 0.79, 0.0f, 0.0f),	// 4
+	TextCharacterData(25.0f, 34.0f, 0.74, 0.0f, 0.0f),	// 5
+	TextCharacterData(24.0f, 34.0f, 0.71, 0.0f, 0.0f),	// 6
+	TextCharacterData(26.0f, 33.0f, 0.79, 0.0f, 0.0f),	// 7
+	TextCharacterData(24.0f, 33.0f, 0.73, 0.0f, 0.0f),	// 8
+	TextCharacterData(25.0f, 34.0f, 0.74, 0.0f, 0.0f),	// 9
+	TextCharacterData(12.0f, 24.0f, 0.50, 0.0f, 0.0f),	// :
+	TextCharacterData(14.0f, 29.0f, 0.48, 0.0f, 0.0f),	// ;
+	TextCharacterData(18.0f, 22.0f, 0.82, 0.0f, 0.0f),	// <
+	TextCharacterData(21.0f, 20.0f, 1.05, 0.0f, 0.0f),	// =
+	TextCharacterData(19.0f, 23.0f, 0.83, 0.0f, 0.0f),	// >
+	TextCharacterData(23.0f, 33.0f, 0.70, 0.0f, 0.0f),	// ?
+	TextCharacterData(34.0f, 36.0f, 0.94, 0.0f, 0.0f),	// @
+	TextCharacterData(28.0f, 32.0f, 0.88, 0.0f, 0.0f),	// A
+	TextCharacterData(24.0f, 34.0f, 0.71, 0.0f, 0.0f),	// B
+	TextCharacterData(26.0f, 33.0f, 0.79, 0.0f, 0.0f),	// C
+	TextCharacterData(27.0f, 34.0f, 0.79, 0.0f, 0.0f),	// D
+	TextCharacterData(25.0f, 35.0f, 0.71, 0.0f, 0.0f),	// E
+	TextCharacterData(25.0f, 35.0f, 0.71, 0.0f, 0.0f),	// F
+	TextCharacterData(28.0f, 34.0f, 0.82, 0.0f, 0.0f),	// G
+	TextCharacterData(29.0f, 34.0f, 0.85, 0.0f, 0.0f),	// H
+	TextCharacterData(24.0f, 32.0f, 0.75, 0.0f, 0.0f),	// I
+	TextCharacterData(27.0f, 34.0f, 0.79, 0.0f, 0.0f),	// J
+	TextCharacterData(25.0f, 34.0f, 0.74, 0.0f, 0.0f),	// K
+	TextCharacterData(24.0f, 34.0f, 0.71, 0.0f, 0.0f),	// L
+	TextCharacterData(34.0f, 34.0f, 1.00, 0.0f, 0.0f),	// M
+	TextCharacterData(31.0f, 34.0f, 0.91, 0.0f, 0.0f),	// N
+	TextCharacterData(31.0f, 33.0f, 0.94, 0.0f, 0.0f),	// O
+	TextCharacterData(23.0f, 33.0f, 0.70, 0.0f, 0.0f),	// P
+	TextCharacterData(35.0f, 39.0f, 0.90, 0.0f, 0.0f),	// Q
+	TextCharacterData(26.0f, 33.0f, 0.79, 0.0f, 0.0f),	// R
+	TextCharacterData(27.0f, 32.0f, 0.84, 0.0f, 0.0f),	// S
+	TextCharacterData(29.0f, 32.0f, 0.91, 0.0f, 0.0f),	// T
+	TextCharacterData(28.0f, 33.0f, 0.85, 0.0f, 0.0f),	// U
+	TextCharacterData(27.0f, 34.0f, 0.79, 0.0f, 0.0f),	// V
+	TextCharacterData(39.0f, 34.0f, 1.15, 0.0f, 0.0f),	// W
+	TextCharacterData(29.0f, 34.0f, 0.85, 0.0f, 0.0f),	// X
+	TextCharacterData(27.0f, 33.0f, 0.82, 0.0f, 0.0f),	// Y
+	TextCharacterData(29.0f, 33.0f, 0.88, 0.0f, 0.0f),	// Z
+	TextCharacterData(17.0f, 39.0f, 0.44, 0.0f, 0.0f),	// [
+	TextCharacterData(22.0f, 34.0f, 0.65, 0.0f, 0.0f),	// '\'
+	TextCharacterData(17.0f, 39.0f, 0.44, 0.0f, 0.0f),	// ]
+	TextCharacterData(21.0f, 17.0f, 1.24, 0.0f, 0.0f),	// ^
+	TextCharacterData(30.0f, 11.0f, 2.73, 0.0f, 0.0f),	// _
+	TextCharacterData(15.0f, 16.0f, 0.94, 0.0f, 0.0f),	// `
+	TextCharacterData(23.0f, 26.0f, 0.88, 0.0f, 0.0f),	// a
+	TextCharacterData(24.0f, 34.0f, 0.71, 0.0f, 0.0f),	// b
+	TextCharacterData(22.0f, 26.0f, 0.85, 0.0f, 0.0f),	// c
+	TextCharacterData(24.0f, 34.0f, 0.71, 0.0f, 0.0f),	// d
+	TextCharacterData(24.0f, 26.0f, 0.92, 0.0f, 0.0f),	// e
+	TextCharacterData(22.0f, 36.0f, 0.61, 0.0f, 0.0f),	// f
+	TextCharacterData(23.0f, 33.0f, 0.70, 0.0f, 0.0f),	// g
+	TextCharacterData(23.0f, 35.0f, 0.66, 0.0f, 0.0f),	// h
+	TextCharacterData(13.0f, 32.0f, 0.41, 0.0f, 0.0f),	// i
+	TextCharacterData(19.0f, 41.0f, 0.46, 0.0f, 0.0f),	// j
+	TextCharacterData(23.0f, 34.0f, 0.68, 0.0f, 0.0f),	// k
+	TextCharacterData(12.0f, 34.0f, 0.35, 0.0f, 0.0f),	// l
+	TextCharacterData(30.0f, 28.0f, 1.07, 0.0f, 0.0f),	// m
+	TextCharacterData(22.0f, 27.0f, 0.81, 0.0f, 0.0f),	// n
+	TextCharacterData(23.0f, 26.0f, 0.88, 0.0f, 0.0f),	// o
+	TextCharacterData(22.0f, 35.0f, 0.63, 0.0f, 0.0f),	// p
+	TextCharacterData(22.0f, 34.0f, 0.65, 0.0f, 0.0f),	// q
+	TextCharacterData(21.0f, 26.0f, 0.81, 0.0f, 0.0f),	// r
+	TextCharacterData(22.0f, 27.0f, 0.81, 0.0f, 0.0f),	// s
+	TextCharacterData(22.0f, 31.0f, 0.71, 0.0f, 0.0f),	// t
+	TextCharacterData(22.0f, 26.0f, 0.85, 0.0f, 0.0f),	// u
+	TextCharacterData(23.0f, 26.0f, 0.88, 0.0f, 0.0f),	// v
+	TextCharacterData(28.0f, 26.0f, 1.08, 0.0f, 0.0f),	// w
+	TextCharacterData(26.0f, 26.0f, 1.00, 0.0f, 0.0f),	// x
+	TextCharacterData(25.0f, 34.0f, 0.74, 0.0f, 0.0f),	// y
+	TextCharacterData(23.0f, 26.0f, 0.88, 0.0f, 0.0f),	// z
+	TextCharacterData(19.0f, 40.0f, 0.47, 0.0f, 0.0f),	// {
+	TextCharacterData(11.0f, 41.0f, 0.27, 0.0f, 0.0f),	// |
+	TextCharacterData(19.0f, 40.0f, 0.47, 0.0f, 0.0f),	// }
+	TextCharacterData(25.0f, 16.0f, 1.56, 0.0f, 0.0f),	// ~
 };
 
 static const int FontAnimLength = 95;
@@ -216,12 +216,17 @@ static TexPackInfo FontTexPacks[] = {
 
 NJS_TEXANIM* TextDisplayData::GetAnim(char character)
 {
-	return &FontAnim[character - 33];
+	return &FontAnim[character - 32];
 }
 
 TextCharacterData* TextDisplayData::GetCharacterData(char character)
 {
 	return &TextVec[character - 32];
+}
+
+TextDataAndAnim TextDisplayData::GetAnimAndData(char character)
+{
+	return TextDataAndAnim(GetAnim(character), GetCharacterData(character));
 }
 
 void TextDisplayData::LoadIcons()
