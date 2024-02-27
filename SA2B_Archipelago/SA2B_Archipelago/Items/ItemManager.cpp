@@ -919,20 +919,11 @@ bool ItemManager::IsActiveTrapValid()
 			return false;
 		}
 		break;
+	case ItemValue::IV_LiteratureTrap:
 	case ItemValue::IV_PongTrap:
-		if (GameMode != GameMode::GameMode_Level)
-		{
-			return false;
-		}
-
-		if (minigameManager->state != MinigameState::MGS_None)
-		{
-			// Another minigame is already in-progress
-			return false;
-		}
-
-		break;
 	case ItemValue::IV_PlatformerTrap:
+	case ItemValue::IV_FishingTrap:
+	case ItemValue::IV_TriviaTrap:
 		if (GameMode != GameMode::GameMode_Level)
 		{
 			return false;
@@ -1186,13 +1177,25 @@ void ItemManager::OnFrameTrapQueue()
 	{
 		// Nothing
 	}
+	else if (this->_ActiveTrap == ItemValue::IV_LiteratureTrap)
+	{
+		// Nothing
+	}
 	else if (this->_ActiveTrap == ItemValue::IV_PongTrap)
 	{
 		// Nothing
 	}
 	else if (this->_ActiveTrap == ItemValue::IV_PlatformerTrap)
 	{
-	// Nothing
+		// Nothing
+	}
+	else if (this->_ActiveTrap == ItemValue::IV_FishingTrap)
+	{
+		// Nothing
+	}
+	else if (this->_ActiveTrap == ItemValue::IV_TriviaTrap)
+	{
+		// Nothing
 	}
 
 	if (this->_ActiveTrapTimer > 0)
@@ -1330,8 +1333,11 @@ void ItemManager::OnFrameTrapQueue()
 		PlayUnshuffledVoice(2, 834);
 		this->_ReverseTrapActive = true;
 		break;
+	case ItemValue::IV_LiteratureTrap:
 	case ItemValue::IV_PongTrap:
 	case ItemValue::IV_PlatformerTrap:
+	case ItemValue::IV_FishingTrap:
+	case ItemValue::IV_TriviaTrap:
 		MinigameManager* minigameManager = &MinigameManager::GetInstance();
 		minigameManager->StartMinigame((ItemValue)this->_ActiveTrap);
 		break;

@@ -65,6 +65,7 @@ void InitializeItemData(std::map<int, ItemData> &outItemData)
     outItemData[ItemValue::IV_SlowTrap]       = ItemData(0x0000000, std::string("Slow Trap"), std::string(), 0);
     outItemData[ItemValue::IV_CutsceneTrap]   = ItemData(0x0000000, std::string("Cutscene Trap"), std::string(), 0);
     outItemData[ItemValue::IV_ReverseTrap]    = ItemData(0x0000000, std::string("Reverse Trap"), std::string(), 0);
+    outItemData[ItemValue::IV_LiteratureTrap] = ItemData(0x0000000, std::string("Literature Trap"), std::string(), 0);
 
     outItemData[ItemValue::IV_WhiteChaosEmerald]  = ItemData(0x01DEEAF8, std::string("White Chaos Emerald"), std::string(), 0);
     outItemData[ItemValue::IV_RedChaosEmerald]    = ItemData(0x01DEEAF9, std::string("Red Chaos Emerald"), std::string(), 0);
@@ -76,6 +77,8 @@ void InitializeItemData(std::map<int, ItemData> &outItemData)
 
     outItemData[ItemValue::IV_PongTrap]       = ItemData(0x0000000, std::string("Pong Trap"), std::string(), 0);
     outItemData[ItemValue::IV_PlatformerTrap] = ItemData(0x0000000, std::string("Platformer Trap"), std::string(), 0);
+    outItemData[ItemValue::IV_FishingTrap]    = ItemData(0x0000000, std::string("Fishing Trap"), std::string(), 0);
+    outItemData[ItemValue::IV_TriviaTrap]     = ItemData(0x0000000, std::string("Trivia Trap"), std::string(), 0);
 
     outItemData[ItemValue::IV_NormalEgg]            = ItemData(0x0000000, std::string("Normal Egg"), std::string(), 1);
     outItemData[ItemValue::IV_YellowMonoToneEgg]    = ItemData(0x0000000, std::string("Yellow Mono-Tone Egg"), std::string(), 1);

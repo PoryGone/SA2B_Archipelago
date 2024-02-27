@@ -67,7 +67,8 @@ enum ItemValue
     IV_SlowTrap,
     IV_CutsceneTrap,
     IV_ReverseTrap,
-    IV_END_TRAPS = IV_ReverseTrap,
+    IV_LiteratureTrap,
+    IV_END_TRAPS = IV_LiteratureTrap,
 
     IV_WhiteChaosEmerald = 0x40,
     IV_RedChaosEmerald,
@@ -80,7 +81,9 @@ enum ItemValue
 
     IV_PongTrap = 0x50,
     IV_PlatformerTrap,
-    IV_END_MINIGAMES = IV_PlatformerTrap,
+    IV_FishingTrap,
+    IV_TriviaTrap,
+    IV_END_MINIGAMES = IV_TriviaTrap,
 
     IV_NormalEgg = 0x100,
     IV_YellowMonoToneEgg,

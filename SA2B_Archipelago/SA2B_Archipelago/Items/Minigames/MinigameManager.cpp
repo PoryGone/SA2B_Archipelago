@@ -144,11 +144,22 @@ void MinigameManager::StartMinigame(ItemValue item)
 
 	switch (item)
 	{
+	case ItemValue::IV_LiteratureTrap:
+		// TODO
+		this->currentMinigame = &this->pong;
+		break;
 	case ItemValue::IV_PongTrap:
 		this->currentMinigame = &this->pong;
 		break;
 	case ItemValue::IV_PlatformerTrap:
 		this->currentMinigame = &this->platformer;
+		break;
+	case ItemValue::IV_FishingTrap:
+		this->currentMinigame = &this->fishing;
+		break;
+	case ItemValue::IV_TriviaTrap:
+		// TODO
+		this->currentMinigame = &this->pong;
 		break;
 	}
 }
