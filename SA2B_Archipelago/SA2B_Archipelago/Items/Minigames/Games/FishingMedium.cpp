@@ -1,5 +1,7 @@
 #include "../../../pch.h"
 #include "Fishing.h"
+#include "../Components/TextBox.h"
+#include "../Components/RotateSpriteNode.h"
 
 void FishingMedium::OnGameStart(MinigameManagerData data)
 {
@@ -128,4 +130,12 @@ void FishingMedium::CreateHierarchy(MinigameManagerData data)
 	}
 
 	AddDPadToHierarchy(anyDPad, { 65.0f, 130.0f, 0.0f }, 45.0f, *data.icons, *data.hierarchy);
+
+	/*
+	SpriteNode* textOne = data.hierarchy->CreateNode("Haha_One");
+	textOne->SetPositionGlobal({ 320.0f, 290.0f, 0.0f });
+	textOne->displaySize = { 300.0f,150.0f,0.0f };
+	textOne->renderComponents.push_back(new TextBox("Shadow: That blue hedgehog again of all places... \nSonic: I've found you, faker! \nShadow: Faker? I think you're the fake hedgehog around here. You're comparing yourself to me? Ha! You're not even good enough to be my fake! \nSonic: I'll make you eat those words!", 12.0f, TextAlignment::Center, data.text));
+	textOne->components.push_back(new RotateSpriteNode(0.0f, 0.1f));
+	*/
 }

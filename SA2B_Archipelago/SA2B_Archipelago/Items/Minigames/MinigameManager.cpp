@@ -7,6 +7,7 @@ void DeleteUpgradeIcon_MG(ObjectMaster* obj)
 {
 	MinigameManager::GetInstance().EndMinigame();
 	MinigameManager::GetInstance().iconData.ReleaseIcons();
+	MinigameManager::GetInstance().textData.ReleaseIcons();
 	MinigameManager::GetInstance().IconObjPtr = nullptr;
 }
 
@@ -48,6 +49,8 @@ void MinigameManager::OnFrameFunction()
 	{
 		this->iconData.LoadIcons();
 		this->_data.icons = &this->iconData;
+		this->textData.LoadIcons();
+		this->_data.text = &this->textData;
 		this->_data.hierarchy = &this->spriteHierarchy;
 		this->_data.collision = &this->collisionManager;
 		this->_data.hierarchy->iconData = &this->iconData;
@@ -113,6 +116,7 @@ void MinigameManager::UpdateCurrentMinigame()
 		}
 	}
 	//Debug Test Minigame
+	/*
 	else
 	{
 		if (_data.inputPress & RIF_Down)
@@ -120,6 +124,7 @@ void MinigameManager::UpdateCurrentMinigame()
 			this->currentMinigame = &this->fishing;
 		}
 	}
+	*/
 }
 
 void MinigameManager::EndMinigame()

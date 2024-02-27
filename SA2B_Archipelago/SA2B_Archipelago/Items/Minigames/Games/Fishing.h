@@ -76,9 +76,27 @@ public:
 
 private:
 	void CreateHierarchy(MinigameManagerData data);
+	void SetFillAmount(float amount);
+	void MoveFish();
+	void UpdateZone();
+	void UpdateProgress(MinigameManagerData data);
+	void Caught();
+	void Escaped();
 	SpriteNode* fish;
 	SpriteNode* catchZone;
 	SpriteNode* progressBar;
+	FishingState fs_state;
+	Timer endTimer;
+	float progress;
+	Timer fishTimer;
+	float fishDestination;
+	float zoneVelocity;
+	float gravity = 0.25f;
+	float inputForce = -0.6f;
+	float fishSpeed = 3.5f;
+	float progressChangeRate = 1.0f / 600.0f;
+	float progressIncreaseMultiplier = 1.2f;
+	RawInputFlags anyDPad = RIF_Up | RIF_Down | RIF_Left | RIF_Right;
 };
 
 class Fishing : public MinigameBase
@@ -88,7 +106,7 @@ public:
 	void OnFrame(MinigameManagerData data) override;
 
 private:
-	FishingMedium easy;
+	FishingEasy easy;
 	FishingMedium medium;
-	FishingMedium hard;
+	FishingHard hard;
 };

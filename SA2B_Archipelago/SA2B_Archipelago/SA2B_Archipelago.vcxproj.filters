@@ -180,6 +180,12 @@
     <ClInclude Include="Items\Minigames\Games\Platformer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Items\Minigames\TextDisplayData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Items\Minigames\Components\TextBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -306,6 +312,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Items\Minigames\Games\FishingHard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Items\Minigames\TextDisplayData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Items\Minigames\Components\TextBox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
