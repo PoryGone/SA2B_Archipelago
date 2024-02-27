@@ -18,7 +18,7 @@ void TextBox::OnRender(SpriteNode& node)
 	NJS_POINT3 down = Point3RotateAround({ 0.0f, 1.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, node.rotation);
 	NJS_POINT3 pos = node.GetPositionGlobal();
 	pos.x -= node.displaySize.x * 0.5f;
-	pos.y -= node.displaySize.y * 0.5f;
+	pos.y -= (node.displaySize.y * 0.5f) - (fontSize * 0.5);
 	pos = Point3RotateAround(pos, node.GetPositionGlobal(), node.rotation);
 
 	int l = 0;
@@ -66,6 +66,11 @@ void TextBox::UpdateText(std::string newText)
 	isDirty = true;
 }
 
+float TextBox::GetHeight()
+{
+	return this->fontSize * this->lines.size();
+}
+
 void TextBox::UpdateLineData(SpriteNode& node)
 {
 	float width = node.displaySize.x;
@@ -80,6 +85,17 @@ void TextBox::UpdateLineData(SpriteNode& node)
 
 	while (i < text.length())
 	{
+		if (text[i] != ' ' && text[i] != '\n')
+		{
+			if (length == 0)
+			{
+				startIndex = i;
+			}
+			float charScale = textData->GetCharacterData(text[i])->height / 42.0f;
+			charWidth += fontSize * textData->GetCharacterData(text[i])->ratio * charScale;
+			length++;
+		}
+
 		if (text[i] == ' ' || text[i] == '\n' || i == text.length() - 1)
 		{
 			if (length > 0)
@@ -92,16 +108,6 @@ void TextBox::UpdateLineData(SpriteNode& node)
 			{
 				words.emplace_back(WordData(i, 0, 0.0f));
 			}
-		}
-		else
-		{
-			if (length == 0)
-			{
-				startIndex = i;
-			}
-			float charScale = textData->GetCharacterData(text[i])->height / 42.0f;
-			charWidth += fontSize * textData->GetCharacterData(text[i])->ratio * charScale;
-			length++;
 		}
 		i++;
 	}

@@ -101,14 +101,16 @@ void MinigameManager::UpdateCurrentMinigame()
 			this->_data.hierarchy->OnFrame();
 			this->_data.hierarchy->Render();
 		}
-		if (this->currentMinigame->currentState == MinigameState::MGS_Victory || this->currentMinigame->currentState == MinigameState::MGS_Loss)
+		if (this->currentMinigame->currentState == MinigameState::MGS_Victory ||
+			this->currentMinigame->currentState == MinigameState::MGS_Draw ||
+			this->currentMinigame->currentState == MinigameState::MGS_Loss)
 		{
 			this->state = this->currentMinigame->currentState;
 			if (state == MinigameState::MGS_Victory)
 			{
 				this->HandleVictory();
 			}
-			else
+			else if (state == MinigameState::MGS_Loss)
 			{
 				this->HandleLoss();
 			}
@@ -146,7 +148,7 @@ void MinigameManager::StartMinigame(ItemValue item)
 	{
 	case ItemValue::IV_LiteratureTrap:
 		// TODO
-		this->currentMinigame = &this->pong;
+		this->currentMinigame = &this->literature;
 		break;
 	case ItemValue::IV_PongTrap:
 		this->currentMinigame = &this->pong;

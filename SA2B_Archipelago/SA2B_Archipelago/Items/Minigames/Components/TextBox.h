@@ -34,6 +34,8 @@ public:
 	void OnRender(SpriteNode& node) override;
 	void UpdateText(std::string newText);
 
+	float GetHeight();
+
 	TextBox(std::string _text, float _fontSize, TextAlignment _alignment, TextDisplayData* _textData) : text(_text), fontSize(_fontSize), alignment(_alignment), textData(_textData) {}
 
 private:

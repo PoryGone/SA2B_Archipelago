@@ -29,6 +29,7 @@ enum MinigameState
 	MGS_PreGame,
 	MGS_InProgress,
 	MGS_Victory,
+	MGS_Draw,
 	MGS_Loss,
 };
 

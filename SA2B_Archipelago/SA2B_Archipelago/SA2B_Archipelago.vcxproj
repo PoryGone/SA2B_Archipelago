@@ -180,6 +180,7 @@
     <ClInclude Include="Items\Minigames\Components\RotateSpriteNode.h" />
     <ClInclude Include="Items\Minigames\Components\TextBox.h" />
     <ClInclude Include="Items\Minigames\Games\Fishing.h" />
+    <ClInclude Include="Items\Minigames\Games\Literature.h" />
     <ClInclude Include="Items\Minigames\Games\Platformer.h" />
     <ClInclude Include="Items\Minigames\MinigameBase.h" />
     <ClInclude Include="Items\Minigames\MinigameIconData.h" />
@@ -347,6 +348,10 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../../pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../../../pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../../../pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="Items\Minigames\Games\Literature.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../../pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../../pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="Items\Minigames\MinigameIconData.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../pch.h</PrecompiledHeaderFile>

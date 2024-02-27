@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "MinigameBase.h"
+#include "Games/Literature.h"
 #include "Games/Pong.h"
 #include "Games/Fishing.h"
 #include "Games/Platformer.h"
@@ -53,6 +54,7 @@ private:
 	bool isPaused = false;
 
 	//Minigames
+	Literature literature = Literature();
 	Pong pong             = Pong();
 	Fishing fishing       = Fishing();
 	Platformer platformer = Platformer();
