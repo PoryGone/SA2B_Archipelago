@@ -43,16 +43,16 @@ void AddDPadToHierarchy(RawInputFlags activeButtons, NJS_POINT3 position, float 
 
 	SpriteNode* dpadDown = hierarchy.CreateNode("DPad_Down", activeButtons & RIF_Down ? iconData.GetAnim(MGI_DPad_Active) : iconData.GetAnim(MGI_DPad_Inactive), { iconSize, iconSize, 0 }, { 0,0,0 }, dpadRoot);
 	dpadDown->SetPosition({ 0.0f, offset, 0.0f });
-	dpadDown->rotation = 0.0f;
+	dpadDown->SetRotation(0.0f);
 	SpriteNode* dpadUp = hierarchy.CreateNode("DPad_Up", activeButtons & RIF_Up ? iconData.GetAnim(MGI_DPad_Active) : iconData.GetAnim(MGI_DPad_Inactive), { iconSize, iconSize, 0 }, { 0,0,0 }, dpadRoot);
 	dpadUp->SetPosition({ 0.0f, -offset, 0.0f });
-	dpadUp->rotation = 180.0f;
+	dpadUp->SetRotation(180.0f);
 	SpriteNode* dpadLeft = hierarchy.CreateNode("DPad_Left", activeButtons & RIF_Left ? iconData.GetAnim(MGI_DPad_Active) : iconData.GetAnim(MGI_DPad_Inactive), { iconSize, iconSize, 0 }, { 0,0,0 }, dpadRoot);
 	dpadLeft->SetPosition({ -offset, 0.0f, 0.0f });
-	dpadLeft->rotation = 90.0f;
+	dpadLeft->SetRotation(90.0f);
 	SpriteNode* dpadRight = hierarchy.CreateNode("DPad_Right", activeButtons & RIF_Right ? iconData.GetAnim(MGI_DPad_Active) : iconData.GetAnim(MGI_DPad_Inactive), { iconSize, iconSize, 0 }, { 0,0,0 }, dpadRoot);
 	dpadRight->SetPosition({ offset, 0.0f, 0.0f });
-	dpadRight->rotation = 270.0f;
+	dpadRight->SetRotation(270.0f);
 }
 
 std::default_random_engine& RNG()

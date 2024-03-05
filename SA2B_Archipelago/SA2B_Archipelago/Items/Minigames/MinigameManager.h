@@ -7,6 +7,7 @@
 #include "Games/Pong.h"
 #include "Games/Fishing.h"
 #include "Games/Platformer.h"
+#include "Games/MinigameFinalBoss.h"
 #include "../ItemData.h"
 #include <ctime>
 
@@ -54,8 +55,9 @@ private:
 	bool isPaused = false;
 
 	//Minigames
-	Literature literature = Literature();
-	Pong pong             = Pong();
-	Fishing fishing       = Fishing();
-	Platformer platformer = Platformer();
+	Literature literature			= Literature();
+	Pong pong						= Pong();
+	Fishing fishing					= Fishing();
+	Platformer platformer			= Platformer();
+	MinigameFinalBoss finalBoss		= MinigameFinalBoss();
 };

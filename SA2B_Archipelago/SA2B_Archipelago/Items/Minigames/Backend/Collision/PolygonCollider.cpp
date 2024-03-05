@@ -53,7 +53,7 @@ NJS_POINT3 PolygonCollider::GetCentroid()
 		if (node)
 		{
 			NJS_POINT3 nodePos = node->GetPositionGlobal();
-			return Point3Add(nodePos, Point3RotateAround(center, nodePos, node->rotation));
+			return Point3Add(nodePos, Point3RotateAround(center, nodePos, node->GetRotationGlobal()));
 		}
 		return center;
 	}
@@ -103,7 +103,7 @@ std::vector<NJS_POINT3> PolygonCollider::GetAdjustedPoints()
 		for (int i = 0; i < adjustedPoints.size(); i++)
 		{
 			adjustedPoints[i] = Point3Add(points[i], offset);
-			adjustedPoints[i] = Point3Add(nodePos, Point3RotateAround(adjustedPoints[i], nodePos, node->rotation));
+			adjustedPoints[i] = Point3Add(nodePos, Point3RotateAround(adjustedPoints[i], nodePos, node->GetRotationGlobal()));
 		}
 	}
 	else

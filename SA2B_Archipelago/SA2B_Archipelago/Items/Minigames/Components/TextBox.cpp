@@ -14,12 +14,13 @@ void TextBox::OnRender(SpriteNode& node)
 	}
 	NJS_SPRITE sprite = { { 0.0f, 0.0f, 0.0f }, 1.0f, 1.0f, 0, textData->FontTex, textData->FontAnims };
 
-	NJS_POINT3 right = Point3RotateAround({ 1.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, node.rotation);
-	NJS_POINT3 down = Point3RotateAround({ 0.0f, 1.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, node.rotation);
+	float rotation = node.GetRotationGlobal();
+	NJS_POINT3 right = Point3RotateAround({ 1.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, rotation);
+	NJS_POINT3 down = Point3RotateAround({ 0.0f, 1.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, rotation);
 	NJS_POINT3 pos = node.GetPositionGlobal();
 	pos.x -= node.displaySize.x * 0.5f;
 	pos.y -= (node.displaySize.y * 0.5f) - (fontSize * 0.5);
-	pos = Point3RotateAround(pos, node.GetPositionGlobal(), node.rotation);
+	pos = Point3RotateAround(pos, node.GetPositionGlobal(), rotation);
 
 	int l = 0;
 	while (l < lines.size())
@@ -43,10 +44,10 @@ void TextBox::OnRender(SpriteNode& node)
 				sprite.tanim = charData.anim;
 				sprite.tanim--;
 				sprite.p = charPos;
-				sprite.ang = NJM_DEG_ANG(node.rotation);
+				sprite.ang = NJM_DEG_ANG(rotation);
 				sprite.sx = sX;
 				sprite.sy = sY;
-				if (node.rotation != 0.0f)
+				if (rotation != 0.0f)
 				{
 					DrawSprite2D(&sprite, 1, 1.0f, NJD_SPRITE_ALPHA | NJD_SPRITE_ANGLE);
 				}

@@ -28,7 +28,7 @@ NJS_POINT3 CircleCollider::GetCenter()
 	if (node)
 	{
 		NJS_POINT3 nodePos = node->GetPositionGlobal();
-		return Point3Add(nodePos, Point3RotateAround(offset, nodePos, node->rotation));
+		return Point3Add(nodePos, Point3RotateAround(offset, nodePos, node->GetRotationGlobal()));
 	}
 	return offset;
 }

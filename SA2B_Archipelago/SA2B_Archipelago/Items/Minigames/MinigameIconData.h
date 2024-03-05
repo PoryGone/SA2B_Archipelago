@@ -19,6 +19,12 @@ enum MinigameIcon
 	MGI_Square_Outline			= 14,
 	MGI_Triangle				= 15,
 	MGI_Triangle_Outline		= 16,
+	MGI_White_Box				= 17,
+	MGI_Bio_Beam				= 18,
+	MGI_Bio_Bullet				= 19,
+	MGI_Super_Bullet			= 20,
+	MGI_Super_Shadow			= 21,
+	MGI_Super_Sonic				= 22,
 };
 
 class MinigameIconData
