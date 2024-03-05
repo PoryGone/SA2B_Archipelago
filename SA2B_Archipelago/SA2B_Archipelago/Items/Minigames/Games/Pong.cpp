@@ -1,7 +1,7 @@
 #include "../../../pch.h"
 #include <cstdlib>
 #include "Pong.h"
-#include "../Components/RotateSpriteNode.h"
+#include "../Components/Rotator.h"
 
 void Pong::OnGameStart(MinigameManagerData data)
 {
@@ -205,6 +205,6 @@ void Pong::CreateHierarchy(MinigameManagerData data)
 	float ballX = PONG_LEFT + (PONG_RIGHT - PONG_LEFT) / 2.0f;
 	float ballY = PONG_TOP + (PONG_BOTTOM - PONG_TOP) / 2.0f;
 	ball = data.hierarchy->CreateNode("Ball", data.icons->GetAnim(MGI_Spinball), { PONG_BALL_RADIUS * 2, PONG_BALL_RADIUS * 2, 1 }, { ballX, ballY, 0 });
-	ball->components.push_back(new RotateSpriteNode(0.0f, rotationDelta));
+	ball->components.push_back(new Rotator(rotationDelta));
 	
 }

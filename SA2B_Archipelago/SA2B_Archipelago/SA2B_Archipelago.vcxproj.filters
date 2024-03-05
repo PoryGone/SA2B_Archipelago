@@ -132,7 +132,7 @@
     <ClInclude Include="Items\Minigames\Backend\SpriteNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Items\Minigames\Components\RotateSpriteNode.h">
+    <ClInclude Include="Items\Minigames\Components\Rotator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Items\Minigames\Backend\SpriteBounds.h">
@@ -190,6 +190,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Items\Minigames\Games\MinigameFinalBoss.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Items\Minigames\Components\Wiggle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -272,7 +275,7 @@
     <ClCompile Include="Items\Minigames\Backend\SpriteNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Items\Minigames\Components\RotateSpriteNode.cpp">
+    <ClCompile Include="Items\Minigames\Components\Rotator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Items\Minigames\Backend\SpriteBounds.cpp">
@@ -330,6 +333,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Items\Minigames\Games\MinigameFinalBoss.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Items\Minigames\Components\Wiggle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

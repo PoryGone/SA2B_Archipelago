@@ -4,7 +4,7 @@
 #include <cstdlib>
 
 #include "../Backend/Time/Timer.h"
-#include "../Components/RotateSpriteNode.h"
+#include "../Components/Rotator.h"
 
 
 void Platformer::OnGameStart(MinigameManagerData data)
@@ -112,7 +112,7 @@ void Platformer::CreateHierarchy(MinigameManagerData data)
 											 data.icons->GetAnim(MGI_Spinball),
 											 { PLATFORMER_ENEMY_WIDTH, PLATFORMER_ENEMY_HEIGHT, 1 },
 											 { PLATFORMER_ENEMY_START_X, PLATFORMER_ENEMY_LOW_Y, 0 });
-	this->enemy->components.push_back(new RotateSpriteNode(0.0f, this->rotationDelta));
+	this->enemy->components.push_back(new Rotator(this->rotationDelta));
 
 	data.collision->AddCollision(this->player, std::make_shared<PolygonCollider>(this->player->displaySize));
 	data.collision->AddCollision(this->enemy, std::make_shared<CircleCollider>(this->enemy->displaySize.x));

@@ -177,8 +177,9 @@
     <ClInclude Include="Items\Minigames\Backend\Time\Stopwatch.h" />
     <ClInclude Include="Items\Minigames\Backend\Time\Timer.h" />
     <ClInclude Include="Items\Minigames\Backend\Time\TimeUtilities.h" />
-    <ClInclude Include="Items\Minigames\Components\RotateSpriteNode.h" />
+    <ClInclude Include="Items\Minigames\Components\Rotator.h" />
     <ClInclude Include="Items\Minigames\Components\TextBox.h" />
+    <ClInclude Include="Items\Minigames\Components\Wiggle.h" />
     <ClInclude Include="Items\Minigames\Games\Fishing.h" />
     <ClInclude Include="Items\Minigames\Games\Literature.h" />
     <ClInclude Include="Items\Minigames\Games\MinigameFinalBoss.h" />
@@ -314,7 +315,7 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../../../../pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../../../../pch.h</PrecompiledHeaderFile>
     </ClCompile>
-    <ClCompile Include="Items\Minigames\Components\RotateSpriteNode.cpp">
+    <ClCompile Include="Items\Minigames\Components\Rotator.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../../pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../../pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../../../pch.h</PrecompiledHeaderFile>
@@ -457,6 +458,12 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="Items\Minigames\Components\Wiggle.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../../pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../../pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../../../pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../../../pch.h</PrecompiledHeaderFile>
     </ClCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
