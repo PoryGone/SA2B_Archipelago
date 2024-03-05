@@ -65,6 +65,7 @@ void SpriteNode::SetRotation(float r)
 		rotation += 360.0f;
 	}
 	SetBranchDirty();
+	//SetPositionDirty();
 }
 
 float SpriteNode::GetRotation()
@@ -90,6 +91,7 @@ void SpriteNode::Rotate(float r)
 		rotation += 360.0f;
 	}
 	SetBranchDirty();
+	//SetPositionDirty();
 }
 
 void SpriteNode::SetEnabled(bool enabled)
@@ -139,7 +141,7 @@ void SpriteNode::Render(NJS_SPRITE& sprite)
 		sprite.sx = displaySize.x / (float)anim->sx;
 		sprite.sy = displaySize.y / (float)anim->sy;
 		ConstantMaterial = color;
-		if (rotation != 0.0f) 
+		if (globalRotation != 0.0f)
 		{
 			DrawSprite2D(&sprite, 1, 1.0f, NJD_SPRITE_ALPHA | NJD_SPRITE_ANGLE | NJD_SPRITE_COLOR);
 		}
@@ -214,16 +216,8 @@ void SpriteNode::UpdateGlobalPosition()
 	}
 	NJS_POINT3 parentPos = parent->GetPositionGlobal();
 	NJS_POINT3 preRotatePos = Point3Add(parentPos, localPosition);
-	globalPosition = Point3RotateAround(preRotatePos, parentPos, parent->rotation);
+	globalPosition = Point3RotateAround(preRotatePos, parentPos, parent->globalRotation);
 	globalRotation = parent->globalRotation + rotation;
 
-	NJS_POINT3 pos = localPosition;
-	SpriteNode* ptr = this;
-	while (ptr->parent != nullptr)
-	{
-		ptr = ptr->parent;
-		Point3AddEQ(pos, (*ptr).localPosition);
-	}
-	globalPosition = pos;
 	isGlobalPositionDirty = false;
 }

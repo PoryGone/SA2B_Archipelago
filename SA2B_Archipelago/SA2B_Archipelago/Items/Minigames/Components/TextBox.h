@@ -36,6 +36,7 @@ public:
 
 	float GetHeight();
 
+	TextBox() : text(""), fontSize(10.0f), alignment(TextAlignment::Left), textData(nullptr) {}
 	TextBox(std::string _text, float _fontSize, TextAlignment _alignment, TextDisplayData* _textData) : text(_text), fontSize(_fontSize), alignment(_alignment), textData(_textData) {}
 
 private:

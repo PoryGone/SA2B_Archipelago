@@ -46,7 +46,9 @@ void SpriteHierarchy::ClearHierarchy()
 		if (node.name != "ROOT_NODE")
 		{
 			for(int i = 0; i < node.components.size(); i++)
-			delete node.components[i];
+				delete node.components[i];
+			for (int i = 0; i < node.renderComponents.size(); i++)
+				delete node.renderComponents[i];
 			delete& node;
 		}
 	};
