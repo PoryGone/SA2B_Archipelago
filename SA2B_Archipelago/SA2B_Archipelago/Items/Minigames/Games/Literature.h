@@ -18,8 +18,6 @@ public:
 
 	void OnFrameSimulate(MinigameManagerData data);
 
-	void HandleCollision(MinigameManagerData data);
-
 private:
 	float textScrollSpeedY = 0.8f;
 
