@@ -91,6 +91,19 @@ void Point3RotateAroundEQ(NJS_POINT3& point, NJS_POINT3 center, float angleDeg)
 	point.y = v.y;
 }
 
+NJS_POINT3 Point3MoveTowards(NJS_POINT3 a, NJS_POINT3 b, float delta)
+{
+	float distance = Point3Distance(a, b);
+	NJS_POINT3 toPoint = Point3Normalize(Point3Substract(b,a));
+	Point3ScaleEQ(toPoint, min(distance, delta));
+	return Point3Add(a, toPoint);
+}
+
+bool Point3Approximatly(NJS_POINT3 a, NJS_POINT3 b)
+{
+	return Point3Distance(a, b) < 0.0001f;
+}
+
 float Point3DotProduct(NJS_POINT3 a, NJS_POINT3 b)
 {
 	return a.x * b.x + a.y * b.y + a.z * b.z;

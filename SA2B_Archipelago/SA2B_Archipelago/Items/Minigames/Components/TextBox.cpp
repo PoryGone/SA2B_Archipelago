@@ -22,6 +22,8 @@ void TextBox::OnRender(SpriteNode& node)
 	pos.y -= (node.displaySize.y * 0.5f) - (fontSize * 0.5);
 	pos = Point3RotateAround(pos, node.GetPositionGlobal(), rotation);
 
+	ConstantMaterial = node.color;
+
 	int l = 0;
 	while (l < lines.size())
 	{
@@ -49,16 +51,18 @@ void TextBox::OnRender(SpriteNode& node)
 				sprite.sy = sY;
 				if (rotation != 0.0f)
 				{
-					DrawSprite2D(&sprite, 1, 1.0f, NJD_SPRITE_ALPHA | NJD_SPRITE_ANGLE);
+					DrawSprite2D(&sprite, 1, 1.0f, NJD_SPRITE_ALPHA | NJD_SPRITE_ANGLE | NJD_SPRITE_COLOR);
 				}
 				else
 				{
-					DrawSprite2D(&sprite, 1, 1.0f, NJD_SPRITE_ALPHA);
+					DrawSprite2D(&sprite, 1, 1.0f, NJD_SPRITE_ALPHA | NJD_SPRITE_COLOR);
 				}
 			}
 		}
 		l++;
 	}
+
+	ResetMaterial();
 }
 
 void TextBox::UpdateText(std::string newText)

@@ -11,14 +11,17 @@ class MinigameFinalBoss : public MinigameBase
 	{
 		FBS_Intro,
 		FBS_InGame,
+		FBS_Swap,
 		FBS_Loss,
 		FBS_Win,
 	};
 
 	enum FinalBossIntroState
 	{
+		FBIS_FadeIn,
 		FBIS_CharacterEntrance,
 		FBIS_BossEntrance,
+		FBIS_CharacterToStart,
 	};
 
 public:
@@ -29,12 +32,27 @@ public:
 
 private:
 
+	void RunIntro(MinigameManagerData data);
+	void RunInGame(MinigameManagerData data);
+	void RunSwap(MinigameManagerData data);
+	void UpdateCharacterPosition(MinigameManagerData data);
+
 	FinalBossState state;
 	FinalBossIntroState introState;
 
 	float bossHealth;
+	bool sonicIsActive;
+
+	float characterSpeed = 2.0f;
+	float enemyBulletSpeed = 2.0f;
+	float playerBulletSpeed = 4.0f;
+
+	NJS_POINT3 sonicOffScreenPos = { 230.0f, 512.0f };
+	NJS_POINT3 shadowOffScreenPos = { 410.0f, 512.0f };
 
 	SpriteNode* background;
+	SpriteNode* rightBar;
+	SpriteNode* leftBar;
 
 	SpriteNode* characterParent;
 	SpriteNode* sonic;
