@@ -1334,6 +1334,7 @@ void ItemManager::OnFrameTrapQueue()
 		this->_ReverseTrapActive = true;
 		break;
 	case ItemValue::IV_LiteratureTrap:
+		PlayUnshuffledVoice(2, 85);
 	case ItemValue::IV_PongTrap:
 	case ItemValue::IV_PlatformerTrap:
 	case ItemValue::IV_FishingTrap:

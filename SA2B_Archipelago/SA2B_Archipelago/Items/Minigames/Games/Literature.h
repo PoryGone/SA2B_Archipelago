@@ -4,10 +4,6 @@
 #include "../Components/TextBox.h"
 
 
-// Sound Data
-#define LITERATURE_SOUND_BEGIN    0x8019
-
-
 class Literature : public MinigameBase
 {
 public:

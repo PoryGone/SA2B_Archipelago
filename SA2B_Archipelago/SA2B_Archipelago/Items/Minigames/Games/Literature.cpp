@@ -7,6 +7,8 @@
 #include "../Backend/Time/Timer.h"
 
 
+// TODO: More Literature
+
 
 std::vector<std::string> possible_literature{
 	std::string("I must not fear. Fear is the mind-killer. Fear is the little-death that brings about total obliteration. I will face my fear. I will permit it to pass over me and through me. And when it has gone past I will turn the inner eye to see its path. Where the fear has gone, there will be nothing. Only I will remain. \n-Herbert"),
@@ -67,6 +69,8 @@ std::vector<std::string> possible_literature{
 	std::string("The FIRST ORDER reigns. Having decimated the peaceful Republic, Supreme Leader Snoke now deploys his merciless legions to seize military control of the galaxy.\n\nOnly General Leia Organa's band of RESISTANCE fighters stand against the rising tyranny, certain that Jedi Master Luke Skywalker will return and restore a spark of hope to the fight.\n\nBut the Resistance has been exposed. As the First Order speeds toward the rebel base, the brave heroes mount a desperate escape...."),
 	std::string("The dead speak! The galaxy has heard a mysterious broadcast, a threat of REVENGE in the sinister voice of the late EMPEROR PALPATINE.\n\nGENERAL LEIA ORGANA dispatches secret agents to gather intelligence, while REY, the last hope of the Jedi, trains for battle against the diabolical FIRST ORDER.\n\nMeanwhile, Supreme Leader KYLO REN rages in search of the phantom Emperor, determined to destroy any threat to his power...."),
 	std::string("Shadow: That blue hedgehog again of all places... \nSonic: I've found you, faker! \nShadow: Faker? I think you're the fake hedgehog around here. You're comparing yourself to me? Ha! You're not even good enough to be my fake! \nSonic: I'll make you eat those words!"),
+	std::string("“Prophet!” said I, “thing of evil!—prophet still, if bird or devil! \nBy that Heaven that bends above us—by that God we both adore— \nTell this soul with sorrow laden if, within the distant Aidenn, \nIt shall clasp a sainted maiden whom the angels name Lenore— \nClasp a rare and radiant maiden whom the angels name Lenore.” \nQuoth the Raven “Nevermore.” \n\n“Be that word our sign of parting, bird or fiend!” I shrieked, upstarting—\n“Get thee back into the tempest and the Night’s Plutonian shore!\nLeave no black plume as a token of that lie thy soul hath spoken!\nLeave my loneliness unbroken!—quit the bust above my door!\nTake thy beak from out my heart, and take thy form from off my door!”\nQuoth the Raven “Nevermore.”\n-Poe"),
+	//std::string(""),
 };
 
 
@@ -75,8 +79,6 @@ void Literature::OnGameStart(MinigameManagerData data)
 	this->currentState = MinigameState::MGS_InProgress;
 
 	this->CreateHierarchy(data);
-
-	PlaySoundProbably(LITERATURE_SOUND_BEGIN, 0, 0, 0);
 }
 
 void Literature::OnFrame(MinigameManagerData data)

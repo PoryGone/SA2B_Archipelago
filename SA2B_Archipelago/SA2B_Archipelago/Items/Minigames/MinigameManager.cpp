@@ -161,7 +161,7 @@ void MinigameManager::StartMinigame(ItemValue item)
 		break;
 	case ItemValue::IV_TriviaTrap:
 		// TODO
-		this->currentMinigame = &this->pong;
+		this->currentMinigame = &this->trivia;
 		break;
 	}
 }

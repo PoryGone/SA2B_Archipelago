@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "MinigameBase.h"
+#include "Games/Trivia.h"
 #include "Games/Literature.h"
 #include "Games/Pong.h"
 #include "Games/Fishing.h"
@@ -59,5 +60,6 @@ private:
 	Pong pong						= Pong();
 	Fishing fishing					= Fishing();
 	Platformer platformer			= Platformer();
+	Trivia trivia					= Trivia();
 	MinigameFinalBoss finalBoss		= MinigameFinalBoss();
 };
