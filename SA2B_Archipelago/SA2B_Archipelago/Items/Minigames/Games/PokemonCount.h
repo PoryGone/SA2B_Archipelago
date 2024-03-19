@@ -1,7 +1,12 @@
 #pragma once
+#include <vector>
+
 #include "../MinigameBase.h"
 #include "../MinigameUtilities.h"
 #include "../Components/TextBox.h"
+#include "../Components/Wiggle.h"
+
+#include "PokemonData.h"
 
 
 // Sound Data
@@ -17,6 +22,7 @@ public:
 	void CreateHierarchy(MinigameManagerData data);
 
 	void OnFramePlayer(MinigameManagerData data);
+	void OnFrameSimulate(MinigameManagerData data);
 
 private:
 	int correctAnswer = 0;
@@ -25,4 +31,5 @@ private:
 
 	SpriteNode* questionNode = nullptr;
 	TextBox* questionBox = nullptr;
+	std::vector<SpriteNode*> pokemonSpawnNodes;
 };

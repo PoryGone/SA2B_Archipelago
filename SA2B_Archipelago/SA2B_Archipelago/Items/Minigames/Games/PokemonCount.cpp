@@ -26,6 +26,7 @@ void PokemonCount::OnFrame(MinigameManagerData data)
 	if (data.managerState == MinigameState::MGS_InProgress)
 	{
 		this->OnFramePlayer(data);
+		this->OnFrameSimulate(data);
 	}
 }
 
@@ -64,29 +65,16 @@ void PokemonCount::OnFramePlayer(MinigameManagerData data)
 	}
 }
 
+void PokemonCount::OnFrameSimulate(MinigameManagerData data)
+{
+	for (SpriteNode* pokemonNode : this->pokemonSpawnNodes)
+	{
+		pokemonNode->Translate({ 1.5f, 0.0f, 0.0f });
+	}
+}
+
 void PokemonCount::CreateHierarchy(MinigameManagerData data)
 {
-	MinigameDifficulty questionDifficulty = MinigameDifficulty::MGD_Easy;
-
-	if (data.difficulty == MinigameDifficulty::MGD_Medium)
-	{
-		if (RandomFloat(0.0f, 1.0f) > 0.3f)
-		{
-			questionDifficulty = MinigameDifficulty::MGD_Medium;
-		}
-	}
-	else if (data.difficulty == MinigameDifficulty::MGD_Hard)
-	{
-		if (RandomFloat(0.0f, 1.0f) > 0.5f)
-		{
-			questionDifficulty = MinigameDifficulty::MGD_Hard;
-		}
-		else if(RandomFloat(0.0f, 1.0f) > 0.2f)
-		{
-			questionDifficulty = MinigameDifficulty::MGD_Medium;
-		}
-	}
-
 	// Question
 	this->questionNode = data.hierarchy->CreateNode("Question");
 	this->questionNode->SetPositionGlobal({ 320.0f, 80.0f, 0.0f });
@@ -95,4 +83,25 @@ void PokemonCount::CreateHierarchy(MinigameManagerData data)
 	this->questionNode->renderComponents.push_back(this->questionBox);
 
 	AddDPadToHierarchy(this->anyDPad, { 320.0f, 280.0f, 0.0f }, 45.0f, *data.icons, *data.hierarchy);
+
+	this->pokemonSpawnNodes.clear();
+
+	float x = -60.0f;
+	float y = 80.0f;
+	for (PokemonData pokemon : allPokemon)
+	{
+		SpriteNode* newSpawnBase = data.hierarchy->CreateNode("SpawnBase");
+		newSpawnBase->SetPositionGlobal({ x, y, 0.0f });
+		Wiggle* pokeWiggle = new Wiggle(RandomFloat(0.45f, 0.95f), -25.0f, 25.0f, true);
+		newSpawnBase->components.push_back(pokeWiggle);
+
+		SpriteNode* newSpawn = data.hierarchy->CreateNode("Spawn", newSpawnBase);
+		newSpawn->anim = data.icons->GetAnim(pokemon.icon);
+		newSpawn->SetPosition({ 0.0f, -30.0f, 0.0f });
+		newSpawn->displaySize = { 60.0f, 60.0f, 0.0f };
+		this->pokemonSpawnNodes.push_back(newSpawnBase);
+
+		x -= 65.0f;
+		y += 10.0f;
+	}
 }

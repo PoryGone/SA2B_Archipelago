@@ -75,10 +75,12 @@ void InitializeItemData(std::map<int, ItemData> &outItemData)
     outItemData[ItemValue::IV_YellowChaosEmerald] = ItemData(0x01DEEAFD, std::string("Yellow Chaos Emerald"), std::string(), 0);
     outItemData[ItemValue::IV_BlueChaosEmerald]   = ItemData(0x01DEEAFE, std::string("Blue Chaos Emerald"), std::string(), 0);
 
-    outItemData[ItemValue::IV_PongTrap]       = ItemData(0x0000000, std::string("Pong Trap"), std::string(), 0);
-    outItemData[ItemValue::IV_PlatformerTrap] = ItemData(0x0000000, std::string("Platformer Trap"), std::string(), 0);
-    outItemData[ItemValue::IV_FishingTrap]    = ItemData(0x0000000, std::string("Fishing Trap"), std::string(), 0);
-    outItemData[ItemValue::IV_TriviaTrap]     = ItemData(0x0000000, std::string("Trivia Trap"), std::string(), 0);
+    outItemData[ItemValue::IV_PongTrap]          = ItemData(0x0000000, std::string("Pong Trap"), std::string(), 0);
+    outItemData[ItemValue::IV_PlatformerTrap]    = ItemData(0x0000000, std::string("Platformer Trap"), std::string(), 0);
+    outItemData[ItemValue::IV_FishingTrap]       = ItemData(0x0000000, std::string("Fishing Trap"), std::string(), 0);
+    outItemData[ItemValue::IV_TriviaTrap]        = ItemData(0x0000000, std::string("Trivia Trap"), std::string(), 0);
+    outItemData[ItemValue::IV_PokemonTriviaTrap] = ItemData(0x0000000, std::string("Pokemon Trivia Trap"), std::string(), 0);
+    outItemData[ItemValue::IV_PokemonCountTrap]  = ItemData(0x0000000, std::string("Pokemon Count Trap"), std::string(), 0);
 
     outItemData[ItemValue::IV_NormalEgg]            = ItemData(0x0000000, std::string("Normal Egg"), std::string(), 1);
     outItemData[ItemValue::IV_YellowMonoToneEgg]    = ItemData(0x0000000, std::string("Yellow Mono-Tone Egg"), std::string(), 1);
