@@ -1,5 +1,7 @@
 #pragma once
 
+#define POKE_START 23
+
 enum MinigameIcon
 {
 	MGI_RoundedBar				= 0,
@@ -25,6 +27,38 @@ enum MinigameIcon
 	MGI_Super_Bullet			= 20,
 	MGI_Super_Shadow			= 21,
 	MGI_Super_Sonic				= 22,
+
+	//Pokemon
+	MGI_Aron					= POKE_START + 0,
+	MGI_Bulbasaur				= POKE_START + 1,
+	MGI_Charjabug				= POKE_START + 2,
+	MGI_Charmander				= POKE_START + 3,
+	MGI_Ditto					= POKE_START + 4,
+	MGI_Dratini					= POKE_START + 5,
+	MGI_Flamigo					= POKE_START + 6,
+	MGI_Goomy					= POKE_START + 7,
+	MGI_Grimer					= POKE_START + 8,
+	MGI_Haunter					= POKE_START + 9,
+	MGI_Litwick					= POKE_START + 10,
+	MGI_Phantump				= POKE_START + 11,
+	MGI_Piplup					= POKE_START + 12,
+	MGI_Pooper					= POKE_START + 13,
+	MGI_Porygon					= POKE_START + 14,
+	MGI_Roggenrola				= POKE_START + 15,
+	MGI_Shuckle					= POKE_START + 16,
+	MGI_Sinistea				= POKE_START + 17,
+	MGI_Snom					= POKE_START + 18,
+	MGI_Spiritomb				= POKE_START + 19,
+	MGI_Sudowoodo				= POKE_START + 20,
+	MGI_Surskit					= POKE_START + 21,
+	MGI_Tatsugiri				= POKE_START + 22,
+	MGI_Togepi					= POKE_START + 23,
+	MGI_UnownP					= POKE_START + 24,
+	MGI_UnownQue				= POKE_START + 25,
+	MGI_UnownX					= POKE_START + 26,
+	MGI_Wailmer					= POKE_START + 27,
+	MGI_Wooper					= POKE_START + 28,
+	MGI_Wugtrio					= POKE_START + 29,
 };
 
 class MinigameIconData
