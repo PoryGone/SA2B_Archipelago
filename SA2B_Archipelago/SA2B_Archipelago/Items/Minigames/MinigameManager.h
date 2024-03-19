@@ -3,11 +3,13 @@
 #include <vector>
 
 #include "MinigameBase.h"
-#include "Games/Trivia.h"
 #include "Games/Literature.h"
 #include "Games/Pong.h"
 #include "Games/Fishing.h"
 #include "Games/Platformer.h"
+#include "Games/Trivia.h"
+#include "Games/PokemonTrivia.h"
+#include "Games/PokemonCount.h"
 #include "Games/MinigameFinalBoss.h"
 #include "../ItemData.h"
 #include <ctime>
@@ -61,5 +63,7 @@ private:
 	Fishing fishing					= Fishing();
 	Platformer platformer			= Platformer();
 	Trivia trivia					= Trivia();
+	PokemonTrivia pokemonTrivia		= PokemonTrivia();
+	PokemonCount pokemonCount		= PokemonCount();
 	MinigameFinalBoss finalBoss		= MinigameFinalBoss();
 };

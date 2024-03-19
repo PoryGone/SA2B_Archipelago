@@ -160,8 +160,13 @@ void MinigameManager::StartMinigame(ItemValue item)
 		this->currentMinigame = &this->fishing;
 		break;
 	case ItemValue::IV_TriviaTrap:
-		// TODO
 		this->currentMinigame = &this->trivia;
+		break;
+	case ItemValue::IV_PokemonTriviaTrap:
+		this->currentMinigame = &this->pokemonTrivia;
+		break;
+	case ItemValue::IV_PokemonCountTrap:
+		this->currentMinigame = &this->pokemonCount;
 		break;
 	}
 }

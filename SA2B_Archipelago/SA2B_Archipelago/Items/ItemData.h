@@ -83,7 +83,9 @@ enum ItemValue
     IV_PlatformerTrap,
     IV_FishingTrap,
     IV_TriviaTrap,
-    IV_END_MINIGAMES = IV_TriviaTrap,
+    IV_PokemonTriviaTrap,
+    IV_PokemonCountTrap,
+    IV_END_MINIGAMES = IV_PokemonCountTrap,
 
     IV_NormalEgg = 0x100,
     IV_YellowMonoToneEgg,

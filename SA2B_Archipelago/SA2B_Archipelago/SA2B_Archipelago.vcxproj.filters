@@ -198,6 +198,12 @@
     <ClInclude Include="Items\Minigames\Games\Trivia.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Items\Minigames\Games\PokemonTrivia.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Items\Minigames\Games\PokemonCount.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -342,6 +348,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Items\Minigames\Games\Trivia.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Items\Minigames\Games\PokemonTrivia.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Items\Minigames\Games\PokemonCount.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
