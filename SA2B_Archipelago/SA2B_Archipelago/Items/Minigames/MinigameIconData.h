@@ -58,12 +58,14 @@ enum MinigameIcon
 	MGI_Surskit					= POKE_START + 21,
 	MGI_Tatsugiri				= POKE_START + 22,
 	MGI_Togepi					= POKE_START + 23,
-	MGI_UnownP					= POKE_START + 24,
+	MGI_Chansey					= POKE_START + 24,
 	MGI_UnownQue				= POKE_START + 25,
 	MGI_UnownX					= POKE_START + 26,
 	MGI_Wailmer					= POKE_START + 27,
 	MGI_Wooper					= POKE_START + 28,
 	MGI_Wugtrio					= POKE_START + 29,
+	MGI_Shroomish				= POKE_START + 30,
+	MGI_Suicune					= POKE_START + 31,
 };
 
 class MinigameIconData

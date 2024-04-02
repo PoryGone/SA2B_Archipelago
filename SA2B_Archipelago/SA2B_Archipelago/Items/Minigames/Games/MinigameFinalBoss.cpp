@@ -324,6 +324,11 @@ void MinigameFinalBoss::UpdateHealthBarFill()
 	FHHealthBar->SetPosition(pos);
 }
 
+bool IsSpriteOutsidePlayArea(SpriteNode* node)
+{
+	return true;
+}
+
 void MinigameFinalBoss::CreateHierarchy(MinigameManagerData data)
 {
 	//Create Background

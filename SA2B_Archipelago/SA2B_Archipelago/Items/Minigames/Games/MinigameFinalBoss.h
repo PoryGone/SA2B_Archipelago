@@ -60,6 +60,7 @@ private:
 	void UpdateCharacterRingGrowthDecay(MinigameManagerData data);
 	void UpdateWeakPoint();
 	void UpdateHealthBarFill();
+	bool IsSpriteOutsidePlayArea(SpriteNode* node);
 
 	FinalBossState state;
 	FinalBossIntroState introState;
