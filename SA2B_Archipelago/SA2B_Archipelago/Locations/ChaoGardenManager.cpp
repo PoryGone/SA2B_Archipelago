@@ -603,6 +603,7 @@ void ChaoGardenManager::HandleChaoER()
 				break;
 			case ChaoExit::CE_CaveNeutral:
 				WriteData<1>((void*)0x58191A, (char)destination);
+				WriteData<1>((void*)0x581A00, (char)destination);
 				break;
 			case ChaoExit::CE_CaveRace:
 				WriteData<1>((void*)0x581993, (char)destination);
