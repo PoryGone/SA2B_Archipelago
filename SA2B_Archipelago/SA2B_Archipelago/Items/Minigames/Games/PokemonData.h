@@ -65,4 +65,4 @@ struct PokemonData
 	};
 };
 
-extern std::array<PokemonData, 30> allPokemon;
+extern std::array<PokemonData, 32> allPokemon;

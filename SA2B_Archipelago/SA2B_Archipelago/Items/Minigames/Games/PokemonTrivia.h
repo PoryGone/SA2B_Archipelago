@@ -2,6 +2,7 @@
 #include "../MinigameBase.h"
 #include "../MinigameUtilities.h"
 #include "../Components/TextBox.h"
+#include "PokemonData.h"
 #include "Trivia.h"
 
 
@@ -12,18 +13,27 @@ struct PokemonTriviaQuestion: public TriviaQuestion
 {
 	PokemonTriviaQuestion() {}
 
-	PokemonTriviaQuestion(const char* question, std::vector<const char*> correctAnswers, std::vector<const char*> wrongAnswers)
+	PokemonTriviaQuestion(const char* question)
 	{
 		this->question = std::string(question);
 
-		this->correctAnswers = correctAnswers;
-		this->wrongAnswers = wrongAnswers;
 	}
 
-	std::string question;
+	void SetPokemon(PokemonData inPokemon)
+	{
+		this->pokemon = inPokemon;
 
-	std::vector<const char*> correctAnswers;
-	std::vector<const char*> wrongAnswers;
+		// Handle generating correct answers here
+		this->correctAnswers;
+		this->wrongAnswers;
+	}
+
+	//std::string question;
+
+	PokemonData pokemon;
+
+	//std::vector<const char*> correctAnswers;
+	//std::vector<const char*> wrongAnswers;
 };
 
 

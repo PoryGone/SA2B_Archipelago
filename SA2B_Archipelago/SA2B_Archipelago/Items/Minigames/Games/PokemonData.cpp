@@ -350,7 +350,7 @@ std::map<std::pair<PokemonType, PokemonType>, PokemonTypeMatchup> typeMatchupDat
 };
 
 
-std::array<PokemonData, 30> allPokemon =
+std::array<PokemonData, 32> allPokemon =
 {
 	PokemonData(MGI_Aron,		std::string("Aron"),		3,	PokemonType::Steel,		PokemonType::Rock),
 	PokemonData(MGI_Bulbasaur,	std::string("Bulbasaur"),	3,	PokemonType::Grass,		PokemonType::Poison),
@@ -376,10 +376,12 @@ std::array<PokemonData, 30> allPokemon =
 	PokemonData(MGI_Surskit,	std::string("Surskit"),		3,	PokemonType::Bug,		PokemonType::Water),
 	PokemonData(MGI_Tatsugiri,	std::string("Tatsugiri"),	3,	PokemonType::Dragon,	PokemonType::Water),
 	PokemonData(MGI_Togepi,		std::string("Togepi"),		3,	PokemonType::Fairy,		PokemonType::No_Type),
-	PokemonData(MGI_Chansey,		std::string("UnownP"),		3,	PokemonType::Psychic,	PokemonType::No_Type),
+	PokemonData(MGI_Chansey,	std::string("Chansey"),		3,	PokemonType::Fairy,		PokemonType::No_Type),
 	PokemonData(MGI_UnownQue,	std::string("UnownQue"),	3,	PokemonType::Psychic,	PokemonType::No_Type),
 	PokemonData(MGI_UnownX,		std::string("UnownX"),		3,	PokemonType::Psychic,	PokemonType::No_Type),
 	PokemonData(MGI_Wailmer,	std::string("Wailmer"),		3,	PokemonType::Water,		PokemonType::No_Type),
 	PokemonData(MGI_Wooper,		std::string("Wooper"),		3,	PokemonType::Water,		PokemonType::Ground),
 	PokemonData(MGI_Wugtrio,	std::string("Wugtrio"),		3,	PokemonType::Water,		PokemonType::No_Type),
+	PokemonData(MGI_Shroomish,	std::string("Shroomish"),	3,	PokemonType::Grass,		PokemonType::No_Type),
+	PokemonData(MGI_Suicune,	std::string("Suicune"),		3,	PokemonType::Water,		PokemonType::No_Type),
 };

@@ -14,30 +14,21 @@
 
 std::vector<PokemonTriviaQuestion> easy_questions =
 {
-	PokemonTriviaQuestion("Which of these stages contains no Omochao?", {"Green Forest", "Green Hill", "Sky Rail"}, {"White Jungle", "Cosmic Wall", "Final Chase", "Final Rush", "Security Hall", "City Escape", "Meteor Herd", "Pyramid Cave", "Egg Quarters", "Death Chamber"}),
-	PokemonTriviaQuestion("Which character says 'I found you, faker!'?", {"Sonic"}, {"Shadow", "Knuckles", "Tails", "Amy", "Eggman", "Rouge"}),
-	PokemonTriviaQuestion("Who created Shadow?", {"Doctor Gerald Robotnik"}, {"Doctor Ivo Robotnik", "Sonic", "G.U.N.", "Chaos", "Maria Robotnik"}),
-	PokemonTriviaQuestion("In which stage does Sonic gain the Ancient Light Upgrade?", {"Green Forest"}, {"Green Jungle", "White Jungle", "Final Rush", "Final Chase", "Pyramid Cave", "City Escape"}),
-	//PokemonTriviaQuestion("", {"", ""}, {"", ""}),
+	PokemonTriviaQuestion("Who is this Pokemon?"),
+	PokemonTriviaQuestion("In which generation was this Pokemon introduced?"),
+	//PokemonTriviaQuestion(""),
 };
 
 std::vector<PokemonTriviaQuestion> medium_questions =
 {
-	PokemonTriviaQuestion("Into how many total pieces was the Master Emerald shattered?", {"12"}, {"18", "15", "30", "9", "27"}),
-	PokemonTriviaQuestion("On which real-world city was City Escape based?", {"San Francisco"}, {"San Diego", "New York", "Boston", "Tokyo", "Osaka", "Seattle"}),
-	PokemonTriviaQuestion("Which stage has exactly two Chao Containers?", {"Hidden Base"}, {"City Escape", "Green Hill", "Cannon's Core ", "Sky Rail"}),
-	PokemonTriviaQuestion("Which stage in Hero Story is Route 101?", {"9th"}, {"1st", "7th", "8th", "10th", "11th", "15th"}),
-	PokemonTriviaQuestion("Which stage in Dark Story is Sky Rail?", {"11th"}, {"7th", "8th", "9th", "10th", "12th", "3rd"}),
-	//PokemonTriviaQuestion("", {"", ""}, {"", ""}),
+	PokemonTriviaQuestion("What type is this Pokemon?"),
+	//PokemonTriviaQuestion(""),
 };
 
 std::vector<PokemonTriviaQuestion> hard_questions =
 {
-	PokemonTriviaQuestion("How many different colors of mono-tone Chao Eggs are there in this game?", {"13"}, {"10", "20", "15", "11", "17"}),
-	PokemonTriviaQuestion("How many types of Animals exist in SA2?", {"21"}, {"20", "15", "22", "25"}),
-	PokemonTriviaQuestion("In which stage does an Omochao say 'Be careful not to fall!'? ", {"White Jungle"}, {"Cosmic Wall", "Metal Harbor", "Radical Highway", "Final Rush"}),
-	PokemonTriviaQuestion("Where was the Yellow Chaos Emerald located at the beginning of the game?", {"Tails had it"}, {"Eggman had it", "Security Hall", "Shadow stole it"}),
-	//PokemonTriviaQuestion("", {"", ""}, {"", ""}),
+	PokemonTriviaQuestion("Which of these attacks would be super-effective against this Pokemon?"),
+	//PokemonTriviaQuestion(""),
 };
 
 
