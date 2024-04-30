@@ -1051,6 +1051,7 @@ void InitializeAnimalChecks(std::map<int, AnimalCheckData>& outAnimalChecks)
     outAnimalChecks[AnimalCheck::AC_DryLagoon_Animal_9]  = AnimalCheckData(0x01DEED6D, 0x00, 0x08, LevelIDs_DryLagoon);
     outAnimalChecks[AnimalCheck::AC_DryLagoon_Animal_10] = AnimalCheckData(0x01DEED6D, 0x01, 0x09, LevelIDs_DryLagoon);
     outAnimalChecks[AnimalCheck::AC_DryLagoon_Animal_11] = AnimalCheckData(0x01DEED6D, 0x02, 0x0A, LevelIDs_DryLagoon);
+    outAnimalChecks[AnimalCheck::AC_DryLagoon_Animal_12] = AnimalCheckData(0x01DEED6D, 0x03, 0x0B, LevelIDs_DryLagoon);
 
     outAnimalChecks[AnimalCheck::AC_SandOcean_Animal_1]  = AnimalCheckData(0x01DEED6E, 0x00, 0x00, LevelIDs_SandOcean);
     outAnimalChecks[AnimalCheck::AC_SandOcean_Animal_2]  = AnimalCheckData(0x01DEED6E, 0x01, 0x01, LevelIDs_SandOcean);
