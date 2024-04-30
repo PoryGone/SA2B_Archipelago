@@ -2609,8 +2609,16 @@ std::vector<int> LocationManager::GetChaoKarateLocations()
 
 			if (pair.second.CheckSent)
 			{
-				count++;
+				if (pair.first - ChaoGardenCheck::CGC_BEGIN_KARATE < this->_chaoKarateEnabled * 5)
+				{
+					count++;
+				}
 			}
+		}
+
+		if (count > result[0])
+		{
+			count = result[0];
 		}
 
 		result.push_back(count);
