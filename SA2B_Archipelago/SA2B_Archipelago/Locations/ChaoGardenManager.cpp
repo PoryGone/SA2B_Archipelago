@@ -202,6 +202,11 @@ void ChaoGardenManager::OnInputFunction()
 		return;
 	}
 
+	if (GameState == GameStates::GameStates_Pause)
+	{
+		return;
+	}
+
 	Uint32 PressedButtons = ControllersRaw->press;
 	if ((PressedButtons & 0b100000) != 0) // Down
 	{
