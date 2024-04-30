@@ -207,6 +207,9 @@
     <ClInclude Include="Items\Minigames\Games\PokemonData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Items\Minigames\Components\AssignColorToChildren.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -360,6 +363,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Items\Minigames\Games\PokemonData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Items\Minigames\Components\AssignColorToChildren.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
