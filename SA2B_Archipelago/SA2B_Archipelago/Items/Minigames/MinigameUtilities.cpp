@@ -57,7 +57,8 @@ void AddDPadToHierarchy(RawInputFlags activeButtons, NJS_POINT3 position, float 
 
 std::default_random_engine& RNG()
 {
-	static std::default_random_engine engine{};
+	static std::random_device rd{};
+	static std::default_random_engine engine(rd());
 	return engine;
 }
 

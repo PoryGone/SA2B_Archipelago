@@ -123,7 +123,7 @@ void MinigameManager::UpdateCurrentMinigame()
 	{
 		if (_data.inputPress & RIF_Down)
 		{
-			this->currentMinigame = &this->fishing;
+			this->currentMinigame = &this->finalBoss;
 		}
 	}
 	*/
@@ -131,6 +131,7 @@ void MinigameManager::UpdateCurrentMinigame()
 
 void MinigameManager::EndMinigame()
 {
+	this->currentMinigame->OnCleanup(this->_data);
 	this->_data.collision->Reset();
 	this->_data.hierarchy->ClearHierarchy();
 	this->currentMinigame = nullptr;

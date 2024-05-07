@@ -144,8 +144,9 @@ public:
 	int progress;
 	float currentRotation;
 	float toRotation;
+	bool collisionActive;
 
-	BossBeamRuntimeData() : active(false), timer(Timer()), node(nullptr), progress(-1), currentRotation(0.0f), toRotation(0.0f) {}
+	BossBeamRuntimeData() : active(false), timer(Timer()), node(nullptr), progress(-1), currentRotation(0.0f), toRotation(0.0f), collisionActive(false) {}
 };
 
 class MinigameFinalBoss : public MinigameBase
@@ -171,6 +172,7 @@ class MinigameFinalBoss : public MinigameBase
 public:
 	void OnGameStart(MinigameManagerData data) override;
 	void OnFrame(MinigameManagerData data) override;
+	void OnCleanup(MinigameManagerData data) override;
 
 	void CreateHierarchy(MinigameManagerData data);
 
@@ -179,6 +181,10 @@ private:
 	void RunIntro(MinigameManagerData data);
 	void RunInGame(MinigameManagerData data);
 	void RunSwap(MinigameManagerData data);
+	void RunWin(MinigameManagerData data);
+	void RunLose(MinigameManagerData data);
+	void Victory(MinigameManagerData data);
+	void Defeat(MinigameManagerData data);
 	void CharacterShoot(MinigameManagerData data);
 	void UpdateBullets(MinigameManagerData data);
 	void UpdateCharacterPosition(MinigameManagerData data);
@@ -188,15 +194,20 @@ private:
 	void UpdateSequence();
 	void UpdatePattern(int index);
 	void UpdateBeam(int index);
+	void CheckCharacterCollision(MinigameManagerData data);
+	void OnCharacterHit();
 
 	FinalBossState state;
 	FinalBossIntroState introState;
 
-	float bossMaxHealth = 100.0f;
+	float bossMaxHealth = 150.0f;
 	float bossHealth;
 	int sonicRingCount;
 	int shadowRingCount;
 	bool sonicIsActive;
+	int remainingIFrames = 0;
+	int onHitIFrames = 15;
+	int onHitRingDamage = 5;
 
 	float characterSpeed = 4.0f;
 	float enemyBulletSpeed = 3.0f;
@@ -229,6 +240,9 @@ private:
 	SpriteNode* shadowRings;
 	TextBox* sonicRingsText;
 	TextBox* shadowRingsText;
+
+	SpriteNode* endTextNode;
+	TextBox* endText;
 	
 	SpriteNode* FHParent;
 	SpriteNode* FHLArmBase;
@@ -305,7 +319,7 @@ private:
 	};
 
 	std::vector<BossPatternSequence> earlySequences = {
-		/*BossPatternSequence({
+		BossPatternSequence({
 			BossPatternData(BPN_AimC_5_Slow, 0, 0.0f),
 			BossPatternData(BPN_Spiral_12, 1, 0.0f),
 			BossPatternData(BPN_Spiral_12_R, 2, 0.0f),
@@ -333,7 +347,7 @@ private:
 			BossPatternData(BPN_Burst_8, 0, 2.5f),
 			BossPatternData(BPN_Burst_9, 0, 3.75f),
 			BossPatternData(BPN_Burst_8, 0, 5.0f),
-			}, {}),*/
+			}, {}),
 		BossPatternSequence({
 			BossPatternData(BPN_Burst_9, 1, 1.0f),
 			BossPatternData(BPN_Burst_9, 2, 3.0f),

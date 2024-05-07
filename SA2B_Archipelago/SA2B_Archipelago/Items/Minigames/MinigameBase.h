@@ -62,6 +62,7 @@ class MinigameBase
 public:
 	virtual void OnGameStart(MinigameManagerData data) = 0;
 	virtual void OnFrame(MinigameManagerData data) = 0;
+	virtual void OnCleanup(MinigameManagerData data) {};
 	MinigameState currentState;
 	float pregameTime = 1.0f;
 };
