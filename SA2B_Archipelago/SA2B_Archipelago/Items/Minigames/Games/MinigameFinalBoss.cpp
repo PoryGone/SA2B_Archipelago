@@ -706,7 +706,7 @@ void MinigameFinalBoss::CreateHierarchy(MinigameManagerData data)
 			startY += beamWidth;
 			height += beamWidth;
 		}
-		data.collision->AddCollision(beamProgress[i].node, std::make_shared<PolygonCollider>(std::vector<NJS_POINT3>({ {-beamWidth * 0.5f, 0.0f}, {beamWidth * 0.5f, 0.0f}, {beamWidth * 0.5f, 600.0f}, {-beamWidth * 0.5f, 600.0f} })));
+		data.collision->AddCollision(beamProgress[i].node, std::make_shared<PolygonCollider>(NJS_POINT3({ beamWidth, 600.0f }), 0.0f, NJS_POINT3({ 0.0f, 300.0f })));
 		beamProgress[i].node->SetEnabled(false);
 	}
 
@@ -760,7 +760,7 @@ void MinigameFinalBoss::CreateHierarchy(MinigameManagerData data)
 		MinigameBulletData bullet{};
 		bullet.node = data.hierarchy->CreateNode("Character_Bullet", data.icons->GetAnim(MGI_Super_Bullet), characterBulletSize, {}, characterBulletParent);
 		bullet.node->SetEnabled(false);
-		data.collision->AddCollision(bullet.node, std::make_shared<CircleCollider>(10.0f, NJS_POINT3({ 0.0f, 10.0f })));
+		data.collision->AddCollision(bullet.node, std::make_shared<CircleCollider>(10.0f, NJS_POINT3({ 0.0f, -10.0f })));
 		characterBullets.push_back(bullet);
 	}
 
@@ -770,10 +770,10 @@ void MinigameFinalBoss::CreateHierarchy(MinigameManagerData data)
 	characterParent->displaySize = { 48.0f, 48.0f };
 	sonic = data.hierarchy->CreateNode("Sonic", data.icons->GetAnim(MGI_Super_Sonic), { 48.0f, 48.0f }, { 0.0f, 0.0f }, characterParent);
 	sonic->SetPositionGlobal(sonicOffScreenPos);
-	data.collision->AddCollision(sonic, std::make_shared<CircleCollider>(15.0f, NJS_POINT3({ 0.0f, 5.0f })));
+	data.collision->AddCollision(sonic, std::make_shared<CircleCollider>(15.0f, NJS_POINT3({ 0.0f, -8.0f })));
 	shadow = data.hierarchy->CreateNode("Shadow", data.icons->GetAnim(MGI_Super_Shadow), { 48.0f, 48.0f }, { 0.0f, 0.0f }, characterParent);
 	shadow->SetPositionGlobal(shadowOffScreenPos);
-	data.collision->AddCollision(shadow, std::make_shared<CircleCollider>(15.0f, NJS_POINT3({ 0.0f, 5.0f})));
+	data.collision->AddCollision(shadow, std::make_shared<CircleCollider>(15.0f, NJS_POINT3({ 0.0f, -8.0f})));
 
 	//Create Health Bar
 	FHHealthBarBG = data.hierarchy->CreateNode("Boss_Health_Bar_Background", data.icons->GetAnim(MGI_White_Box), { 200.0f, 10.0f }, { 320.0f, 6.0f });

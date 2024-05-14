@@ -100,6 +100,10 @@ void MinigameManager::UpdateCurrentMinigame()
 			this->currentMinigame->OnFrame(this->_data);
 			this->_data.hierarchy->OnFrame();
 			this->_data.hierarchy->Render();
+			if (ArchipelagoManager::getInstance().IsDebug())
+			{
+				this->_data.collision->DebugDrawCollision(this->_data.icons);
+			}
 		}
 		if (this->currentMinigame->currentState == MinigameState::MGS_Victory ||
 			this->currentMinigame->currentState == MinigameState::MGS_Draw ||

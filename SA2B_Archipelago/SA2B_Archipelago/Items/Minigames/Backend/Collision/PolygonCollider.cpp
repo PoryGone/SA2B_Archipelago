@@ -17,10 +17,11 @@ bool PolygonCollider::IsColliding(Collider& otherCollider)
 
 BoundingBox PolygonCollider::GetBoundingBox()
 {
+	GetAdjustedPoints();
 	BoundingBox box = BoundingBox(GetCentroid(), { 0.0f,0.0f,0.0f });
-	for (int i = 1; i < points.size(); i++)
+	for (int i = 1; i < adjustedPoints.size(); i++)
 	{
-		box.Add(points[i]);
+		box.Add(adjustedPoints[i]);
 	}
 	return box;
 }
@@ -47,19 +48,13 @@ bool PolygonCollider::ContainsPoint(NJS_POINT3 point)
 
 NJS_POINT3 PolygonCollider::GetCentroid()
 {
-	if (points.size() == 1)
+	GetAdjustedPoints();
+	if (adjustedPoints.size() == 1)
 	{
-		NJS_POINT3 center = Point3Add(offset, points[0]);
-		if (node)
-		{
-			NJS_POINT3 nodePos = node->GetPositionGlobal();
-			return Point3Add(nodePos, Point3RotateAround(center, nodePos, node->GetRotationGlobal()));
-		}
-		return center;
+		return adjustedPoints[0];
 	}
-	else if (points.size() > 1)
+	else if (adjustedPoints.size() > 1)
 	{
-		GetAdjustedPoints();
 		NJS_POINT3 centroid = { 0.0f,0.0f,0.0f };
 		float area = 0.0f;
 		NJS_POINT3 current;
@@ -103,7 +98,8 @@ std::vector<NJS_POINT3> PolygonCollider::GetAdjustedPoints()
 		for (int i = 0; i < adjustedPoints.size(); i++)
 		{
 			adjustedPoints[i] = Point3Add(points[i], offset);
-			adjustedPoints[i] = Point3Add(nodePos, Point3RotateAround(adjustedPoints[i], nodePos, node->GetRotationGlobal()));
+			adjustedPoints[i] = Point3RotateAround(Point3Add(nodePos, adjustedPoints[i]), nodePos, node->GetRotationGlobal());
+			//adjustedPoints[i] = Point3Add(nodePos, Point3RotateAround(adjustedPoints[i], nodePos, node->GetRotationGlobal()));
 		}
 	}
 	else
