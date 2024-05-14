@@ -19,7 +19,7 @@ BoundingBox PolygonCollider::GetBoundingBox()
 {
 	GetAdjustedPoints();
 	BoundingBox box = BoundingBox(GetCentroid(), { 0.0f,0.0f,0.0f });
-	for (int i = 1; i < adjustedPoints.size(); i++)
+	for (int i = 0; i < adjustedPoints.size(); i++)
 	{
 		box.Add(adjustedPoints[i]);
 	}

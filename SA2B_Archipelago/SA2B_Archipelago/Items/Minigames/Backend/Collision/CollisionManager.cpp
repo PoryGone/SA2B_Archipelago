@@ -53,6 +53,7 @@ void CollisionManager::DebugDrawCollision(MinigameIconData* iconData)
 			for (int i = 0; i < cVector.second.size(); i++)
 			{
 				auto c = cVector.second[i].get();
+				//Draw Bounding Box
 				auto b = c->GetBoundingBox();
 				NJS_TEXANIM* anim = iconData->GetAnim(MGI_White_Box);
 				NJS_TEXANIM* tempAnim = anim;
@@ -64,6 +65,7 @@ void CollisionManager::DebugDrawCollision(MinigameIconData* iconData)
 				sprite.sy = b.size.y / (float)anim->sy;
 				ConstantMaterial = { 0.4f, 0.0f, 0.0f, 1.0f };
 				DrawSprite2D(&sprite, 1, 1.0f, NJD_SPRITE_ALPHA | NJD_SPRITE_COLOR);
+				//Draw polygon frame
 				if (auto polygon = dynamic_cast<PolygonCollider*>(c))
 				{
 					auto points = polygon->GetAdjustedPoints();
@@ -90,6 +92,7 @@ void CollisionManager::DebugDrawCollision(MinigameIconData* iconData)
 						DrawSprite2D(&sprite, 1, 1.0f, NJD_SPRITE_ALPHA | NJD_SPRITE_ANGLE | NJD_SPRITE_COLOR);
 					}
 				}
+				//Draw circle frame
 				if (auto circle = dynamic_cast<CircleCollider*>(c))
 				{
 					anim = iconData->GetAnim(MGI_Circle_Outline);
