@@ -99,6 +99,11 @@ extern "C"
 			_itemManager->OnInputFunction();
 		}
 
+		if (_locationManager)
+		{
+			_locationManager->OnInputFunction();
+		}
+
 		_minigameManager.OnInputFunction();
 
 		_chaoGardenManager.OnInputFunction();

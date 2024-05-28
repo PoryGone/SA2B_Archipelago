@@ -5,6 +5,7 @@
 #include "../Items/ItemManager.h"
 #include "../Utilities/MessageQueue.h"
 
+DataPointer(char, ShowHud, 0x0174AFCC);
 
 // Chao Key "Trampoline"
 static void __cdecl PickedUpChaoKey()
@@ -243,6 +244,32 @@ void LocationManager::OnInitFunction(const char* path, const HelperFunctions& he
 	for (int i = 0; i < 7; i++)
 	{
 		this->_CollectedChaoStats[i] = std::vector<int>();
+	}
+}
+
+void LocationManager::OnInputFunction()
+{
+	if (GameMode != GameMode::GameMode_Level)
+	{
+		return;
+	}
+
+	if (GameState != GameStates::GameStates_Pause)
+	{
+		Uint32 HeldButtons = ControllersRaw->on;
+		Uint32 PressedButtons = ControllersRaw->press;
+
+		if (HeldButtons & 0b1000000000)
+		{
+			//GameState = GameStates::GameStates_Pause;
+			//IsNotPauseHide = 0;
+			//ShowHud = 0;
+			TimeStopped = 2;
+		}
+		else
+		{
+			TimeStopped = 0;
+		}
 	}
 }
 

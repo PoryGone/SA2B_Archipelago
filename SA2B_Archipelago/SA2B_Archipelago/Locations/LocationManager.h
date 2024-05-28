@@ -22,6 +22,7 @@ public:
 	}
 
 	void OnInitFunction(const char* path, const HelperFunctions& helperFunctions);
+	void OnInputFunction();
 	void OnFrameFunction();
 	void OnFrameLevelClears();
 	void OnFrameBossRush();
