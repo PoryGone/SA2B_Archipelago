@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <cstdint>
 
 void AP_Init(const char*, const char*, const char*, const char*);
 void AP_Init(const char*);
@@ -14,6 +15,24 @@ struct AP_NetworkVersion {
     int major;
     int minor;
     int build;
+};
+
+struct AP_NetworkItem {
+    int64_t item;
+    int64_t location;
+    int player;
+    int flags;
+    std::string itemName;
+    std::string locationName;
+    std::string playerName;
+};
+
+struct AP_NetworkPlayer {
+    int team;
+    int slot;
+    std::string name;
+    std::string alias;
+    std::string game;
 };
 
 // Set current client version
@@ -44,6 +63,11 @@ void AP_RegisterSlotDataIntCallback(std::string, void (*f_slotdata)(int));
 void AP_RegisterSlotDataMapIntIntCallback(std::string, void (*f_slotdata)(std::map<int,int>));
 void AP_RegisterSlotDataRawCallback(std::string, void (*f_slotdata)(std::string));
 
+// Send LocationScouts packet
+void AP_SendLocationScouts(std::vector<int64_t> const& locations, int create_as_hint);
+// Receive Function for LocationInfo
+void AP_SetLocationInfoCallback(void (*f_locrecv)(std::vector<AP_NetworkItem>));
+
 /* Game Management Functions */
 
 // Sends LocationCheck for given index
@@ -60,7 +84,7 @@ void AP_DeathLinkSend();
 
 /* Message Management Types */
 
-enum AP_MessageType {
+enum struct AP_MessageType {
     Plaintext, ItemSend, ItemRecv, Hint, Countdown
 };
 
@@ -97,9 +121,11 @@ bool AP_IsMessagePending();
 void AP_ClearLatestMessage();
 AP_Message* AP_GetLatestMessage();
 
+void AP_Say(std::string);
+
 /* Connection Information Types */
 
-enum AP_ConnectionStatus {
+enum struct AP_ConnectionStatus {
     Disconnected, Connected, Authenticated, ConnectionRefused
 };
 
@@ -115,12 +141,10 @@ struct AP_RoomInfo {
     std::map<std::string, int> permissions;
     int hint_cost;
     int location_check_points;
-    //MISSING: players
     //MISSING: games
-    int datapackage_version;
-    std::map<std::string, int> datapackage_versions;
+    std::map<std::string, std::string> datapackage_checksums;
     std::string seed_name;
-    float time;
+    double time;
 };
 
 /* Connection Information Functions */
@@ -128,6 +152,7 @@ struct AP_RoomInfo {
 int AP_GetRoomInfo(AP_RoomInfo*);
 AP_ConnectionStatus AP_GetConnectionStatus();
 int AP_GetUUID();
+int AP_GetPlayerID();
 
 /* Serverside Data Types */
 
@@ -167,9 +192,9 @@ struct AP_SetReply {
 };
 
 struct AP_Bounce {
-    std::vector<std::string>* games = nullptr; // Can be null or empty, but must be set to either
-    std::vector<std::string>* slots = nullptr; // Can be null or empty, but must be set to either
-    std::vector<std::string>* tags = nullptr; // Can be null or empty, but must be set to either
+    std::vector<std::string>* games = nullptr; // Can be nullptr or empty, but must be set to either
+    std::vector<std::string>* slots = nullptr; // Can be nullptr or empty, but must be set to either
+    std::vector<std::string>* tags  = nullptr; // Can be nullptr or empty, but must be set to either
     std::string data; // Valid JSON Data. Can also be primitive (Numbers or literals)
 };
 
@@ -178,6 +203,11 @@ struct AP_Bounce {
 // Set and Receive Data
 void AP_SetServerData(AP_SetServerDataRequest* request);
 void AP_GetServerData(AP_GetServerDataRequest* request);
+
+// This returns a string prefix, consistent across game connections and unique to the player slot.
+// Intended to be used for getting / setting private server data
+// No guarantees are made regarding the content of the prefix!
+std::string AP_GetPrivateServerDataPrefix();
 
 // Parameter Function receives all SetReply's
 // ! Pointers in AP_SetReply struct only valid within function !
