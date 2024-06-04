@@ -11,6 +11,7 @@
 #include "Games/PokemonTrivia.h"
 #include "Games/PokemonCount.h"
 #include "Games/MinigameFinalBoss.h"
+#include "Games/NumberSequence.h"
 #include "../ItemData.h"
 #include <ctime>
 
@@ -66,4 +67,5 @@ private:
 	PokemonTrivia pokemonTrivia		= PokemonTrivia();
 	PokemonCount pokemonCount		= PokemonCount();
 	MinigameFinalBoss finalBoss		= MinigameFinalBoss();
+	NumberSequence numberSequence	= NumberSequence();
 };

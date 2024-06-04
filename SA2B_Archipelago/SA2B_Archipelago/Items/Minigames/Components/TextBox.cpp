@@ -71,6 +71,12 @@ void TextBox::UpdateText(std::string newText)
 	isDirty = true;
 }
 
+void TextBox::UpdateFontSize(float newSize)
+{
+	fontSize = newSize;
+	isDirty = true;
+}
+
 float TextBox::GetHeight()
 {
 	return this->fontSize * this->lines.size();

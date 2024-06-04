@@ -33,6 +33,7 @@ class TextBox : public SpriteRenderComponent
 public:
 	void OnRender(SpriteNode& node, NJS_SPRITE& sprite) override;
 	void UpdateText(std::string newText);
+	void UpdateFontSize(float newSize);
 
 	float GetHeight();
 
