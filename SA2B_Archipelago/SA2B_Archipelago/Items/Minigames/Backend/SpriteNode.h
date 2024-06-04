@@ -16,7 +16,7 @@ public:
 class SpriteRenderComponent
 {
 public:
-	virtual void OnRender(SpriteNode& node) = 0;
+	virtual void OnRender(SpriteNode& node, NJS_SPRITE& sprite) = 0;
 };
 
 class SpriteNode

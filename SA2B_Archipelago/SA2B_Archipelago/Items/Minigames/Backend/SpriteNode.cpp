@@ -156,7 +156,7 @@ void SpriteNode::Render(NJS_SPRITE& sprite)
 	{
 		for (auto& component : this->renderComponents)
 		{
-			component->OnRender(*this);
+			component->OnRender(*this, sprite);
 		}
 	}
 }

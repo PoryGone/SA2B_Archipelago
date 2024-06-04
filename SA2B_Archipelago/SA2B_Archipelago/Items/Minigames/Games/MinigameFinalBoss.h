@@ -4,6 +4,7 @@
 #include "../Components/TextBox.h"
 #include "../Components/Wiggle.h"
 #include "../Components/AssignColorToChildren.h"
+#include "../Components//ParticleEmitter.h"
 #include <array>
 
 enum BossAimType
@@ -208,6 +209,7 @@ private:
 	int remainingIFrames = 0;
 	int onHitIFrames = 15;
 	int onHitRingDamage = 5;
+	int ringEmitterIndex = 0;
 
 	float characterSpeed = 4.0f;
 	float enemyBulletSpeed = 3.0f;
@@ -235,6 +237,7 @@ private:
 	SpriteNode* characterParent;
 	SpriteNode* sonic;
 	SpriteNode* shadow;
+	std::array<ParticleEmitter*, 5> ringEmitters = { nullptr ,nullptr ,nullptr ,nullptr ,nullptr };
 
 	SpriteNode* sonicRings;
 	SpriteNode* shadowRings;
@@ -254,6 +257,8 @@ private:
 	SpriteNode* FHWeakPoint;
 	Wiggle* FHLWiggle;
 	Wiggle* FHRWiggle;
+	SpriteNode* FHExplostion;
+	ParticleEmitter* FHExplosionEmitter;
 
 	SpriteNode* FHHealthBar;
 	SpriteNode* FHHealthBarBG;
@@ -268,7 +273,6 @@ private:
 
 	int sequenceIndex = 0;
 	BossPatternSequence* currentSequence = nullptr;
-
 
 	SpriteNode* characterBulletParent;
 	std::vector<MinigameBulletData> characterBullets;

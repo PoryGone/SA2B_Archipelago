@@ -2,7 +2,7 @@
 #include "../../../Utilities/SpriteUtilities.h"
 #include "TextBox.h"
 
-void TextBox::OnRender(SpriteNode& node)
+void TextBox::OnRender(SpriteNode& node, NJS_SPRITE& sprite)
 {
 	if (isDirty)
 	{
@@ -12,7 +12,7 @@ void TextBox::OnRender(SpriteNode& node)
 	{
 		return;
 	}
-	NJS_SPRITE sprite = { { 0.0f, 0.0f, 0.0f }, 1.0f, 1.0f, 0, textData->FontTex, textData->FontAnims };
+	NJS_SPRITE tSprite = { { 0.0f, 0.0f, 0.0f }, 1.0f, 1.0f, 0, textData->FontTex, textData->FontAnims };
 
 	float rotation = node.GetRotationGlobal();
 	NJS_POINT3 right = Point3RotateAround({ 1.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, rotation);
@@ -43,19 +43,19 @@ void TextBox::OnRender(SpriteNode& node)
 				linePos = Point3Add(linePos, Point3Scale(right, cWidth * 0.5f));
 				charPos = Point3Add(charPos, Point3Scale(right, charData.data->xOffset * sX));
 				charPos = Point3Add(charPos, Point3Scale(down, charData.data->yOffset * sY));
-				sprite.tanim = charData.anim;
-				sprite.tanim--;
-				sprite.p = charPos;
-				sprite.ang = NJM_DEG_ANG(rotation);
-				sprite.sx = sX;
-				sprite.sy = sY;
+				tSprite.tanim = charData.anim;
+				tSprite.tanim--;
+				tSprite.p = charPos;
+				tSprite.ang = NJM_DEG_ANG(rotation);
+				tSprite.sx = sX;
+				tSprite.sy = sY;
 				if (rotation != 0.0f)
 				{
-					DrawSprite2D(&sprite, 1, 1.0f, NJD_SPRITE_ALPHA | NJD_SPRITE_ANGLE | NJD_SPRITE_COLOR);
+					DrawSprite2D(&tSprite, 1, 1.0f, NJD_SPRITE_ALPHA | NJD_SPRITE_ANGLE | NJD_SPRITE_COLOR);
 				}
 				else
 				{
-					DrawSprite2D(&sprite, 1, 1.0f, NJD_SPRITE_ALPHA | NJD_SPRITE_COLOR);
+					DrawSprite2D(&tSprite, 1, 1.0f, NJD_SPRITE_ALPHA | NJD_SPRITE_COLOR);
 				}
 			}
 		}

@@ -4,6 +4,8 @@
 
 void MinigameFinalBoss::OnGameStart(MinigameManagerData data)
 {
+	ResetMusic();
+	PlayMusic("mg_boss.adx");
 	currentState = MGS_InProgress;
 	state = FBS_Intro;
 	introState = FBIS_FadeIn;
@@ -33,6 +35,7 @@ void MinigameFinalBoss::OnGameStart(MinigameManagerData data)
 	}
 	weakSpotIndex = 0;
 	sequenceIndex = 0;
+	ringEmitterIndex = 0;
 	std::shuffle(weakPointPositions.begin(), weakPointPositions.end(), RNG());
 	std::shuffle(earlySequences.begin(), earlySequences.end(), RNG());
 	std::shuffle(lateSequences.begin(), lateSequences.end(), RNG());
@@ -235,6 +238,7 @@ void MinigameFinalBoss::Victory(MinigameManagerData data)
 	endText->UpdateText("Victory!");
 	endTextNode->SetEnabled(true);
 	sequenceTimer.Start(2.0f);
+	FHExplosionEmitter->Play();
 	state = FBS_Win;
 }
 
@@ -670,6 +674,12 @@ void MinigameFinalBoss::CheckCharacterCollision(MinigameManagerData data)
 
 void MinigameFinalBoss::OnCharacterHit()
 {
+	ringEmitters[ringEmitterIndex]->Play();
+	ringEmitterIndex++;
+	if (ringEmitterIndex >= ringEmitters.size())
+	{
+		ringEmitterIndex = 0;
+	}
 	remainingIFrames = onHitIFrames;
 	if (sonicIsActive)
 	{
@@ -752,6 +762,23 @@ void MinigameFinalBoss::CreateHierarchy(MinigameManagerData data)
 	FHWeakPoint->color = { 1.0f, 1.0f, 0.0f, 0.0f };
 	data.collision->AddCollision(FHWeakPoint, std::make_shared<CircleCollider>(25.0f));
 
+	FHExplostion = data.hierarchy->CreateNode("Final_Hazard_Explosion");
+	FHExplostion->SetPositionGlobal({ 320.0f, 25.0f });
+	FHExplosionEmitter = new ParticleEmitter();
+	FHExplosionEmitter->anim = data.icons->GetAnim(MGI_Circle);
+	FHExplosionEmitter->emitZoneType = PEZ_Box;
+	FHExplosionEmitter->boxSize = { 300.0f, 50.0f };
+	FHExplosionEmitter->particleTimeline = {
+		{ 0.0f, ET_Linear, { 0.0f, 1.0f, 1.0f, 0.0f }, { 0.0f, 0.0f }},
+		{ 0.2f, ET_CubicOut, { 1.0f, 1.0f, 1.0f, 0.0f }, { 30.0f, 30.0f }},
+		{ 0.75f, ET_Linear, { 1.0f, 1.0f, 0.6f, 0.0f }, { 30.0f, 30.0f }},
+		{ 1.0f, ET_CubicOut, { 0.0f, 1.0f, 0.4f, 0.0f }, { 30.0f, 30.0f }},
+	};
+	FHExplosionEmitter->looping = true;
+	FHExplosionEmitter->rate = 15.0f;
+	FHExplosionEmitter->particleDuration = 1.5f;
+	FHExplostion->renderComponents.push_back(FHExplosionEmitter);
+
 	//Create Character Bullets
 	characterBulletParent = data.hierarchy->CreateNode("Character_Bullets");
 	characterBullets.clear();
@@ -774,6 +801,28 @@ void MinigameFinalBoss::CreateHierarchy(MinigameManagerData data)
 	shadow = data.hierarchy->CreateNode("Shadow", data.icons->GetAnim(MGI_Super_Shadow), { 48.0f, 48.0f }, { 0.0f, 0.0f }, characterParent);
 	shadow->SetPositionGlobal(shadowOffScreenPos);
 	data.collision->AddCollision(shadow, std::make_shared<CircleCollider>(15.0f, NJS_POINT3({ 0.0f, -8.0f})));
+
+	for (int i = 0; i < 5; i++)
+	{
+		ringEmitters[i] = new ParticleEmitter();
+		ringEmitters[i]->anim = data.icons->GetAnim(MGI_Circle_Outline);
+		ringEmitters[i]->emitZoneType = PEZ_Point;
+		ringEmitters[i]->angleRange = { 160.0f, 200.0f };
+		ringEmitters[i]->initialVelocityRange = { 60.0f, 65.0f };
+		ringEmitters[i]->velocityRateMin = { 0.0f, 100.0f };
+		ringEmitters[i]->velocityRateMax = { 0.0f, 150.0f };
+		ringEmitters[i]->particleTimeline = {
+			{ 0.0f, ET_Linear, { 1.0f, 1.0f, 1.0f, 0.0f }, { 0.0f, 0.0f }},
+			{ 0.2f, ET_CubicOut, { 1.0f, 1.0f, 1.0f, 0.0f }, { 15.0f, 15.0f }},
+			{ 0.75f, ET_Linear, { 1.0f, 1.0f, 1.0f, 0.0f }, { 15.0f, 15.0f }},
+			{ 1.0f, ET_CubicOut, { 0.0f, 1.0f, 1.0f, 0.0f }, { 0.0f, 0.0f }},
+		};
+		ringEmitters[i]->looping = false;
+		ringEmitters[i]->emitterDuration = 0.1f;
+		ringEmitters[i]->rate = 50.0f;
+		ringEmitters[i]->particleDuration = 2.5f;
+		characterParent->renderComponents.push_back(ringEmitters[i]);
+	}
 
 	//Create Health Bar
 	FHHealthBarBG = data.hierarchy->CreateNode("Boss_Health_Bar_Background", data.icons->GetAnim(MGI_White_Box), { 200.0f, 10.0f }, { 320.0f, 6.0f });
@@ -814,5 +863,9 @@ void MinigameFinalBoss::OnCleanup(MinigameManagerData data)
 	for (int i = 0; i < beamProgress.size(); i++)
 	{
 		beamProgress[i] = BossBeamRuntimeData();
+	}
+	for (int i = 0; i < ringEmitters.size(); i++)
+	{
+		ringEmitters[i] = nullptr;
 	}
 }

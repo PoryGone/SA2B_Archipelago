@@ -2,6 +2,7 @@
 #include "MinigameIconData.h"
 #include "TextDisplayData.h"
 #include "../../Utilities/SpriteUtilities.h"
+#include "../../Utilities/EasingUtilities.h"
 #include "Backend/MinigameBackend.h"
 #include "Backend/Time/TimeUtilities.h"
 #include <vector>
