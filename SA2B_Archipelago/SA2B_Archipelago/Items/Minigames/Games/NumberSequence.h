@@ -8,8 +8,10 @@ class NumberSequence : public MinigameBase
 {
 	enum NumberSequenceState
 	{
+		NSS_Start,
 		NSS_InGame,
 		NSS_Win,
+		NSS_Lose,
 	};
 
 	struct NumberSequenceNumber
@@ -18,7 +20,9 @@ class NumberSequence : public MinigameBase
 		SpriteNode* upArrow;
 		SpriteNode* downArrow;
 		SpriteNode* textNode;
+		SpriteNode* prevTextNode;
 		TextBox* text;
+		TextBox* prevText;
 		int current;
 		int correct;
 	};
@@ -36,11 +40,14 @@ private:
 	void SetSelectedIndex(int index);
 	bool AnySequenceContains(int n);
 	void SubmitSequence();
+	void UpdateTimerFill();
 
 	NumberSequenceState state;
 	Timer timer;
+	int guessesRemaining = 0;
+	float guessTime = 10.0f;
 
-	std::array<int, 10> numbers = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+	std::array<int, 9> numbers = { 1, 2, 3, 4, 5, 6, 7, 8, 9};
 
 	std::array< NumberSequenceNumber, 4> numberObjs;
 
@@ -57,4 +64,10 @@ private:
 	SpriteNode* submitUp;
 	SpriteNode* submitDown;
 	TextBox* submitText;
+
+	SpriteNode* timerBarBG;
+	SpriteNode* timerBar;
+
+	std::array<SpriteNode*, 15> questionMarks;
+	TextBox* questionMarkText;
 };

@@ -5,6 +5,8 @@
 
 void Pong::OnGameStart(MinigameManagerData data)
 {
+	this->currentState = MGS_InProgress;
+
 	this->CreateHierarchy(data);
 
 	this->activePlayerSpeed = PONG_PLAYER_SPEED;
