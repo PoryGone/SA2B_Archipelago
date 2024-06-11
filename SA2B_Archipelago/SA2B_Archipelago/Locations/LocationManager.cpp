@@ -3,6 +3,7 @@
 #include "LocationData.h"
 #include "StageSelectData.h"
 #include "../Items/ItemManager.h"
+#include "../Items/Minigames/MinigameManager.h"
 #include "../Utilities/MessageQueue.h"
 
 DataPointer(char, ShowHud, 0x0174AFCC);
@@ -251,24 +252,54 @@ void LocationManager::OnInputFunction()
 {
 	if (GameMode != GameMode::GameMode_Level)
 	{
+		this->_inBigFishing = false;
+		this->_FreezePos = NJS_VECTOR();
+
 		return;
 	}
 
 	if (GameState != GameStates::GameStates_Pause)
 	{
+		if (this->_inBigFishing)
+		{
+			TimeStopped = 1;
+			if ((MainCharObj1[0]) && (MainCharObj2[0]))
+			{
+				MainCharObj1[0]->Action = Action_None;
+				MainCharObj1[0]->Position = this->_FreezePos;
+				MainCharObj2[0]->Speed.x = 0.0;
+				MainCharObj2[0]->Speed.y = 0.0;
+				MainCharObj2[0]->Speed.z = 0.0;
+			}
+		}
+
+		MinigameManager* minigameManager = &MinigameManager::GetInstance();
+
+		if (minigameManager->state == MinigameState::MGS_None && this->_inBigFishing)
+		{
+			TimeStopped = 0;
+			this->_inBigFishing = false;
+		}
+
 		Uint32 HeldButtons = ControllersRaw->on;
 		Uint32 PressedButtons = ControllersRaw->press;
 
-		if (HeldButtons & 0b1000000000)
+		if (PressedButtons & 0b1000000000)
 		{
-			//GameState = GameStates::GameStates_Pause;
-			//IsNotPauseHide = 0;
-			//ShowHud = 0;
-			TimeStopped = 2;
-		}
-		else
-		{
-			TimeStopped = 0;
+			if (minigameManager->state == MinigameState::MGS_None)
+			{
+				// Check for Big proximity and show prompt
+
+				TimeStopped = 2;
+
+				minigameManager->StartMinigame(ItemValue::IV_FishingTrap, true);
+
+				this->_inBigFishing = true;
+				if (MainCharObj1[0])
+				{
+					this->_FreezePos = MainCharObj1[0]->Position;
+				}
+			}
 		}
 	}
 }

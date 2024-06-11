@@ -113,6 +113,9 @@ private:
 	unsigned int _chaoEntryTimer = 0;
 	unsigned int _whistleTimer = 0;
 
+	bool _inBigFishing = false;
+	NJS_VECTOR _FreezePos;
+
 	int _goal = 0;
 	int _requiredRank = 0;
 	bool _requireAllCannonsCoreMissions = false;

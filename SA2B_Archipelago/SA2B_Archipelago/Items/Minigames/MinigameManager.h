@@ -33,7 +33,7 @@ public:
 
 	void UpdateCurrentMinigame();
 	void EndMinigame();
-	void StartMinigame(ItemValue item);
+	void StartMinigame(ItemValue item, bool locationGame = false);
 
 	void HandleVictory();
 	void HandleLoss();
@@ -58,6 +58,8 @@ private:
 	MinigameManagerData _data = MinigameManagerData();
 	std::clock_t minigameStart;
 	bool isPaused = false;
+
+	bool isLocationCheck = false;
 
 	//Minigames
 	Literature literature			= Literature();
