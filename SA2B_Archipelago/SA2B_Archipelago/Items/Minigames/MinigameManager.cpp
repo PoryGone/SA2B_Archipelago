@@ -127,7 +127,7 @@ void MinigameManager::UpdateCurrentMinigame()
 	{
 		if (_data.inputPress & RIF_Down)
 		{
-			this->currentMinigame = &this->numberSequence;
+			this->currentMinigame = &this->lightUpPath;
 		}
 	}
 	*/

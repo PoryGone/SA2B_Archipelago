@@ -12,6 +12,7 @@
 #include "Games/PokemonCount.h"
 #include "Games/MinigameFinalBoss.h"
 #include "Games/NumberSequence.h"
+#include "Games/LightUpPath.h"
 #include "../ItemData.h"
 #include <ctime>
 
@@ -68,4 +69,5 @@ private:
 	PokemonCount pokemonCount		= PokemonCount();
 	MinigameFinalBoss finalBoss		= MinigameFinalBoss();
 	NumberSequence numberSequence	= NumberSequence();
+	LightUpPath lightUpPath			= LightUpPath();
 };
