@@ -262,6 +262,7 @@ void LocationManager::OnInputFunction()
 	{
 		if (this->_inBigFishing)
 		{
+			// Handle Cannon's Core switches
 			TimeStopped = 1;
 			if ((MainCharObj1[0]) && (MainCharObj2[0]))
 			{
