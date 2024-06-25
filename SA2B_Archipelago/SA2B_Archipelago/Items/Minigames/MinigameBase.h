@@ -21,6 +21,8 @@ enum RawInputFlags
 	RIF_X = 1024,
 	RIF_RightTrigger = 65536,
 	RIF_LeftTrigger = 131072,
+	//C-C-C-Combo Inputs!
+	RIF_ANY_D_PAD = 0b11110000,
 };
 DEFINE_ENUM_FLAG_OPERATORS(RawInputFlags);
 

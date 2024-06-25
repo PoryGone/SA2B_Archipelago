@@ -58,8 +58,6 @@ private:
 
 	int selectedIndex = 0;
 
-	RawInputFlags anyDPad = RIF_Up | RIF_Down | RIF_Left | RIF_Right;
-
 	SpriteNode* submitParent;
 	SpriteNode* submitUp;
 	SpriteNode* submitDown;

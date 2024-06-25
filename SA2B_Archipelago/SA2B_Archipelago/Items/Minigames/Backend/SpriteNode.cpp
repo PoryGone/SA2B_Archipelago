@@ -65,7 +65,6 @@ void SpriteNode::SetRotation(float r)
 		rotation += 360.0f;
 	}
 	SetBranchDirty();
-	//SetPositionDirty();
 }
 
 float SpriteNode::GetRotation()
@@ -91,7 +90,6 @@ void SpriteNode::Rotate(float r)
 		rotation += 360.0f;
 	}
 	SetBranchDirty();
-	//SetPositionDirty();
 }
 
 void SpriteNode::SetEnabled(bool enabled)

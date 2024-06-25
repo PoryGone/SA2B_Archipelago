@@ -205,6 +205,8 @@ LightUpPath::PathGridCell* LightUpPath::GetCell(int x, int y)
 
 void LightUpPath::CreateHierarchy(MinigameManagerData data)
 {
+	AddDPadToHierarchy(RIF_ANY_D_PAD, { 65.0f, 130.0f, 0.0f }, 45.0f, *data.icons, *data.hierarchy);
+
 	gridParent = data.hierarchy->CreateNode("Grid_Parent");
 
 	NJS_POINT3 gridStart = { data.icons->xCenter, data.icons->yCenter };

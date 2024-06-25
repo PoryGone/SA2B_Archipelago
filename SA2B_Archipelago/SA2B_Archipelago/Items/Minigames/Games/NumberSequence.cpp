@@ -52,7 +52,7 @@ void NumberSequence::OnFrame(MinigameManagerData data)
 		state = NSS_InGame;
 		break;
 	case NSS_InGame:
-		UpdateTimerFill();
+		//UpdateTimerFill();
 		if (data.inputPress & RIF_Up && selectedIndex < numberObjs.size())
 		{
 			Increment(&numberObjs[selectedIndex]);
@@ -73,10 +73,12 @@ void NumberSequence::OnFrame(MinigameManagerData data)
 		{
 			SetSelectedIndex(selectedIndex + 1);
 		}
+		/*
 		if (timer.IsElapsed())
 		{
 			SubmitSequence();
 		}
+		*/
 		break;
 	case NSS_Win:
 		if (timer.IsElapsed())
@@ -256,7 +258,7 @@ void NumberSequence::UpdateTimerFill()
 
 void NumberSequence::CreateHierarchy(MinigameManagerData data)
 {
-	AddDPadToHierarchy(anyDPad, { 65.0f, 130.0f, 0.0f }, 45.0f, *data.icons, *data.hierarchy);
+	AddDPadToHierarchy(RIF_ANY_D_PAD, { 65.0f, 130.0f, 0.0f }, 45.0f, *data.icons, *data.hierarchy);
 	
 	float xPos = 180.0f;
 	for (int i = 0; i < numberObjs.size(); i++)
@@ -296,6 +298,8 @@ void NumberSequence::CreateHierarchy(MinigameManagerData data)
 	timerBarBG->color = { 1.0f, 1.0f, 0.0f, 0.0f };
 	timerBar = data.hierarchy->CreateNode("Timer_Fill", data.icons->GetAnim(MGI_White_Box), { 200.0f, 10.0f }, { 320.0f, 106.0f }, timerBarBG);
 	timerBar->color = { 1.0f, 0.0f, 0.0f, 1.0f };
+	timerBarBG->SetEnabled(false); //Disabling timer for now
+
 
 	questionMarkText = new TextBox("?", 25.0f, TextAlignment::Left, data.text);
 	xPos = data.icons->xCenter - 100.0f;
