@@ -4116,3 +4116,70 @@ struct ItemBoxCheckData
 };
 
 void InitializeItemBoxChecks(std::map<int, ItemBoxCheckData>& outItemBoxChecks);
+
+enum BigCheck
+{
+    BC_BEGIN = 0x1B00,
+    BC_CityEscape_Big_1 = BC_BEGIN,
+    BC_WildCanyon_Big_1,
+    BC_PrisonLane_Big_1,
+    BC_MetalHarbor_Big_1,
+    BC_GreenForest_Big_1,
+    BC_PumpkinHill_Big_1,
+    BC_MissionStreet_Big_1,
+    BC_AquaticMine_Big_1,
+    BC_Route101_Big_1,
+    BC_HiddenBase_Big_1,
+    BC_PyramidCave_Big_1,
+    BC_DeathChamber_Big_1,
+    BC_EternalEngine_Big_1,
+    BC_MeteorHerd_Big_1,
+    BC_CrazyGadget_Big_1,
+    BC_FinalRush_Big_1,
+    BC_IronGate_Big_1,
+    BC_DryLagoon_Big_1,
+    BC_SandOcean_Big_1,
+    BC_RadicalHighway_Big_1,
+    BC_EggQuarters_Big_1,
+    BC_LostColony_Big_1,
+    BC_WeaponsBed_Big_1,
+    BC_SecurityHall_Big_1,
+    BC_WhiteJungle_Big_1,
+    BC_Route280_Big_1,
+    BC_SkyRail_Big_1,
+    BC_MadSpace_Big_1,
+    BC_CosmicWall_Big_1,
+    BC_FinalChase_Big_1,
+    BC_CannonCore_Big_1,
+
+    BC_WhiteJungle_Big_2 = 0x1B38,
+    BC_CannonCore_Big_2  = 0x1B3E,
+
+    BC_CannonCore_Big_3 = 0x1B5E,
+
+    BC_CannonCore_Big_4 = 0x1B7E,
+
+    BC_CannonCore_Big_5 = 0x1B9E,
+
+    BC_NUM_CHECKS
+};
+
+struct BigCheckData
+{
+    BigCheckData() {}
+    BigCheckData(int address, int addressBit, int levelID, NJS_VECTOR position) : Address(address), AddressBit(addressBit), LevelID(levelID), Position(position) {}
+    BigCheckData(int address, int addressBit, int levelID, NJS_VECTOR position, float range) : Address(address), AddressBit(addressBit), LevelID(levelID), Position(position), Range(range) {}
+    BigCheckData(int address, int addressBit, int levelID, NJS_VECTOR position, NJS_VECTOR hardPosition) : Address(address), AddressBit(addressBit), LevelID(levelID), Position(position), HardPosition(hardPosition) {}
+    BigCheckData(int address, int addressBit, int levelID, NJS_VECTOR position, NJS_VECTOR hardPosition, float range) : Address(address), AddressBit(addressBit), LevelID(levelID), Position(position), HardPosition(hardPosition), Range(range) {}
+
+    int Address = 0x00;
+    int AddressBit = 0x00;
+    int LevelID = 0x00;
+    NJS_VECTOR Position = { 0, 0, 0 };
+    NJS_VECTOR HardPosition = { 0, 0, 0 };
+    float Range = 15.0f;
+    bool CheckSent = false;
+};
+
+void InitializeBigChecks(std::map<int, BigCheckData>& outBigChecks);
+

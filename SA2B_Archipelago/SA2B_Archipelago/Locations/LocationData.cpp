@@ -2111,3 +2111,41 @@ void InitializeKartRaceChecks(std::map<int, KartRaceCheckData>& outKartRaceCheck
     outKartRaceChecks[KartRaceCheck::KRC_Standard_General] = KartRaceCheckData(0x01DEF5C9);
     outKartRaceChecks[KartRaceCheck::KRC_Expert_General]   = KartRaceCheckData(0x01DEF5D6);
 }
+
+void InitializeBigChecks(std::map<int, BigCheckData>& outBigChecks)
+{
+    outBigChecks.clear();
+
+    outBigChecks[BigCheck::BC_GreenForest_Big_1]    = BigCheckData(0x01DEEECC, 0x00, LevelIDs_GreenForest,      {  6635,  -1620,   7423 },  { 6369,  -1595,  7201 });
+    outBigChecks[BigCheck::BC_WhiteJungle_Big_1]    = BigCheckData(0x01DEEECC, 0x01, LevelIDs_WhiteJungle,      {  9833,  -3080,  -7339 });
+    outBigChecks[BigCheck::BC_WhiteJungle_Big_2]    = BigCheckData(0x01DEEECC, 0x02, LevelIDs_WhiteJungle,      { 13275,  -3571,  -5391 });
+    outBigChecks[BigCheck::BC_PumpkinHill_Big_1]    = BigCheckData(0x01DEEECC, 0x03, LevelIDs_PumpkinHill,      {   957,  -1000,   -959 });
+    outBigChecks[BigCheck::BC_SkyRail_Big_1]        = BigCheckData(0x01DEEECC, 0x04, LevelIDs_SkyRail,          {    45,    405,   -532 });
+    outBigChecks[BigCheck::BC_AquaticMine_Big_1]    = BigCheckData(0x01DEEECC, 0x05, LevelIDs_AquaticMine,      {   134,   -250,    176 });
+    outBigChecks[BigCheck::BC_SecurityHall_Big_1]   = BigCheckData(0x01DEEECC, 0x06, LevelIDs_SecurityHall,     {   165,   -986,    161 });
+    outBigChecks[BigCheck::BC_PrisonLane_Big_1]     = BigCheckData(0x01DEEECC, 0x07, LevelIDs_PrisonLane,       { -1838,    236,   -596 });
+    outBigChecks[BigCheck::BC_MetalHarbor_Big_1]    = BigCheckData(0x01DEEECD, 0x00, LevelIDs_MetalHarbor,      {  4821,   -270,  -9224 },  { 4862,   -197, -9128 });
+    outBigChecks[BigCheck::BC_IronGate_Big_1]       = BigCheckData(0x01DEEECD, 0x01, LevelIDs_IronGate,         {  1994,   -665,  -1047 });
+    outBigChecks[BigCheck::BC_WeaponsBed_Big_1]     = BigCheckData(0x01DEEECD, 0x02, LevelIDs_WeaponsBed,       {   957,  -1000,   -959 },  { -201,    -87, -1550 });
+    outBigChecks[BigCheck::BC_CityEscape_Big_1]     = BigCheckData(0x01DEEECD, 0x03, LevelIDs_CityEscape,       {  7832, -20608,  16083 });
+    outBigChecks[BigCheck::BC_RadicalHighway_Big_1] = BigCheckData(0x01DEEECD, 0x04, LevelIDs_RadicalHighway,   { -6760,  -2546,  -6134 });
+    outBigChecks[BigCheck::BC_MissionStreet_Big_1]  = BigCheckData(0x01DEEECD, 0x06, LevelIDs_MissionStreet,    {  2796,    200,  -3443 });
+    outBigChecks[BigCheck::BC_DryLagoon_Big_1]      = BigCheckData(0x01DEEECD, 0x07, LevelIDs_DryLagoon,        {   193,      2,    969 });
+    outBigChecks[BigCheck::BC_SandOcean_Big_1]      = BigCheckData(0x01DEEECE, 0x00, LevelIDs_SandOcean,        {  2845,    150,  -6928 });
+    outBigChecks[BigCheck::BC_CrazyGadget_Big_1]    = BigCheckData(0x01DEEECE, 0x01, LevelIDs_CrazyGadget,      { -9650,  -1255,  -2548 });
+    outBigChecks[BigCheck::BC_HiddenBase_Big_1]     = BigCheckData(0x01DEEECE, 0x02, LevelIDs_HiddenBase,       {   100,    190,  -1757 });
+    outBigChecks[BigCheck::BC_EternalEngine_Big_1]  = BigCheckData(0x01DEEECE, 0x03, LevelIDs_EternalEngine,    { -2166,    225,  -8342 });
+    outBigChecks[BigCheck::BC_DeathChamber_Big_1]   = BigCheckData(0x01DEEECE, 0x04, LevelIDs_DeathChamber,     {    48,    217,     97 });
+    outBigChecks[BigCheck::BC_EggQuarters_Big_1]    = BigCheckData(0x01DEEECE, 0x05, LevelIDs_EggQuarters,      {     0,    114,   1455 });
+    outBigChecks[BigCheck::BC_LostColony_Big_1]     = BigCheckData(0x01DEEECE, 0x06, LevelIDs_LostColony,       {  2891,   1241,  -2469 });
+    outBigChecks[BigCheck::BC_PyramidCave_Big_1]    = BigCheckData(0x01DEEECE, 0x07, LevelIDs_PyramidCave,      { -2500,  -1969, -10431 });
+    outBigChecks[BigCheck::BC_FinalRush_Big_1]      = BigCheckData(0x01DEEECF, 0x00, LevelIDs_FinalRush,        {  5937, -15487,  21804 },  { 5713, -15222, 21799 });
+    outBigChecks[BigCheck::BC_MeteorHerd_Big_1]     = BigCheckData(0x01DEEECF, 0x01, LevelIDs_MeteorHerd,       {   504,   -600,    -46 });
+    outBigChecks[BigCheck::BC_CannonCore_Big_1]     = BigCheckData(0x01DEEECF, 0x02, LevelIDs_CannonsCoreT,     {  -674,   -638,  -1031 });
+    outBigChecks[BigCheck::BC_CannonCore_Big_2]     = BigCheckData(0x01DEEECF, 0x03, LevelIDs_CannonsCoreE,     {   430,  -2475,  -2402 });
+    outBigChecks[BigCheck::BC_CannonCore_Big_3]     = BigCheckData(0x01DEEECF, 0x04, LevelIDs_CannonsCoreR,     {    11,    528,     -4 });
+    outBigChecks[BigCheck::BC_CannonCore_Big_4]     = BigCheckData(0x01DEEECF, 0x05, LevelIDs_CannonsCoreK,     {    94,   -125,  -1346 });
+    outBigChecks[BigCheck::BC_CannonCore_Big_5]     = BigCheckData(0x01DEEECF, 0x06, LevelIDs_CannonsCoreS,     {  -614,  -1090,  -3347 });
+    outBigChecks[BigCheck::BC_FinalChase_Big_1]     = BigCheckData(0x01DEEECF, 0x07, LevelIDs_FinalChase,       {   144,  -9030,  11145 });
+    outBigChecks[BigCheck::BC_MadSpace_Big_1]       = BigCheckData(0x01DEEED0, 0x01, LevelIDs_MadSpace,         {  1577,   4119,    -16 });
+}
