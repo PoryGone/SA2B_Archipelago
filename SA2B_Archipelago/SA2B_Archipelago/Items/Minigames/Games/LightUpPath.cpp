@@ -7,7 +7,7 @@ void LightUpPath::OnGameStart(MinigameManagerData data)
 	cursorX = 0;
 	cursorY = 0;
 	CreateHierarchy(data);
-	FillGrid();
+	FillGrid(data.difficulty);
 }
 
 void LightUpPath::OnFrame(MinigameManagerData data)
@@ -43,17 +43,36 @@ void LightUpPath::OnCleanup(MinigameManagerData data)
 	grid.clear();
 }
 
-void LightUpPath::FillGrid()
+void LightUpPath::FillGrid(MinigameDifficulty difficulty)
 {
 	int startX = 0;
 	int startY = 0;
-	int index = RandomInt(0, layouts.size());
-	bool rotate = RandomFloat(0.0f, 1.0f) < 0.5f;
+	int xMax = sizeX - 1;
+	int yMax = sizeY - 1;
+	int layoutsSize = 0;
+	switch (difficulty)
+	{
+	case MGD_Easy:
+		layoutsSize = layoutsEasy.size();
+		break;
+	case MGD_Medium:
+		layoutsSize = layoutsMedium.size();
+		break;
+	case MGD_Hard:
+		layoutsSize = layoutsHard.size();
+		break;
+	}
+	int index = RandomInt(0, layoutsSize);
+	bool flipXY = RandomFloat(0.0f, 1.0f) < 0.5f;
+	bool invX = RandomFloat(0.0f, 1.0f) < 0.5f;
+	bool invY = RandomFloat(0.0f, 1.0f) < 0.5f;
 	for (int x = 0; x < grid.size(); x++)
 	{
 		for (int y = 0; y < grid[x].size(); y++)
 		{
-			auto type = GetCellType(index, rotate ? x : y, rotate ? y : x);
+			int cellX = invX ? xMax - x : x;
+			int cellY = invY ? yMax - y : y;
+			auto type = GetCellType(index, flipXY ? cellX : cellY, flipXY ? cellY : cellX, difficulty);
 			switch (type)
 			{
 			case LightUpPath::LTT_None:
@@ -148,12 +167,30 @@ void LightUpPath::Set(int x, int y)
 	}
 }
 
-LightUpPath::LightUpPathTileType LightUpPath::GetCellType(int index, int x, int y)
+LightUpPath::LightUpPathTileType LightUpPath::GetCellType(int index, int x, int y, MinigameDifficulty difficulty)
 {
-	if (index < layouts.size() && x < layouts[index].size() && y < layouts[index][x].size())
+	switch (difficulty)
 	{
-		return layouts[index][x][y];
+	case MGD_Easy:
+		if (index < layoutsEasy.size() && x < layoutsEasy[index].size() && y < layoutsEasy[index][x].size())
+		{
+			return layoutsEasy[index][x][y];
+		}
+		break;
+	case MGD_Medium:
+		if (index < layoutsMedium.size() && x < layoutsMedium[index].size() && y < layoutsMedium[index][x].size())
+		{
+			return layoutsMedium[index][x][y];
+		}
+		break;
+	case MGD_Hard:
+		if (index < layoutsHard.size() && x < layoutsHard[index].size() && y < layoutsHard[index][x].size())
+		{
+			return layoutsHard[index][x][y];
+		}
+		break;
 	}
+	
 	return LTT_None;
 }
 
