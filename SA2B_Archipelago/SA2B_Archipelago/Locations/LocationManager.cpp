@@ -210,6 +210,11 @@ DataPointer(char, SS_SelectedTile, 0x1D1BF08);
 DataPointer(ChaoKarateManager*, KarateManager, 0x1A5D148);
 DataPointer(unsigned int, BlackMarketTokenCount, 0x1DEE41C);
 
+float dist(NJS_POINT3 a, NJS_POINT3 b)
+{
+	return sqrt(pow((b.x - a.x), 2) + pow((b.y - a.y), 2) + pow((b.z - a.z), 2));
+}
+
 
 void LocationManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
 {
@@ -259,6 +264,11 @@ void LocationManager::OnInputFunction()
 		return;
 	}
 
+	if (MainCharObj1[0] == NULL)
+	{
+		return;
+	}
+
 	if (this->_bigEnabled)
 	{
 		if (GameState != GameStates::GameStates_Pause)
@@ -288,21 +298,36 @@ void LocationManager::OnInputFunction()
 			Uint32 HeldButtons = ControllersRaw->on;
 			Uint32 PressedButtons = ControllersRaw->press;
 
-			if (PressedButtons & 0b1000000000)
+			if (minigameManager->state == MinigameState::MGS_None)
 			{
-				if (minigameManager->state == MinigameState::MGS_None)
+				for (int i = BigCheck::BC_BEGIN; i < BigCheck::BC_NUM_CHECKS; i++)
 				{
-					// TODO: Check for Big proximity and show prompt
-
-					TimeStopped = 2;
-
-					minigameManager->StartMinigame(ItemValue::IV_FishingTrap, true);
-
-					this->_inBigFishing = true;
-					if (MainCharObj1[0])
+					if (this->_BigData.find(i) != this->_BigData.end())
 					{
-						this->_FreezePos = MainCharObj1[0]->Position;
+						BigCheckData& checkData = this->_BigData[i];
+
+						if (!checkData.CheckSent && checkData.LevelID == CurrentLevel)
+						{
+							if (dist(checkData.Position, MainCharObj1[0]->Position) < checkData.Range)
+							{
+								// TODO: RAS: Show prompt for Big
+								std::string msg1 = "PRESS Y TO FISH";
+								_helperFunctions->SetDebugFontColor(0xFFF542C8);
+								_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 2), msg1.c_str());
+
+								if (PressedButtons & 0b1000000000)
+								{
+									TimeStopped = 2;
+
+									minigameManager->StartMinigame(ItemValue::IV_FishingTrap, true);
+
+									this->_inBigFishing = true;
+									this->_FreezePos = MainCharObj1[0]->Position;
+								}
+							}
+						}
 					}
+
 				}
 			}
 		}
@@ -335,6 +360,7 @@ void LocationManager::OnFrameFunction()
 		this->OnFrameOmochao();
 		this->OnFrameAnimals();
 		this->OnFrameItemBoxes();
+		this->OnFrameBig();
 		this->OnFrameKartRace();
 	}
 }
@@ -802,6 +828,7 @@ void LocationManager::OnFrameBig()
 
 				if ((dataValue & bitFlag) != 0x00)
 				{
+					MessageQueue::GetInstance().AddMessage("Send Item");
 					if (this->_archipelagoManager)
 					{
 						this->_archipelagoManager->SendItem(i);
@@ -1872,12 +1899,6 @@ void LocationManager::ResetLocations()
 	}
 }
 
-
-float dist(NJS_POINT3 a, NJS_POINT3 b)
-{
-	return sqrt(pow((b.x - a.x), 2) + pow((b.y - a.y), 2) + pow((b.z - a.z), 2));
-}
-
 void LocationManager::SendChaoKeyLocationCheck()
 {
 	if (!this->_chaoKeysEnabled)
@@ -2168,6 +2189,7 @@ void LocationManager::SendItemBoxLocationCheck(ObjectMaster* itemBox)
 
 void LocationManager::SendBigLocationCheck()
 {
+	MessageQueue::GetInstance().AddMessage("Send Big Location Check");
 	if (!this->_bigEnabled)
 	{
 		return;
@@ -2177,8 +2199,6 @@ void LocationManager::SendBigLocationCheck()
 	{
 		return;
 	}
-
-	//TODO: Call this from Minigame Manager somehow when finishing a Big minigame
 
 	for (int i = BigCheck::BC_BEGIN; i < BigCheck::BC_NUM_CHECKS; i++)
 	{
@@ -2194,12 +2214,15 @@ void LocationManager::SendBigLocationCheck()
 
 					char bitFlag = (char)(0x01 << checkData.AddressBit);
 
+					MessageQueue::GetInstance().AddMessage("Found Location Check");
+
 					if ((dataValue & bitFlag) == 0x00)
 					{
 						char dataValue = *(char*)checkData.Address;
 						char bitFlag = (char)(0x01 << checkData.AddressBit);
 						char newDataValue = dataValue | bitFlag;
 
+						MessageQueue::GetInstance().AddMessage("Write Data");
 						WriteData<1>((void*)checkData.Address, newDataValue);
 					}
 
@@ -2486,9 +2509,9 @@ std::vector<int> LocationManager::GetBigLocationsForLevel(int levelID)
 		for (int j = 0; j < 5; j++)
 		{
 			int locationID = checkOffset + (j * 0x20) + levelID;
-			if (this->_ItemBoxData.find(locationID) != this->_ItemBoxData.end())
+			if (this->_BigData.find(locationID) != this->_BigData.end())
 			{
-				ItemBoxCheckData& checkData = this->_ItemBoxData[locationID];
+				BigCheckData& checkData = this->_BigData[locationID];
 				char dataValue = *(char*)checkData.Address;
 
 				char bitFlag = (char)(0x01 << checkData.AddressBit);

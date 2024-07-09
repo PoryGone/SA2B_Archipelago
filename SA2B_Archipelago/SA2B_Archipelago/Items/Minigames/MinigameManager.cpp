@@ -2,6 +2,7 @@
 #include "MinigameManager.h"
 #include "../../Archipelago/ArchipelagoManager.h"
 #include "../ItemManager.h"
+#include "../../Locations/LocationManager.h"
 
 void DeleteUpgradeIcon_MG(ObjectMaster* obj)
 {
@@ -196,7 +197,9 @@ void MinigameManager::HandleVictory()
 
 	if (this->isLocationCheck)
 	{
-		// Send Location Check
+		// TODO: Generalize?
+
+		LocationManager::getInstance().SendBigLocationCheck();
 	}
 	else
 	{

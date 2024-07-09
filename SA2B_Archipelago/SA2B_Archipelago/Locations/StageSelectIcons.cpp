@@ -387,6 +387,7 @@ void UpdateLevelCheckIcons()
 		std::vector<int> omochao = locMan->GetOmochaoLocationsForLevel(currentTileStageIndex);
 		std::vector<int> lifeBoxes = locMan->GetLifeBoxLocationsForLevel(currentTileStageIndex);
 		std::vector<int> itemBoxes = locMan->GetItemBoxLocationsForLevel(currentTileStageIndex);
+		std::vector<int> bigs = locMan->GetBigLocationsForLevel(currentTileStageIndex);
 		int animalsFound = locMan->GetCompletedAnimalLocationsForLevel(currentTileStageIndex);
 		int animalsTotal = locMan->GetTotalAnimalLocationsForLevel(currentTileStageIndex);
 
@@ -436,6 +437,25 @@ void UpdateLevelCheckIcons()
 			DrawString(std::to_string(animalsFound), x, yPos + 8.0f, 0.25f);
 			DrawString(std::to_string(animalsTotal), x, yPos + 24.0f, 0.25f);
 			xCount++;
+		}
+		if (bigs.size() > 0)
+		{
+			itemCount = bigs.size();
+			for (int i = bigs.size() - 1; i >= 0; i--)
+			{
+				int bigIcon = bigs[i] == 0x01 ? SSI_Upgrade : SSI_UpgradeDisabled;
+				float x = maxXPos - ((xCount + 1) * 32.0f);
+				StageSelectSprite.tanim = &StageSelectAnim[bigIcon];
+				StageSelectSprite.p = { x, yPos, 0.0f };
+				DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+				x += 4;
+				if (bigs.size() > 1)
+				{
+					DrawString(std::to_string(itemCount), x, yPos + 24.0f, 0.25f);
+				}
+				xCount++;
+				itemCount--;
+			}
 		}
 		StageSelectSprite.sx = 0.1875f;
 		StageSelectSprite.sy = 0.1875f;
