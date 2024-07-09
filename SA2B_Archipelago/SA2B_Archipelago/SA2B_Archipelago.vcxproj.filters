@@ -222,6 +222,9 @@
     <ClInclude Include="Items\Minigames\Games\LightUpPath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Items\Minigames\Games\PunchOut.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -390,6 +393,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Items\Minigames\Games\LightUpPath.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Items\Minigames\Games\PunchOut.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

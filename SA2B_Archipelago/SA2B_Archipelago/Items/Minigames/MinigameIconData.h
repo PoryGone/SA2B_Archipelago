@@ -1,6 +1,6 @@
 #pragma once
 
-#define POKE_START 28
+#define POKE_START 31
 
 enum MinigameIcon
 {
@@ -27,11 +27,14 @@ enum MinigameIcon
 	MGI_Super_Bullet			= 20,
 	MGI_Super_Shadow			= 21,
 	MGI_Super_Sonic				= 22,
-	MGI_Artificial_Chaos_Round	= 23,
-	MGI_Artificial_Chaos_Tall	= 24,
-	MGI_Beetle					= 25,
-	MGI_Beetle_Gun				= 26,
-	MGI_Barrel					= 27,
+	MGI_Boss_Body				= 23,
+	MGI_Boss_Arm				= 24,
+	MGI_Boss_Head				= 25,
+	MGI_Artificial_Chaos_Round	= 26,
+	MGI_Artificial_Chaos_Tall	= 27,
+	MGI_Beetle					= 28,
+	MGI_Beetle_Gun				= 29,
+	MGI_Barrel					= 30,
 
 	//Pokemon
 	MGI_Aron					= POKE_START + 0,

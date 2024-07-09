@@ -350,8 +350,8 @@ void MinigameFinalBoss::UpdateCharacterPosition(MinigameManagerData data)
 	y = characterParent->displaySize.y * 0.5f;
 	pos.y = max(0.0f + y, pos.y);
 	pos.y = min(480.0f - y, pos.y);
-	pos.x = max(20.0f + x, pos.x);
-	pos.x = min(620.0f - x, pos.x);
+	pos.x = max(0.0f + x, pos.x);
+	pos.x = min(640.0f - x, pos.x);
 	characterParent->SetPositionGlobal(pos);
 }
 
@@ -745,18 +745,19 @@ void MinigameFinalBoss::CreateHierarchy(MinigameManagerData data)
 	FHRArmBase->SetRotation(40.0f);
 	FHRWiggle = new Wiggle(0.25f, 30.0f, 50.0f, false);
 	FHRArmBase->components.push_back(FHRWiggle);
-	FHLArm = data.hierarchy->CreateNode("Final_Hazard_Arm_L", data.icons->GetAnim(MGI_Square), { 100.0f, 45.0f }, { 0.0f, 0.0f }, FHLArmBase);
+	FHLArm = data.hierarchy->CreateNode("Final_Hazard_Arm_L", data.icons->GetAnim(MGI_Boss_Arm), { 100.0f, 45.0f }, { 0.0f, 0.0f }, FHLArmBase);
 	FHLArm->SetPosition({ -50.0f, 0.0f });
-	FHLArm->color = { 1.0f, 1.0f, 0.5f, 0.0f };
-	FHRArm = data.hierarchy->CreateNode("Final_Hazard_Arm_R", data.icons->GetAnim(MGI_Square), { 100.0f, 45.0f }, { 0.0f, 0.0f}, FHRArmBase);
+	//FHLArm->color = { 1.0f, 1.0f, 0.5f, 0.0f };
+	FHRArm = data.hierarchy->CreateNode("Final_Hazard_Arm_R", data.icons->GetAnim(MGI_Boss_Arm), { 100.0f, 45.0f }, { 0.0f, 0.0f}, FHRArmBase);
+	FHRArm->SetRotation(180.0f);
 	FHRArm->SetPosition({ 50.0f, 0.0f });
-	FHRArm->color = { 1.0f, 1.0f, 0.5f, 0.0f };
-	FHBody = data.hierarchy->CreateNode("Final_Hazard_Body", data.icons->GetAnim(MGI_Circle), { 300.0f, 100.0f }, { 0.0f, 0.0f }, FHParent);
-	FHBody->SetPosition({ 0.0f, 0.0f });
-	FHBody->color = { 1.0f, 1.0f, 0.5f, 0.0f };
-	FHHead = data.hierarchy->CreateNode("Final_Hazard_Head", data.icons->GetAnim(MGI_Circle), { 75.0f, 100.0f }, { 0.0f, 0.0f }, FHParent);
+	//FHRArm->color = { 1.0f, 1.0f, 0.5f, 0.0f };
+	FHBody = data.hierarchy->CreateNode("Final_Hazard_Body", data.icons->GetAnim(MGI_Boss_Body), { 300.0f, 50.0f }, { 0.0f, 0.0f }, FHParent);
+	FHBody->SetPosition({ 0.0f, 25.0f });
+	//FHBody->color = { 1.0f, 1.0f, 0.5f, 0.0f };
+	FHHead = data.hierarchy->CreateNode("Final_Hazard_Head", data.icons->GetAnim(MGI_Boss_Head), { 75.0f, 100.0f }, { 0.0f, 0.0f }, FHParent);
 	FHHead->SetPosition({ 0.0f, 60.0f });
-	FHHead->color = { 1.0f, 1.0f, 0.5f, 0.0f };
+	//FHHead->color = { 1.0f, 1.0f, 0.5f, 0.0f };
 	FHWeakPoint = data.hierarchy->CreateNode("Final_Hazard_Weak_Point", data.icons->GetAnim(MGI_Circle), { 50.0f,50.0f }, {}, FHParent);
 	FHWeakPoint->SetEnabled(false);
 	FHWeakPoint->color = { 1.0f, 1.0f, 0.0f, 0.0f };
@@ -794,11 +795,11 @@ void MinigameFinalBoss::CreateHierarchy(MinigameManagerData data)
 	//Create Characters
 	characterParent = data.hierarchy->CreateNode("Characters");
 	characterParent->SetPositionGlobal({ 320.f, 420.0f });
-	characterParent->displaySize = { 48.0f, 48.0f };
-	sonic = data.hierarchy->CreateNode("Sonic", data.icons->GetAnim(MGI_Super_Sonic), { 48.0f, 48.0f }, { 0.0f, 0.0f }, characterParent);
+	characterParent->displaySize = { 34.0f, 48.0f };
+	sonic = data.hierarchy->CreateNode("Sonic", data.icons->GetAnim(MGI_Super_Sonic), { 34.0f, 48.0f }, { 0.0f, 0.0f }, characterParent);
 	sonic->SetPositionGlobal(sonicOffScreenPos);
 	data.collision->AddCollision(sonic, std::make_shared<CircleCollider>(15.0f, NJS_POINT3({ 0.0f, -8.0f })));
-	shadow = data.hierarchy->CreateNode("Shadow", data.icons->GetAnim(MGI_Super_Shadow), { 48.0f, 48.0f }, { 0.0f, 0.0f }, characterParent);
+	shadow = data.hierarchy->CreateNode("Shadow", data.icons->GetAnim(MGI_Super_Shadow), { 34.0f, 48.0f }, { 0.0f, 0.0f }, characterParent);
 	shadow->SetPositionGlobal(shadowOffScreenPos);
 	data.collision->AddCollision(shadow, std::make_shared<CircleCollider>(15.0f, NJS_POINT3({ 0.0f, -8.0f})));
 

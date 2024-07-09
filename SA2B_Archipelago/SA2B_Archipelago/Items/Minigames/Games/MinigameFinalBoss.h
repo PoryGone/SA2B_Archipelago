@@ -219,7 +219,7 @@ private:
 	float ringDecayCooldown = 2.0f;
 	float ringGrowthCooldown = 1.0f;
 
-	NJS_POINT3 characterBulletSize = { 32.0f, 32.0f };
+	NJS_POINT3 characterBulletSize = { 14.0f, 32.0f };
 	NJS_POINT3 bossBulletSize = { 20.0f, 20.0f };
 
 	NJS_POINT3 sonicOffScreenPos = { 230.0f, 512.0f };
