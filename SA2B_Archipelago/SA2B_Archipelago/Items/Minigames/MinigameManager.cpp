@@ -177,6 +177,15 @@ void MinigameManager::StartMinigame(ItemValue item, bool locationGame)
 	case ItemValue::IV_PokemonCountTrap:
 		this->currentMinigame = &this->pokemonCount;
 		break;
+	case ItemValue::IV_NumberSequenceTrap:
+		this->currentMinigame = &this->numberSequence;
+		break;
+	case ItemValue::IV_LightUpPathTrap:
+		this->currentMinigame = &this->lightUpPath;
+		break;
+	case ItemValue::IV_PinballTrap:
+		this->currentMinigame = &this->pinball;
+		break;
 	}
 
 	this->isLocationCheck = locationGame;

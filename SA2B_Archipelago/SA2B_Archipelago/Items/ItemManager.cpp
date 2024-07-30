@@ -926,6 +926,9 @@ bool ItemManager::IsActiveTrapValid()
 	case ItemValue::IV_TriviaTrap:
 	case ItemValue::IV_PokemonTriviaTrap:
 	case ItemValue::IV_PokemonCountTrap:
+	case ItemValue::IV_NumberSequenceTrap:
+	case ItemValue::IV_LightUpPathTrap:
+	case ItemValue::IV_PinballTrap:
 		if (GameMode != GameMode::GameMode_Level)
 		{
 			return false;
@@ -1207,6 +1210,18 @@ void ItemManager::OnFrameTrapQueue()
 	{
 		// Nothing
 	}
+	else if (this->_ActiveTrap == ItemValue::IV_NumberSequenceTrap)
+	{
+		// Nothing
+	}
+	else if (this->_ActiveTrap == ItemValue::IV_LightUpPathTrap)
+	{
+		// Nothing
+	}
+	else if (this->_ActiveTrap == ItemValue::IV_PinballTrap)
+	{
+		// Nothing
+	}
 
 	if (this->_ActiveTrapTimer > 0)
 	{
@@ -1351,6 +1366,9 @@ void ItemManager::OnFrameTrapQueue()
 	case ItemValue::IV_TriviaTrap:
 	case ItemValue::IV_PokemonTriviaTrap:
 	case ItemValue::IV_PokemonCountTrap:
+	case ItemValue::IV_NumberSequenceTrap:
+	case ItemValue::IV_LightUpPathTrap:
+	case ItemValue::IV_PinballTrap:
 		MinigameManager* minigameManager = &MinigameManager::GetInstance();
 		minigameManager->StartMinigame((ItemValue)this->_ActiveTrap);
 		break;
