@@ -14,6 +14,7 @@
 #include "Games/NumberSequence.h"
 #include "Games/LightUpPath.h"
 #include "Games/PunchOut.h"
+#include "Games//Pinball.h"
 #include "../ItemData.h"
 #include <ctime>
 
@@ -73,5 +74,8 @@ private:
 	MinigameFinalBoss finalBoss		= MinigameFinalBoss();
 	NumberSequence numberSequence	= NumberSequence();
 	LightUpPath lightUpPath			= LightUpPath();
+	Pinball pinball					= Pinball();
+
+	//On Hold
 	PunchOut punchOut				= PunchOut();
 };
