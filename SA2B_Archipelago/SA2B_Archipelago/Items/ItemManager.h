@@ -38,6 +38,8 @@ public:
 
 	std::vector<int> GetChaosEmeraldAddresses();
 
+	void HandleMinigameCompletion(int item_id);
+
 	int _TimeStopTimer;
 
 private:

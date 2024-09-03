@@ -63,10 +63,6 @@ void MinigameManager::OnFrameFunction()
 		this->IconObjPtr->DisplaySub_Delayed3 = DrawUpgradeIcon_MG;
 		this->IconObjPtr->Data1.Entity->Action = 1;
 	}
-	else if (GameState != GameStates_Ingame)
-	{
-		Pause();
-	}
 }
 
 void MinigameManager::OnInputFunction()
@@ -142,8 +138,10 @@ void MinigameManager::EndMinigame()
 	}
 	this->_data.collision->Reset();
 	this->_data.hierarchy->ClearHierarchy();
+	this->_data.isLocationCheck = false;
 	this->currentMinigame = nullptr;
 	this->state = MinigameState::MGS_None;
+	this->currentMinigameItem = ItemValue::IV_Apple;
 }
 
 void MinigameManager::StartMinigame(ItemValue item, bool locationGame)
@@ -186,9 +184,13 @@ void MinigameManager::StartMinigame(ItemValue item, bool locationGame)
 	case ItemValue::IV_PinballTrap:
 		this->currentMinigame = &this->pinball;
 		break;
+	case ItemValue::IV_Maria:
+		this->currentMinigame = &this->finalBoss;
+		break;
 	}
 
-	this->isLocationCheck = locationGame;
+	this->_data.isLocationCheck = locationGame;
+	this->currentMinigameItem = item;
 }
 
 void MinigameManager::HandleVictory()
@@ -204,7 +206,16 @@ void MinigameManager::HandleVictory()
 		itemToSend = ItemValue::IV_TwentyRings;
 	}
 
-	if (this->isLocationCheck)
+	if (this->currentMinigameItem == ItemValue::IV_Maria)
+	{
+		// TODO: RAS: Figure out how to keep the minigame rendering until the stage transitions to the ending
+
+		AwardWin(0);
+
+		return;
+	}
+
+	if (this->_data.isLocationCheck)
 	{
 		// TODO: Generalize?
 
@@ -213,12 +224,13 @@ void MinigameManager::HandleVictory()
 	else
 	{
 		ItemManager::getInstance().HandleJunk(itemToSend);
+		ItemManager::getInstance().HandleMinigameCompletion(this->currentMinigameItem);
 	}
 }
 
 void MinigameManager::HandleLoss()
 {
-	if (this->isLocationCheck)
+	if (this->_data.isLocationCheck)
 	{
 		// Don't kill from failing location check
 	}
@@ -248,6 +260,11 @@ void MinigameManager::Pause()
 		{
 			stopwatches[i]->Pause();
 		}
+	}
+
+	if (this->currentMinigameItem == ItemValue::IV_Maria)
+	{
+		this->_data.hierarchy->Render();
 	}
 }
 

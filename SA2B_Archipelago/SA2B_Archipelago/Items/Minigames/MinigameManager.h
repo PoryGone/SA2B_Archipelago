@@ -61,7 +61,7 @@ private:
 	std::clock_t minigameStart;
 	bool isPaused = false;
 
-	bool isLocationCheck = false;
+	ItemValue currentMinigameItem;
 
 	//Minigames
 	Literature literature			= Literature();

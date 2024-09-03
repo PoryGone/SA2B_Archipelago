@@ -4,6 +4,7 @@
 #include "../Utilities/MessageQueue.h"
 #include "../Archipelago/ArchipelagoManager.h"
 #include "../Aesthetics/StatsManager.h"
+#include "../Items/Minigames/MinigameManager.h"
 
 void* saveLevelDataReadOffset_ptr = (void*)0x6773b6;
 const char saveLevelDataReadOffset = '\x3d';
@@ -756,6 +757,10 @@ void StageSelectManager::HandleGoal()
 	{
 		HandleChaosChao();
 	}
+	else if (this->_goal == 8)
+	{
+		HandleMinigameMadness();
+	}
 }
 
 void StageSelectManager::HandleBiolizard()
@@ -1038,6 +1043,88 @@ void StageSelectManager::HandleChaosChao()
 	}
 }
 
+void StageSelectManager::HandleMinigameMadness()
+{
+	if (this->_victorySent)
+	{
+		return;
+	}
+
+	ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
+	if (!apm || !apm->IsInit() || !apm->IsAuth())
+	{
+		return;
+	}
+
+	if (this->_chosenMissionsMap.find(StageSelectStage::SSS_CannonCore) == this->_chosenMissionsMap.end())
+	{
+		return;
+	}
+
+	if (this->_missionCountMap.find(StageSelectStage::SSS_CannonCore) == this->_missionCountMap.end())
+	{
+		return;
+	}
+
+	if (this->HaveAllMinigames())
+	{
+		// Finalhazard Tile
+		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_GreenHill].TileIDAddress, 0x41);
+		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_GreenHill].TileCharacterAddress, 0x01);
+		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_GreenHill].TileColumnAddress, 0x1B);
+		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_GreenHill].TileRowAddress, 0x04);
+
+		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_Biolizard].UnlockMemAddress, unlockByteData);
+	}
+	else
+	{
+		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_Biolizard].UnlockMemAddress, lockByteData);
+	}
+
+	if (CurrentLevel == LevelIDs_Biolizard)
+	{
+		TimeStopped = 1;
+
+		if (GameState == GameStates_GoToNextLevel)
+		{
+			MessageQueue* messageQueue = &MessageQueue::GetInstance();
+			std::string msg = "Victory!";
+			messageQueue->AddMessage(msg);
+
+			ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
+			apm->SendStoryComplete();
+
+			return;
+		}
+
+		if (TimerMinutes == 0 && TimerSeconds < 5)
+		{
+			WriteData<1>((void*)0x1DEB060, 0xD0);
+			WriteData<1>((void*)0x1DEB061, 0x00);
+			WriteData<1>((void*)0x1DEB062, 0x00);
+			WriteData<1>((void*)0x1DEB063, 0x00);
+			WriteData<1>((void*)0x1DEB064, 0xD1);
+			WriteData<1>((void*)0x1DEB065, 0x00);
+			WriteData<1>((void*)0x1DEB066, 0x00);
+			WriteData<1>((void*)0x1DEB067, 0x00);
+
+			WriteData<1>((void*)0x1DEB31E, 0x06);
+			WriteData<1>((void*)0x1DEB31F, 0x06);
+			WriteData<1>((void*)0x1DEB320, 0x03);
+
+			WriteData<1>((void*)0x174B044, 0x0C);
+		}
+
+		// TODO: Make this not re-proc at the end
+
+		MinigameManager* minigameManager = &MinigameManager::GetInstance();
+		if (minigameManager->state == MinigameState::MGS_None)
+		{
+			minigameManager->StartMinigame(ItemValue::IV_Maria);
+		}
+	}
+}
+
 void TurnOffVanillaCamera()
 {
 	WriteData<7>((void*)0x677456, nullop);
@@ -1200,6 +1287,23 @@ bool StageSelectManager::HaveAllChaosEmeralds()
 		unsigned char dataValue = *(unsigned char*)(0x01DEEAF8 + i);
 
 		if (dataValue == 0)
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool StageSelectManager::HaveAllMinigames()
+{
+	for (int i = 0; i < 9; i++)
+	{
+		unsigned char dataValue = *(unsigned char*)(0x01DEEAFF + i);
+
+		char bitFlag = (char)(0x01 << 0x01);
+
+		if ((dataValue & bitFlag) == 0x00)
 		{
 			return false;
 		}

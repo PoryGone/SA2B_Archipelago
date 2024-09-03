@@ -58,6 +58,8 @@ public:
 
 	std::vector<Timer*>* timers;
 	std::vector<Stopwatch*>* stopwatches;
+
+	bool isLocationCheck;
 };
 
 class MinigameBase

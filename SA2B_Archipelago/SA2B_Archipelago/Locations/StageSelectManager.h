@@ -106,6 +106,7 @@ private:
 	void HandleGrandPrix();
 	void HandleBossRush();
 	void HandleChaosChao();
+	void HandleMinigameMadness();
     void HandleBossStage();
 	void HandleStageSelectCamera();
 	void HandleMissionOrder();
@@ -114,6 +115,7 @@ private:
     void DrawCurrentCharacterUpgrades();
     CharacterItemRange GetItemRangeForCharacter(char character);
     bool HaveAllChaosEmeralds();
+    bool HaveAllMinigames();
     bool IsCurrentLevelChaoWorld();
 
     std::array<int, 33> TileIDtoStageIndex = {

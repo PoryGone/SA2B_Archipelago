@@ -1469,6 +1469,22 @@ void ItemManager::OnFrameCutsceneQueue()
 	}
 }
 
+void ItemManager::HandleMinigameCompletion(int item_id)
+{
+	ItemData& receivedItem = this->_ItemData[item_id];
+
+	char dataValue = *(char*)receivedItem.Address;
+
+	char bitFlag = (char)(0x01 << 0x01);
+
+	if ((dataValue & bitFlag) == 0x00)
+	{
+		char newDataValue = dataValue | bitFlag;
+
+		WriteData<1>((void*)receivedItem.Address, newDataValue);
+	}
+}
+
 std::vector<int> ItemManager::GetChaosEmeraldAddresses()
 {
 	std::vector<int> result;
