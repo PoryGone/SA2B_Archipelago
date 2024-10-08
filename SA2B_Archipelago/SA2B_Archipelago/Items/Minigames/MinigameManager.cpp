@@ -189,6 +189,11 @@ void MinigameManager::StartMinigame(ItemValue item, bool locationGame)
 		break;
 	}
 
+	if (this->_baseDifficulty == MinigameDifficulty::MGD_Chaos)
+	{
+		this->_data.difficulty = (MinigameDifficulty)RandomInt(0, 3);
+	}
+
 	this->_data.isLocationCheck = locationGame;
 	this->currentMinigameItem = item;
 }
@@ -244,7 +249,8 @@ void MinigameManager::HandleLoss()
 
 void MinigameManager::SetDifficulty(int difficulty)
 {
-	this->_data.difficulty = (MinigameDifficulty)difficulty;
+	this->_baseDifficulty = (MinigameDifficulty)difficulty;
+	this->_data.difficulty = this->_baseDifficulty;
 }
 
 void MinigameManager::Pause()

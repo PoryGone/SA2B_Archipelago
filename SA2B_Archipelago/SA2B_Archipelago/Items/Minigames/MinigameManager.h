@@ -61,6 +61,8 @@ private:
 	std::clock_t minigameStart;
 	bool isPaused = false;
 
+	MinigameDifficulty _baseDifficulty;
+
 	ItemValue currentMinigameItem;
 
 	//Minigames

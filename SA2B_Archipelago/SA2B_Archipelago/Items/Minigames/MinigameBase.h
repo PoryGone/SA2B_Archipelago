@@ -41,6 +41,7 @@ enum MinigameDifficulty
 	MGD_Easy,
 	MGD_Medium,
 	MGD_Hard,
+	MGD_Chaos,
 };
 
 struct MinigameManagerData
