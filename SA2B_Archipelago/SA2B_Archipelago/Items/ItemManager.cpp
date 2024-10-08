@@ -661,6 +661,21 @@ void ItemManager::HandleTrap(int item_id)
 	this->_TrapQueue.push(item_id);
 }
 
+void ItemManager::HandleTrapLink(std::string item_name, std::string message)
+{
+	if (item_name_to_value.find(item_name) == item_name_to_value.end())
+	{
+		// We don't know handle this trap
+
+		return;
+	}
+
+	ItemValue trap_value = item_name_to_value[item_name];
+
+	this->_PriorityTrap = trap_value;
+	this->_TrapLinkMessage = message;
+}
+
 bool ItemManager::IsActiveTrapValid()
 {
 	MinigameManager* minigameManager = &MinigameManager::GetInstance();
@@ -1237,28 +1252,51 @@ void ItemManager::OnFrameTrapQueue()
 		return;
 	}
 
-	if (this->_TrapQueue.size() == 0)
-	{
-		return;
-	}
-
 	if (this->_TrapCooldownTimer > 0)
 	{
 		this->_TrapCooldownTimer--;
 		return;
 	}
 
-	// Next Trap
-	this->_ActiveTrap = this->_TrapQueue.front();
-	this->_TrapQueue.pop();
-
-	if (!this->IsActiveTrapValid())
+	// Priority Trap
+	if (this->_PriorityTrap != 0)
 	{
-		// Add back to the end of the queue and grab another trap next frame
-		this->_TrapQueue.push(this->_ActiveTrap);
-		this->_ActiveTrap = 0;
+		this->_ActiveTrap = this->_PriorityTrap;
 
-		return;
+		if (!this->IsActiveTrapValid())
+		{
+			// Dump the Priority Trap and grab another trap from the queue next frame
+			this->_ActiveTrap = 0;
+
+			this->_PriorityTrap = 0;
+			this->_TrapLinkMessage = "";
+
+			return;
+		}
+
+		MessageQueue::GetInstance().AddMessage(this->_TrapLinkMessage);
+
+		this->_PriorityTrap = 0;
+	}
+	else
+	{
+		if (this->_TrapQueue.size() == 0)
+		{
+			return;
+		}
+
+		// Next Trap
+		this->_ActiveTrap = this->_TrapQueue.front();
+		this->_TrapQueue.pop();
+
+		if (!this->IsActiveTrapValid())
+		{
+			// Add back to the end of the queue and grab another trap next frame
+			this->_TrapQueue.push(this->_ActiveTrap);
+			this->_ActiveTrap = 0;
+
+			return;
+		}
 	}
 
 	this->_ActiveTrapTimer = TRAP_DURATION;
@@ -1376,9 +1414,18 @@ void ItemManager::OnFrameTrapQueue()
 
 	ItemData& receivedItem = this->_ItemData[this->_ActiveTrap];
 
-	std::string message = std::string("Received ");
-	message += receivedItem.DisplayName;
-	MessageQueue::GetInstance().AddMessage(message);
+	if (this->_TrapLinkMessage.length() == 0)
+	{
+		std::string message = std::string("Received ");
+		message += receivedItem.DisplayName;
+		MessageQueue::GetInstance().AddMessage(message);
+
+		ArchipelagoManager::getInstance().TrapLinkSend(receivedItem.DisplayName);
+	}
+	else
+	{
+		this->_TrapLinkMessage = "";
+	}
 }
 
 void ItemManager::AddRandomDialogueToQueue()

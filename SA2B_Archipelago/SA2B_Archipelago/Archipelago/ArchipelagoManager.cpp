@@ -370,6 +370,27 @@ void SA2_HandleBouncedPacket(AP_Bounce bouncePacket)
                 apm->_lastSentRingCount += realDiff;
             }
         }
+        else if (!strcmp((*bouncePacket.tags)[i].c_str(), "TrapLink"))
+        {
+            if (!apm->_trapLinkActive)
+            {
+                return;
+            }
+
+            if (bounceData["source"] == apm->ap_player_name)
+            {
+                // Don't receive our own Trap Links (even from other players on the same slot)
+
+                return;
+            }
+
+            std::string trap_name = bounceData["trap_name"].asCString();
+            std::string message = "Received Linked " + trap_name + " from " + bounceData["source"].asCString();
+
+            ItemManager* itemManager = &ItemManager::getInstance();
+
+            itemManager->HandleTrapLink(trap_name, message);
+        }
     }
 }
 
@@ -424,6 +445,13 @@ void SA2_SetRingLink(int ringLinkActive)
     ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
 
     apm->SetRingLink(ringLinkActive != 0);
+}
+
+void SA2_SetTrapLink(int trapLinkActive)
+{
+    ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
+
+    apm->SetTrapLink(trapLinkActive != 0);
 }
 
 void SA2_SetGoal(int goal)
@@ -984,6 +1012,7 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_RegisterBouncedCallback(&SA2_HandleBouncedPacket);
     AP_RegisterSlotDataIntCallback("DeathLink", &SA2_SetDeathLink);
     AP_RegisterSlotDataIntCallback("RingLink", &SA2_SetRingLink);
+    AP_RegisterSlotDataIntCallback("TrapLink", &SA2_SetTrapLink);
     AP_RegisterSlotDataIntCallback("Goal", &SA2_SetGoal);
     AP_RegisterSlotDataIntCallback("ModVersion", &SA2_CompareModVersion);
     AP_RegisterSlotDataMapIntIntCallback("MusicMap", &SA2_SetMusicMap);
@@ -1322,6 +1351,33 @@ void ArchipelagoManager::DeathLinkClear()
     AP_DeathLinkClear();
 }
 
+// TrapLink Functions
+void ArchipelagoManager::TrapLinkSend(std::string trapName)
+{
+    if (!this->_trapLinkActive)
+    {
+        return;
+    }
+
+    Json::FastWriter writer;
+    std::chrono::time_point<std::chrono::system_clock> timestamp = std::chrono::system_clock::now();
+    AP_Bounce b;
+    Json::Value v;
+    v["time"] = std::chrono::duration_cast<std::chrono::seconds>(timestamp.time_since_epoch()).count();
+    v["source"] = this->ap_player_name;
+    v["trap_name"] = trapName;
+    b.data = writer.write(v);
+    b.games = nullptr;
+    b.slots = nullptr;
+    std::vector<std::string> tags = { std::string("TrapLink") };
+    b.tags = &tags;
+    AP_SendBounce(b);
+
+    std::string message = "Linked " + trapName + " sent";
+
+    MessageQueue::GetInstance().AddMessage(message.c_str());
+}
+
 // RingLink Functions
 void ArchipelagoManager::OnFrameRingLink()
 {
@@ -1480,6 +1536,10 @@ void ArchipelagoManager::SetDeathLink(bool deathLinkActive)
     {
         tags.push_back(std::string("RingLink"));
     }
+    if (this->_trapLinkActive)
+    {
+        tags.push_back(std::string("TrapLink"));
+    }
     AP_SetTags(tags);
 }
 
@@ -1495,6 +1555,30 @@ void ArchipelagoManager::SetRingLink(bool ringLinkActive)
     if (this->_ringLinkActive)
     {
         tags.push_back(std::string("RingLink"));
+    }
+    if (this->_trapLinkActive)
+    {
+        tags.push_back(std::string("TrapLink"));
+    }
+    AP_SetTags(tags);
+}
+
+void ArchipelagoManager::SetTrapLink(bool trapLinkActive)
+{
+    this->_trapLinkActive = trapLinkActive;
+
+    std::vector<std::string> tags;
+    if (this->_deathLinkActive)
+    {
+        tags.push_back(std::string("DeathLink"));
+    }
+    if (this->_ringLinkActive)
+    {
+        tags.push_back(std::string("RingLink"));
+    }
+    if (this->_trapLinkActive)
+    {
+        tags.push_back(std::string("TrapLink"));
     }
     AP_SetTags(tags);
 }

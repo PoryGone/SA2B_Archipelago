@@ -209,3 +209,53 @@ void InitializeItemData(std::map<int, ItemData> &outItemData)
     outItemData[ItemValue::IV_RedChaosDrive]    = ItemData(0x0000000, std::string("Red Chaos Drive"), std::string(), 13);
     outItemData[ItemValue::IV_PurpleChaosDrive] = ItemData(0x0000000, std::string("Purple Chaos Drive"), std::string(), 13);
 }
+
+std::map<ItemValue, std::string> item_value_to_name = {
+    {ItemValue::IV_OmochaoTrap,         "OmoTrap"},
+    {ItemValue::IV_TimeStopTrap,        "Chaos Control Trap"},
+    {ItemValue::IV_ConfuseTrap,         "Confuse Trap"},
+    {ItemValue::IV_TinyTrap,            "Tiny Trap"},
+    {ItemValue::IV_GravityTrap,         "Gravity Trap"},
+    {ItemValue::IV_ExpositionTrap,      "Exposition Trap"},
+    {ItemValue::IV_IceTrap,             "Ice Trap"},
+    {ItemValue::IV_SlowTrap,            "Slow Trap"},
+    {ItemValue::IV_CutsceneTrap,        "Cutscene Trap"},
+    {ItemValue::IV_ReverseTrap,         "Reverse Trap"},
+    {ItemValue::IV_LiteratureTrap,      "Literature Trap"},
+    {ItemValue::IV_PongTrap,            "Pong Trap"},
+    {ItemValue::IV_PlatformerTrap,      "Platformer Trap"},
+    {ItemValue::IV_FishingTrap,         "Fishing Trap"},
+    {ItemValue::IV_TriviaTrap,          "Trivia Trap"},
+    {ItemValue::IV_PokemonTriviaTrap,   "Pokemon Trivia Trap"},
+    {ItemValue::IV_PokemonCountTrap,    "Pokemon Count Trap"},
+    {ItemValue::IV_NumberSequenceTrap,  "Number Sequence Trap"},
+    {ItemValue::IV_LightUpPathTrap,     "Light Up Path Trap"},
+    {ItemValue::IV_PinballTrap,         "Pinball Trap"},
+};
+
+std::map<std::string, ItemValue> item_name_to_value = {
+    // Our native Traps
+    {"OmoTrap",                 ItemValue::IV_OmochaoTrap},
+    {"Chaos Control Trap",      ItemValue::IV_TimeStopTrap},
+    {"Confuse Trap",            ItemValue::IV_ConfuseTrap},
+    {"Tiny Trap",               ItemValue::IV_TinyTrap},
+    {"Gravity Trap",            ItemValue::IV_GravityTrap},
+    {"Exposition Trap",         ItemValue::IV_ExpositionTrap},
+    {"Ice Trap",                ItemValue::IV_IceTrap},
+    {"Slow Trap",               ItemValue::IV_SlowTrap},
+    {"Cutscene Trap",           ItemValue::IV_CutsceneTrap},
+    {"Reverse Trap",            ItemValue::IV_ReverseTrap},
+    {"Literature Trap",         ItemValue::IV_LiteratureTrap},
+    {"Pong Trap",               ItemValue::IV_PongTrap},
+    {"Platformer Trap",         ItemValue::IV_PlatformerTrap},
+    {"Fishing Trap",            ItemValue::IV_FishingTrap},
+    {"Trivia Trap",             ItemValue::IV_TriviaTrap},
+    {"Pokemon Trivia Trap",     ItemValue::IV_PokemonTriviaTrap},
+    {"Pokemon Count Trap",      ItemValue::IV_PokemonCountTrap},
+    {"Number Sequence Trap",    ItemValue::IV_NumberSequenceTrap},
+    {"Light Up Path Trap",      ItemValue::IV_LightUpPathTrap},
+    {"Pinball Trap",            ItemValue::IV_PinballTrap},
+
+    // Common other trap names
+    {"Stun Trap",               ItemValue::IV_TimeStopTrap},
+};

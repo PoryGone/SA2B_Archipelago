@@ -33,6 +33,7 @@ public:
 	// Item Functions
 	void ResetItems();
 	void ReceiveItem(int item_id, bool notify);
+	void HandleTrapLink(std::string item_name, std::string message);
 	bool IsOmotrapActive();
 	void HandleJunk(int item_id);
 
@@ -73,6 +74,9 @@ private:
 	std::queue<int> _JunkQueue;
 	std::queue<int> _TrapQueue;
 	std::queue<DialogueData> _DialogueQueue;
+
+	int _PriorityTrap;
+	std::string _TrapLinkMessage;
 
 	std::vector<ChaoGardenObject> _ChaoEggQueue;
 	unsigned int _ChaoEggsUsed = 0;

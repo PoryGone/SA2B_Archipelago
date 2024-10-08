@@ -303,3 +303,7 @@ struct ChaoAnimalSlot
     SA2BAnimal Type;
     char gap_1[7];
 };
+
+
+extern std::map<ItemValue, std::string> item_value_to_name;
+extern std::map<std::string, ItemValue> item_name_to_value;

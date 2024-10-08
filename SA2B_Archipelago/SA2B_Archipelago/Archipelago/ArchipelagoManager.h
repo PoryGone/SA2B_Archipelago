@@ -56,11 +56,14 @@ public:
 	void SetNarrator(int narrator);
 	void SetDeathLink(bool deathLinkActive);
 	void SetRingLink(bool ringLinkActive);
+	void SetTrapLink(bool trapLinkActive);
 	void VerfyModVersion(int modVersion);
 
 	void AP_KillPlayer();
 
 	void SetDeathCause(DeathCause cause);
+
+	void TrapLinkSend(std::string trapName);
 
 	std::string GetSeedNameAndPlayer();
 	std::string GetSeedName() { return this->_seedName; };
@@ -75,6 +78,7 @@ public:
 
 	bool _deathLinkActive = false;
 	bool _ringLinkActive = false;
+	bool _trapLinkActive = false;
 
 	std::string receivedDeathCause;
 
