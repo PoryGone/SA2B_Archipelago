@@ -11,6 +11,10 @@ constexpr int MOD_VERSION = 203;
 constexpr int KEEP_ALIVE = 3600;
 
 constexpr int RINGLINK_RATE = 10;
+constexpr int ERROR_RATE = 30;
+
+constexpr int ERROR_COLOR_1 = 0xFFF542C8;
+constexpr int ERROR_COLOR_2 = 0xFFFFFFFF;
 
 #define RING_LOSS_SOUND 0x8014
 #define RING_GAIN_SOUND 0x8005
@@ -88,6 +92,9 @@ private:
 
 	int _keepAliveTimer = 0;
 	int _ringLinkTimer = RINGLINK_RATE;
+	int _errorTimer = RINGLINK_RATE;
+
+	int _errorColor = ERROR_COLOR_1;
 
 	int _deathLinkTimer = 0;
 	DeathCause deathCauseOverride;

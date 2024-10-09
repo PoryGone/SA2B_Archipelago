@@ -134,11 +134,28 @@ void ArchipelagoManager::OnInitFunction(const char* path, const HelperFunctions&
 
 void ArchipelagoManager::OnFrameFunction()
 {
+    this->_errorTimer--;
+
+    if (this->_errorTimer <= 0)
+    {
+        this->_errorTimer = ERROR_RATE;
+
+        if (this->_errorColor == ERROR_COLOR_1)
+        {
+            this->_errorColor = ERROR_COLOR_2;
+        }
+        else
+        {
+            this->_errorColor = ERROR_COLOR_1;
+        }
+    }
+
     if (this->_badSaveFile || this->_badSaveName)
     {
         std::string msg1 = "Incorrect Save File Loaded.";
         std::string msg2 = "Relaunch game and load the correct save.";
-        _helperFunctions->SetDebugFontColor(0xFFF542C8);
+        _helperFunctions->SetDebugFontSize(16);
+        _helperFunctions->SetDebugFontColor(this->_errorColor);
         _helperFunctions->DisplayDebugString(NJM_LOCATION(0, 0), msg1.c_str());
         _helperFunctions->DisplayDebugString(NJM_LOCATION(0, 1), msg2.c_str());
 
@@ -156,7 +173,8 @@ void ArchipelagoManager::OnFrameFunction()
         msg2.append(std::to_string(this->_serverModVersion / 100));
         msg2.append(".");
         msg2.append(std::to_string(this->_serverModVersion % 100));
-        _helperFunctions->SetDebugFontColor(0xFFF542C8);
+        _helperFunctions->SetDebugFontSize(16);
+        _helperFunctions->SetDebugFontColor(this->_errorColor);
         _helperFunctions->DisplayDebugString(NJM_LOCATION(0, 0), msg1.c_str());
         _helperFunctions->DisplayDebugString(NJM_LOCATION(0, 1), msg2.c_str());
 
@@ -198,7 +216,8 @@ void ArchipelagoManager::OnFrameFunction()
     {
         std::string msg1 = "Connection to Archipelago lost.";
         std::string msg2 = "Reconnecting...";
-        _helperFunctions->SetDebugFontColor(0xFFF542C8);
+        _helperFunctions->SetDebugFontSize(16);
+        _helperFunctions->SetDebugFontColor(this->_errorColor);
         _helperFunctions->DisplayDebugString(NJM_LOCATION(0, 0), msg1.c_str());
         _helperFunctions->DisplayDebugString(NJM_LOCATION(0, 1), msg2.c_str());
 
