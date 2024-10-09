@@ -71,7 +71,7 @@ void MinigameManager::OnInputFunction()
 	this->_data.inputPress = (RawInputFlags)ControllersRaw->press;
 	this->_data.inputRelease = (RawInputFlags)ControllersRaw->release;
 
-	if (this->currentMinigame)
+	if (this->currentMinigame && !this->isPaused)
 	{
 		ControllersRaw->on &= ~RawInputFlags::RIF_ANY_D_PAD;
 		ControllersRaw->press &= ~RawInputFlags::RIF_ANY_D_PAD;
