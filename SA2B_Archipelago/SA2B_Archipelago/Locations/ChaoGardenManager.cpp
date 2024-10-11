@@ -148,7 +148,10 @@ void ChaoGardenManager::OnFrameFunction()
 	}
 
 	// Prevent Game Overs in Chao Garden
-	Life_Count[0] = 3;
+	if (Life_Count[0] < 3)
+	{
+		Life_Count[0] = 3;
+	}
 
 	this->HandleStartingEggs();
 	this->HandleSubsequentEggs();
