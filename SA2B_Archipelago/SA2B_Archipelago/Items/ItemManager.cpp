@@ -144,6 +144,40 @@ void ItemManager::OnInputFunction()
 		ControllersRaw->press = 0;
 	}
 
+	if (this->_DriftTrapAngle > -1 &&
+		(GameState == GameStates::GameStates_Ingame || GameState == GameStates::GameStates_Pause))
+	{
+		int driftMagnitude = RandomInt(0, 255);
+
+		if (driftMagnitude > 90)
+		{
+			int xOffset = int(driftMagnitude * cos(NJM_DEG_RAD(this->_DriftTrapAngle)));
+			int yOffset = int(driftMagnitude * sin(NJM_DEG_RAD(this->_DriftTrapAngle)));
+
+			if (this->_DriftTrapAngle >= 360)
+			{
+				ControllersRaw->x1 = Sint16(max(min(ControllersRaw->x1 + xOffset, 255), -255));
+				ControllersRaw->y1 = Sint16(max(min(ControllersRaw->y1 + yOffset, 255), -255));
+			}
+			else
+			{
+				ControllersRaw->x2 = Sint16(max(min(ControllersRaw->x2 + xOffset, 255), -255));
+				ControllersRaw->y2 = Sint16(max(min(ControllersRaw->y2 + yOffset, 255), -255));
+			}
+		}
+
+		// TODO: Remove once behavior is validated
+		//std::string msg1 = "driftMagnitude: ";
+		//msg1.append(std::to_string(driftMagnitude));
+		//_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 0), msg1.c_str());
+		//
+		//std::string msg2 = "ControllersRaw->x1: ";
+		//msg2.append(std::to_string(ControllersRaw->x1));
+		//msg2.append(" | ControllersRaw->y1: ");
+		//msg2.append(std::to_string(ControllersRaw->y1));
+		//_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 2), msg2.c_str());
+	}
+
 	if (this->_ReverseTrapActive &&
 		(GameState == GameStates::GameStates_Ingame || GameState == GameStates::GameStates_Pause))
 	{
@@ -934,6 +968,17 @@ bool ItemManager::IsActiveTrapValid()
 			return false;
 		}
 		break;
+	case ItemValue::IV_ControllerDriftTrap:
+		if (GameMode != GameMode::GameMode_Level)
+		{
+			return false;
+		}
+
+		if (this->_DriftTrapAngle > -1)
+		{
+			return false;
+		}
+		break;
 	case ItemValue::IV_LiteratureTrap:
 	case ItemValue::IV_PongTrap:
 	case ItemValue::IV_PlatformerTrap:
@@ -1022,6 +1067,8 @@ void ItemManager::ResetTrapData()
 	this->_StoredPhysicsData = PhysicsData();
 
 	this->_ReverseTrapActive = false;
+
+	this->_DriftTrapAngle = -1;
 }
 
 void ItemManager::OnFrameTrapQueue()
@@ -1198,6 +1245,10 @@ void ItemManager::OnFrameTrapQueue()
 		// Nothing
 	}
 	else if (this->_ActiveTrap == ItemValue::IV_LiteratureTrap)
+	{
+		// Nothing
+	}
+	else if (this->_ActiveTrap == ItemValue::IV_ControllerDriftTrap)
 	{
 		// Nothing
 	}
@@ -1393,11 +1444,15 @@ void ItemManager::OnFrameTrapQueue()
 		return;
 		break;
 	case ItemValue::IV_ReverseTrap:
-		PlayUnshuffledVoice(2, 834);
+		PlayUnshuffledVoice(2, 1956);
 		this->_ReverseTrapActive = true;
 		break;
 	case ItemValue::IV_LiteratureTrap:
 		PlayUnshuffledVoice(2, 85);
+	case ItemValue::IV_ControllerDriftTrap:
+		PlayUnshuffledVoice(2, 834);
+		this->_DriftTrapAngle = RandomInt(0, 720);
+		break;
 	case ItemValue::IV_PongTrap:
 	case ItemValue::IV_PlatformerTrap:
 	case ItemValue::IV_FishingTrap:

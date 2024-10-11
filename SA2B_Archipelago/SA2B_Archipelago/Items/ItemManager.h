@@ -101,6 +101,8 @@ private:
 
 	bool _ReverseTrapActive = false;
 
+	int _DriftTrapAngle = -1;
+
 	int _chaoEntryTimer = 0;
 	int _animalDropoffTimer = ANIMAL_DROPOFF_COOLDOWN;
 	char _lastAnimalCount = 0;
