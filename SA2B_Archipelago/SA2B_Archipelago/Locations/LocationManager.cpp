@@ -276,7 +276,8 @@ void LocationManager::OnInputFunction()
 			if (this->_inBigFishing)
 			{
 				// TODO: Handle Cannon's Core switches
-				TimeStopped = 1;
+				TimeStopped = 2;
+				WriteData<1>((void*)0x4D2E50, 2);
 				if ((MainCharObj1[0]) && (MainCharObj2[0]))
 				{
 					MainCharObj1[0]->Action = Action_None;
@@ -292,6 +293,7 @@ void LocationManager::OnInputFunction()
 			if (minigameManager->state == MinigameState::MGS_None && this->_inBigFishing)
 			{
 				TimeStopped = 0;
+				WriteData<1>((void*)0x4D2E50, 0);
 				this->_inBigFishing = false;
 			}
 
