@@ -131,6 +131,7 @@ void ChaoGardenManager::OnFrameFunction()
 	// Remove Hero/Dark Race restrictions
 	WriteData<2>((void*)0x531774, '\x90');
 	WriteData<2>((void*)0x5314CF, '\x90');
+	WriteData<2>((void*)0x531519, '\x90');
 
 	// Handle Separate Chao Saves
 	std::string chaoFileName = ArchipelagoManager::getInstance().GetSeedNameAndPlayer().substr(0, 12);
