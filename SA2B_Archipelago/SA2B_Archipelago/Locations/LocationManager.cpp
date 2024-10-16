@@ -1725,6 +1725,15 @@ void LocationManager::SetKartRacesEnabled(int kartRacesEnabled)
 void LocationManager::SetRacesPacked(bool racesPacked)
 {
 	this->_racesPacked = racesPacked;
+
+	for (auto& pair : this->_ChaoGardenData)
+	{
+		if (pair.second.CheckSent)
+		{
+			// Redo the "check" of the location, as we may have already incorrectly processed it before we got this bool set
+			CheckLocation(pair.first);
+		}
+	}
 }
 
 void LocationManager::SetChaoEnabled(bool chaoEnabled)
