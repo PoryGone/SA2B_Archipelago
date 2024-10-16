@@ -340,12 +340,13 @@ void LocationManager::OnFrameFunction()
 {
 	this->SendAnimalLocationCheck();
 	this->OnFrameWhistle();
-	this->OnFrameChaoGarden();
 
 	if (!this->_archipelagoManager->IsInit() || !this->_archipelagoManager->IsAuth())
 	{
 		return;
 	}
+
+	this->OnFrameChaoGarden();
 
 	this->_timer++;
 
@@ -1005,7 +1006,6 @@ void LocationManager::OnFrameChaoGarden()
 				}
 			}
 		}
-		// End Sending of Chao Locations to Server
 
 
 		// Chao Kindergarten
@@ -1036,7 +1036,6 @@ void LocationManager::OnFrameChaoGarden()
 				}
 			}
 		}
-		// End Sending of Chao Locations to Server
 
 
 		// Black Market
