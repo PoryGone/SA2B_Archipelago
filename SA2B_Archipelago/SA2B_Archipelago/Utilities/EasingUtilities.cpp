@@ -48,6 +48,15 @@ float Lerp(float a, float b, float t)
 	return (1.0f - t) * a + t * b;
 }
 
+NJS_POINT3 Lerp(NJS_POINT3 a, NJS_POINT3 b, float t)
+{
+	return {
+		Lerp(a.x, b.x, t),
+		Lerp(a.y, b.y, t),
+		Lerp(a.z, b.z, t),
+	};
+}
+
 float EaseInterpolate(float a, float b, float t, EasingType type)
 {
 	return Lerp(a, b, ApplyEasing(t, type));

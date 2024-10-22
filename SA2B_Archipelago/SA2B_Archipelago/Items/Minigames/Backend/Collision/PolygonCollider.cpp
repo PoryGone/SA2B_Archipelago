@@ -1,6 +1,7 @@
 #include "../../../../pch.h"
 #include "PolygonCollider.h"
 #include "CircleCollider.h"
+#include "CapsuleCollider.h"
 
 bool PolygonCollider::IsColliding(Collider& otherCollider)
 {
@@ -11,6 +12,10 @@ bool PolygonCollider::IsColliding(Collider& otherCollider)
 	if (auto circle = dynamic_cast<CircleCollider*>(&otherCollider))
 	{
 		return ContainsPoint(circle->GetClosestPoint(GetCentroid()));
+	}
+	if (auto capsule = dynamic_cast<CapsuleCollider*>(&otherCollider))
+	{
+		return ContainsPoint(capsule->GetClosestPoint(GetCentroid()));
 	}
 	return false;
 }
@@ -28,8 +33,6 @@ BoundingBox PolygonCollider::GetBoundingBox()
 
 bool PolygonCollider::ContainsPoint(NJS_POINT3 point)
 {
-	bool isInside = true;
-
 	GetAdjustedPoints();
 
 	for (int i = 0; i < adjustedPoints.size(); i++)

@@ -114,6 +114,11 @@ float Point3Magnitude(NJS_POINT3 a)
 	return sqrt(a.x * a.x + a.y * a.y + a.z * a.z);
 }
 
+float Point3SqrMagnitude(NJS_POINT3 a)
+{
+	return a.x * a.x + a.y * a.y + a.z * a.z;
+}
+
 NJS_POINT3 Point3Normalize(NJS_POINT3 a)
 {
 	float mag = Point3Magnitude(a);
@@ -133,4 +138,16 @@ void Point3NormalizeEQ(NJS_POINT3& a)
 		a.y /= mag;
 		a.z /= mag;
 	}
+}
+
+std::string Point3String(NJS_POINT3 a)
+{
+	std::string str("(");
+	str.append(std::to_string(a.x));
+	str.append(", ");
+	str.append(std::to_string(a.y));
+	str.append(", ");
+	str.append(std::to_string(a.z));
+	str.append(")");
+	return str;
 }

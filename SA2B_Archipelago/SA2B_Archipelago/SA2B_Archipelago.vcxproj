@@ -165,10 +165,13 @@
     <ClInclude Include="Items\ItemData.h" />
     <ClInclude Include="Items\ItemManager.h" />
     <ClInclude Include="Items\Minigames\Backend\Collision\BoundingBox.h" />
+    <ClInclude Include="Items\Minigames\Backend\Collision\CapsuleCollider.h" />
+    <ClInclude Include="Items\Minigames\Backend\Collision\CastResult.h" />
     <ClInclude Include="Items\Minigames\Backend\Collision\CircleCollider.h" />
     <ClInclude Include="Items\Minigames\Backend\Collision\Collider.h" />
     <ClInclude Include="Items\Minigames\Backend\Collision\CollisionManager.h" />
     <ClInclude Include="Items\Minigames\Backend\Collision\CollisionTest.h" />
+    <ClInclude Include="Items\Minigames\Backend\Collision\CollisionUtilities.h" />
     <ClInclude Include="Items\Minigames\Backend\Collision\PolygonCollider.h" />
     <ClInclude Include="Items\Minigames\Backend\SpriteBounds.h" />
     <ClInclude Include="Items\Minigames\Backend\SpriteHierarchy.h" />
@@ -266,6 +269,12 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../../../../pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../../../../pch.h</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="Items\Minigames\Backend\Collision\CapsuleCollider.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../../../pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../../../pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../../../../pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../../../../pch.h</PrecompiledHeaderFile>
+    </ClCompile>
     <ClCompile Include="Items\Minigames\Backend\Collision\CircleCollider.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../../../pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../../../pch.h</PrecompiledHeaderFile>
@@ -279,6 +288,12 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../../../../pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="Items\Minigames\Backend\Collision\CollisionTest.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../../../pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../../../pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../../../../pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../../../../pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="Items\Minigames\Backend\Collision\CollisionUtilities.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../../../pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../../../pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../../../../pch.h</PrecompiledHeaderFile>

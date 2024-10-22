@@ -204,6 +204,22 @@ void CollisionTest::RunTests()
 	AssertFalse(colManager.IsColliding(spr1, spr2), "Manager_ApartCircleAndPolygonResultsInNoCollision");
 	AssertFalse(colManager.IsColliding(spr2, spr1), "Manager_ApartCircleAndPolygonResultsInNoCollision_Reverse");
 
+	AssertTrue(TestLineSegmentIntersection({ -1.0f, 0.0f }, { 1.0f, 0.0f }, { 0.0f, 1.0f }, { 0.0f, -1.0f }).isIntersecting, "Util_PerpendicularOverlappingLineSegmentsResultsInIntersection");
+	AssertFalse(TestLineSegmentIntersection({ -1.0f, 1.0f }, { -1.0f, -1.0f }, { 0.0f, 1.0f }, { 0.0f, -1.0f }).isIntersecting, "Util_ParallelLineSegmentsResultsInNoIntersection");
+
+	CapsuleCollider capCol1 = CapsuleCollider(1.0f, nullptr, { 2.0f, 0.0f }, { 1.0f, 0.0f });
+	CapsuleCollider capCol2 = CapsuleCollider(1.0f, nullptr, { -2.0f, 0.0f }, { 0.5f, 0.0f });
+
+	AssertTrue(TestCapsuleCapsuleIntersection(capCol1, capCol2).isIntersecting, "Util_CapsultCapsuleIntersection");
+
+	capCol2 = CapsuleCollider(1.0f, nullptr, { -2.0f, 0.0f }, { -2.0f, 1.0f });
+
+	AssertFalse(TestCapsuleCapsuleIntersection(capCol1, capCol2).isIntersecting, "Util_CapsultCapsuleNoIntersection");
+	AssertFalse(capCol1.IsColliding(capCol2), "Util_CapsultCapsuleNoCollision");
+	box1 = capCol1.GetBoundingBox();
+	box2 = capCol2.GetBoundingBox();
+	AssertFalse(box1.IsOverlapping(box2), "Util_CapsultCapsuleNoOverlap");
+
 	PrintDebug("-----Run Tests End-----");
 	hasRun = true;
 }

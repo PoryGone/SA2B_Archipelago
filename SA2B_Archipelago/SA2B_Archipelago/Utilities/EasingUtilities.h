@@ -19,6 +19,7 @@ enum EasingType
 
 float ApplyEasing(float x, EasingType type);
 float Lerp(float a, float b, float t);
+NJS_POINT3 Lerp(NJS_POINT3 a, NJS_POINT3 b, float t);
 
 float EaseInterpolate(float a, float b, float t, EasingType type);
 NJS_POINT3 EaseInterpolate(NJS_POINT3 a, NJS_POINT3 b, float t, EasingType type);

@@ -1,6 +1,7 @@
 #include "../../../../pch.h"
 #include "CircleCollider.h"
 #include "PolygonCollider.h"
+#include "CapsuleCollider.h"
 #include "../../../../Utilities/SpriteUtilities.h"
 
 bool CircleCollider::IsColliding(Collider& otherCollider)
@@ -13,6 +14,11 @@ bool CircleCollider::IsColliding(Collider& otherCollider)
 	if (auto polygon = dynamic_cast<PolygonCollider*>(&otherCollider))
 	{
 		return polygon->ContainsPoint(GetClosestPoint(polygon->GetCentroid()));
+	}
+	if (auto capsule = dynamic_cast<CapsuleCollider*>(&otherCollider))
+	{
+		NJS_POINT3 center = GetCenter();
+		return Point3Distance(center, capsule->GetClosestPoint(center)) < radius;
 	}
 	return false;
 }

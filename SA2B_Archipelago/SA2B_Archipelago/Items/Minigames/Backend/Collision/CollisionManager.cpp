@@ -43,6 +43,70 @@ bool CollisionManager::IsColliding(SpriteNode* nodeA, SpriteNode* nodeB)
 	return false;
 }
 
+/// <summary>
+/// This currently only works on single circle collider nodes. Returns data about the first collision that will occur (if any) when projected along vector.
+/// </summary>
+CastResult CollisionManager::CastCollision(SpriteNode* node, NJS_POINT3 vector, std::vector<SpriteNode*> others)
+{
+	CastResult castResults = CastResult();
+	float currentDist = 10000.0f;
+	if (!colliderMap.count(node)) return CastResult();
+	auto colliders = colliderMap[node];
+	if (colliders.size() == 1)
+	{
+		auto col = colliders[0];
+		if (auto circle_col = dynamic_cast<CircleCollider*>(&*col))
+		{
+			CapsuleCollider castCol = CapsuleCollider(*circle_col, vector);
+			NJS_POINT3 castPt = castCol.GetPoint1();
+			auto castBounds = castCol.GetBoundingBox();
+			
+			for (int i = 0; i < others.size(); i++)
+			{
+				auto otherCol = colliderMap[others[i]];
+				for (int c = 0; c < otherCol.size(); c++)
+				{
+					auto otherBound = otherCol[c]->GetBoundingBox();
+					if (castBounds.IsOverlapping(otherBound) && col->IsColliding(*otherCol[c]))
+					{
+						if (auto polygon = dynamic_cast<PolygonCollider*>(&*otherCol[c]))
+						{
+							auto results = TestCapsulePolygonIntersection(castCol, *polygon);
+							float dist = Point3Distance(castPt, results.point);
+							if (!castResults.isHit || dist < currentDist)
+							{
+								castResults = CastResult(results.point, results.surfaceNormal, polygon->node);
+								currentDist = dist;
+							}
+						}
+						if (auto circle = dynamic_cast<CircleCollider*>(&*otherCol[c]))
+						{
+							auto results = TestCapsuleCircleIntersection(castCol, *circle);
+							float dist = Point3Distance(castPt, results.point);
+							if (!castResults.isHit || dist < currentDist)
+							{
+								castResults = CastResult(results.point, results.surfaceNormal, circle->node);
+								currentDist = dist;
+							}
+						}
+						if (auto capsule = dynamic_cast<CapsuleCollider*>(&*otherCol[c]))
+						{
+							auto results = TestCapsuleCapsuleIntersection(castCol, *capsule);
+							float dist = Point3Distance(castPt, results.point);
+							if (!castResults.isHit || dist < currentDist)
+							{
+								castResults = CastResult(results.point, results.surfaceNormal, capsule->node);
+								currentDist = dist;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	return castResults;
+}
+
 void CollisionManager::DebugDrawCollision(MinigameIconData* iconData)
 {
 	NJS_SPRITE sprite = { { 0.0f, 0.0f, 0.0f }, 1.0f, 1.0f, 0, iconData->MinigameTex, iconData->MinigameAnims };
@@ -105,6 +169,50 @@ void CollisionManager::DebugDrawCollision(MinigameIconData* iconData)
 					sprite.sy = circle->radius * 2.0f / (float)anim->sy;
 					ConstantMaterial = { 0.8f, 0.0f, 1.0f, 0.0f };
 					DrawSprite2D(&sprite, 1, 1.0f, NJD_SPRITE_ALPHA | NJD_SPRITE_COLOR);
+				}
+				//Draw capsule frame
+				if (auto capsule = dynamic_cast<CapsuleCollider*>(c))
+				{
+					NJS_POINT3 c1 = capsule->GetPoint1();
+					NJS_POINT3 c2 = capsule->GetPoint2();
+					anim = iconData->GetAnim(MGI_Circle_Outline);
+					tempAnim = anim;
+					tempAnim--;
+					sprite.tanim = tempAnim;
+					sprite.p = c1;
+					sprite.ang = NJM_DEG_ANG(0.0f);
+					sprite.sx = capsule->radius * 2.0f / (float)anim->sx;
+					sprite.sy = capsule->radius * 2.0f / (float)anim->sy;
+					ConstantMaterial = { 0.8f, 0.0f, 1.0f, 0.0f };
+					DrawSprite2D(&sprite, 1, 1.0f, NJD_SPRITE_ALPHA | NJD_SPRITE_COLOR);
+					sprite.p = c2;
+					DrawSprite2D(&sprite, 1, 1.0f, NJD_SPRITE_ALPHA | NJD_SPRITE_COLOR);
+					anim = iconData->GetAnim(MGI_White_Box);
+					tempAnim = anim;
+					tempAnim--;
+					sprite.tanim = tempAnim;
+					NJS_POINT3 centerLine = Point3Normalize(Point3Substract(c2, c1));
+					float ang = atan2(centerLine.y, centerLine.x) - atan2(1.0f, 0.0f);
+					ang = NJM_RAD_DEG(ang);
+					NJS_POINT3 perpendicularLine = Point3RotateAround(centerLine, {}, 90.0f);
+					NJS_POINT3 c3 = Point3Add(c1, Point3Scale(perpendicularLine, capsule->radius));
+					NJS_POINT3 c4 = Point3Add(c2, Point3Scale(perpendicularLine, capsule->radius));
+					NJS_POINT3 c5 = Point3Add(c1, Point3Scale(perpendicularLine, -capsule->radius));
+					NJS_POINT3 c6 = Point3Add(c2, Point3Scale(perpendicularLine, -capsule->radius));
+					NJS_POINT3 c34 = { 0.0f, 0.0f };
+					c34.x = 0.5f * c3.x + 0.5f * c4.x;
+					c34.y = 0.5f * c3.y + 0.5f * c4.y;
+					NJS_POINT3 c56 = { 0.0f, 0.0f };
+					c56.x = 0.5f * c5.x + 0.5f * c6.x;
+					c56.y = 0.5f * c5.y + 0.5f * c6.y;
+					sprite.ang = NJM_DEG_ANG(ang);
+					sprite.sx = 2.0f / (float)anim->sx;
+					sprite.p = c34;
+					sprite.sy = Point3Distance(c3, c4) / (float)anim->sy;
+					DrawSprite2D(&sprite, 1, 1.0f, NJD_SPRITE_ALPHA | NJD_SPRITE_ANGLE | NJD_SPRITE_COLOR);
+					sprite.p = c56;
+					sprite.sy = Point3Distance(c5, c6) / (float)anim->sy;
+					DrawSprite2D(&sprite, 1, 1.0f, NJD_SPRITE_ALPHA | NJD_SPRITE_ANGLE | NJD_SPRITE_COLOR);
 				}
 			}
 		}
