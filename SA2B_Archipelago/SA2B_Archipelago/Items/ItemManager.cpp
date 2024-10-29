@@ -1447,12 +1447,12 @@ void ItemManager::OnFrameTrapQueue()
 		PlayUnshuffledVoice(2, 1956);
 		this->_ReverseTrapActive = true;
 		break;
-	case ItemValue::IV_LiteratureTrap:
-		PlayUnshuffledVoice(2, 85);
 	case ItemValue::IV_ControllerDriftTrap:
 		PlayUnshuffledVoice(2, 834);
 		this->_DriftTrapAngle = RandomInt(0, 720);
 		break;
+	case ItemValue::IV_LiteratureTrap:
+		PlayUnshuffledVoice(2, 85);
 	case ItemValue::IV_PongTrap:
 	case ItemValue::IV_PlatformerTrap:
 	case ItemValue::IV_FishingTrap:
