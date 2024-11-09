@@ -567,6 +567,18 @@ void SA2_SetRequiredRank(int requiredRank)
     ssm->SetRequiredRank(requiredRank);
 }
 
+void SA2_SetLogicDifficulty(int logicDifficulty)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    LocationManager* locationManager = &LocationManager::getInstance();
+
+    locationManager->SetLogicDifficulty(logicDifficulty);
+}
+
 void SA2_SetChaoPacks(int chaoRaceChecks)
 {
     if (!ArchipelagoManager::getInstance().IsInit())
@@ -1042,6 +1054,7 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_RegisterSlotDataIntCallback("EmblemsForCannonsCore", &SA2_SetEmblemsForCannonsCore);
     AP_RegisterSlotDataIntCallback("RequiredCannonsCoreMissions", &SA2_SetRequiredCannonsCoreMissions);
     AP_RegisterSlotDataIntCallback("RequiredRank", &SA2_SetRequiredRank);
+    AP_RegisterSlotDataIntCallback("LogicDifficulty", &SA2_SetLogicDifficulty);
     AP_RegisterSlotDataIntCallback("ChaoKeys", &SA2_SetChaoKeys);
     AP_RegisterSlotDataIntCallback("Whistlesanity", &SA2_SetPipes);
     AP_RegisterSlotDataIntCallback("GoldBeetles", &SA2_SetGoldBeetles);

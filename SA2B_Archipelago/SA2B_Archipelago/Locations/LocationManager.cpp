@@ -310,7 +310,14 @@ void LocationManager::OnInputFunction()
 
 						if (!checkData.CheckSent && checkData.LevelID == CurrentLevel)
 						{
-							if (dist(checkData.Position, MainCharObj1[0]->Position) < checkData.Range)
+							NJS_VECTOR relevantPos = checkData.Position;
+
+							if (this->_logicDifficulty > 0 && dist(checkData.HardPosition, NJS_VECTOR({ 0.0f, 0.0f, 0.0f })) > 1.0f)
+							{
+								relevantPos = checkData.HardPosition;
+							}
+
+							if (dist(relevantPos, MainCharObj1[0]->Position) < checkData.Range)
 							{
 								// TODO: RAS: Show prompt for Big
 								std::string msg1 = "PRESS Y TO FISH";
@@ -814,8 +821,6 @@ void LocationManager::OnFrameBig()
 		return;
 	}
 
-	// TODO: ???
-
 	for (int i = BigCheck::BC_BEGIN; i < BigCheck::BC_NUM_CHECKS; i++)
 	{
 		if (this->_BigData.find(i) != this->_BigData.end())
@@ -831,7 +836,6 @@ void LocationManager::OnFrameBig()
 
 				if ((dataValue & bitFlag) != 0x00)
 				{
-					MessageQueue::GetInstance().AddMessage("Send Item");
 					if (this->_archipelagoManager)
 					{
 						this->_archipelagoManager->SendItem(i);
@@ -1622,6 +1626,11 @@ void LocationManager::SetRequiredRank(int requiredRank)
 	this->_requiredRank = requiredRank;
 }
 
+void LocationManager::SetLogicDifficulty(int logicDifficulty)
+{
+	this->_logicDifficulty = logicDifficulty;
+}
+
 void LocationManager::SetChaoKeysEnabled(bool chaoKeysEnabled)
 {
 	this->_chaoKeysEnabled = chaoKeysEnabled;
@@ -2199,7 +2208,6 @@ void LocationManager::SendItemBoxLocationCheck(ObjectMaster* itemBox)
 
 void LocationManager::SendBigLocationCheck()
 {
-	MessageQueue::GetInstance().AddMessage("Send Big Location Check");
 	if (!this->_bigEnabled)
 	{
 		return;
@@ -2218,13 +2226,18 @@ void LocationManager::SendBigLocationCheck()
 
 			if (checkData.LevelID == CurrentLevel)
 			{
-				if (dist(checkData.Position, MainCharObj1[0]->Position) < checkData.Range)
+				NJS_VECTOR relevantPos = checkData.Position;
+
+				if (this->_logicDifficulty > 0 && dist(checkData.HardPosition, NJS_VECTOR({ 0.0f, 0.0f, 0.0f })) > 1.0f)
+				{
+					relevantPos = checkData.HardPosition;
+				}
+
+				if (dist(relevantPos, MainCharObj1[0]->Position) < checkData.Range)
 				{
 					char dataValue = *(char*)checkData.Address;
 
 					char bitFlag = (char)(0x01 << checkData.AddressBit);
-
-					MessageQueue::GetInstance().AddMessage("Found Location Check");
 
 					if ((dataValue & bitFlag) == 0x00)
 					{
@@ -2232,7 +2245,6 @@ void LocationManager::SendBigLocationCheck()
 						char bitFlag = (char)(0x01 << checkData.AddressBit);
 						char newDataValue = dataValue | bitFlag;
 
-						MessageQueue::GetInstance().AddMessage("Write Data");
 						WriteData<1>((void*)checkData.Address, newDataValue);
 					}
 

@@ -43,6 +43,7 @@ public:
 
 	void SetGoal(int goal);
 	void SetRequiredRank(int requiredRank);
+	void SetLogicDifficulty(int logicDifficulty);
 	void SetRequiredCannonsCoreMissions(bool requireAllCannonsCoreMissions);
 
 	void SetChaoKeysEnabled(bool chaoKeysEnabled);
@@ -122,6 +123,7 @@ private:
 
 	int _goal = 0;
 	int _requiredRank = 0;
+	int _logicDifficulty = 0;
 	bool _requireAllCannonsCoreMissions = false;
 
 	bool _chaoKeysEnabled = false;
