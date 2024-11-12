@@ -1002,6 +1002,18 @@ void SA2_SetChosenBossRushMap(std::map<int, int> map)
     ssm->SetChosenBossRushMap(map);
 }
 
+void SA2_SetActiveTraps(std::map<int, int> map)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    ItemManager* itemManager = &ItemManager::getInstance();
+
+    itemManager->SetPossibleTraps(map);
+}
+
 void SA2_SetMinigameDifficulty(int minigameDifficulty)
 {
     if (!ArchipelagoManager::getInstance().IsInit())
@@ -1084,6 +1096,7 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_RegisterSlotDataMapIntIntCallback("MissionCountMap", &SA2_SetMissionCountMap);
     AP_RegisterSlotDataMapIntIntCallback("GateBosses", &SA2_SetGateBosses);
     AP_RegisterSlotDataMapIntIntCallback("BossRushMap", &SA2_SetChosenBossRushMap);
+    AP_RegisterSlotDataMapIntIntCallback("ActiveTraps", &SA2_SetActiveTraps);
     AP_RegisterSlotDataIntCallback("PlayerNum", &SA2_SetPlayerNum);
     AP_Start();
 }

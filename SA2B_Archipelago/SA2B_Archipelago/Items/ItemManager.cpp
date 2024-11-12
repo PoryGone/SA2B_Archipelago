@@ -690,6 +690,11 @@ void RestoreOmochao()
 	}
 }
 
+void ItemManager::SetPossibleTraps(std::map<int, int> map)
+{
+	this->_possibleTraps = map;
+}
+
 void ItemManager::HandleTrap(int item_id)
 {
 	this->_TrapQueue.push(item_id);
@@ -706,8 +711,14 @@ void ItemManager::HandleTrapLink(std::string item_name, std::string message)
 
 	ItemValue trap_value = item_name_to_value[item_name];
 
-	this->_PriorityTrap = trap_value;
-	this->_TrapLinkMessage = message;
+	if (this->_possibleTraps.find(trap_value) != this->_possibleTraps.end())
+	{
+		if (this->_possibleTraps.at(trap_value) > 0)
+		{
+			this->_PriorityTrap = trap_value;
+			this->_TrapLinkMessage = message;
+		}
+	}
 }
 
 bool ItemManager::IsActiveTrapValid()

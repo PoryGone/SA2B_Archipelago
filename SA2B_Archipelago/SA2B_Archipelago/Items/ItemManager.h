@@ -34,6 +34,7 @@ public:
 	void ResetItems();
 	void ReceiveItem(int item_id, bool notify);
 	void HandleTrapLink(std::string item_name, std::string message);
+	void SetPossibleTraps(std::map<int, int> map);
 	bool IsOmotrapActive();
 	void HandleJunk(int item_id);
 
@@ -77,6 +78,7 @@ private:
 
 	int _PriorityTrap;
 	std::string _TrapLinkMessage;
+	std::map<int, int> _possibleTraps;
 
 	std::vector<ChaoGardenObject> _ChaoEggQueue;
 	unsigned int _ChaoEggsUsed = 0;
