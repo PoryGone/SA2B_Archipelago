@@ -74,14 +74,14 @@ std::tuple<int, NJS_POINT3, NJS_POINT3> GetIntersectionsOfLineSegAndCircle(LineS
 
 NJS_POINT3 GetNormalDirectionOfPointFromSeg(LineSegment seg, NJS_POINT3 pt)
 {
-	float d = (seg.b.x - seg.a.x) * (pt.y - seg.a.y) - (seg.b.y - seg.a.y) * (pt.x - seg.a.x);
+	//float d = (seg.b.x - seg.a.x) * (pt.y - seg.a.y) - (seg.b.y - seg.a.y) * (pt.x - seg.a.x);
 	//float d = (pt.x - seg.a.x) * (seg.b.y - seg.a.y) - (pt.y - seg.a.y) * (seg.b.x - seg.a.x);
 	NJS_POINT3 n = Point3Normalize({ seg.b.y - seg.a.y, -(seg.b.x - seg.a.x) });
-	if (d < 0.0f)
+	/*if (d < 0.0f)
 	{
 		n = Point3Scale(n, -1.0f);
-	}
-	return n;
+	}*/
+	return Point3Scale(n, -1.0f);;
 }
 
 float NonSquaredDistance(NJS_POINT3 a, NJS_POINT3 b)

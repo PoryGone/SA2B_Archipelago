@@ -34,36 +34,48 @@ void Pinball::UpdateBallActive(MinigameManagerData data)
 	if (results.isHit)
 	{
 		float totalDistance = Point3Magnitude(ballVelocity);
-		float distance = Point3Distance(results.collisionPoint, ball->GetPositionGlobal());
-		distance -= ballRadius;
-		
-		//Reflection
-		NJS_POINT3 ballVelNormal = Point3Normalize(ballVelocity);
-		float refVal = -2.0f * Point3DotProduct(ballVelNormal, results.surfaceNormal);
+		float ballMag = totalDistance;
 		NJS_POINT3 refNormal = { 0.0f, 0.0f, 0.0f };
-		//refNormal.x = ballVelNormal.x + refVal * results.surfaceNormal.x;
-		//refNormal.y = ballVelNormal.y + refVal * results.surfaceNormal.y;
-		refNormal.x = refVal * results.surfaceNormal.x + ballVelNormal.x;
-		refNormal.y = refVal * results.surfaceNormal.y + ballVelNormal.y;
-		refNormal = Point3Normalize(refNormal);
 
-		//Debug Norm
-		SpriteNode* normObj = normObjs[normIndex];
-		normObj->SetPositionGlobal(Point3Add(results.collisionPoint, Point3Scale(results.surfaceNormal, normObj->displaySize.y * 0.5f)));
-		float normAng = Point3SignedAngleDegrees({ 0.0f, 1.0f }, results.surfaceNormal);
-		normObj->SetRotation(normAng);
-		normObj->SetEnabled(true);
-		normObj = colPtObjs[normIndex];
-		normIndex = normIndex < (normObjs.size() - 1) ? normIndex + 1 : 0;
-		normObj->SetPositionGlobal(results.collisionPoint);
-		normObj->SetEnabled(true);
-		std::string dbgStr = std::to_string(normAng);
-		dbgStr.append(" --> ");
-		dbgStr.append(Point3String(results.surfaceNormal));
-		PrintDebug(dbgStr.c_str());
-		
-		ball->SetPositionGlobal(Point3Add(results.collisionPoint, Point3Scale(refNormal, totalDistance - distance)));
-		ballVelocity = Point3Scale(refNormal, totalDistance * 0.7f);
+		while (totalDistance > 0.0f && results.isHit)
+		{
+			NJS_POINT3 colPoint = Point3Add(results.collisionPoint, Point3Scale(results.surfaceNormal, ballRadius));
+			float distance = Point3Distance(colPoint, ball->GetPositionGlobal());
+
+			//Reflection
+			NJS_POINT3 ballVelNormal = Point3Normalize(ballVelocity);
+			float refVal = -2.0f * Point3DotProduct(ballVelNormal, results.surfaceNormal);
+			//refNormal.x = ballVelNormal.x + refVal * results.surfaceNormal.x;
+			//refNormal.y = ballVelNormal.y + refVal * results.surfaceNormal.y;
+			refNormal = { 0.0f, 0.0f, 0.0f };
+			refNormal.x = refVal * results.surfaceNormal.x + ballVelNormal.x;
+			refNormal.y = refVal * results.surfaceNormal.y + ballVelNormal.y;
+			refNormal = Point3Normalize(refNormal);
+
+			//Debug Norm
+			SpriteNode* normObj = normObjs[normIndex];
+			normObj->SetPositionGlobal(Point3Add(results.collisionPoint, Point3Scale(refNormal, normObj->displaySize.y * 0.5f)));
+			float normAng = Point3SignedAngleDegrees({ 0.0f, 1.0f }, refNormal);
+			normObj->SetRotation(normAng);
+			normObj->SetEnabled(true);
+			normObj = colPtObjs[normIndex];
+			normIndex = normIndex < (normObjs.size() - 1) ? normIndex + 1 : 0;
+			normObj->SetPositionGlobal(results.collisionPoint);
+			normObj->SetEnabled(true);
+			std::string dbgStr = std::to_string(max(totalDistance - distance, 0.0f));
+			dbgStr.append(" --> ");
+			dbgStr.append(Point3String(results.surfaceNormal));
+			dbgStr.append(" --> ");
+			dbgStr.append(Point3String(ballVelNormal));
+			dbgStr.append(" --> ");
+			dbgStr.append(Point3String(refNormal));
+			PrintDebug(dbgStr.c_str());
+
+			ball->SetPositionGlobal(Point3Add(colPoint, Point3Scale(refNormal, max(totalDistance - distance, 0.0f))));
+			totalDistance = max(totalDistance - distance, 0.0f);
+			results = data.collision->CastCollision(ball, Point3Scale(Point3Normalize(ballVelocity), totalDistance), boardObjs);
+		}
+		ballVelocity = Point3Scale(refNormal, ballMag * 0.1f);
 	}
 	else
 	{
@@ -124,7 +136,7 @@ void Pinball::CreateHierarchy(MinigameManagerData data)
 	wall_8->SetRotation(-15.0f);
 	boardObjs.push_back(wall_8);
 
-	ball = data.hierarchy->CreateNode("Ball", data.icons->GetAnim(MGI_Spinball), { 10.0f, 10.0f }, { 320.0f, 290.0f });
+	ball = data.hierarchy->CreateNode("Ball", data.icons->GetAnim(MGI_Spinball), { ballRadius * 2.0f, ballRadius * 2.0f }, { 320.0f, 290.0f });
 	data.collision->AddCollision(ball, std::make_shared<CircleCollider>(ballRadius, NJS_POINT3({ 0.0f, 0.0f })));
 	ball->components.push_back(new Rotator(ballRotationDelta));
 
