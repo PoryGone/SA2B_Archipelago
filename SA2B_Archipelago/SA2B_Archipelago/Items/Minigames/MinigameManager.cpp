@@ -126,15 +126,15 @@ void MinigameManager::UpdateCurrentMinigame()
 		}
 	}
 	//Debug Test Minigame
-	/*
+	
 	else
 	{
 		if (_data.inputPress & RIF_Down)
 		{
-			this->currentMinigame = &this->lightUpPath;
+			this->currentMinigame = &this->pinball;
 		}
 	}
-	*/
+	
 }
 
 void MinigameManager::EndMinigame()

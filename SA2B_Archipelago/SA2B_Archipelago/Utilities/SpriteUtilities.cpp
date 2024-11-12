@@ -140,6 +140,32 @@ void Point3NormalizeEQ(NJS_POINT3& a)
 	}
 }
 
+float Point3AngleDegrees(NJS_POINT3 a, NJS_POINT3 b)
+{
+	float denom = sqrt(Point3SqrMagnitude(a) * Point3SqrMagnitude(b));
+	if (denom < 0.000001f)
+	{
+		return 0.0f;
+	}
+	float dot = Point3DotProduct(a, b) / denom;
+	dot = min(1.0f, dot);
+	dot = max(-1.0f, dot);
+	return NJM_RAD_DEG(acos(dot));
+}
+
+float Point3SignedAngleDegrees(NJS_POINT3 a, NJS_POINT3 b)
+{
+	float ang = Point3AngleDegrees(a, b);
+	float sign = a.x * b.y - a.y * b.x;
+	sign = sign < 0.0f ? -1.0f : 1.0f;
+	return ang * sign;
+}
+
+float Point3AngleRadians(NJS_POINT3 a, NJS_POINT3 b)
+{
+	return acos(Point3DotProduct(Point3Normalize(a), Point3Normalize(b)));
+}
+
 std::string Point3String(NJS_POINT3 a)
 {
 	std::string str("(");

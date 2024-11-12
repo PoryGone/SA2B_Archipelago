@@ -29,4 +29,8 @@ float Point3SqrMagnitude(NJS_POINT3 a);
 NJS_POINT3 Point3Normalize(NJS_POINT3 a);
 void Point3NormalizeEQ(NJS_POINT3& a);
 
+float Point3AngleDegrees(NJS_POINT3 a, NJS_POINT3 b);
+float Point3SignedAngleDegrees(NJS_POINT3 a, NJS_POINT3 b);
+float Point3AngleRadians(NJS_POINT3 a, NJS_POINT3 b);
+
 std::string Point3String(NJS_POINT3 a);
