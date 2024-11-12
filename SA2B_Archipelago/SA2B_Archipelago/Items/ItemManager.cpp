@@ -990,6 +990,17 @@ bool ItemManager::IsActiveTrapValid()
 			return false;
 		}
 		break;
+	case ItemValue::IV_PoisonTrap:
+		if (GameMode != GameMode::GameMode_Level)
+		{
+			return false;
+		}
+
+		if (RingCount[0] == 0)
+		{
+			return false;
+		}
+		break;
 	case ItemValue::IV_LiteratureTrap:
 	case ItemValue::IV_PongTrap:
 	case ItemValue::IV_PlatformerTrap:
@@ -1080,6 +1091,7 @@ void ItemManager::ResetTrapData()
 	this->_ReverseTrapActive = false;
 
 	this->_DriftTrapAngle = -1;
+	this->_RingPoisonAmount = 0;
 }
 
 void ItemManager::OnFrameTrapQueue()
@@ -1262,6 +1274,17 @@ void ItemManager::OnFrameTrapQueue()
 	else if (this->_ActiveTrap == ItemValue::IV_ControllerDriftTrap)
 	{
 		// Nothing
+	}
+	else if (this->_ActiveTrap == ItemValue::IV_PoisonTrap)
+	{
+		if (this->_ActiveTrapTimer % POISON_TRAP_COOLDOWN == 0)
+		{
+			if (RingCount[0] > 0)
+			{
+				RingCount[0] -= min(RingCount[0], this->_RingPoisonAmount);
+				PlaySoundProbably(RING_LOSS_SOUND, 0, 0, 0);
+			}
+		}
 	}
 	else if (this->_ActiveTrap == ItemValue::IV_PongTrap)
 	{
@@ -1461,6 +1484,10 @@ void ItemManager::OnFrameTrapQueue()
 	case ItemValue::IV_ControllerDriftTrap:
 		PlayUnshuffledVoice(2, 834);
 		this->_DriftTrapAngle = RandomInt(0, 720);
+		break;
+	case ItemValue::IV_PoisonTrap:
+		PlayUnshuffledVoice(2, 880);
+		this->_RingPoisonAmount = RandomInt(1, 4);
 		break;
 	case ItemValue::IV_LiteratureTrap:
 		PlayUnshuffledVoice(2, 85);

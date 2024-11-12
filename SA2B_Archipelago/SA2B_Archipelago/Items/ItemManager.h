@@ -13,6 +13,7 @@ constexpr unsigned int AP_ITEM_ID_OFFSET = 0xFF0000;
 constexpr unsigned int TRAP_DURATION = 600;
 constexpr unsigned int TRAP_COOLDOWN = 60;
 constexpr unsigned int JUNK_COOLDOWN = 210;
+constexpr unsigned int POISON_TRAP_COOLDOWN = 30;
 
 constexpr unsigned int IM_CHAO_MEMORY_CHECK_ENTRY_TIME = 180;
 constexpr unsigned int ANIMAL_DROPOFF_COOLDOWN = 90;
@@ -104,6 +105,7 @@ private:
 	bool _ReverseTrapActive = false;
 
 	int _DriftTrapAngle = -1;
+	int _RingPoisonAmount = 0;
 
 	int _chaoEntryTimer = 0;
 	int _animalDropoffTimer = ANIMAL_DROPOFF_COOLDOWN;

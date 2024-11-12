@@ -69,7 +69,8 @@ enum ItemValue
     IV_ReverseTrap,
     IV_LiteratureTrap,
     IV_ControllerDriftTrap,
-    IV_END_TRAPS = IV_ControllerDriftTrap,
+    IV_PoisonTrap,
+    IV_END_TRAPS = IV_PoisonTrap,
 
     IV_WhiteChaosEmerald = 0x40,
     IV_RedChaosEmerald,
