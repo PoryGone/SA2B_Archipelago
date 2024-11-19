@@ -18,6 +18,10 @@ std::vector<TriviaQuestion> easy_questions =
 	TriviaQuestion("Which character says 'I found you, faker!'?", {"Sonic"}, {"Shadow", "Knuckles", "Tails", "Amy", "Eggman", "Rouge"}),
 	TriviaQuestion("Who created Shadow?", {"Doctor Gerald Robotnik"}, {"Doctor Ivo Robotnik", "Sonic", "G.U.N.", "Chaos", "Maria Robotnik"}),
 	TriviaQuestion("In which stage does Sonic gain the Ancient Light Upgrade?", {"Green Forest"}, {"Green Jungle", "White Jungle", "Final Rush", "Final Chase", "Pyramid Cave", "City Escape"}),
+	TriviaQuestion("For what anniversary of Sonic the Hedgehog was Sonic Adventure 2 developed?", {"10th"}, {"15th", "5th", "20th", "25th", "30th"}),
+	TriviaQuestion("What is the name of the main theme of this game?", {"Live & Learn"}, {"Open Your Heart", "Knight of the Wind", "Seven Rings in Hand", "Sonic Heroes", "It Doesn't Matter", "I am... All of Me", "His World", "A New Venture", "Endless Possibility", "Reach for the Stars"}),
+	TriviaQuestion("How many (real) Chaos Emeralds are there (in this game)?", {"7"}, {"6", "8", "5", "16"}),
+	TriviaQuestion("Which character is known to have met the President of the United States in person?", {"Sonic", "Tails"}, {"Knuckles", "Eggman", "Rouge", "Amy", "Shadow"}),
 	//TriviaQuestion("", {"", ""}, {"", ""}),
 };
 
@@ -28,6 +32,10 @@ std::vector<TriviaQuestion> medium_questions =
 	TriviaQuestion("Which stage has exactly two Chao Containers?", {"Hidden Base"}, {"City Escape", "Green Hill", "Cannon's Core ", "Sky Rail"}),
 	TriviaQuestion("Which stage in Hero Story is Route 101?", {"9th"}, {"1st", "7th", "8th", "10th", "11th", "15th"}),
 	TriviaQuestion("Which stage in Dark Story is Sky Rail?", {"11th"}, {"7th", "8th", "9th", "10th", "12th", "3rd"}),
+	TriviaQuestion("What was the prototype name for Rouge the Bat?", {"Nails the Bat"}, {"Rouge the Cat", "Boots the Bat", "Terios the Bat", "Wings the Bat"}),
+	TriviaQuestion("Which character has no stage in the desert or pyramid areas?", {"Shadow"}, {"Sonic", "Rouge", "Tails", "Knuckles", "Eggman"}),
+	TriviaQuestion("Which character cannot be the menu narrator?", {"Chaos", "Tikal"}, {"Sonic", "Shadow", "Tails", "Eggman", "Knuckles", "Rouge", "Maria", "Omochao", "President's Secretary", "Amy"}),
+	TriviaQuestion("What is the name of Tails's mech in this game?", {"The Cyclone"}, {"The Tornado", "The Tornado 2", "The Hurricane", "The Tailsmobile", "The Tails Walker"}),
 	//TriviaQuestion("", {"", ""}, {"", ""}),
 };
 
@@ -37,6 +45,10 @@ std::vector<TriviaQuestion> hard_questions =
 	TriviaQuestion("How many types of Animals exist in SA2?", {"21"}, {"20", "15", "22", "25"}),
 	TriviaQuestion("In which stage does an Omochao say 'Be careful not to fall!'? ", {"White Jungle"}, {"Cosmic Wall", "Metal Harbor", "Radical Highway", "Final Rush"}),
 	TriviaQuestion("Where was the Yellow Chaos Emerald located at the beginning of the game?", {"Tails had it"}, {"Eggman had it", "Security Hall", "Shadow stole it"}),
+	TriviaQuestion("In which stage does Knuckles first encounter a ghost?", {"Pumpkin Hill"}, {"Wild Canyon", "Egg Quarters", "Death Chamber", "Aquatic Mine", "Meteor Herd"}),
+	TriviaQuestion("Which of Shadow's stages was Sonic seen navigating in an early preview of the game?", {"Sky Rail"}, {"Radical Highway", "Final Chase", "White Jungle"}),
+	TriviaQuestion("In which stage does Big the Cat appear more than once?", {"White Jungle", "Cannon's Core"}, {"Cosmic Wall", "Final Chase", "Final Rush", "Security Hall", "City Escape", "Meteor Herd", "Pyramid Cave", "Egg Quarters", "Death Chamber", "Metal Harbor", "Mission Street"}),
+	TriviaQuestion("What language does Maria speak when launching Shadow to earth in the Japanese dub?", {"Spanish"}, {"English", "Japanese", "Italian", "Chinese", "German", "French"}),
 	//TriviaQuestion("", {"", ""}, {"", ""}),
 };
 
