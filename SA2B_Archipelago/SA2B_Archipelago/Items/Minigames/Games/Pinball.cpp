@@ -23,16 +23,78 @@ void Pinball::OnFrame(MinigameManagerData data)
 void Pinball::UpdateBallActive(MinigameManagerData data)
 {
 	ballVelocity.y += gravity;
-	if (data.inputPress & RIF_ANY_D_PAD)
+	if (data.inputPress & RIF_Up)
 	{
 		NJS_POINT3 force = { 0.0f, -1.0f };
-		force = Point3RotateAround(force, { 0.0f,0.0f }, RandomFloat(-30.0f, 30.0f));
+		//force = Point3RotateAround(force, { 0.0f,0.0f }, RandomFloat(-30.0f, 30.0f));
+		force = Point3Scale(force, flipperForce);
+		ballVelocity = Point3Add(ballVelocity, force);
+	}
+	if (data.inputPress & RIF_Right)
+	{
+		NJS_POINT3 force = { 0.0f, -1.0f };
+		force = Point3RotateAround(force, { 0.0f,0.0f }, RandomFloat(0, 30.0f));
+		force = Point3Scale(force, flipperForce);
+		ballVelocity = Point3Add(ballVelocity, force);
+	}
+	if (data.inputPress & RIF_Left)
+	{
+		NJS_POINT3 force = { 0.0f, -1.0f };
+		force = Point3RotateAround(force, { 0.0f,0.0f }, RandomFloat(-30.0f, 0));
 		force = Point3Scale(force, flipperForce);
 		ballVelocity = Point3Add(ballVelocity, force);
 	}
 	auto results = data.collision->CastCollision(ball, ballVelocity, boardObjs);
 	if (results.isHit)
 	{
+		float initialVelocity = Point3Magnitude(ballVelocity);
+		float finalVelocity = sqrt(baseDampening) * initialVelocity; //Change in KE
+		//float theta = 180.0f - Point3AngleDegrees(Point3Normalize(ballVelocity), results.surfaceNormal);
+
+		float displacementAng = Point3SignedAngleDegrees({ 1.0f, 0.0f }, { results.surfaceNormal.x, -results.surfaceNormal.y });
+		//displacementAng = displacementAng < 0.0f ? displacementAng + 360.0f : displacementAng;
+
+		NJS_POINT3 displacedBallVelocity = Point3RotateAround(ballVelocity, {}, displacementAng);
+
+		finalVelocity = max(finalVelocity, abs(displacedBallVelocity.y));
+		float finalX = -sqrt(pow(finalVelocity, 2.0f) - pow(displacedBallVelocity.y, 2.0f));
+		float finalY = -displacedBallVelocity.y;
+
+		NJS_POINT3 undisplacedBallVelocity = Point3RotateAround({ finalX, finalY }, {}, -displacementAng);
+		ballVelocity = Point3Scale(undisplacedBallVelocity, -1.0f);
+		
+		NJS_POINT3 colPoint = Point3Add(results.collisionPoint, Point3Scale(results.surfaceNormal, ballRadius ));
+		ball->SetPositionGlobal(colPoint);
+
+		//Debug Norm
+		NJS_POINT3 refNormal = Point3Normalize(ballVelocity);
+		SpriteNode* normObj = normObjs[normIndex];
+		normObj->SetPositionGlobal(Point3Add(results.collisionPoint, Point3Scale(refNormal, normObj->displaySize.y * 0.5f)));
+		float normAng = Point3SignedAngleDegrees({ 0.0f, 1.0f }, refNormal);
+		normObj->SetRotation(normAng);
+		normObj->SetEnabled(true);
+		normObj = colPtObjs[normIndex];
+		normIndex = normIndex < (normObjs.size() - 1) ? normIndex + 1 : 0;
+		normObj->SetPositionGlobal(results.collisionPoint);
+		normObj->SetEnabled(true);
+		std::string dbgStr = std::to_string(Point3Magnitude(ballVelocity));
+		dbgStr.append(" --> ");
+		dbgStr.append(std::to_string(displacementAng));
+		dbgStr.append(" --> ");
+		dbgStr.append(std::to_string(initialVelocity));
+		dbgStr.append(" --> ");
+		dbgStr.append(std::to_string(finalVelocity));
+		dbgStr.append(" --> ");
+		dbgStr.append(std::to_string(finalX));
+		dbgStr.append(" --> ");
+		dbgStr.append(std::to_string(finalY));
+		dbgStr.append(" --> ");
+		dbgStr.append(Point3String(ballVelocity));
+		dbgStr.append(" --> ");
+		dbgStr.append(Point3String(results.collisionPoint));
+		PrintDebug(dbgStr.c_str());
+		
+		/*
 		float totalDistance = Point3Magnitude(ballVelocity);
 		float ballMag = totalDistance;
 		NJS_POINT3 refNormal = { 0.0f, 0.0f, 0.0f };
@@ -76,12 +138,13 @@ void Pinball::UpdateBallActive(MinigameManagerData data)
 			results = data.collision->CastCollision(ball, Point3Scale(Point3Normalize(ballVelocity), totalDistance), boardObjs);
 		}
 		ballVelocity = Point3Scale(refNormal, ballMag * 0.1f);
+		*/
 	}
 	else
 	{
 		ball->Translate(ballVelocity);
 	}
-	if (data.collision->IsColliding(ball, drain) || ball->GetPositionGlobal().y > 485.0f)
+	if (data.collision->IsColliding(ball, drain) || ball->GetPositionGlobal().y > 485.0f || data.inputPress & RIF_RightTrigger)
 	{
 		ballVelocity = { 0.0f, 0.0f, 0.0f };
 		ball->SetPositionGlobal({ RandomFloat(200.0f, 440.0f), 290.0f });
@@ -135,6 +198,13 @@ void Pinball::CreateHierarchy(MinigameManagerData data)
 	data.collision->AddCollision(wall_8, std::make_shared<PolygonCollider>(NJS_POINT3({ 90.0f, 5.0f })));
 	wall_8->SetRotation(-15.0f);
 	boardObjs.push_back(wall_8);
+	//Temp Wall
+	SpriteNode* wall_9 = data.hierarchy->CreateNode("Static", data.icons->GetAnim(MGI_White_Box), { 90.0f, 5.0f }, { 320.0f, 350.0f }, boardParent);
+	data.collision->AddCollision(wall_9, std::make_shared<PolygonCollider>(NJS_POINT3({ 90.0f, 5.0f })));
+	boardObjs.push_back(wall_9);
+	SpriteNode* wall_10 = data.hierarchy->CreateNode("Static", data.icons->GetAnim(MGI_White_Box), { 90.0f, 5.0f }, { 320.0f, 200.0f }, boardParent);
+	data.collision->AddCollision(wall_10, std::make_shared<PolygonCollider>(NJS_POINT3({ 90.0f, 5.0f })));
+	boardObjs.push_back(wall_10);
 
 	ball = data.hierarchy->CreateNode("Ball", data.icons->GetAnim(MGI_Spinball), { ballRadius * 2.0f, ballRadius * 2.0f }, { 320.0f, 290.0f });
 	data.collision->AddCollision(ball, std::make_shared<CircleCollider>(ballRadius, NJS_POINT3({ 0.0f, 0.0f })));

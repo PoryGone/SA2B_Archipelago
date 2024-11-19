@@ -28,6 +28,7 @@ private:
 	float gravity = 0.05f;
 	float flipperForce = 3.0f;
 	float ballRadius = 5.0f;
+	float baseDampening = 0.7f;
 
 	NJS_POINT3 ballVelocity;
 	SpriteNode* ball;
