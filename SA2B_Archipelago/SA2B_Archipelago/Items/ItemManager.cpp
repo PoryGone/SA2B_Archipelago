@@ -1101,6 +1101,11 @@ void ItemManager::OnFrameTrapQueue()
 		return;
 	}
 
+	if (GameState >= GameStates::GameStates_SettingsEnter && GameState <= GameStates::GameStates_HowToPlayExit)
+	{
+		return;
+	}
+
 	if ((GameMode != GameMode::GameMode_LoadStory && GameMode != GameMode::GameMode_Event) &&
 		(GameState != GameStates::GameStates_Ingame &&
 		 GameState != GameStates::GameStates_Exit_1 &&
