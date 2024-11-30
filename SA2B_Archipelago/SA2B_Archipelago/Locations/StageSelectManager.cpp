@@ -1202,13 +1202,21 @@ void StageSelectManager::HandleMissionOrder()
 		{
 			WriteData<1>((void*)((int)(loc_Mission_1)+i * 4), (char)(i));
 		}
-		WriteData<1>((void*)((int)(loc_mission_count)), 5);
+		WriteData<1>((void*)((int)(loc_mission_count)), 1);
 
 		// Handle "1st" highlighting
 		WriteData<1>((void*)(0xC69218 + 8), 0x00);
 		WriteData<1>((void*)(0xC69218 + 10), 0x00);
 		WriteData<1>((void*)(0xC69218 + 12), 0x32);
 		WriteData<1>((void*)(0xC69218 + 14), 0x33);
+
+		if (*(char*)(0x1DEF5C7) > 0)
+		{
+			// Highest bit of "Flying Dog" Score Save Byte
+			// Overlaps with Centiseconds of 3rd Place Intermediate Kart Race time
+			// Crashes at Flying Dog SS tile entry when non-zero
+			WriteData<1>((void*)(0x1DEF5C7), 0x00);
+		}
 	}
 	else if (CurrentMenu == Menus::Menus_StageSelect && currentTileStageIndex < this->_chosenMissionsMap.size())
 	{
