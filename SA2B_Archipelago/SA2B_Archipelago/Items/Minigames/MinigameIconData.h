@@ -81,12 +81,20 @@ public:
 	NJS_TEXLIST* MinigameTex;
 	int AnimLength;
 
-	//600 x 480 of usuable space, but using 600 x 380 for standard minigames removing 100 at the top
 	float xMin;
 	float xMax;
 	float xCenter;
 	float yMin = 0.0f;
 	float yMax = 480.0f;
 	float yCenter = 240.0f;
+
+	//600 x 480 of usuable space, but using 600 x 380 for standard minigames removing 100 at the top
+	//5:4 is the narrowest ratio, henct 600x480 instead of 640x480
+	float xMinSafe = 20.0f;
+	float xMaxSafe = 620.0f;
+	float xCenterSafe = 320.0f;
+	float yMinSafe = 100.0f;
+	float yMaxSafe = 480.0f;
+	float yCenterSafe = 290.0f;
 };
 

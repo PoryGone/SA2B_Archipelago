@@ -32,7 +32,7 @@ void DrawDPad(RawInputFlags activeButtons, NJS_POINT3 position, float displaySiz
 	DrawSprite2D(&sprite, 1, 1, NJD_SPRITE_ALPHA | NJD_SPRITE_ANGLE);
 }
 
-void AddDPadToHierarchy(RawInputFlags activeButtons, NJS_POINT3 position, float displaySize, MinigameIconData& iconData, SpriteHierarchy& hierarchy)
+SpriteNode* AddDPadToHierarchy(RawInputFlags activeButtons, NJS_POINT3 position, float displaySize, MinigameIconData& iconData, SpriteHierarchy& hierarchy)
 {
 	float offset = displaySize / 4.0f;
 	float iconSize = displaySize / 2.0f;
@@ -53,6 +53,8 @@ void AddDPadToHierarchy(RawInputFlags activeButtons, NJS_POINT3 position, float 
 	SpriteNode* dpadRight = hierarchy.CreateNode("DPad_Right", activeButtons & RIF_Right ? iconData.GetAnim(MGI_DPad_Active) : iconData.GetAnim(MGI_DPad_Inactive), { iconSize, iconSize, 0 }, { 0,0,0 }, dpadRoot);
 	dpadRight->SetPosition({ offset, 0.0f, 0.0f });
 	dpadRight->SetRotation(270.0f);
+
+	return dpadRoot;
 }
 
 std::default_random_engine& RNG()
