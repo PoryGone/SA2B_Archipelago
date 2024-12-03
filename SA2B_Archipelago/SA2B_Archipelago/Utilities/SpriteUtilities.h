@@ -22,6 +22,7 @@ NJS_POINT3 Point3MoveTowards(NJS_POINT3 a, NJS_POINT3 b, float delta);
 bool Point3Approximatly(NJS_POINT3 a, NJS_POINT3 b);
 
 float Point3DotProduct(NJS_POINT3 a, NJS_POINT3 b);
+NJS_POINT3 Point3CrossProduct(NJS_POINT3 a, NJS_POINT3 b);
 
 float Point3Magnitude(NJS_POINT3 a);
 float Point3SqrMagnitude(NJS_POINT3 a);

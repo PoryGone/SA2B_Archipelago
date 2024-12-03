@@ -1,5 +1,6 @@
 #include "../../../../pch.h"
 #include "BoundingBox.h"
+#include "../../../../Utilities/SpriteUtilities.h"
 
 bool BoundingBox::IsOverlapping(BoundingBox& other)
 {
@@ -71,6 +72,16 @@ float BoundingBox::Top()
 float BoundingBox::Bottom()
 {
 	return this->center.y - (this->size.y * 0.5f);
+}
+
+std::string BoundingBox::ToDebugString()
+{
+	std::string str("( Center: ");
+	str.append(Point3String(center));
+	str.append(", Size: ");
+	str.append(Point3String(size));
+	str.append(")");
+	return str;
 }
 
 float BoundingBox::Min(float f1, float f2)

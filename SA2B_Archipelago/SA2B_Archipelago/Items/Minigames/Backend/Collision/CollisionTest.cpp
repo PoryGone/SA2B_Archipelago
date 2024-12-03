@@ -1,6 +1,7 @@
 #include "../../../../pch.h"
 #include "CollisionTest.h"
 #include "../MinigameBackend.h"
+#include <vector>
 
 void CollisionTest::RunTests()
 {
@@ -219,6 +220,29 @@ void CollisionTest::RunTests()
 	box1 = capCol1.GetBoundingBox();
 	box2 = capCol2.GetBoundingBox();
 	AssertFalse(box1.IsOverlapping(box2), "Util_CapsultCapsuleNoOverlap");
+
+	colManager.Reset();
+
+	spr1->SetPositionGlobal({});
+	spr2->SetPositionGlobal({ 235.0f, 375.0f });
+	spr2->SetRotation(15.0f);
+
+	colManager.AddCollision(spr1, std::make_shared<CapsuleCollider>(5.0f, spr1, NJS_POINT3({ 238.982544f, 383.645325f }), NJS_POINT3({ 240.926193f, 382.061707f })));
+	colManager.AddCollision(spr2, std::make_shared<PolygonCollider>(NJS_POINT3({ 90.0f, 5.0f }), 0.0f, NJS_POINT3({})));
+	
+	AssertTrue(colManager.IsColliding(spr1, spr2), "Manager_OverlappingCapsuleAndPolygon");
+
+	colManager.Reset();
+
+	spr1->SetPositionGlobal({ 238.982544f, 383.645325f });
+	spr2->SetPositionGlobal({ 235.0f, 375.0f });
+	spr2->SetRotation(15.0f);
+
+	colManager.AddCollision(spr1, std::make_shared<CircleCollider>(5.0f));
+	colManager.AddCollision(spr2, std::make_shared<PolygonCollider>(NJS_POINT3({ 90.0f, 5.0f }), 0.0f, NJS_POINT3({})));
+
+	std::vector<SpriteNode*> castAgainst = { spr2 };
+	AssertTrue(colManager.CastCollision(spr1, { 1.943644f, -1.633612f }, castAgainst).isHit, "Manager_CastCirceAgainstPolygon");
 
 	PrintDebug("-----Run Tests End-----");
 	hasRun = true;

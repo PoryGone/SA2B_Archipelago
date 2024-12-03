@@ -15,7 +15,7 @@ bool PolygonCollider::IsColliding(Collider& otherCollider)
 	}
 	if (auto capsule = dynamic_cast<CapsuleCollider*>(&otherCollider))
 	{
-		return ContainsPoint(capsule->GetClosestPoint(GetCentroid()));
+		return capsule->IsCollidingPolygon(*this);
 	}
 	return false;
 }
@@ -73,8 +73,7 @@ NJS_POINT3 PolygonCollider::GetCentroid()
 			centroid.x += (current.x + next.x) * segArea;
 			centroid.y += (current.y + next.y) * segArea;
 		}
-		area *= 0.5f;
-		area *= 6.0f;
+		area *= 3.0f;
 		if (area != 0.0f)
 		{
 			centroid.x /= area;

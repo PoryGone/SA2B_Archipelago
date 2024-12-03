@@ -3,6 +3,10 @@
 #include "../../../../Utilities/SpriteUtilities.h"
 #include <vector>
 
+/// <summary>
+/// Any number of points that define a convex shape.
+/// MUST be convex to properly detect collisions.
+/// </summary>
 class PolygonCollider : public Collider
 {
 public:

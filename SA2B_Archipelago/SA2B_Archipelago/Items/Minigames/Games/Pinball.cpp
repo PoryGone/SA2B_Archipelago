@@ -22,6 +22,8 @@ void Pinball::OnFrame(MinigameManagerData data)
 
 void Pinball::UpdateBallActive(MinigameManagerData data)
 {
+	NJS_POINT3 prevVel = ballVelocity;
+	NJS_POINT3 prevPos = ball->GetPositionGlobal();
 	ballVelocity.y += gravity;
 	if (data.inputPress & RIF_Up)
 	{
@@ -67,6 +69,7 @@ void Pinball::UpdateBallActive(MinigameManagerData data)
 		ball->SetPositionGlobal(colPoint);
 
 		//Debug Norm
+		/*
 		NJS_POINT3 refNormal = Point3Normalize(ballVelocity);
 		SpriteNode* normObj = normObjs[normIndex];
 		normObj->SetPositionGlobal(Point3Add(results.collisionPoint, Point3Scale(refNormal, normObj->displaySize.y * 0.5f)));
@@ -93,51 +96,6 @@ void Pinball::UpdateBallActive(MinigameManagerData data)
 		dbgStr.append(" --> ");
 		dbgStr.append(Point3String(results.collisionPoint));
 		PrintDebug(dbgStr.c_str());
-		
-		/*
-		float totalDistance = Point3Magnitude(ballVelocity);
-		float ballMag = totalDistance;
-		NJS_POINT3 refNormal = { 0.0f, 0.0f, 0.0f };
-
-		while (totalDistance > 0.0f && results.isHit)
-		{
-			NJS_POINT3 colPoint = Point3Add(results.collisionPoint, Point3Scale(results.surfaceNormal, ballRadius));
-			float distance = Point3Distance(colPoint, ball->GetPositionGlobal());
-
-			//Reflection
-			NJS_POINT3 ballVelNormal = Point3Normalize(ballVelocity);
-			float refVal = -2.0f * Point3DotProduct(ballVelNormal, results.surfaceNormal);
-			//refNormal.x = ballVelNormal.x + refVal * results.surfaceNormal.x;
-			//refNormal.y = ballVelNormal.y + refVal * results.surfaceNormal.y;
-			refNormal = { 0.0f, 0.0f, 0.0f };
-			refNormal.x = refVal * results.surfaceNormal.x + ballVelNormal.x;
-			refNormal.y = refVal * results.surfaceNormal.y + ballVelNormal.y;
-			refNormal = Point3Normalize(refNormal);
-
-			//Debug Norm
-			SpriteNode* normObj = normObjs[normIndex];
-			normObj->SetPositionGlobal(Point3Add(results.collisionPoint, Point3Scale(refNormal, normObj->displaySize.y * 0.5f)));
-			float normAng = Point3SignedAngleDegrees({ 0.0f, 1.0f }, refNormal);
-			normObj->SetRotation(normAng);
-			normObj->SetEnabled(true);
-			normObj = colPtObjs[normIndex];
-			normIndex = normIndex < (normObjs.size() - 1) ? normIndex + 1 : 0;
-			normObj->SetPositionGlobal(results.collisionPoint);
-			normObj->SetEnabled(true);
-			std::string dbgStr = std::to_string(max(totalDistance - distance, 0.0f));
-			dbgStr.append(" --> ");
-			dbgStr.append(Point3String(results.surfaceNormal));
-			dbgStr.append(" --> ");
-			dbgStr.append(Point3String(ballVelNormal));
-			dbgStr.append(" --> ");
-			dbgStr.append(Point3String(refNormal));
-			PrintDebug(dbgStr.c_str());
-
-			ball->SetPositionGlobal(Point3Add(colPoint, Point3Scale(refNormal, max(totalDistance - distance, 0.0f))));
-			totalDistance = max(totalDistance - distance, 0.0f);
-			results = data.collision->CastCollision(ball, Point3Scale(Point3Normalize(ballVelocity), totalDistance), boardObjs);
-		}
-		ballVelocity = Point3Scale(refNormal, ballMag * 0.1f);
 		*/
 	}
 	else

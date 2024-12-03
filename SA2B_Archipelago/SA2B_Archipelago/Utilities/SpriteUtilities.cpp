@@ -109,6 +109,15 @@ float Point3DotProduct(NJS_POINT3 a, NJS_POINT3 b)
 	return a.x * b.x + a.y * b.y + a.z * b.z;
 }
 
+NJS_POINT3 Point3CrossProduct(NJS_POINT3 a, NJS_POINT3 b)
+{
+	return {
+		a.y * b.z - a.z * b.y,
+		a.z * b.x - a.x * b.z,
+		a.x * b.y - a.y * b.x
+	};
+}
+
 float Point3Magnitude(NJS_POINT3 a)
 {
 	return sqrt(a.x * a.x + a.y * a.y + a.z * a.z);

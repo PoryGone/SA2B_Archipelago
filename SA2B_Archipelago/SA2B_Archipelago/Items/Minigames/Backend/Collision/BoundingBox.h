@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 struct BoundingBox
 {
@@ -15,6 +16,7 @@ public:
 	float Right();
 	float Top();
 	float Bottom();
+	std::string ToDebugString();
 
 	BoundingBox() : center({ 0.0f, 0.0f, 0.0f}), size({ 0.0f, 0.0f, 0.0f }) {}
 	BoundingBox(NJS_POINT3 _center, NJS_POINT3 _size) : center(_center), size(_size) {}

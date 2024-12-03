@@ -1,6 +1,7 @@
 #include "../../../../pch.h"
 #include "CollisionUtilities.h"
 #include <tuple>
+#include <string>
 
 std::tuple<LineSegment, LineSegment> GetCapsuleSegments(CapsuleCollider& col)
 {
@@ -106,7 +107,7 @@ IntersectionResults TestCapsulePolygonIntersection(CapsuleCollider& aCol, Polygo
 		IntersectionResults results = TestLineSegmentIntersection(std::get<0>(capLines), seg);
 		if (results.isIntersecting)
 		{
-			float dist = NonSquaredDistance(aColStart, results.point);
+			float dist = NonSquaredDistance(aColStart, results.point);// +NonSquaredDistance(aColEnd, results.point);
 			if (dist < currentDist || !currentResults.isIntersecting)
 			{
 				currentResults = results;
@@ -116,7 +117,7 @@ IntersectionResults TestCapsulePolygonIntersection(CapsuleCollider& aCol, Polygo
 		results = TestLineSegmentIntersection(std::get<1>(capLines), seg);
 		if (results.isIntersecting)
 		{
-			float dist = NonSquaredDistance(aColStart, results.point);
+			float dist = NonSquaredDistance(aColStart, results.point);// +NonSquaredDistance(aColEnd, results.point);
 			if (dist < currentDist || !currentResults.isIntersecting)
 			{
 				currentResults = results;
@@ -127,19 +128,18 @@ IntersectionResults TestCapsulePolygonIntersection(CapsuleCollider& aCol, Polygo
 		if (std::get<0>(intersections) > 0)
 		{
 			NJS_POINT3 intersection = std::get<1>(intersections);
-			float dist = NonSquaredDistance(aColStart, intersection);
+			float dist = NonSquaredDistance(aColStart, intersection);// +NonSquaredDistance(aColEnd, intersection);
 			if (dist < currentDist || !currentResults.isIntersecting)
 			{
 				NJS_POINT3 n = GetNormalDirectionOfPointFromSeg(seg, aColStart);
 				currentResults = IntersectionResults(true, intersection, n);
-				//currentResults = IntersectionResults(true, intersection, Point3Scale(Point3Normalize(Point3Substract(intersection, aColEnd)), -1.0f));
 				currentDist = dist;
 			}
 		}
 		if (std::get<0>(intersections) > 1)
 		{
 			NJS_POINT3 intersection = Lerp(std::get<1>(intersections), std::get<2>(intersections), 0.5f);
-			float dist = NonSquaredDistance(aColStart, intersection);
+			float dist = NonSquaredDistance(aColStart, intersection);// +NonSquaredDistance(aColEnd, intersection);
 			if (dist < currentDist || !currentResults.isIntersecting)
 			{
 				NJS_POINT3 n = GetNormalDirectionOfPointFromSeg(seg, aColStart);
@@ -148,6 +148,33 @@ IntersectionResults TestCapsulePolygonIntersection(CapsuleCollider& aCol, Polygo
 			}
 		}
 	}
+
+	if (currentResults.isIntersecting)
+	{
+		std::string dbgStr = "Capsule Cast: ";
+		dbgStr.append("Capsule { Start: ");
+		dbgStr.append(Point3String(aColStart));
+		dbgStr.append(" End: ");
+		dbgStr.append(Point3String(aColEnd));
+		dbgStr.append(" Radius: ");
+		dbgStr.append(std::to_string(aRadius));
+		dbgStr.append("} Polygon { Position: ");
+		dbgStr.append(Point3String(bCol.node->GetPositionGlobal()));
+		dbgStr.append(" Rotation: ");
+		dbgStr.append(std::to_string(bCol.node->GetRotationGlobal()));
+		dbgStr.append(" Points: ");
+		for (int i = 0; i < bCol.points.size(); i++)
+		{
+			dbgStr.append(Point3String(bCol.points[i]));
+			if (i < bCol.points.size() - 1)
+			{
+				dbgStr.append(", ");
+			}
+		}
+		dbgStr.append("}");
+		PrintDebug(dbgStr.c_str());
+	}
+
 	return currentResults;
 }
 

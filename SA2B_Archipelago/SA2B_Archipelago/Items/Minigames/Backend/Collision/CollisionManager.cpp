@@ -67,13 +67,13 @@ CastResult CollisionManager::CastCollision(SpriteNode* node, NJS_POINT3 vector, 
 				for (int c = 0; c < otherCol.size(); c++)
 				{
 					auto otherBound = otherCol[c]->GetBoundingBox();
-					if (castBounds.IsOverlapping(otherBound) && col->IsColliding(*otherCol[c]))
+					if (castBounds.IsOverlapping(otherBound) && castCol.IsColliding(*otherCol[c]))
 					{
 						if (auto polygon = dynamic_cast<PolygonCollider*>(&*otherCol[c]))
 						{
 							auto results = TestCapsulePolygonIntersection(castCol, *polygon);
 							float dist = Point3Distance(castPt, results.point);
-							if (!castResults.isHit || dist < currentDist)
+							if (results.isIntersecting && (!castResults.isHit || dist < currentDist))
 							{
 								castResults = CastResult(results.point, results.surfaceNormal, polygon->node);
 								currentDist = dist;
@@ -83,7 +83,7 @@ CastResult CollisionManager::CastCollision(SpriteNode* node, NJS_POINT3 vector, 
 						{
 							auto results = TestCapsuleCircleIntersection(castCol, *circle);
 							float dist = Point3Distance(castPt, results.point);
-							if (!castResults.isHit || dist < currentDist)
+							if (results.isIntersecting && (!castResults.isHit || dist < currentDist))
 							{
 								castResults = CastResult(results.point, results.surfaceNormal, circle->node);
 								currentDist = dist;
@@ -93,7 +93,7 @@ CastResult CollisionManager::CastCollision(SpriteNode* node, NJS_POINT3 vector, 
 						{
 							auto results = TestCapsuleCapsuleIntersection(castCol, *capsule);
 							float dist = Point3Distance(castPt, results.point);
-							if (!castResults.isHit || dist < currentDist)
+							if (results.isIntersecting && (!castResults.isHit || dist < currentDist))
 							{
 								castResults = CastResult(results.point, results.surfaceNormal, capsule->node);
 								currentDist = dist;
