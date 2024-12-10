@@ -237,6 +237,9 @@
     <ClInclude Include="Items\Minigames\Backend\Collision\CollisionUtilities.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Items\Minigames\Games\MathQuiz.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -417,6 +420,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Items\Minigames\Backend\Collision\CollisionUtilities.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Items\Minigames\Games\MathQuiz.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
