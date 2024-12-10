@@ -377,7 +377,7 @@ std::array<PokemonData, 32> allPokemon =
 	PokemonData(MGI_Tatsugiri,	std::string("Tatsugiri"),	3,	PokemonType::Dragon,	PokemonType::Water),
 	PokemonData(MGI_Togepi,		std::string("Togepi"),		3,	PokemonType::Fairy,		PokemonType::No_Type),
 	PokemonData(MGI_Chansey,	std::string("Chansey"),		3,	PokemonType::Fairy,		PokemonType::No_Type),
-	PokemonData(MGI_UnownQue,	std::string("UnownQue"),	3,	PokemonType::Psychic,	PokemonType::No_Type),
+	PokemonData(MGI_UnownQue,	std::string("Unown ?"),		3,	PokemonType::Psychic,	PokemonType::No_Type),
 	PokemonData(MGI_UnownX,		std::string("UnownX"),		3,	PokemonType::Psychic,	PokemonType::No_Type),
 	PokemonData(MGI_Wailmer,	std::string("Wailmer"),		3,	PokemonType::Water,		PokemonType::No_Type),
 	PokemonData(MGI_Wooper,		std::string("Wooper"),		3,	PokemonType::Water,		PokemonType::Ground),
