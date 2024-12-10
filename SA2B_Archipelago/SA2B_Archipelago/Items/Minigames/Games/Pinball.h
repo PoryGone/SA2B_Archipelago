@@ -27,10 +27,16 @@ private:
 	float ballRotationDelta = 2.0f;
 	float gravity = 0.05f;
 	float flipperForce = 3.0f;
+	float flipperAngle = 60.0f; //Change in flipper angle when flipped
 	float ballRadius = 5.0f;
 	float baseDampening = 0.7f;
 
+	RawInputFlags leftFlipperInput = RIF_Left | RIF_Up | RIF_Down;
+	RawInputFlags rightFlipperInput = RIF_Right | RIF_Up | RIF_Down;
+
 	NJS_POINT3 ballVelocity;
+	SpriteNode* leftFlipper;
+	SpriteNode* rightFlipper;
 	SpriteNode* ball;
 	SpriteNode* drain;
 	Timer timer;
