@@ -245,11 +245,193 @@ void MathQuiz::CreateHierarchy(MinigameManagerData data)
 		} // End Division
 		}
 	} // End Arithmetic
+	case MathQuestionType::MQT_Hypotenuse:
+	{
+		int maxInt = 5;
+
+		int num_m = RandomInt(1, maxInt);
+		int num_n = RandomInt(0, num_m);
+
+		num_m = (num_m * 2) + 1;
+		num_n = (num_n * 2) + 1;
+
+		int num_a = num_m * num_n;
+		int num_b = ((num_m * num_m) - (num_n * num_n)) / 2;
+
+		int correctAnswerInt = ((num_m * num_m) + (num_n * num_n)) / 2;
+
+		chosenQuestion += "Find the hypotenuse of a right triangle with legs\n";
+		chosenQuestion += std::to_string(num_a);
+		chosenQuestion += " and ";
+		chosenQuestion += std::to_string(num_b);
+
+		correctAnswer = std::to_string(correctAnswerInt);
+
+		int errorRange = 10;
+
+		while (wrongAnswersInt.size() < 3)
+		{
+			int wrongAnswer = RandomInt(max(num_a, num_b) + 1, correctAnswerInt + errorRange + 1);
+
+			if (wrongAnswer == correctAnswerInt ||
+				std::find(std::begin(wrongAnswersInt), std::end(wrongAnswersInt), wrongAnswer) != std::end(wrongAnswersInt))
+			{
+				continue;
+			}
+
+			wrongAnswersInt.push_back(wrongAnswer);
+		}
+		break;
+	} // End Hypotenuse
+	case MathQuestionType::MQT_Quadratic:
+	{
+		int maxInt = 14;
+
+		int root_1 = RandomInt(1, maxInt);
+		int root_2 = RandomInt(1, maxInt);
+
+		if (RandomInt(0, 2) == 0)
+		{
+			root_1 *= -1;
+		}
+
+		if (RandomInt(0, 2) == 0)
+		{
+			root_2 *= -1;
+		}
+
+		int num_b = (-root_1) + (-root_2);
+		int num_c = root_1 * root_2;
+
+		chosenQuestion += "Find the real root(s) of the quadratic expression\nx^2";
+		if (num_b > 0)
+		{
+			chosenQuestion += " + ";
+			if (num_b != 1)
+			{
+				chosenQuestion += std::to_string(num_b);
+			}
+			chosenQuestion += "x";
+		}
+		else if (num_b < 0)
+		{
+			chosenQuestion += " - ";
+			if (num_b != -1)
+			{
+				chosenQuestion += std::to_string(abs(num_b));
+			}
+			chosenQuestion += "x";
+		}
+		if (num_c > 0)
+		{
+			chosenQuestion += " + ";
+		}
+		else if (num_c < 0)
+		{
+			chosenQuestion += " - ";
+		}
+		chosenQuestion += std::to_string(abs(num_c));
+
+		correctAnswer = std::to_string(root_1);
+		if (root_1 != root_2)
+		{
+			correctAnswer += " and ";
+			correctAnswer += std::to_string(root_2);
+		}
+
+
+		// TODO: Generate incorrect pair of answers where one of the pair can be correct
+		int errorRange = 5;
+
+		while (wrongAnswers.size() < 3)
+		{
+			int wrong_root_1 = 0;
+			int wrong_root_2 = 0;
+
+			if (RandomFloat(0.0f, 1.0f) > 0.2f)
+			{
+				// 80% Chance to have a correct root
+				if (RandomInt(0, 2) == 0)
+				{
+					wrong_root_1 = root_1;
+				}
+				else
+				{
+					wrong_root_1 = root_2;
+				}
+			}
+			else
+			{
+				if (RandomInt(0, 2) == 0)
+				{
+					// 10% Chance to have a correct root, but negated
+					if (RandomInt(0, 2) == 0)
+					{
+						wrong_root_1 = -root_1;
+					}
+					else
+					{
+						wrong_root_1 = -root_2;
+					}
+				}
+			}
+
+			if (wrong_root_1 == 0)
+			{
+				wrong_root_1 = RandomInt(root_1 - errorRange, root_1 + errorRange + 1);
+				if (RandomInt(0, 2) == 0)
+				{
+					wrong_root_1 = -wrong_root_1;
+				}
+			}
+
+			wrong_root_2 = RandomInt(root_2 - errorRange, root_2 + errorRange + 1);
+			if (RandomInt(0, 2) == 0)
+			{
+				wrong_root_2 = -wrong_root_2;
+			}
+
+			std::string wrong_answer_1 = std::to_string(wrong_root_1);
+			if (wrong_root_1 != wrong_root_2)
+			{
+				wrong_answer_1 += " and ";
+				wrong_answer_1 += std::to_string(wrong_root_2);
+			}
+			std::string wrong_answer_2 = std::to_string(wrong_root_2);
+			if (wrong_root_1 != wrong_root_2)
+			{
+				wrong_answer_2 += " and ";
+				wrong_answer_2 += std::to_string(wrong_root_1);
+			}
+
+			if (wrong_answer_1 == correctAnswer ||
+				wrong_answer_2 == correctAnswer ||
+				std::find(std::begin(wrongAnswers), std::end(wrongAnswers), wrong_answer_1) != std::end(wrongAnswers) ||
+				std::find(std::begin(wrongAnswers), std::end(wrongAnswers), wrong_answer_2) != std::end(wrongAnswers))
+			{
+				continue;
+			}
+
+			if (RandomInt(0, 2) == 0)
+			{
+				wrongAnswers.push_back(wrong_answer_1);
+			}
+			else
+			{
+				wrongAnswers.push_back(wrong_answer_2);
+			}
+		}
+		break;
+	} // End Quadratic
 	}
 
-	for (int answer : wrongAnswersInt)
+	// Some question types have to write their answer strings directly
+	if (wrongAnswersInt.size() > 0)
 	{
-		wrongAnswers.push_back(std::to_string(answer));
+		for (int answer : wrongAnswersInt)
+		{
+			wrongAnswers.push_back(std::to_string(answer));
+		}
 	}
 
 	this->correctAnswerSlot = RandomInt(1, 5);
