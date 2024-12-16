@@ -246,6 +246,24 @@ std::vector<int> StageSelectManager::GetGateRequirements()
 	return this->_gateRequirements;
 }
 
+std::vector<int> StageSelectManager::GetCurrentStageMissions()
+{
+	int currentTileStageIndex = this->TileIDtoStageIndex[SS_SelectedTile];
+	int missionOrderIndex = this->_chosenMissionsMap.at(currentTileStageIndex);
+	std::array<int, 5> chosenMissionOrder = this->_potentialMissionOrders.at(missionOrderIndex);
+
+	int missionCount = this->_missionCountMap[currentTileStageIndex];
+
+	std::vector<int> activeOrder;
+
+	for (int i = 0; i < missionCount; i++)
+	{
+		activeOrder.push_back(chosenMissionOrder[i]);
+	}
+
+	return activeOrder;
+}
+
 void StageSelectManager::SetChosenMissionsMap(std::map<int, int> map)
 {
 	this->_chosenMissionsMap = map;

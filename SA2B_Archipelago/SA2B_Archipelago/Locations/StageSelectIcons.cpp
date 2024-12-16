@@ -832,11 +832,24 @@ void UpdateTimescale()
 
 void UpdateMissionInLevel() 
 {
-	NumSprite.tanim = &NumAnim[(Num_Anim_Length - 2) + ActiveMission];
-	NumSprite.p = { 320.0f, 12.0f, 0.0f };
-	NumSprite.sx = 1.0f;
-	NumSprite.sy = 1.0f;
-	DrawSprite2D(&NumSprite, 1, 1, NJD_SPRITE_ALPHA);
+	std::vector<int> activeMissions = StageSelectManager::GetInstance().GetCurrentStageMissions();
+
+	int iconWidth = 48;
+	float x_pos = 320.0f - ((activeMissions.size() - 1) * iconWidth / 2);
+
+	for (int i = 0; i < activeMissions.size(); i++)
+	{
+		// TODO if (activeMissions[i] - 1) then use active version. Otherwise, grey version
+		NumSprite.tanim = &NumAnim[(Num_Anim_Length - 2) + (activeMissions[i] - 1)];
+		NumSprite.p = { x_pos, 12.0f, 0.0f };
+		NumSprite.sx = 1.0f;
+		NumSprite.sy = 1.0f;
+		DrawSprite2D(&NumSprite, 1, 1, NJD_SPRITE_ALPHA);
+
+		// TODO Emblem indicating Mission completed
+
+		x_pos += iconWidth;
+	}
 }
 
 void DeleteUpgradeIcon(ObjectMaster* obj)
