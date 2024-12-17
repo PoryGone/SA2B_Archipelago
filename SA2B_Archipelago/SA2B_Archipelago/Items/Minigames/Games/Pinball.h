@@ -26,10 +26,16 @@ private:
 
 	float ballRotationDelta = 2.0f;
 	float gravity = 0.05f;
-	float flipperForce = 3.0f;
+	float flipperForceMin = 1.0f;
+	float flipperForceMax = 10.0f;
+	float flipperAngForceAngMin = 35.0f;
+	float flipperAngForceAngMax = 95.0f;
 	float flipperAngle = 60.0f; //Change in flipper angle when flipped
-	float ballRadius = 5.0f;
-	float baseDampening = 0.7f;
+	float flipperLength = 45.0f;
+	float ballRadius = 7.5f;
+	float maxVelocity = 15.0f;
+	float baseDampening = 0.3f;
+	float bumperDampening = 1.3f;
 
 	RawInputFlags leftFlipperInput = RIF_Left | RIF_Up | RIF_Down;
 	RawInputFlags rightFlipperInput = RIF_Right | RIF_Up | RIF_Down;
@@ -42,6 +48,7 @@ private:
 	Timer timer;
 	SpriteNode* boardParent;
 	std::vector<SpriteNode*> boardObjs;
+	std::vector<SpriteNode*> boardObjsNoFlippers;
 	std::vector<SpriteNode*> normObjs;
 	std::vector<SpriteNode*> colPtObjs;
 	int normIndex = 0;

@@ -149,7 +149,7 @@ IntersectionResults TestCapsulePolygonIntersection(CapsuleCollider& aCol, Polygo
 		}
 	}
 
-	if (currentResults.isIntersecting)
+	/*if (currentResults.isIntersecting)
 	{
 		std::string dbgStr = "Capsule Cast: ";
 		dbgStr.append("Capsule { Start: ");
@@ -173,7 +173,7 @@ IntersectionResults TestCapsulePolygonIntersection(CapsuleCollider& aCol, Polygo
 		}
 		dbgStr.append("}");
 		PrintDebug(dbgStr.c_str());
-	}
+	}*/
 
 	return currentResults;
 }
