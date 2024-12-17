@@ -197,6 +197,7 @@
     <ClInclude Include="Items\Minigames\Games\PokemonData.h" />
     <ClInclude Include="Items\Minigames\Games\PokemonTrivia.h" />
     <ClInclude Include="Items\Minigames\Games\PunchOut.h" />
+    <ClInclude Include="Items\Minigames\Games\Snake.h" />
     <ClInclude Include="Items\Minigames\Games\Trivia.h" />
     <ClInclude Include="Items\Minigames\MinigameBase.h" />
     <ClInclude Include="Items\Minigames\MinigameIconData.h" />
@@ -439,6 +440,10 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../../pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../../../pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../../../pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="Items\Minigames\Games\Snake.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../../pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../../pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="Items\Minigames\Games\Trivia.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../../pch.h</PrecompiledHeaderFile>

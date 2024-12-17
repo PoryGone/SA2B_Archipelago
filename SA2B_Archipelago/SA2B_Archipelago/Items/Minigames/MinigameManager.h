@@ -16,6 +16,7 @@
 #include "Games/PunchOut.h"
 #include "Games/Pinball.h"
 #include "Games/MathQuiz.h"
+#include "Games/Snake.h"
 #include "../ItemData.h"
 #include <ctime>
 
@@ -79,6 +80,7 @@ private:
 	LightUpPath lightUpPath			= LightUpPath();
 	Pinball pinball					= Pinball();
 	MathQuiz mathQuiz				= MathQuiz();
+	Snake snake						= Snake();
 
 	//On Hold
 	PunchOut punchOut				= PunchOut();

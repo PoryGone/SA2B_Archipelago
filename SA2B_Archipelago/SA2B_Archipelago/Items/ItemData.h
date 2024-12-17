@@ -91,7 +91,8 @@ enum ItemValue
     IV_LightUpPathTrap,
     IV_PinballTrap,
     IV_MathQuizTrap,
-    IV_END_MINIGAMES = IV_MathQuizTrap,
+    IV_SnakeTrap,
+    IV_END_MINIGAMES = IV_SnakeTrap,
 
     IV_NormalEgg = 0x100,
     IV_YellowMonoToneEgg,

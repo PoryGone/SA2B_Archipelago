@@ -131,7 +131,7 @@ void MinigameManager::UpdateCurrentMinigame()
 	{
 		if (_data.inputPress & RIF_Down)
 		{
-			this->currentMinigame = &this->pinball;
+			//this->currentMinigame = &this->pinball;
 		}
 	}
 	
@@ -193,6 +193,9 @@ void MinigameManager::StartMinigame(ItemValue item, bool locationGame)
 		break;
 	case ItemValue::IV_MathQuizTrap:
 		this->currentMinigame = &this->mathQuiz;
+		break;
+	case ItemValue::IV_SnakeTrap:
+		this->currentMinigame = &this->snake;
 		break;
 	case ItemValue::IV_Maria:
 		this->currentMinigame = &this->finalBoss;

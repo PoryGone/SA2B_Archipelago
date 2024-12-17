@@ -1012,6 +1012,7 @@ bool ItemManager::IsActiveTrapValid()
 	case ItemValue::IV_LightUpPathTrap:
 	case ItemValue::IV_PinballTrap:
 	case ItemValue::IV_MathQuizTrap:
+	case ItemValue::IV_SnakeTrap:
 		if (GameMode != GameMode::GameMode_Level)
 		{
 			return false;
@@ -1332,6 +1333,10 @@ void ItemManager::OnFrameTrapQueue()
 	{
 		// Nothing
 	}
+	else if (this->_ActiveTrap == ItemValue::IV_SnakeTrap)
+	{
+	// Nothing
+	}
 
 	if (this->_ActiveTrapTimer > 0)
 	{
@@ -1511,6 +1516,7 @@ void ItemManager::OnFrameTrapQueue()
 	case ItemValue::IV_LightUpPathTrap:
 	case ItemValue::IV_PinballTrap:
 	case ItemValue::IV_MathQuizTrap:
+	case ItemValue::IV_SnakeTrap:
 		MinigameManager* minigameManager = &MinigameManager::GetInstance();
 		minigameManager->StartMinigame((ItemValue)this->_ActiveTrap);
 		break;
