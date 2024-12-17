@@ -42,7 +42,7 @@ std::map<char, NumberDisplayData> NumberMap = {
 
 static const int Anim_Length = 29;
 static const int Stage_Anim_Length = 120;
-static const int Num_Anim_Length = 14;
+static const int Num_Anim_Length = 19;
 
 static NJS_TEXNAME UpgradeIconsTexName[Anim_Length];
 static NJS_TEXNAME UpgradeIconsTexName_Inactive[Anim_Length];
@@ -73,6 +73,12 @@ static NJS_TEXANIM NumAnim[] = {
 	{0x31, 0x19, 0x18, 0x0C, 0x64, 0x00, 0x95, 0x32, 1, 0},
 	{0x31, 0x19, 0x18, 0x0C, 0x96, 0x00, 0xC7, 0x32, 1, 0},
 	{0x31, 0x19, 0x18, 0x0C, 0xC8, 0x00, 0xF9, 0x32, 1, 0},
+
+	{0x31, 0x19, 0x18, 0x0C, 0x96, 0x95, 0xC7, 0xC8, 1, 0},
+	{0x31, 0x19, 0x18, 0x0C, 0x00, 0xC7, 0x31, 0xFA, 1, 0},
+	{0x31, 0x19, 0x18, 0x0C, 0x32, 0xC7, 0x63, 0xFA, 1, 0},
+	{0x31, 0x19, 0x18, 0x0C, 0x64, 0xC7, 0x95, 0xFA, 1, 0},
+	{0x31, 0x19, 0x18, 0x0C, 0x96, 0xC7, 0xC7, 0xFA, 1, 0},
 	//Padding
 	{40, 32, 20, 16, 0x0A, 0x10, 0x34, 0x30, 1, 0},
 };
@@ -835,12 +841,16 @@ void UpdateMissionInLevel()
 	std::vector<int> activeMissions = StageSelectManager::GetInstance().GetCurrentStageMissions();
 
 	int iconWidth = 48;
-	float x_pos = 320.0f - ((activeMissions.size() - 1) * iconWidth / 2);
+	float x_pos = minXPos + (iconWidth / 2);
 
 	for (int i = 0; i < activeMissions.size(); i++)
 	{
-		// TODO if (activeMissions[i] - 1) then use active version. Otherwise, grey version
-		NumSprite.tanim = &NumAnim[(Num_Anim_Length - 2) + (activeMissions[i] - 1)];
+		int animIndex = (Num_Anim_Length - 7) + (activeMissions[i] - 1);
+		if (activeMissions[i] - 1 != ActiveMission)
+		{
+			animIndex += 5;
+		}
+		NumSprite.tanim = &NumAnim[animIndex];
 		NumSprite.p = { x_pos, 12.0f, 0.0f };
 		NumSprite.sx = 1.0f;
 		NumSprite.sy = 1.0f;
