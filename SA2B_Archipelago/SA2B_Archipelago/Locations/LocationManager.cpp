@@ -273,6 +273,15 @@ void LocationManager::OnInputFunction()
 	{
 		if (GameState != GameStates::GameStates_Pause)
 		{
+			MinigameManager* minigameManager = &MinigameManager::GetInstance();
+
+			if (minigameManager->state == MinigameState::MGS_None && this->_inBigFishing)
+			{
+				TimeStopped = 0;
+				WriteData<1>((void*)0x4D2E50, 0);
+				this->_inBigFishing = false;
+			}
+
 			if (this->_inBigFishing)
 			{
 				// TODO: Handle Cannon's Core switches
@@ -286,15 +295,6 @@ void LocationManager::OnInputFunction()
 					MainCharObj2[0]->Speed.y = 0.0;
 					MainCharObj2[0]->Speed.z = 0.0;
 				}
-			}
-
-			MinigameManager* minigameManager = &MinigameManager::GetInstance();
-
-			if (minigameManager->state == MinigameState::MGS_None && this->_inBigFishing)
-			{
-				TimeStopped = 0;
-				WriteData<1>((void*)0x4D2E50, 0);
-				this->_inBigFishing = false;
 			}
 
 			Uint32 HeldButtons = ControllersRaw->on;
@@ -2246,6 +2246,11 @@ void LocationManager::SendBigLocationCheck()
 						char newDataValue = dataValue | bitFlag;
 
 						WriteData<1>((void*)checkData.Address, newDataValue);
+					}
+
+					if (checkData.TeleAfter)
+					{
+						MainCharObj1[0]->Position = checkData.TelePosition;
 					}
 
 					return;
