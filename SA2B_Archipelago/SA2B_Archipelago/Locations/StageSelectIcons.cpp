@@ -42,7 +42,7 @@ std::map<char, NumberDisplayData> NumberMap = {
 
 static const int Anim_Length = 29;
 static const int Stage_Anim_Length = 120;
-static const int Num_Anim_Length = 19;
+static const int Num_Anim_Length = 24;
 
 static NJS_TEXNAME UpgradeIconsTexName[Anim_Length];
 static NJS_TEXNAME UpgradeIconsTexName_Inactive[Anim_Length];
@@ -79,6 +79,12 @@ static NJS_TEXANIM NumAnim[] = {
 	{0x31, 0x19, 0x18, 0x0C, 0x32, 0xC7, 0x63, 0xFA, 1, 0},
 	{0x31, 0x19, 0x18, 0x0C, 0x64, 0xC7, 0x95, 0xFA, 1, 0},
 	{0x31, 0x19, 0x18, 0x0C, 0x96, 0xC7, 0xC7, 0xFA, 1, 0},
+	//Ranks
+	{0x31, 0x31, 0x18, 0x18, 0xC8, 0x33, 0xF9, 0x96, 1, 0}, // E
+	{0x31, 0x31, 0x18, 0x18, 0x96, 0x33, 0xC7, 0x96, 1, 0}, // D
+	{0x31, 0x31, 0x18, 0x18, 0x64, 0x33, 0x95, 0x96, 1, 0}, // C
+	{0x31, 0x31, 0x18, 0x18, 0x32, 0x33, 0x63, 0x96, 1, 0}, // B
+	{0x31, 0x31, 0x18, 0x18, 0x00, 0x33, 0x31, 0x96, 1, 0}, // A
 	//Padding
 	{40, 32, 20, 16, 0x0A, 0x10, 0x34, 0x30, 1, 0},
 };
@@ -839,13 +845,14 @@ void UpdateTimescale()
 void UpdateMissionInLevel() 
 {
 	std::vector<int> activeMissions = StageSelectManager::GetInstance().GetCurrentStageMissions();
+	std::vector<int> activeRanks = StageSelectManager::GetInstance().GetCurrentStageRanks();
 
 	int iconWidth = 48;
 	float x_pos = minXPos + (iconWidth / 2);
 
 	for (int i = 0; i < activeMissions.size(); i++)
 	{
-		int animIndex = (Num_Anim_Length - 7) + (activeMissions[i] - 1);
+		int animIndex = (Num_Anim_Length - 12) + (activeMissions[i] - 1);
 		if (activeMissions[i] - 1 != ActiveMission)
 		{
 			animIndex += 5;
@@ -856,7 +863,15 @@ void UpdateMissionInLevel()
 		NumSprite.sy = 1.0f;
 		DrawSprite2D(&NumSprite, 1, 1, NJD_SPRITE_ALPHA);
 
-		// TODO Emblem indicating Mission completed
+		if (activeRanks[i] > 0)
+		{
+			animIndex = (Num_Anim_Length - 2) + (activeRanks[i] - 1);
+			NumSprite.tanim = &NumAnim[animIndex];
+			NumSprite.p = { x_pos, 48.0f, 0.0f };
+			NumSprite.sx = 1.0f;
+			NumSprite.sy = 1.0f;
+			DrawSprite2D(&NumSprite, 1, 1, NJD_SPRITE_ALPHA);
+		}
 
 		x_pos += iconWidth;
 	}

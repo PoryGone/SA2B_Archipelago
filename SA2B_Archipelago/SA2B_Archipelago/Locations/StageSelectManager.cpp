@@ -264,6 +264,34 @@ std::vector<int> StageSelectManager::GetCurrentStageMissions()
 	return activeOrder;
 }
 
+std::vector<int> StageSelectManager::GetCurrentStageRanks()
+{
+	int currentTileStageIndex = this->TileIDtoStageIndex[SS_SelectedTile];
+	int missionOrderIndex = this->_chosenMissionsMap.at(currentTileStageIndex);
+	std::array<int, 5> chosenMissionOrder = this->_potentialMissionOrders.at(missionOrderIndex);
+
+	int missionCount = this->_missionCountMap[currentTileStageIndex];
+
+	std::vector<int> activeRanks;
+
+	int rankAddr = this->_stageSelectDataMap.at(currentTileStageIndex).UnlockMemAddress - 5;
+
+	if (currentTileStageIndex == SSS_Route101 || currentTileStageIndex == SSS_Route280)
+	{
+		rankAddr -= 13;
+	}
+
+	for (int i = 0; i < missionCount; i++)
+	{
+		int missionIdx = chosenMissionOrder[i] - 1;
+		char dataValue = *(char*)(rankAddr + missionIdx);
+
+		activeRanks.push_back(dataValue);
+	}
+
+	return activeRanks;
+}
+
 void StageSelectManager::SetChosenMissionsMap(std::map<int, int> map)
 {
 	this->_chosenMissionsMap = map;

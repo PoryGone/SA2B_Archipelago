@@ -65,6 +65,7 @@ public:
     int GetCannonsCoreEmblemCount();
     std::vector<int> GetGateRequirements();
     std::vector<int> GetCurrentStageMissions();
+    std::vector<int> GetCurrentStageRanks();
 
 private:
 	const HelperFunctions* _helperFunctions;
