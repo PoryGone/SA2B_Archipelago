@@ -40,6 +40,7 @@ public:
 	void HandleJunk(int item_id);
 
 	std::vector<int> GetChaosEmeraldAddresses();
+	std::vector<int> GetMinigameAddresses();
 
 	void HandleMinigameCompletion(int item_id);
 

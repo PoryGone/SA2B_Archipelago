@@ -1658,6 +1658,22 @@ std::vector<int> ItemManager::GetChaosEmeraldAddresses()
 	return result;
 }
 
+std::vector<int> ItemManager::GetMinigameAddresses()
+{
+	std::vector<int> result;
+
+	for (int i = ItemValue::IV_PongTrap; i <= ItemValue::IV_END_MINIGAMES; i++)
+	{
+		if (this->_ItemData.find(i) != this->_ItemData.end())
+		{
+			ItemData& itemData = this->_ItemData[i];
+			result.push_back(itemData.Address);
+		}
+	}
+
+	return result;
+}
+
 bool AnimalSlotAvailable()
 {
 	int animalsInInventory = 0;

@@ -643,6 +643,22 @@ void UpdateChaosEmeraldIcons()
 			DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
 		}
 	}
+	else if (goal == 8)
+	{
+		ItemManager* itemMan = &ItemManager::getInstance();
+		std::vector<int> minigames = itemMan->GetMinigameAddresses();
+		StageSelectSprite.sx = 0.25f;
+		StageSelectSprite.sy = 0.25f;
+		for (int i = 0; i < minigames.size(); i++)
+		{
+			// TODO: RAS: Minigame Icons
+			int minigameIcon = (*(char*)minigames[i] & 0b10) != 0x00 ? SSI_Emerald_White + i : SSI_CannonsCore + i;
+			float x = (320.0f - (minigames.size() - 1) * 16.0f) + (i * 32.0f);
+			StageSelectSprite.tanim = &StageSelectAnim[minigameIcon];
+			StageSelectSprite.p = { x, 380.0f, 0.0f };
+			DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+		}
+	}
 }
 
 void UpdateUpgradeIcons(bool inLevel)
