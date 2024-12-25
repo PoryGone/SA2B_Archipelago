@@ -88,6 +88,7 @@ void InitializeItemData(std::map<int, ItemData> &outItemData)
     outItemData[ItemValue::IV_PinballTrap]        = ItemData(0x01DEEB07, std::string("Pinball Trap"), std::string(), 0);
     outItemData[ItemValue::IV_MathQuizTrap]       = ItemData(0x01DEEB08, std::string("Math Quiz Trap"), std::string(), 0);
     outItemData[ItemValue::IV_SnakeTrap]          = ItemData(0x01DEEB09, std::string("Snake Trap"), std::string(), 0);
+    outItemData[ItemValue::IV_InputSequenceTrap]  = ItemData(0x01DEEB0A, std::string("Input Sequence Trap"), std::string(), 0);
 
     outItemData[ItemValue::IV_NormalEgg]            = ItemData(0x0000000, std::string("Normal Egg"), std::string(), 1);
     outItemData[ItemValue::IV_YellowMonoToneEgg]    = ItemData(0x0000000, std::string("Yellow Mono-Tone Egg"), std::string(), 1);
@@ -238,7 +239,8 @@ std::map<ItemValue, std::string> item_value_to_name = {
     {ItemValue::IV_LightUpPathTrap,     "Light Up Path Trap"},
     {ItemValue::IV_PinballTrap,         "Pinball Trap"},
     {ItemValue::IV_MathQuizTrap,        "Math Quiz Trap"},
-    {ItemValue::IV_SnakeTrap,        "Snake Trap"},
+    {ItemValue::IV_SnakeTrap,           "Snake Trap"},
+    {ItemValue::IV_InputSequenceTrap,   "Input Sequence Trap"},
 };
 
 std::map<std::string, ItemValue> item_name_to_value = {
@@ -267,6 +269,7 @@ std::map<std::string, ItemValue> item_name_to_value = {
     {"Pinball Trap",            ItemValue::IV_PinballTrap},
     {"Math Quiz Trap",          ItemValue::IV_MathQuizTrap},
     {"Snake Trap",              ItemValue::IV_SnakeTrap},
+    {"Input Sequence Trap",     ItemValue::IV_InputSequenceTrap},
 
     // Common other trap names
     {"Stun Trap",               ItemValue::IV_TimeStopTrap},

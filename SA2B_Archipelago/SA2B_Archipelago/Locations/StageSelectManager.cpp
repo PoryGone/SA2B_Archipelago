@@ -1351,7 +1351,7 @@ bool StageSelectManager::HaveAllChaosEmeralds()
 
 bool StageSelectManager::HaveAllMinigames()
 {
-	for (int i = 0; i < 9; i++)
+	for (int i = 0; i < 12; i++)
 	{
 		unsigned char dataValue = *(unsigned char*)(0x01DEEAFF + i);
 
