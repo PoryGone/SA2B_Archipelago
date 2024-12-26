@@ -27,7 +27,18 @@ enum class DeathCause
 	DC_Kart,
 	DC_Fall,
 	DC_Drown,
-	DC_Pong
+	DC_Pong = 0x50,
+	DC_Platformer,
+	DC_Fishing,
+	DC_Trivia,
+	DC_PokemonTrivia,
+	DC_PokemonCount,
+	DC_NumberSequence,
+	DC_LightUpPath,
+	DC_Pinball,
+	DC_MathQuiz,
+	DC_Snake,
+	DC_InputSequence,
 };
 
 class ArchipelagoManager

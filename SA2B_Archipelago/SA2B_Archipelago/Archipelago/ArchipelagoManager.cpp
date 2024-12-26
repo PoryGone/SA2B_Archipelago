@@ -1359,6 +1359,39 @@ void ArchipelagoManager::DeathLinkSend(DeathCause cause)
     case DeathCause::DC_Pong:
         causeText = this->ap_player_name + " could not win at Pong.";
         break;
+    case DeathCause::DC_Platformer:
+        causeText = this->ap_player_name + " didn't make the jump.";
+        break;
+    case DeathCause::DC_Fishing:
+        causeText = this->ap_player_name + " could not catch a fish.";
+        break;
+    case DeathCause::DC_Trivia:
+        causeText = this->ap_player_name + " doesn't know the lore.";
+        break;
+    case DeathCause::DC_PokemonTrivia:
+        causeText = this->ap_player_name + " doesn't know Pokemon.";
+        break;
+    case DeathCause::DC_PokemonCount:
+        causeText = this->ap_player_name + " could not count.";
+        break;
+    case DeathCause::DC_NumberSequence:
+        causeText = this->ap_player_name + " could not solve the sequence.";
+        break;
+    case DeathCause::DC_LightUpPath:
+        causeText = this->ap_player_name + " could not find their way.";
+        break;
+    case DeathCause::DC_Pinball:
+        causeText = this->ap_player_name + " could not win at Pinball.";
+        break;
+    case DeathCause::DC_MathQuiz:
+        causeText = this->ap_player_name + " doesn't know math.";
+        break;
+    case DeathCause::DC_Snake:
+        causeText = this->ap_player_name + " could not win at Snake.";
+        break;
+    case DeathCause::DC_InputSequence:
+        causeText = this->ap_player_name + " didn't react fast enough.";
+        break;
     default:
         causeText = characterText + " died. (" + this->ap_player_name + ")";
         break;

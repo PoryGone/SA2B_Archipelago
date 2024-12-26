@@ -258,7 +258,7 @@ void MinigameManager::HandleLoss()
 	else
 	{
 		// TODO: Make this dynamic when we have multiple Minigames
-		ArchipelagoManager::getInstance().SetDeathCause(DeathCause::DC_Pong);
+		ArchipelagoManager::getInstance().SetDeathCause((DeathCause)this->currentMinigameItem);
 		ArchipelagoManager::getInstance().AP_KillPlayer();
 	}
 }
