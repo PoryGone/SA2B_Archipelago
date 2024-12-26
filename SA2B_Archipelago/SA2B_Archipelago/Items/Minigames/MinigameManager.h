@@ -58,6 +58,8 @@ public:
 	std::vector<Stopwatch*> stopwatches = std::vector<Stopwatch*>();
 
 private:
+	const HelperFunctions* _helperFunctions;
+
 	MinigameBase* currentMinigame;
 	MinigameManagerData _data = MinigameManagerData();
 	std::clock_t minigameStart;

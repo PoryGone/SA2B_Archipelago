@@ -41,7 +41,7 @@ void DrawUpgradeIconMain_MG(ObjectMaster* obj)
 
 void MinigameManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
 {
-
+	_helperFunctions = &helperFunctions;
 }
 
 void MinigameManager::OnFrameFunction()
@@ -67,6 +67,49 @@ void MinigameManager::OnFrameFunction()
 
 void MinigameManager::OnInputFunction()
 {
+	// Debug Sound Test
+	if (ArchipelagoManager::getInstance().IsDebug() && false)
+	{
+		static int DEBUG_SOUND_BANK{ 0 };
+		static int DEBUG_SOUND_ID{ 0 };
+
+		int res_ID = (int)((((DEBUG_SOUND_BANK) << 12) & 0xF000) + (DEBUG_SOUND_ID));
+
+		std::string message = "Bank: " + std::to_string(DEBUG_SOUND_BANK) + " | ID: " + std::to_string(DEBUG_SOUND_ID);
+		this->_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 1), message.c_str());
+
+		if ((ControllersRaw->press & RawInputFlags::RIF_Down) != 0)
+		{
+			if (DEBUG_SOUND_ID > 0)
+			{
+				DEBUG_SOUND_ID -= 1;
+			}
+		}
+		else if ((ControllersRaw->press & RawInputFlags::RIF_Up) != 0)
+		{
+			DEBUG_SOUND_ID += 1;
+		}
+		else if ((ControllersRaw->press & RawInputFlags::RIF_Left) != 0)
+		{
+			if (DEBUG_SOUND_BANK > 0)
+			{
+				DEBUG_SOUND_BANK -= 1;
+			}
+		}
+		else if ((ControllersRaw->press & RawInputFlags::RIF_Right) != 0)
+		{
+			if (DEBUG_SOUND_BANK < 8)
+			{
+				DEBUG_SOUND_BANK += 1;
+			}
+		}
+		else if ((ControllersRaw->press & RawInputFlags::RIF_Y) != 0)
+		{
+			PlaySoundProbably(res_ID, 0, 1, 1);
+		}
+	}
+	// End Debug Sound Test
+
 	this->_data.input = (RawInputFlags)ControllersRaw->on;
 	this->_data.inputPress = (RawInputFlags)ControllersRaw->press;
 	this->_data.inputRelease = (RawInputFlags)ControllersRaw->release;
