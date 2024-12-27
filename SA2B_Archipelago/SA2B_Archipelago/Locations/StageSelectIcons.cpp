@@ -651,12 +651,19 @@ void UpdateChaosEmeraldIcons()
 		StageSelectSprite.sy = 0.25f;
 		for (int i = 0; i < minigames.size(); i++)
 		{
+			char minigamesWon = *(char*)(minigames[i] + 0x30);
+
 			// TODO: RAS: Minigame Icons
-			int minigameIcon = (*(char*)minigames[i] & 0b10) != 0x00 ? SSI_Emerald_White + i : SSI_CannonsCore + i;
+			int minigameIcon = minigamesWon >= itemMan->RequiredMinigames ? SSI_Emerald_White + i : SSI_CannonsCore + i;
 			float x = (320.0f - (minigames.size() - 1) * 16.0f) + (i * 32.0f);
+			float y = 380.0f;
 			StageSelectSprite.tanim = &StageSelectAnim[minigameIcon];
-			StageSelectSprite.p = { x, 380.0f, 0.0f };
+			StageSelectSprite.p = { x, y, 0.0f };
 			DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+
+			x += 4;
+			DrawString(std::to_string(minigamesWon), x, y + 8.0f, 0.25f);
+			DrawString(std::to_string(itemMan->RequiredMinigames), x, y + 24.0f, 0.25f);
 		}
 	}
 }

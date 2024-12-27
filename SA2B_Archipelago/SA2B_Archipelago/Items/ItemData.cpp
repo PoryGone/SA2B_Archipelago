@@ -77,18 +77,18 @@ void InitializeItemData(std::map<int, ItemData> &outItemData)
     outItemData[ItemValue::IV_YellowChaosEmerald] = ItemData(0x01DEEAFD, std::string("Yellow Chaos Emerald"), std::string(), 0);
     outItemData[ItemValue::IV_BlueChaosEmerald]   = ItemData(0x01DEEAFE, std::string("Blue Chaos Emerald"), std::string(), 0);
 
-    outItemData[ItemValue::IV_PongTrap]           = ItemData(0x01DEEAFF, std::string("Pong Trap"), std::string(), 0);
-    outItemData[ItemValue::IV_PlatformerTrap]     = ItemData(0x01DEEB00, std::string("Platformer Trap"), std::string(), 0);
-    outItemData[ItemValue::IV_FishingTrap]        = ItemData(0x01DEEB01, std::string("Fishing Trap"), std::string(), 0);
-    outItemData[ItemValue::IV_TriviaTrap]         = ItemData(0x01DEEB02, std::string("Trivia Trap"), std::string(), 0);
-    outItemData[ItemValue::IV_PokemonTriviaTrap]  = ItemData(0x01DEEB03, std::string("Pokemon Trivia Trap"), std::string(), 0);
-    outItemData[ItemValue::IV_PokemonCountTrap]   = ItemData(0x01DEEB04, std::string("Pokemon Count Trap"), std::string(), 0);
-    outItemData[ItemValue::IV_NumberSequenceTrap] = ItemData(0x01DEEB05, std::string("Number Sequence Trap"), std::string(), 0);
-    outItemData[ItemValue::IV_LightUpPathTrap]    = ItemData(0x01DEEB06, std::string("Light Up Path Trap"), std::string(), 0);
-    outItemData[ItemValue::IV_PinballTrap]        = ItemData(0x01DEEB07, std::string("Pinball Trap"), std::string(), 0);
-    outItemData[ItemValue::IV_MathQuizTrap]       = ItemData(0x01DEEB08, std::string("Math Quiz Trap"), std::string(), 0);
-    outItemData[ItemValue::IV_SnakeTrap]          = ItemData(0x01DEEB09, std::string("Snake Trap"), std::string(), 0);
-    outItemData[ItemValue::IV_InputSequenceTrap]  = ItemData(0x01DEEB0A, std::string("Input Sequence Trap"), std::string(), 0);
+    outItemData[ItemValue::IV_PongTrap]           = ItemData(0x01DEEB05, std::string("Pong Trap"), std::string(), 0);
+    outItemData[ItemValue::IV_PlatformerTrap]     = ItemData(0x01DEEB06, std::string("Platformer Trap"), std::string(), 0);
+    outItemData[ItemValue::IV_FishingTrap]        = ItemData(0x01DEEB07, std::string("Fishing Trap"), std::string(), 0);
+    outItemData[ItemValue::IV_TriviaTrap]         = ItemData(0x01DEEB08, std::string("Trivia Trap"), std::string(), 0);
+    outItemData[ItemValue::IV_PokemonTriviaTrap]  = ItemData(0x01DEEB09, std::string("Pokemon Trivia Trap"), std::string(), 0);
+    outItemData[ItemValue::IV_PokemonCountTrap]   = ItemData(0x01DEEB0A, std::string("Pokemon Count Trap"), std::string(), 0);
+    outItemData[ItemValue::IV_NumberSequenceTrap] = ItemData(0x01DEEB0B, std::string("Number Sequence Trap"), std::string(), 0);
+    outItemData[ItemValue::IV_LightUpPathTrap]    = ItemData(0x01DEEB0C, std::string("Light Up Path Trap"), std::string(), 0);
+    outItemData[ItemValue::IV_PinballTrap]        = ItemData(0x01DEEB0D, std::string("Pinball Trap"), std::string(), 0);
+    outItemData[ItemValue::IV_MathQuizTrap]       = ItemData(0x01DEEB0E, std::string("Math Quiz Trap"), std::string(), 0);
+    outItemData[ItemValue::IV_SnakeTrap]          = ItemData(0x01DEEB0F, std::string("Snake Trap"), std::string(), 0);
+    outItemData[ItemValue::IV_InputSequenceTrap]  = ItemData(0x01DEEB11, std::string("Input Sequence Trap"), std::string(), 0);
 
     outItemData[ItemValue::IV_NormalEgg]            = ItemData(0x0000000, std::string("Normal Egg"), std::string(), 1);
     outItemData[ItemValue::IV_YellowMonoToneEgg]    = ItemData(0x0000000, std::string("Yellow Mono-Tone Egg"), std::string(), 1);

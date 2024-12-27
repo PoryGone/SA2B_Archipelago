@@ -1026,6 +1026,18 @@ void SA2_SetMinigameDifficulty(int minigameDifficulty)
     minigameManager->SetDifficulty(minigameDifficulty);
 }
 
+void SA2_SetMinigameMadnessAmount(int minigameAmount)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    ItemManager* itemManager = &ItemManager::getInstance();
+
+    itemManager->SetMinigameMadnessAmount(minigameAmount);
+}
+
 void SA2_SetPlayerNum(int playerNum)
 {
     if (!ArchipelagoManager::getInstance().IsInit())
@@ -1091,6 +1103,7 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_RegisterSlotDataMapIntIntCallback("DefaultChaoNameMap", &SA2_SetDefaultChaoNameMap);
     AP_RegisterSlotDataMapIntIntCallback("ChaoERLayout", &SA2_SetChaoERMap);
     AP_RegisterSlotDataIntCallback("MinigameTrapDifficulty", &SA2_SetMinigameDifficulty);
+    AP_RegisterSlotDataIntCallback("MinigameMadnessAmount", &SA2_SetMinigameMadnessAmount);
     AP_RegisterSlotDataMapIntIntCallback("RegionEmblemMap", &SA2_SetRegionEmblemMap);
     AP_RegisterSlotDataMapIntIntCallback("MissionMap", &SA2_SetChosenMissionsMap);
     AP_RegisterSlotDataMapIntIntCallback("MissionCountMap", &SA2_SetMissionCountMap);

@@ -416,6 +416,15 @@ void ItemManager::ReceiveItem(int item_id, bool notify)
 			// Don't recollect the trap items
 			this->HandleTrap(item_id);
 
+			// Count how many of this minigame we've received
+			ItemData& receivedItem = this->_ItemData[item_id];
+			char dataValue = *(char*)receivedItem.Address;
+			if (dataValue < this->RequiredMinigames)
+			{
+				dataValue++;
+				*(char*)receivedItem.Address = dataValue;
+			}
+
 			SavedChecksReceived = this->_thisSessionChecksReceived;
 		}
 	}
@@ -693,6 +702,11 @@ void RestoreOmochao()
 void ItemManager::SetPossibleTraps(std::map<int, int> map)
 {
 	this->_possibleTraps = map;
+}
+
+void ItemManager::SetMinigameMadnessAmount(int minigameAmount)
+{
+	this->RequiredMinigames = minigameAmount;
 }
 
 void ItemManager::HandleTrap(int item_id)
@@ -1636,15 +1650,12 @@ void ItemManager::HandleMinigameCompletion(int item_id)
 {
 	ItemData& receivedItem = this->_ItemData[item_id];
 
-	char dataValue = *(char*)receivedItem.Address;
+	char dataValue = *(char*)(receivedItem.Address + 0x30);
 
-	char bitFlag = (char)(0x01 << 0x01);
-
-	if ((dataValue & bitFlag) == 0x00)
+	if (dataValue < this->RequiredMinigames)
 	{
-		char newDataValue = dataValue | bitFlag;
-
-		WriteData<1>((void*)receivedItem.Address, newDataValue);
+		dataValue++;
+		*(unsigned int*)(receivedItem.Address + 0x30) = dataValue;
 	}
 }
 

@@ -36,6 +36,7 @@ public:
 	void ReceiveItem(int item_id, bool notify);
 	void HandleTrapLink(std::string item_name, std::string message);
 	void SetPossibleTraps(std::map<int, int> map);
+	void SetMinigameMadnessAmount(int minigameAmount);
 	bool IsOmotrapActive();
 	void HandleJunk(int item_id);
 
@@ -45,6 +46,7 @@ public:
 	void HandleMinigameCompletion(int item_id);
 
 	int _TimeStopTimer;
+	int RequiredMinigames = 0;
 
 private:
 	void HandleEquipment(int EquipmentItem);

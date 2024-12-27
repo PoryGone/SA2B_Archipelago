@@ -4,6 +4,7 @@
 #include "../Utilities/MessageQueue.h"
 #include "../Archipelago/ArchipelagoManager.h"
 #include "../Aesthetics/StatsManager.h"
+#include "../Items/ItemManager.h"
 #include "../Items/Minigames/MinigameManager.h"
 
 void* saveLevelDataReadOffset_ptr = (void*)0x6773b6;
@@ -1351,13 +1352,13 @@ bool StageSelectManager::HaveAllChaosEmeralds()
 
 bool StageSelectManager::HaveAllMinigames()
 {
-	for (int i = 0; i < 12; i++)
+	std::vector<int> addresses = ItemManager::getInstance().GetMinigameAddresses();
+
+	for (int i = 0; i < addresses.size(); i++)
 	{
-		unsigned char dataValue = *(unsigned char*)(0x01DEEAFF + i);
+		char dataValue = *(char*)(addresses[i] + 0x30);
 
-		char bitFlag = (char)(0x01 << 0x01);
-
-		if ((dataValue & bitFlag) == 0x00)
+		if (dataValue < ItemManager::getInstance().RequiredMinigames)
 		{
 			return false;
 		}
