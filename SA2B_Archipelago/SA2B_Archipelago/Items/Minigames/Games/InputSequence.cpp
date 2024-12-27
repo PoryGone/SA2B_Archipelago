@@ -3,25 +3,36 @@
 
 void InputSequence::OnGameStart(MinigameManagerData data)
 {
-	currentState = MGS_InProgress;
-	selectedIndex = 0;
-	state = ISS_Start;
-	data.timers->push_back(&timer);
+	this->currentState = MGS_InProgress;
+	this->selectedIndex = 0;
+	this->state = ISS_Start;
+	data.timers->push_back(&this->timer);
+
+	int numInputs = 3;
 
 	switch (data.difficulty)
 	{
 	case MGD_Easy:
-		guessTime = 15.0f;
+		this->guessTime = 8.0f;
+		numInputs = 3;
 		break;
 	case MGD_Medium:
-		guessTime = 12.0f;
+		this->guessTime = 7.0f;
+		numInputs = 5;
 		break;
 	case MGD_Hard:
-		guessTime = 10.0f;
+		this->guessTime = 5.0f;
+		numInputs = 7;
 		break;
 	}
+
+	for (int i = 0; i < numInputs; i++)
+	{
+		RawInputFlags flag = (RawInputFlags)(RIF_Up << RandomInt(0, 4));
+		this->chosenInputs.push_back(flag);
+	}
 	
-	CreateHierarchy(data);
+	this->CreateHierarchy(data);
 }
 
 void InputSequence::OnFrame(MinigameManagerData data)
@@ -30,62 +41,102 @@ void InputSequence::OnFrame(MinigameManagerData data)
 	{
 		return;
 	}
-	switch (state)
+
+	for (int i = 0; i < this->chosenInputs.size(); i++)
+	{
+		if (i <= this->selectedIndex)
+		{
+			this->dPads[i]->SetEnabled(true);
+		}
+		else
+		{
+			this->dPads[i]->SetEnabled(false);
+		}
+	}
+
+	switch (this->state)
 	{
 	case ISS_Start:
-		timer.Start(guessTime);
-		state = ISS_InGame;
+		this->timer.Start(this->guessTime);
+		this->state = ISS_InGame;
 		break;
 	case ISS_InGame:
-		//UpdateTimerFill();
-		/*
+		this->UpdateTimerFill();
 		if (timer.IsElapsed())
 		{
-			SubmitSequence();
+			this->state = ISS_Lose;
 		}
-		*/
+		else
+		{
+			this->OnFramePlayer(data);
+		}
 		break;
 	case ISS_Win:
-		if (timer.IsElapsed())
-		{
-			currentState = MGS_Victory;
-		}
+		this->currentState = MGS_Victory;
 		break;
 	case ISS_Lose:
-		if (timer.IsElapsed())
-		{
-			currentState = MGS_Loss;
-		}
+		this->currentState = MGS_Loss;
 		break;
 	}
-	
+}
+
+void InputSequence::OnFramePlayer(MinigameManagerData data)
+{
+	RawInputFlags correctInput = this->chosenInputs[this->selectedIndex];
+	RawInputFlags wrongInputs = (RawInputFlags::RIF_ANY_D_PAD & (~correctInput));
+
+	if ((data.inputPress & wrongInputs) != 0)
+	{
+		this->state = InputSequenceState::ISS_Lose;
+
+		return;
+	}
+	else if ((data.inputPress & correctInput) != 0)
+	{
+		this->selectedIndex++;
+
+		if (this->selectedIndex >= this->chosenInputs.size())
+		{
+			this->state = InputSequenceState::ISS_Win;
+
+			return;
+		}
+	}
 }
 
 void InputSequence::OnCleanup(MinigameManagerData data)
 {
-
+	this->selectedIndex = 0;
+	this->dPads.clear();
+	this->chosenInputs.clear();
 }
 
 void InputSequence::UpdateTimerFill()
 {
-	float amount = timer.TimeRemaining() / guessTime;
+	float amount = this->timer.TimeRemaining() / this->guessTime;
 	amount = amount < 0.0f ? 0.0f : amount;
 	amount = amount > 1.0f ? 1.0f : amount;
-	float width = timerBarBG->displaySize.x * amount;
-	float bgX = -(timerBarBG->displaySize.x * 0.5f);
+	float width = this->timerBarBG->displaySize.x * amount;
+	float bgX = -(this->timerBarBG->displaySize.x * 0.5f);
 	NJS_POINT3 pos = { bgX + width * 0.5f, 0.0f };
-	timerBar->displaySize.x = width;
-	timerBar->SetPosition(pos);
+	this->timerBar->displaySize.x = width;
+	this->timerBar->SetPosition(pos);
 }
 
 void InputSequence::CreateHierarchy(MinigameManagerData data)
 {
-	AddDPadToHierarchy(RIF_ANY_D_PAD, { 65.0f, 130.0f, 0.0f }, 45.0f, *data.icons, *data.hierarchy);
+	for (int i = 0; i < this->chosenInputs.size(); i++)
+	{
+		float x = (320.0f - (this->chosenInputs.size() - 1) * 32.0f) + (i * 64.0f);
+		SpriteNode* dPad = AddDPadToHierarchy(this->chosenInputs[i], { x, 240.0f, 0.0f }, 45.0f, *data.icons, *data.hierarchy);
+		dPad->SetEnabled(false);
+		this->dPads.push_back(dPad);
+	}
 	
 	float xPos = 180.0f;
-	timerBarBG = data.hierarchy->CreateNode("Timer_Background", data.icons->GetAnim(MGI_White_Box), { 200.0f, 10.0f }, { 320.0f, 106.0f });
-	timerBarBG->color = { 1.0f, 1.0f, 0.0f, 0.0f };
-	timerBar = data.hierarchy->CreateNode("Timer_Fill", data.icons->GetAnim(MGI_White_Box), { 200.0f, 10.0f }, { 320.0f, 106.0f }, timerBarBG);
-	timerBar->color = { 1.0f, 0.0f, 0.0f, 1.0f };
-	timerBarBG->SetEnabled(false); //Disabling timer for now
+	this->timerBarBG = data.hierarchy->CreateNode("Timer_Background", data.icons->GetAnim(MGI_White_Box), { 200.0f, 10.0f }, { 320.0f, 106.0f });
+	this->timerBarBG->color = { 1.0f, 1.0f, 0.0f, 0.0f };
+	this->timerBar = data.hierarchy->CreateNode("Timer_Fill", data.icons->GetAnim(MGI_White_Box), { 200.0f, 10.0f }, { 320.0f, 106.0f }, this->timerBarBG);
+	this->timerBar->color = { 1.0f, 0.0f, 0.0f, 1.0f };
+	this->timerBarBG->SetEnabled(true);
 }	

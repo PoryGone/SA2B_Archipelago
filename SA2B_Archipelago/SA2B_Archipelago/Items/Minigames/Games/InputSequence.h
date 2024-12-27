@@ -22,12 +22,15 @@ public:
 private:
 	void CreateHierarchy(MinigameManagerData data);
 	void UpdateTimerFill();
+	void OnFramePlayer(MinigameManagerData data);
 
 	InputSequenceState state;
 	Timer timer;
 	float guessTime = 10.0f;
 
 	int selectedIndex = 0;
+	std::vector<RawInputFlags> chosenInputs;
+	std::vector<SpriteNode*> dPads;
 
 	SpriteNode* timerBarBG;
 	SpriteNode* timerBar;

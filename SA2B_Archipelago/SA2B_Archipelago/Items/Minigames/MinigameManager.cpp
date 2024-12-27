@@ -241,7 +241,7 @@ void MinigameManager::StartMinigame(ItemValue item, bool locationGame)
 		this->currentMinigame = &this->snake;
 		break;
 	case ItemValue::IV_InputSequenceTrap:
-		this->currentMinigame = &this->snake;
+		this->currentMinigame = &this->inputSequence;
 		break;
 	case ItemValue::IV_Maria:
 		this->currentMinigame = &this->finalBoss;

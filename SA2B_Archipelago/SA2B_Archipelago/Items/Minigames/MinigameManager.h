@@ -17,6 +17,7 @@
 #include "Games/Pinball.h"
 #include "Games/MathQuiz.h"
 #include "Games/Snake.h"
+#include "Games/InputSequence.h"
 #include "../ItemData.h"
 #include <ctime>
 
@@ -83,6 +84,7 @@ private:
 	Pinball pinball					= Pinball();
 	MathQuiz mathQuiz				= MathQuiz();
 	Snake snake						= Snake();
+	InputSequence inputSequence		= InputSequence();
 
 	//On Hold
 	PunchOut punchOut				= PunchOut();
