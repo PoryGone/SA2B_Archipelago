@@ -73,7 +73,7 @@ void MessageQueue::SetFontSize(int newFontSize)
 		return;
 	}
 
-	this->_debugFontSize = newFontSize;
+	this->_debugFontSize = max(12, min(newFontSize, 24));
 
 	_helperFunctions->SetDebugFontSize(this->_debugFontSize);
 }
@@ -85,7 +85,7 @@ void MessageQueue::SetDisplayCount(int newDisplayCount)
 		return;
 	}
 
-	this->_displayCount = max(1, min(newDisplayCount, MAX_MESSAGE_QUEUE_DISPLAY_COUNT));
+	this->_displayCount = max(5, min(newDisplayCount, MAX_MESSAGE_QUEUE_DISPLAY_COUNT));
 
 	this->_startLine = ((VerticalResolution / this->_debugFontSize) - this->_displayCount);
 }
@@ -107,7 +107,7 @@ void MessageQueue::SetDisplayDuration(float newDisplayDuration)
 		return;
 	}
 
-	this->_displayDuration = newDisplayDuration;
+	this->_displayDuration = min(5.0f, max(newDisplayDuration, 30.0f));
 }
 
 void MessageQueue::AddMessage(std::string message, int color)

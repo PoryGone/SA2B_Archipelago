@@ -115,6 +115,10 @@ void ArchipelagoManager::OnInitFunction(const char* path, const HelperFunctions&
     int textGreen = this->_settingsINI->getInt("General", "MessageColorG");
     int textBlue  = this->_settingsINI->getInt("General", "MessageColorB");
 
+    textRed   = max(0, min(textRed,   255));
+    textGreen = max(0, min(textGreen, 255));
+    textBlue  = max(0, min(textBlue,  255));
+
     int textColor = 0xFF000000 + (textRed * 0x10000) + (textGreen * 0x100) + (textBlue * 0x1);
     MessageQueue::GetInstance().SetDisplayColor(textColor);
 
