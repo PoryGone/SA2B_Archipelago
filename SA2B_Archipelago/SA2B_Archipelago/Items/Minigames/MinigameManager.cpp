@@ -194,7 +194,7 @@ void MinigameManager::EndMinigame()
 	this->currentMinigameItem = ItemValue::IV_Apple;
 }
 
-void MinigameManager::StartMinigame(ItemValue item, bool locationGame)
+void MinigameManager::StartMinigame(ItemValue item, bool locationGame, bool linkedTrap)
 {
 	if (this->state != MinigameState::MGS_None)
 	{
@@ -254,6 +254,7 @@ void MinigameManager::StartMinigame(ItemValue item, bool locationGame)
 	}
 
 	this->_data.isLocationCheck = locationGame;
+	this->_data.isLinkedTrap = linkedTrap;
 	this->currentMinigameItem = item;
 }
 
@@ -279,7 +280,12 @@ void MinigameManager::HandleVictory()
 		return;
 	}
 
-	if (this->_data.isLocationCheck)
+	if (this->_data.isLinkedTrap)
+	{
+		// Don't count linked trap wins for goal completion
+		ItemManager::getInstance().HandleJunk(itemToSend);
+	}
+	else if (this->_data.isLocationCheck)
 	{
 		// TODO: Generalize?
 

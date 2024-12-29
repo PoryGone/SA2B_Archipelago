@@ -6,6 +6,7 @@
 #include "LocationManager.h"
 #include "ChaoGardenManager.h"
 #include "../Items/ItemManager.h"
+#include "../Items/Minigames/MinigameManager.h"
 #include "../Utilities/SpriteUtilities.h"
 #include <map>
 
@@ -969,6 +970,8 @@ void DrawUpgradeIcon_IL(ObjectMaster* obj)
 	{
 		UpdateChaoCoinRequirements();
 		UpdateTimescale();
+
+		StageSelectIcons::GetInstance().MinigameReplaySystem();
 	}
 }
 
@@ -1048,4 +1051,92 @@ bool StageSelectIcons::IsCurrentTileBoss()
 	bool isBossStage = (std::count(StageSelectIcons::GetInstance().bossIDs.begin(), StageSelectIcons::GetInstance().bossIDs.end(), levelID) != 0);
 
 	return isBossStage;
+}
+
+void StageSelectIcons::MinigameReplaySystem()
+{
+	int goal = StageSelectManager::GetInstance().GetGoal();
+
+	if (goal != 8)
+	{
+		// Only use this on Minigame Madness
+		return;
+	}
+
+	MinigameManager* mingameManager = &MinigameManager::GetInstance();
+
+	if (mingameManager->state != MinigameState::MGS_None)
+	{
+		// Don't show/handle system during Minigame
+		return;
+	}
+
+	if (GameState != GameStates_Ingame)
+	{
+		this->minigameReplayIndex = 0;
+
+		return;
+	}
+
+	if (CurrentLevel != LevelIDs::LevelIDs_ChaoWorld)
+	{
+		return;
+	}
+
+	if (CurrentChaoArea != 0x07)
+	{
+		// Only display in Lobby
+
+		return;
+	}
+
+	ItemManager* itemMan = &ItemManager::getInstance();
+	std::vector<int> minigames = itemMan->GetMinigameAddresses();
+	StageSelectSprite.sx = 0.5f;
+	StageSelectSprite.sy = 0.5f;
+	char minigamesReceived = *(char*)(minigames[this->minigameReplayIndex]);
+	bool isActivatable = minigamesReceived >= itemMan->RequiredMinigames;
+
+	// TODO: RAS: Minigame Icons
+	int minigameIcon = isActivatable ? SSI_Emerald_White + this->minigameReplayIndex : SSI_CannonsCore + this->minigameReplayIndex;
+	float x = maxXPos - 64.0f;
+	float y = 16.0f;
+	StageSelectSprite.tanim = &StageSelectAnim[minigameIcon];
+	StageSelectSprite.p = { x, y, 0.0f };
+	DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+
+	std::string minigameMessage = "";
+	minigameMessage.append(std::to_string(minigamesReceived));
+	minigameMessage.append("/");
+	minigameMessage.append(std::to_string(itemMan->RequiredMinigames));
+	x = maxXPos - 120.0f;
+	DrawString(minigameMessage, x, 96.0f, 0.75f);
+	// TODO: Show "Y to replay"
+
+	Uint32 PressedButtons = ControllersRaw->press;
+	if ((PressedButtons & 0b1000000) != 0) // Left
+	{
+		this->minigameReplayIndex--;
+	}
+	else if ((PressedButtons & 0b10000000) != 0) // Right
+	{
+		this->minigameReplayIndex++;
+	}
+	else if ((PressedButtons & 0b1000000000) != 0) // Y
+	{
+		if (isActivatable)
+		{
+			ItemValue minigameToActivate = (ItemValue)(ItemValue::IV_PongTrap + this->minigameReplayIndex);
+			mingameManager->StartMinigame(minigameToActivate);
+		}
+	}
+
+	if (this->minigameReplayIndex < 0)
+	{
+		this->minigameReplayIndex = (minigames.size() - 1);
+	}
+	else if (this->minigameReplayIndex > (minigames.size() - 1))
+	{
+		this->minigameReplayIndex = 0;
+	}
 }

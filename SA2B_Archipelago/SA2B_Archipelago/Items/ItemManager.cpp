@@ -1537,8 +1537,9 @@ void ItemManager::OnFrameTrapQueue()
 	case ItemValue::IV_MathQuizTrap:
 	case ItemValue::IV_SnakeTrap:
 	case ItemValue::IV_InputSequenceTrap:
+		bool isLinkedTrap = (this->_TrapLinkMessage.length() != 0);
 		MinigameManager* minigameManager = &MinigameManager::GetInstance();
-		minigameManager->StartMinigame((ItemValue)this->_ActiveTrap);
+		minigameManager->StartMinigame((ItemValue)this->_ActiveTrap, false, isLinkedTrap);
 		break;
 	}
 

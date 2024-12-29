@@ -169,6 +169,7 @@ public:
 	std::vector<Stopwatch*>* stopwatches;
 
 	bool isLocationCheck;
+	bool isLinkedTrap;
 };
 
 class MinigameBase

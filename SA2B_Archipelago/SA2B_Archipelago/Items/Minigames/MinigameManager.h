@@ -38,7 +38,7 @@ public:
 
 	void UpdateCurrentMinigame();
 	void EndMinigame();
-	void StartMinigame(ItemValue item, bool locationGame = false);
+	void StartMinigame(ItemValue item, bool locationGame = false, bool linkedTrap = false);
 
 	void HandleVictory();
 	void HandleLoss();
