@@ -52,6 +52,7 @@ private:
 
 	RawInputFlags anyDPad = RIF_Up | RIF_Down | RIF_Left | RIF_Right;
 
+	SpriteNode* pokemonNode = nullptr;
 	SpriteNode* questionNode = nullptr;
 	TextBox* questionBox = nullptr;
 

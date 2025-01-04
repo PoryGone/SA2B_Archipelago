@@ -40,6 +40,9 @@ enum class PokemonTypeMatchup
 	SuperEffective = 3,
 };
 
+extern std::map<PokemonType, std::string> typeNames;
+
+extern std::map<PokemonTypeMatchup, std::string> typeEffectivenessNames;
 
 extern std::map<std::pair<PokemonType, PokemonType>, PokemonTypeMatchup> typeMatchupData;
 

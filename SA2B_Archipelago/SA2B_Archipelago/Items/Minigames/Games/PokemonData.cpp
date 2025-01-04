@@ -6,6 +6,7 @@
 
 std::map<std::pair<PokemonType, PokemonType>, PokemonTypeMatchup> typeMatchupData =
 {
+	{std::make_pair(PokemonType::Normal,	 PokemonType::No_Type),		PokemonTypeMatchup::NeutralEffective},
 	{std::make_pair(PokemonType::Normal,	 PokemonType::Normal),		PokemonTypeMatchup::NeutralEffective},
 	{std::make_pair(PokemonType::Normal,	 PokemonType::Fire),		PokemonTypeMatchup::NeutralEffective},
 	{std::make_pair(PokemonType::Normal,	 PokemonType::Water),		PokemonTypeMatchup::NeutralEffective},
@@ -25,6 +26,7 @@ std::map<std::pair<PokemonType, PokemonType>, PokemonTypeMatchup> typeMatchupDat
 	{std::make_pair(PokemonType::Normal,	 PokemonType::Steel),		PokemonTypeMatchup::NotVeryEffective},
 	{std::make_pair(PokemonType::Normal,	 PokemonType::Fairy),		PokemonTypeMatchup::NeutralEffective},
 
+	{std::make_pair(PokemonType::Fire,	 PokemonType::No_Type),		PokemonTypeMatchup::NeutralEffective},
 	{std::make_pair(PokemonType::Fire,	 PokemonType::Normal),		PokemonTypeMatchup::NeutralEffective},
 	{std::make_pair(PokemonType::Fire,	 PokemonType::Fire),		PokemonTypeMatchup::NotVeryEffective},
 	{std::make_pair(PokemonType::Fire,	 PokemonType::Water),		PokemonTypeMatchup::NotVeryEffective},
@@ -44,6 +46,7 @@ std::map<std::pair<PokemonType, PokemonType>, PokemonTypeMatchup> typeMatchupDat
 	{std::make_pair(PokemonType::Fire,	 PokemonType::Steel),		PokemonTypeMatchup::SuperEffective},
 	{std::make_pair(PokemonType::Fire,	 PokemonType::Fairy),		PokemonTypeMatchup::NeutralEffective},
 
+	{std::make_pair(PokemonType::Water,	 PokemonType::No_Type),		PokemonTypeMatchup::NeutralEffective},
 	{std::make_pair(PokemonType::Water,	 PokemonType::Normal),		PokemonTypeMatchup::NeutralEffective},
 	{std::make_pair(PokemonType::Water,	 PokemonType::Fire),		PokemonTypeMatchup::SuperEffective},
 	{std::make_pair(PokemonType::Water,	 PokemonType::Water),		PokemonTypeMatchup::NotVeryEffective},
@@ -63,6 +66,7 @@ std::map<std::pair<PokemonType, PokemonType>, PokemonTypeMatchup> typeMatchupDat
 	{std::make_pair(PokemonType::Water,	 PokemonType::Steel),		PokemonTypeMatchup::NeutralEffective},
 	{std::make_pair(PokemonType::Water,	 PokemonType::Fairy),		PokemonTypeMatchup::NeutralEffective},
 
+	{std::make_pair(PokemonType::Grass,	 PokemonType::No_Type),		PokemonTypeMatchup::NeutralEffective},
 	{std::make_pair(PokemonType::Grass,	 PokemonType::Normal),		PokemonTypeMatchup::NeutralEffective},
 	{std::make_pair(PokemonType::Grass,	 PokemonType::Fire),		PokemonTypeMatchup::NotVeryEffective},
 	{std::make_pair(PokemonType::Grass,	 PokemonType::Water),		PokemonTypeMatchup::SuperEffective},
@@ -82,6 +86,7 @@ std::map<std::pair<PokemonType, PokemonType>, PokemonTypeMatchup> typeMatchupDat
 	{std::make_pair(PokemonType::Grass,	 PokemonType::Steel),		PokemonTypeMatchup::NotVeryEffective},
 	{std::make_pair(PokemonType::Grass,	 PokemonType::Fairy),		PokemonTypeMatchup::NeutralEffective},
 
+	{std::make_pair(PokemonType::Electric,	 PokemonType::No_Type),		PokemonTypeMatchup::NeutralEffective},
 	{std::make_pair(PokemonType::Electric,	 PokemonType::Normal),		PokemonTypeMatchup::NeutralEffective},
 	{std::make_pair(PokemonType::Electric,	 PokemonType::Fire),		PokemonTypeMatchup::NeutralEffective},
 	{std::make_pair(PokemonType::Electric,	 PokemonType::Water),		PokemonTypeMatchup::SuperEffective},
@@ -101,6 +106,7 @@ std::map<std::pair<PokemonType, PokemonType>, PokemonTypeMatchup> typeMatchupDat
 	{std::make_pair(PokemonType::Electric,	 PokemonType::Steel),		PokemonTypeMatchup::NeutralEffective},
 	{std::make_pair(PokemonType::Electric,	 PokemonType::Fairy),		PokemonTypeMatchup::NeutralEffective},
 
+	{std::make_pair(PokemonType::Ice,	 PokemonType::No_Type),		PokemonTypeMatchup::NeutralEffective},
 	{std::make_pair(PokemonType::Ice,	 PokemonType::Normal),		PokemonTypeMatchup::NeutralEffective},
 	{std::make_pair(PokemonType::Ice,	 PokemonType::Fire),		PokemonTypeMatchup::NotVeryEffective},
 	{std::make_pair(PokemonType::Ice,	 PokemonType::Water),		PokemonTypeMatchup::NotVeryEffective},
@@ -120,6 +126,7 @@ std::map<std::pair<PokemonType, PokemonType>, PokemonTypeMatchup> typeMatchupDat
 	{std::make_pair(PokemonType::Ice,	 PokemonType::Steel),		PokemonTypeMatchup::NotVeryEffective },
 	{std::make_pair(PokemonType::Ice,	 PokemonType::Fairy),		PokemonTypeMatchup::NeutralEffective},
 
+	{ std::make_pair(PokemonType::Fighting,	 PokemonType::No_Type),		PokemonTypeMatchup::NeutralEffective },
 	{ std::make_pair(PokemonType::Fighting,	 PokemonType::Normal),		PokemonTypeMatchup::SuperEffective },
 	{ std::make_pair(PokemonType::Fighting,	 PokemonType::Fire),		PokemonTypeMatchup::NeutralEffective },
 	{ std::make_pair(PokemonType::Fighting,	 PokemonType::Water),		PokemonTypeMatchup::NeutralEffective },
@@ -139,6 +146,7 @@ std::map<std::pair<PokemonType, PokemonType>, PokemonTypeMatchup> typeMatchupDat
 	{ std::make_pair(PokemonType::Fighting,	 PokemonType::Steel),		PokemonTypeMatchup::SuperEffective },
 	{ std::make_pair(PokemonType::Fighting,	 PokemonType::Fairy),		PokemonTypeMatchup::NotVeryEffective },
 
+	{ std::make_pair(PokemonType::Poison,	 PokemonType::No_Type),		PokemonTypeMatchup::NeutralEffective },
 	{ std::make_pair(PokemonType::Poison,	 PokemonType::Normal),		PokemonTypeMatchup::NeutralEffective },
 	{ std::make_pair(PokemonType::Poison,	 PokemonType::Fire),		PokemonTypeMatchup::NeutralEffective },
 	{ std::make_pair(PokemonType::Poison,	 PokemonType::Water),		PokemonTypeMatchup::NeutralEffective },
@@ -158,6 +166,7 @@ std::map<std::pair<PokemonType, PokemonType>, PokemonTypeMatchup> typeMatchupDat
 	{ std::make_pair(PokemonType::Poison,	 PokemonType::Steel),		PokemonTypeMatchup::NoEffect },
 	{ std::make_pair(PokemonType::Poison,	 PokemonType::Fairy),		PokemonTypeMatchup::SuperEffective },
 
+	{ std::make_pair(PokemonType::Ground,	 PokemonType::No_Type),		PokemonTypeMatchup::NeutralEffective },
 	{ std::make_pair(PokemonType::Ground,	 PokemonType::Normal),		PokemonTypeMatchup::NeutralEffective },
 	{ std::make_pair(PokemonType::Ground,	 PokemonType::Fire),		PokemonTypeMatchup::SuperEffective },
 	{ std::make_pair(PokemonType::Ground,	 PokemonType::Water),		PokemonTypeMatchup::NeutralEffective },
@@ -177,6 +186,7 @@ std::map<std::pair<PokemonType, PokemonType>, PokemonTypeMatchup> typeMatchupDat
 	{ std::make_pair(PokemonType::Ground,	 PokemonType::Steel),		PokemonTypeMatchup::SuperEffective },
 	{ std::make_pair(PokemonType::Ground,	 PokemonType::Fairy),		PokemonTypeMatchup::NeutralEffective },
 
+	{ std::make_pair(PokemonType::Flying,	 PokemonType::No_Type),		PokemonTypeMatchup::NeutralEffective },
 	{ std::make_pair(PokemonType::Flying,	 PokemonType::Normal),		PokemonTypeMatchup::NeutralEffective },
 	{ std::make_pair(PokemonType::Flying,	 PokemonType::Fire),		PokemonTypeMatchup::NeutralEffective },
 	{ std::make_pair(PokemonType::Flying,	 PokemonType::Water),		PokemonTypeMatchup::NeutralEffective },
@@ -196,6 +206,7 @@ std::map<std::pair<PokemonType, PokemonType>, PokemonTypeMatchup> typeMatchupDat
 	{ std::make_pair(PokemonType::Flying,	 PokemonType::Steel),		PokemonTypeMatchup::NotVeryEffective },
 	{ std::make_pair(PokemonType::Flying,	 PokemonType::Fairy),		PokemonTypeMatchup::NeutralEffective },
 
+	{ std::make_pair(PokemonType::Psychic,	 PokemonType::No_Type),		PokemonTypeMatchup::NeutralEffective },
 	{ std::make_pair(PokemonType::Psychic,	 PokemonType::Normal),		PokemonTypeMatchup::NeutralEffective },
 	{ std::make_pair(PokemonType::Psychic,	 PokemonType::Fire),		PokemonTypeMatchup::NeutralEffective },
 	{ std::make_pair(PokemonType::Psychic,	 PokemonType::Water),		PokemonTypeMatchup::NeutralEffective },
@@ -215,6 +226,7 @@ std::map<std::pair<PokemonType, PokemonType>, PokemonTypeMatchup> typeMatchupDat
 	{ std::make_pair(PokemonType::Psychic,	 PokemonType::Steel),		PokemonTypeMatchup::NotVeryEffective },
 	{ std::make_pair(PokemonType::Psychic,	 PokemonType::Fairy),		PokemonTypeMatchup::NeutralEffective },
 
+	{ std::make_pair(PokemonType::Bug,	 PokemonType::No_Type),		PokemonTypeMatchup::NeutralEffective },
 	{ std::make_pair(PokemonType::Bug,	 PokemonType::Normal),		PokemonTypeMatchup::NeutralEffective },
 	{ std::make_pair(PokemonType::Bug,	 PokemonType::Fire),		PokemonTypeMatchup::NotVeryEffective },
 	{ std::make_pair(PokemonType::Bug,	 PokemonType::Water),		PokemonTypeMatchup::NeutralEffective },
@@ -234,6 +246,7 @@ std::map<std::pair<PokemonType, PokemonType>, PokemonTypeMatchup> typeMatchupDat
 	{ std::make_pair(PokemonType::Bug,	 PokemonType::Steel),		PokemonTypeMatchup::NotVeryEffective },
 	{ std::make_pair(PokemonType::Bug,	 PokemonType::Fairy),		PokemonTypeMatchup::NotVeryEffective },
 
+	{ std::make_pair(PokemonType::Rock,	 PokemonType::No_Type),		PokemonTypeMatchup::NeutralEffective },
 	{ std::make_pair(PokemonType::Rock,	 PokemonType::Normal),		PokemonTypeMatchup::NeutralEffective },
 	{ std::make_pair(PokemonType::Rock,	 PokemonType::Fire),		PokemonTypeMatchup::SuperEffective },
 	{ std::make_pair(PokemonType::Rock,	 PokemonType::Water),		PokemonTypeMatchup::NeutralEffective },
@@ -253,6 +266,7 @@ std::map<std::pair<PokemonType, PokemonType>, PokemonTypeMatchup> typeMatchupDat
 	{ std::make_pair(PokemonType::Rock,	 PokemonType::Steel),		PokemonTypeMatchup::NotVeryEffective },
 	{ std::make_pair(PokemonType::Rock,	 PokemonType::Fairy),		PokemonTypeMatchup::NeutralEffective },
 
+	{ std::make_pair(PokemonType::Ghost,	 PokemonType::No_Type),		PokemonTypeMatchup::NeutralEffective },
 	{ std::make_pair(PokemonType::Ghost,	 PokemonType::Normal),		PokemonTypeMatchup::NoEffect },
 	{ std::make_pair(PokemonType::Ghost,	 PokemonType::Fire),		PokemonTypeMatchup::NeutralEffective },
 	{ std::make_pair(PokemonType::Ghost,	 PokemonType::Water),		PokemonTypeMatchup::NeutralEffective },
@@ -272,6 +286,7 @@ std::map<std::pair<PokemonType, PokemonType>, PokemonTypeMatchup> typeMatchupDat
 	{ std::make_pair(PokemonType::Ghost,	 PokemonType::Steel),		PokemonTypeMatchup::NeutralEffective },
 	{ std::make_pair(PokemonType::Ghost,	 PokemonType::Fairy),		PokemonTypeMatchup::NeutralEffective },
 
+	{ std::make_pair(PokemonType::Dragon,	 PokemonType::No_Type),		PokemonTypeMatchup::NeutralEffective },
 	{ std::make_pair(PokemonType::Dragon,	 PokemonType::Normal),		PokemonTypeMatchup::NeutralEffective },
 	{ std::make_pair(PokemonType::Dragon,	 PokemonType::Fire),		PokemonTypeMatchup::NeutralEffective },
 	{ std::make_pair(PokemonType::Dragon,	 PokemonType::Water),		PokemonTypeMatchup::NeutralEffective },
@@ -291,6 +306,7 @@ std::map<std::pair<PokemonType, PokemonType>, PokemonTypeMatchup> typeMatchupDat
 	{ std::make_pair(PokemonType::Dragon,	 PokemonType::Steel),		PokemonTypeMatchup::NotVeryEffective },
 	{ std::make_pair(PokemonType::Dragon,	 PokemonType::Fairy),		PokemonTypeMatchup::NoEffect },
 
+	{ std::make_pair(PokemonType::Dark,	 PokemonType::No_Type),		PokemonTypeMatchup::NeutralEffective },
 	{ std::make_pair(PokemonType::Dark,	 PokemonType::Normal),		PokemonTypeMatchup::NeutralEffective },
 	{ std::make_pair(PokemonType::Dark,	 PokemonType::Fire),		PokemonTypeMatchup::NeutralEffective },
 	{ std::make_pair(PokemonType::Dark,	 PokemonType::Water),		PokemonTypeMatchup::NeutralEffective },
@@ -310,6 +326,7 @@ std::map<std::pair<PokemonType, PokemonType>, PokemonTypeMatchup> typeMatchupDat
 	{ std::make_pair(PokemonType::Dark,	 PokemonType::Steel),		PokemonTypeMatchup::NeutralEffective },
 	{ std::make_pair(PokemonType::Dark,	 PokemonType::Fairy),		PokemonTypeMatchup::NotVeryEffective },
 
+	{ std::make_pair(PokemonType::Steel,	 PokemonType::No_Type),		PokemonTypeMatchup::NeutralEffective },
 	{ std::make_pair(PokemonType::Steel,	 PokemonType::Normal),		PokemonTypeMatchup::NeutralEffective },
 	{ std::make_pair(PokemonType::Steel,	 PokemonType::Fire),		PokemonTypeMatchup::NotVeryEffective },
 	{ std::make_pair(PokemonType::Steel,	 PokemonType::Water),		PokemonTypeMatchup::NotVeryEffective },
@@ -329,6 +346,7 @@ std::map<std::pair<PokemonType, PokemonType>, PokemonTypeMatchup> typeMatchupDat
 	{ std::make_pair(PokemonType::Steel,	 PokemonType::Steel),		PokemonTypeMatchup::NotVeryEffective },
 	{ std::make_pair(PokemonType::Steel,	 PokemonType::Fairy),		PokemonTypeMatchup::SuperEffective },
 
+	{ std::make_pair(PokemonType::Fairy,	 PokemonType::No_Type),		PokemonTypeMatchup::NeutralEffective },
 	{ std::make_pair(PokemonType::Fairy,	 PokemonType::Normal),		PokemonTypeMatchup::NeutralEffective },
 	{ std::make_pair(PokemonType::Fairy,	 PokemonType::Fire),		PokemonTypeMatchup::NotVeryEffective },
 	{ std::make_pair(PokemonType::Fairy,	 PokemonType::Water),		PokemonTypeMatchup::NeutralEffective },
@@ -384,4 +402,35 @@ std::array<PokemonData, 32> allPokemon =
 	PokemonData(MGI_Wugtrio,	std::string("Wugtrio"),		3,	PokemonType::Water,		PokemonType::No_Type),
 	PokemonData(MGI_Shroomish,	std::string("Shroomish"),	3,	PokemonType::Grass,		PokemonType::No_Type),
 	PokemonData(MGI_Suicune,	std::string("Suicune"),		3,	PokemonType::Water,		PokemonType::No_Type),
+};
+
+std::map<PokemonType, std::string> typeNames =
+{
+	{ PokemonType::No_Type,		std::string("None") },
+	{ PokemonType::Normal,		std::string("Normal") },
+	{ PokemonType::Fire,		std::string("Fire") },
+	{ PokemonType::Water,		std::string("Water") },
+	{ PokemonType::Grass,		std::string("Grass") },
+	{ PokemonType::Electric,	std::string("Electric") },
+	{ PokemonType::Ice,			std::string("Ice") },
+	{ PokemonType::Fighting,	std::string("Fighting") },
+	{ PokemonType::Poison,		std::string("Poison") },
+	{ PokemonType::Ground,		std::string("Ground") },
+	{ PokemonType::Flying,		std::string("Flying") },
+	{ PokemonType::Psychic,		std::string("Psychic") },
+	{ PokemonType::Bug,			std::string("Bug") },
+	{ PokemonType::Rock,		std::string("Rock") },
+	{ PokemonType::Ghost,		std::string("Ghost") },
+	{ PokemonType::Dragon,		std::string("Dragon") },
+	{ PokemonType::Dark,		std::string("Dark") },
+	{ PokemonType::Steel,		std::string("Steel") },
+	{ PokemonType::Fairy,		std::string("Fairy") },
+};
+
+std::map<PokemonTypeMatchup, std::string> typeEffectivenessNames =
+{
+	{ PokemonTypeMatchup::NoEffect,			std::string("Ineffective") },
+	{ PokemonTypeMatchup::NotVeryEffective,	std::string("Not Very Effective") },
+	{ PokemonTypeMatchup::NeutralEffective,	std::string("Neutral") },
+	{ PokemonTypeMatchup::SuperEffective,	std::string("Super Effective") },
 };
