@@ -354,6 +354,7 @@ void LocationManager::OnFrameFunction()
 	}
 
 	this->OnFrameChaoGarden();
+	this->OnFrameRouteBalloons();
 
 	this->_timer++;
 
@@ -1354,6 +1355,53 @@ void LocationManager::OnFrameChaoGarden()
 			}
 		}
 		// End In-Garden Tracking of Locations
+	}
+}
+
+void LocationManager::OnFrameRouteBalloons()
+{
+	if (!this->_itemBoxesEnabled)
+	{
+		return;
+	}
+
+	if (CurrentLevel != LevelIDs_Route101280)
+	{
+		return;
+	}
+
+	if (MainCharObj1[0] == nullptr)
+	{
+		return;
+	}
+
+	for (int i = ItemBoxCheck::IBC_BEGIN; i < ItemBoxCheck::IBC_NUM_CHECKS; i++)
+	{
+		if (this->_ItemBoxData.find(i) != this->_ItemBoxData.end())
+		{
+			if (i % 0x20 == 8 || i % 0x20 == 25)
+			{
+				ItemBoxCheckData& checkData = this->_ItemBoxData[i];
+
+				if (dist(checkData.Position, MainCharObj1[0]->Position) < checkData.Range)
+				{
+					char dataValue = *(char*)checkData.Address;
+
+					char bitFlag = (char)(0x01 << checkData.AddressBit);
+
+					if ((dataValue & bitFlag) == 0x00)
+					{
+						char dataValue = *(char*)checkData.Address;
+						char bitFlag = (char)(0x01 << checkData.AddressBit);
+						char newDataValue = dataValue | bitFlag;
+
+						WriteData<1>((void*)checkData.Address, newDataValue);
+					}
+
+					return;
+				}
+			}
+		}
 	}
 }
 

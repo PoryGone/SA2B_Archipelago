@@ -37,6 +37,7 @@ public:
 	void OnFrameBig();
 	void OnFrameKartRace();
 	void OnFrameChaoGarden();
+	void OnFrameRouteBalloons();
 
 	void CheckLocation(int location_id);
 	void ResetLocations();
