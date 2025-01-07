@@ -28,7 +28,7 @@ enum class DeathCause
 	DC_Fall,
 	DC_Drown,
 	DC_Pong = 0x50,
-	DC_Platformer,
+	DC_Breakout,
 	DC_Fishing,
 	DC_Trivia,
 	DC_PokemonTrivia,

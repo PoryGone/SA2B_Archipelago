@@ -1376,8 +1376,8 @@ void ArchipelagoManager::DeathLinkSend(DeathCause cause)
     case DeathCause::DC_Pong:
         causeText = this->ap_player_name + " could not win at Pong.";
         break;
-    case DeathCause::DC_Platformer:
-        causeText = this->ap_player_name + " didn't make the jump.";
+    case DeathCause::DC_Breakout:
+        causeText = this->ap_player_name + " could not break out.";
         break;
     case DeathCause::DC_Fishing:
         causeText = this->ap_player_name + " could not catch a fish.";

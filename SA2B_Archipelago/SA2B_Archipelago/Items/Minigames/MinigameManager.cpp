@@ -204,7 +204,6 @@ void MinigameManager::StartMinigame(ItemValue item, bool locationGame, bool link
 	switch (item)
 	{
 	case ItemValue::IV_LiteratureTrap:
-		// TODO
 		this->currentMinigame = &this->literature;
 		break;
 	case ItemValue::IV_PongTrap:

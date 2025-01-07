@@ -339,8 +339,6 @@ void MathQuiz::CreateHierarchy(MinigameManagerData data)
 			correctAnswer += std::to_string(root_2);
 		}
 
-
-		// TODO: Generate incorrect pair of answers where one of the pair can be correct
 		int errorRange = 5;
 
 		while (wrongAnswers.size() < 3)
