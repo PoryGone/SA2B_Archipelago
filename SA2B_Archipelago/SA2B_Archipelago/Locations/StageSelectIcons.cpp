@@ -655,7 +655,7 @@ void UpdateChaosEmeraldIcons()
 			char minigamesWon = *(char*)(minigames[i] + 0x30);
 
 			// TODO: RAS: Minigame Icons
-			int minigameIcon = minigamesWon >= itemMan->RequiredMinigames ? SSI_Emerald_White + i : SSI_CannonsCore + i;
+			int minigameIcon = minigamesWon >= itemMan->RequiredMinigames ? SSI_Bat + (i * 2) : SSI_Bat + (i * 2) + 1;
 			float x = (320.0f - (minigames.size() - 1) * 16.0f) + (i * 32.0f);
 			float y = 380.0f;
 			StageSelectSprite.tanim = &StageSelectAnim[minigameIcon];
@@ -1098,7 +1098,7 @@ void StageSelectIcons::MinigameReplaySystem()
 	bool isActivatable = minigamesReceived >= itemMan->RequiredMinigames;
 
 	// TODO: RAS: Minigame Icons
-	int minigameIcon = isActivatable ? SSI_Emerald_White + this->minigameReplayIndex : SSI_CannonsCore + this->minigameReplayIndex;
+	int minigameIcon = isActivatable ? SSI_Bat + (this->minigameReplayIndex * 2) : SSI_Bat + (this->minigameReplayIndex * 2) + 1;
 	float x = maxXPos - 64.0f;
 	float y = 16.0f;
 	StageSelectSprite.tanim = &StageSelectAnim[minigameIcon];
