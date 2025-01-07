@@ -1017,7 +1017,7 @@ bool ItemManager::IsActiveTrapValid()
 		break;
 	case ItemValue::IV_LiteratureTrap:
 	case ItemValue::IV_PongTrap:
-	case ItemValue::IV_PlatformerTrap:
+	case ItemValue::IV_BreakoutTrap:
 	case ItemValue::IV_FishingTrap:
 	case ItemValue::IV_TriviaTrap:
 	case ItemValue::IV_PokemonTriviaTrap:
@@ -1312,7 +1312,7 @@ void ItemManager::OnFrameTrapQueue()
 	{
 		// Nothing
 	}
-	else if (this->_ActiveTrap == ItemValue::IV_PlatformerTrap)
+	else if (this->_ActiveTrap == ItemValue::IV_BreakoutTrap)
 	{
 		// Nothing
 	}
@@ -1526,7 +1526,7 @@ void ItemManager::OnFrameTrapQueue()
 	case ItemValue::IV_LiteratureTrap:
 		PlayUnshuffledVoice(2, 85);
 	case ItemValue::IV_PongTrap:
-	case ItemValue::IV_PlatformerTrap:
+	case ItemValue::IV_BreakoutTrap:
 	case ItemValue::IV_FishingTrap:
 	case ItemValue::IV_TriviaTrap:
 	case ItemValue::IV_PokemonTriviaTrap:

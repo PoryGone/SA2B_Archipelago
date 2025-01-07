@@ -6,7 +6,7 @@
 #include "Games/Literature.h"
 #include "Games/Pong.h"
 #include "Games/Fishing.h"
-#include "Games/Platformer.h"
+#include "Games/Breakout.h"
 #include "Games/Trivia.h"
 #include "Games/PokemonTrivia.h"
 #include "Games/PokemonCount.h"
@@ -74,7 +74,7 @@ private:
 	Literature literature			= Literature();
 	Pong pong						= Pong();
 	Fishing fishing					= Fishing();
-	Platformer platformer			= Platformer();
+	Breakout breakout				= Breakout();
 	Trivia trivia					= Trivia();
 	PokemonTrivia pokemonTrivia		= PokemonTrivia();
 	PokemonCount pokemonCount		= PokemonCount();

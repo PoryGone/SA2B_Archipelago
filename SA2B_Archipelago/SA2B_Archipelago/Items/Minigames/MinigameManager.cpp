@@ -210,8 +210,8 @@ void MinigameManager::StartMinigame(ItemValue item, bool locationGame, bool link
 	case ItemValue::IV_PongTrap:
 		this->currentMinigame = &this->pong;
 		break;
-	case ItemValue::IV_PlatformerTrap:
-		this->currentMinigame = &this->platformer;
+	case ItemValue::IV_BreakoutTrap:
+		this->currentMinigame = &this->breakout;
 		break;
 	case ItemValue::IV_FishingTrap:
 		this->currentMinigame = &this->fishing;

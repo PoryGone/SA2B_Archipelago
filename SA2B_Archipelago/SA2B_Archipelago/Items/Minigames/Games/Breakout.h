@@ -52,7 +52,7 @@ struct BreakoutBrick
 	int health = 1;
 };
 
-class Platformer : public MinigameBase
+class Breakout : public MinigameBase
 {
 public:
 	void OnGameStart(MinigameManagerData data) override;

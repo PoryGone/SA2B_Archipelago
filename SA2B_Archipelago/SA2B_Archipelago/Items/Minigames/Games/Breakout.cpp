@@ -1,5 +1,5 @@
 #include "../../../pch.h"
-#include "Platformer.h"
+#include "Breakout.h"
 
 #include <cstdlib>
 
@@ -13,7 +13,7 @@ std::vector<NJS_ARGB> brickColors = {
 	{ 1.0f, 1.0f, 0.0f, 0.0f },
 };
 
-void Platformer::OnGameStart(MinigameManagerData data)
+void Breakout::OnGameStart(MinigameManagerData data)
 {
 	this->currentState = MinigameState::MGS_InProgress;
 
@@ -28,7 +28,7 @@ void Platformer::OnGameStart(MinigameManagerData data)
 	PlaySoundProbably(BREAKOUT_SOUND_BEGIN, 0, 0, 0);
 }
 
-void Platformer::OnFrame(MinigameManagerData data)
+void Breakout::OnFrame(MinigameManagerData data)
 {
 	this->OnFramePlayer(data);
 	if (data.managerState == MinigameState::MGS_InProgress)
@@ -37,14 +37,14 @@ void Platformer::OnFrame(MinigameManagerData data)
 	}
 }
 
-void Platformer::OnCleanup(MinigameManagerData data)
+void Breakout::OnCleanup(MinigameManagerData data)
 {
 	this->playerPaddle = nullptr;
 	this->ball = nullptr;
 	this->bricks.clear();
 }
 
-void Platformer::OnFramePlayer(MinigameManagerData data)
+void Breakout::OnFramePlayer(MinigameManagerData data)
 {
 	if (data.input & RawInputFlags::RIF_Left)
 	{
@@ -59,7 +59,7 @@ void Platformer::OnFramePlayer(MinigameManagerData data)
 	//PrintDebug(debugstr.c_str());
 }
 
-void Platformer::OnFrameSimulate(MinigameManagerData data)
+void Breakout::OnFrameSimulate(MinigameManagerData data)
 {
 	// Ball
 	this->ball->Translate({ this->ballSpeedX , this->ballSpeedY, 0 });
@@ -67,7 +67,7 @@ void Platformer::OnFrameSimulate(MinigameManagerData data)
 	this->HandleCollision(data);
 }
 
-void Platformer::HandleCollision(MinigameManagerData data)
+void Breakout::HandleCollision(MinigameManagerData data)
 {
 	// Bounce from Player Paddle
 	if ((this->ball->GetPositionGlobal().y + BREAKOUT_BALL_RADIUS) >= (BREAKOUT_BOTTOM - BREAKOUT_PADDLE_THICKNESS))
@@ -173,7 +173,7 @@ void Platformer::HandleCollision(MinigameManagerData data)
 	}
 }
 
-void Platformer::CreateHierarchy(MinigameManagerData data)
+void Breakout::CreateHierarchy(MinigameManagerData data)
 {
 	AddDPadToHierarchy(RIF_Left | RIF_Right, { BREAKOUT_LEFT - 55.0f, 130.0f, 0.0f }, 45.0f, *data.icons, *data.hierarchy);
 

@@ -177,7 +177,7 @@
     <ClInclude Include="Items\Minigames\Minigames\Pong.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Items\Minigames\Games\Platformer.h">
+    <ClInclude Include="Items\Minigames\Games\Breakout.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Items\Minigames\TextDisplayData.h">
@@ -359,7 +359,7 @@
     <ClCompile Include="Items\Minigames\Backend\Time\TimeUtilities.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Items\Minigames\Games\Platformer.cpp">
+    <ClCompile Include="Items\Minigames\Games\Breakout.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Items\Minigames\Games\Fishing.cpp">

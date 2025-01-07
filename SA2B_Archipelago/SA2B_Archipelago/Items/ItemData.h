@@ -82,7 +82,7 @@ enum ItemValue
     IV_END_CHAOS_EMERALDS = IV_BlueChaosEmerald,
 
     IV_PongTrap = 0x50,
-    IV_PlatformerTrap,
+    IV_BreakoutTrap,
     IV_FishingTrap,
     IV_TriviaTrap,
     IV_PokemonTriviaTrap,

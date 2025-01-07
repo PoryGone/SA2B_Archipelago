@@ -78,7 +78,7 @@ void InitializeItemData(std::map<int, ItemData> &outItemData)
     outItemData[ItemValue::IV_BlueChaosEmerald]   = ItemData(0x01DEEAFE, std::string("Blue Chaos Emerald"), std::string(), 0);
 
     outItemData[ItemValue::IV_PongTrap]           = ItemData(0x01DEEB05, std::string("Pong Trap"), std::string(), 0);
-    outItemData[ItemValue::IV_PlatformerTrap]     = ItemData(0x01DEEB06, std::string("Platformer Trap"), std::string(), 0);
+    outItemData[ItemValue::IV_BreakoutTrap]       = ItemData(0x01DEEB06, std::string("Breakout Trap"), std::string(), 0);
     outItemData[ItemValue::IV_FishingTrap]        = ItemData(0x01DEEB07, std::string("Fishing Trap"), std::string(), 0);
     outItemData[ItemValue::IV_TriviaTrap]         = ItemData(0x01DEEB08, std::string("Trivia Trap"), std::string(), 0);
     outItemData[ItemValue::IV_PokemonTriviaTrap]  = ItemData(0x01DEEB09, std::string("Pokemon Trivia Trap"), std::string(), 0);
@@ -230,7 +230,7 @@ std::map<ItemValue, std::string> item_value_to_name = {
     {ItemValue::IV_ControllerDriftTrap, "Controller Drift Trap"},
     {ItemValue::IV_PoisonTrap,          "Poison Trap"},
     {ItemValue::IV_PongTrap,            "Pong Trap"},
-    {ItemValue::IV_PlatformerTrap,      "Platformer Trap"},
+    {ItemValue::IV_BreakoutTrap,        "Breakout Trap"},
     {ItemValue::IV_FishingTrap,         "Fishing Trap"},
     {ItemValue::IV_TriviaTrap,          "Trivia Trap"},
     {ItemValue::IV_PokemonTriviaTrap,   "Pokemon Trivia Trap"},
@@ -259,7 +259,7 @@ std::map<std::string, ItemValue> item_name_to_value = {
     {"Controller Drift Trap",   ItemValue::IV_ControllerDriftTrap},
     {"Poison Trap",             ItemValue::IV_PoisonTrap},
     {"Pong Trap",               ItemValue::IV_PongTrap},
-    {"Platformer Trap",         ItemValue::IV_PlatformerTrap},
+    {"Breakout Trap",           ItemValue::IV_BreakoutTrap},
     {"Fishing Trap",            ItemValue::IV_FishingTrap},
     {"Trivia Trap",             ItemValue::IV_TriviaTrap},
     {"Pokemon Trivia Trap",     ItemValue::IV_PokemonTriviaTrap},
