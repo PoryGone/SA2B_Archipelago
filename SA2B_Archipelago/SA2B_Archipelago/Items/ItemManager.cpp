@@ -1656,7 +1656,7 @@ void ItemManager::HandleMinigameCompletion(int item_id)
 	if (dataValue < this->RequiredMinigames)
 	{
 		dataValue++;
-		*(unsigned int*)(receivedItem.Address + 0x30) = dataValue;
+		*(unsigned char*)(receivedItem.Address + 0x30) = dataValue;
 	}
 }
 

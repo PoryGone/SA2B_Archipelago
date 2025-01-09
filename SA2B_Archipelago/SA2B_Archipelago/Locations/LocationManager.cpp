@@ -352,6 +352,7 @@ void LocationManager::OnInputFunction()
 								relevantPos = checkData.HardPosition;
 							}
 
+							// TODO: REPLACE WITH BETTER INDICATOR
 							if (this->_BigIndicators.find(i) == this->_BigIndicators.end())
 							{
 								ObjectMaster* newBig = LoadBig(&relevantPos);

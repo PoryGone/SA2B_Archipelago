@@ -90,6 +90,9 @@ void Pinball::UpdateBallActive(MinigameManagerData data)
 		else if (results.firstHitObject->name == "Bumper")
 		{
 			surfaceDampening = bumperDampening;
+
+			// TODO: TEMP UNTIL REAL WIN CONDITION
+			this->currentState = MinigameState::MGS_Victory;
 		}
 		NJS_POINT3 initialPosition = ball->GetPositionGlobal();
 		float initialVelocity = Point3Magnitude(ballVelocity);
