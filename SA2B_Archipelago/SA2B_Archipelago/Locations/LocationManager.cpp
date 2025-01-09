@@ -210,6 +210,41 @@ DataPointer(char, SS_SelectedTile, 0x1D1BF08);
 DataPointer(ChaoKarateManager*, KarateManager, 0x1A5D148);
 DataPointer(unsigned int, BlackMarketTokenCount, 0x1DEE41C);
 
+ObjectMaster* LoadBig(NJS_VECTOR* position)
+{
+	ObjectMaster* obj = AllocateObjectMaster(Big_Main_2, 2, "ObjectBig");
+	if (obj)
+	{
+		EntityData1* ent_data_1 = AllocateEntityData1();
+		if (ent_data_1)
+		{
+			obj->Data1.Entity = ent_data_1;
+			void* ent_data_2 = AllocateEntityData2();
+			if (ent_data_2)
+			{
+				obj->EntityData2 = (UnknownData2*)ent_data_2;
+				ent_data_1->Position = *position;
+				ent_data_1->Rotation = MainCharObj1[0]->Rotation;
+				ent_data_1->Scale.x = 2;
+				//ent_data_1->Scale.y = 0.5;
+				//ent_data_1->Scale.z = 0.5;
+				//ent_data_1->NextAction |= 3; // force Omochao to follow the player
+				//ent_data_1->Action = 5; // force Omochao into the talking action
+				return obj;
+			}
+			else
+			{
+				DeleteObject_(obj);
+			}
+		}
+		else
+		{
+			DeleteObject_(obj);
+		}
+	}
+	return nullptr;
+}
+
 float dist(NJS_POINT3 a, NJS_POINT3 b)
 {
 	return sqrt(pow((b.x - a.x), 2) + pow((b.y - a.y), 2) + pow((b.z - a.z), 2));
@@ -317,6 +352,23 @@ void LocationManager::OnInputFunction()
 								relevantPos = checkData.HardPosition;
 							}
 
+							if (this->_BigIndicators.find(i) == this->_BigIndicators.end())
+							{
+								ObjectMaster* newBig = LoadBig(&relevantPos);
+								this->_BigIndicators[i] = newBig;
+							}
+							else if (this->_BigIndicators[i] != nullptr && this->_BigIndicators[i]->Data1.Entity != nullptr)
+							{
+								Angle newZrot = this->_BigIndicators[i]->Data1.Entity->Rotation.z + 1;
+								newZrot = newZrot % 360;
+								this->_BigIndicators[i]->Data1.Entity->Rotation.z = newZrot;
+							}
+							else
+							{
+								ObjectMaster* newBig = LoadBig(&relevantPos);
+								this->_BigIndicators[i] = newBig;
+							}
+
 							if (dist(relevantPos, MainCharObj1[0]->Position) < checkData.Range)
 							{
 								// TODO: RAS: Show prompt for Big
@@ -333,6 +385,14 @@ void LocationManager::OnInputFunction()
 									this->_inBigFishing = true;
 									this->_FreezePos = MainCharObj1[0]->Position;
 								}
+							}
+						}
+						else if (checkData.CheckSent && checkData.LevelID == CurrentLevel)
+						{
+							if (this->_BigIndicators.find(i) != this->_BigIndicators.end())
+							{
+								DeleteObject_(this->_BigIndicators[i]);
+								this->_BigIndicators.erase(i);
 							}
 						}
 					}

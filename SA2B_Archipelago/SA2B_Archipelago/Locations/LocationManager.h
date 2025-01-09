@@ -120,6 +120,7 @@ private:
 	unsigned int _whistleTimer = 0;
 
 	bool _inBigFishing = false;
+	std::map<int, ObjectMaster*> _BigIndicators;
 	NJS_VECTOR _FreezePos;
 
 	int _goal = 0;

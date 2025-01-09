@@ -371,6 +371,7 @@ FunctionPointer(int, CameraDebug_GAKUGAKU, (int, int), 0x4F54C0);
 FunctionPointer(int, CameraDebug_KNUCKLES, (void* a1), 0x4F5760);
 FunctionPointer(int, CameraDebug_SNAPSHOT, (), 0x4F58C0);
 FunctionPointer(int, Big_Main, (ObjectMaster* a1), 0x4F61E0);
+ObjectFunc(Big_Main_2, 0x4F61E0);
 ObjectFunc(exec_1, 0x4F7020);
 FunctionPointer(int, E_NAMIE, (ObjectMaster* a1), 0x4F8F90);
 FunctionPointer(int, E_SHOUKO, (int a1), 0x4F9F00);
