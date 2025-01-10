@@ -610,6 +610,13 @@ void ItemManager::OnFrameJunkQueue()
 
 		int itemToGrant = this->_JunkQueue.front();
 		this->_JunkQueue.pop();
+
+		if (itemToGrant == ItemValue::IV_Invincibility && CurrentLevel == LevelIDs_KingBoomBoo)
+		{
+			this->_JunkQueue.push(itemToGrant);
+			break;
+		}
+
 		ItemData& receivedItem = this->_ItemData[itemToGrant];
 
 		DisplayItemBoxItem(0, ItemBox_Items[receivedItem.Address].Texture);
