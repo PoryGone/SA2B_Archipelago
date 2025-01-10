@@ -1057,8 +1057,8 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_Init(ip, "Sonic Adventure 2 Battle", playerName, password);
 
     AP_NetworkVersion net_ver;
-    net_ver.major = 0;
-    net_ver.minor = 3;
+    net_ver.major = 7;
+    net_ver.minor = 7;
     net_ver.build = 7;
 
     AP_SetDeathLinkSupported(true);
