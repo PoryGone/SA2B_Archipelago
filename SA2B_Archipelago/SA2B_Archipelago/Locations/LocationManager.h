@@ -53,7 +53,7 @@ public:
 	void SetGoldBeetlesEnabled(bool goldBeetlesEnabled);
 	void SetOmochaoEnabled(bool omochaoEnabled);
 	void SetAnimalsEnabled(bool animalsEnabled);
-	void SetItemBoxesEnabled(bool itemboxesEnabled);
+	void SetItemBoxesEnabled(int itemboxesEnabled);
 	void SetBigEnabled(bool bigEnabled);
 	void SetKartRacesEnabled(int kartRacesEnabled);
 
@@ -134,6 +134,7 @@ private:
 	bool _goldBeetlesEnabled = false;
 	bool _omochaoEnabled = false;
 	bool _animalsEnabled = false;
+	bool _lifeBoxesEnabled = false;
 	bool _itemBoxesEnabled = false;
 	bool _bigEnabled = false;
 	int _kartRacesEnabled = 0;

@@ -911,7 +911,7 @@ void SA2_SetItemBoxChecks(int itemBoxChecks)
     {
         LocationManager* locationManager = &LocationManager::getInstance();
 
-        locationManager->SetItemBoxesEnabled(true);
+        locationManager->SetItemBoxesEnabled(itemBoxChecks);
     }
 }
 

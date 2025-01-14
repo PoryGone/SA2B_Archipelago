@@ -830,7 +830,7 @@ void LocationManager::OnFrameAnimals()
 
 void LocationManager::OnFrameItemBoxes()
 {
-	if (!this->_itemBoxesEnabled)
+	if (!this->_lifeBoxesEnabled && !this->_itemBoxesEnabled)
 	{
 		return;
 	}
@@ -1797,11 +1797,12 @@ void LocationManager::SetAnimalsEnabled(bool animalsEnabled)
 	this->_animalsEnabled = animalsEnabled;
 }
 
-void LocationManager::SetItemBoxesEnabled(bool itemBoxesEnabled)
+void LocationManager::SetItemBoxesEnabled(int itemBoxesEnabled)
 {
-	this->_itemBoxesEnabled = itemBoxesEnabled;
+	this->_lifeBoxesEnabled = (itemBoxesEnabled > 0);
+	this->_itemBoxesEnabled = (itemBoxesEnabled > 1);
 
-	if (this->_itemBoxesEnabled)
+	if (this->_lifeBoxesEnabled || this->_itemBoxesEnabled)
 	{
 		// Floating Item Boxes
 		WriteData<1>((void*)0x006C9273, '\x89');
@@ -2246,7 +2247,7 @@ void LocationManager::SendAnimalLocationCheck()
 
 void LocationManager::SendItemBoxLocationCheck(ObjectMaster* itemBox)
 {
-	if (!this->_itemBoxesEnabled)
+	if (!this->_lifeBoxesEnabled && !this->_itemBoxesEnabled)
 	{
 		return;
 	}
@@ -2572,7 +2573,7 @@ std::vector<int> LocationManager::GetLifeBoxLocationsForLevel(int levelID)
 {
 	std::vector<int> result;
 
-	if (this->_itemBoxesEnabled)
+	if (this->_lifeBoxesEnabled)
 	{
 		int checkOffset = 0x1400;
 

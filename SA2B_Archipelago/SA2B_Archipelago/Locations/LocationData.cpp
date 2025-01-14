@@ -2131,7 +2131,7 @@ void InitializeBigChecks(std::map<int, BigCheckData>& outBigChecks)
     outBigChecks[BigCheck::BC_WhiteJungle_Big_1]    = BigCheckData(0x01DEEECD, 0x01, LevelIDs_WhiteJungle,      {  9833,  -3080,  -7339 }, 40.0f, true, { 10225, -3500, -7460 });
     outBigChecks[BigCheck::BC_WhiteJungle_Big_2]    = BigCheckData(0x01DEEECD, 0x02, LevelIDs_WhiteJungle,      { 13275,  -3571,  -5391 });
     outBigChecks[BigCheck::BC_PumpkinHill_Big_1]    = BigCheckData(0x01DEEECD, 0x03, LevelIDs_PumpkinHill,      {   957,  -1000,   -959 });
-    outBigChecks[BigCheck::BC_SkyRail_Big_1]        = BigCheckData(0x01DEEECD, 0x04, LevelIDs_SkyRail,          {    45,    405,   -532 }, 40.0f, true, {   -20,   800,  -527 });
+    outBigChecks[BigCheck::BC_SkyRail_Big_1]        = BigCheckData(0x01DEEECD, 0x04, LevelIDs_SkyRail,          {    45,    405,   -532 }, 40.0f, true, {    -5, -1125,  1500 });
     outBigChecks[BigCheck::BC_AquaticMine_Big_1]    = BigCheckData(0x01DEEECD, 0x05, LevelIDs_AquaticMine,      {   134,   -250,    176 });
     outBigChecks[BigCheck::BC_SecurityHall_Big_1]   = BigCheckData(0x01DEEECD, 0x06, LevelIDs_SecurityHall,     {   301,   -933,    173 },  {  165,   -986,   161 });
     outBigChecks[BigCheck::BC_PrisonLane_Big_1]     = BigCheckData(0x01DEEECD, 0x07, LevelIDs_PrisonLane,       { -1838,    236,   -596 });
