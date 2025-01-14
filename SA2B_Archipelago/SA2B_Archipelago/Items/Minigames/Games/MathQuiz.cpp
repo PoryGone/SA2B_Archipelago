@@ -244,6 +244,7 @@ void MathQuiz::CreateHierarchy(MinigameManagerData data)
 			break;
 		} // End Division
 		}
+		break;
 	} // End Arithmetic
 	case MathQuestionType::MQT_Hypotenuse:
 	{
