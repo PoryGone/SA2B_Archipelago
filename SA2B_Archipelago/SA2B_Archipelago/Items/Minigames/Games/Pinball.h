@@ -21,9 +21,10 @@ public:
 
 private:
 	void CreateHierarchy(MinigameManagerData data);
-
 	void UpdateBallActive(MinigameManagerData data);
+	void SpawnBall();
 
+	int lives;
 	float ballRotationDelta = 2.0f;
 	float gravity = 0.05f;
 	float flipperForceMin = 1.0f;
@@ -33,12 +34,14 @@ private:
 	float flipperAngle = 60.0f; //Change in flipper angle when flipped
 	float flipperLength = 45.0f;
 	float ballRadius = 7.5f;
-	float maxVelocity = 15.0f;
+	float maxVelocity = 12.0f;
 	float baseDampening = 0.3f;
 	float bumperDampening = 1.3f;
 
 	RawInputFlags leftFlipperInput = RIF_Left | RIF_Up | RIF_Down;
 	RawInputFlags rightFlipperInput = RIF_Right | RIF_Up | RIF_Down;
+
+	Timer endTimer;
 
 	NJS_POINT3 ballVelocity;
 	SpriteNode* leftFlipper;
@@ -49,8 +52,12 @@ private:
 	SpriteNode* boardParent;
 	std::vector<SpriteNode*> boardObjs;
 	std::vector<SpriteNode*> boardObjsNoFlippers;
+	std::vector<SpriteNode*> livesCounter;
+
+	//DEBUG
+	/*
 	std::vector<SpriteNode*> normObjs;
 	std::vector<SpriteNode*> colPtObjs;
 	int normIndex = 0;
-
+	*/
 };

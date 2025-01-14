@@ -35,6 +35,14 @@ enum MinigameIcon
 	MGI_Beetle					= 28,
 	MGI_Beetle_Gun				= 29,
 	MGI_Barrel					= 30,
+	MGI_F_Rank					= 31,
+	MGI_Chopper					= 32,
+	MGI_Bobber					= 33,
+	MGI_Bobber_Splash			= 34,
+	MGI_Big_0					= 35,
+	MGI_Big_1					= 36,
+	MGI_Caught_Banner			= 37,
+	MGI_Miss_Banner				= 38,
 
 	//Pokemon
 	MGI_Aron					= POKE_START + 0,

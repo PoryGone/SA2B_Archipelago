@@ -60,7 +60,7 @@ void FishingHard::CreateHierarchy(MinigameManagerData data)
 	data.hierarchy->CreateNode("FishingBG", data.icons->GetAnim(MGI_Square), { 20.0f, 320.0f, 0.0f }, { 320.0f, 290.0f, 0.0f }, nullptr);
 	data.hierarchy->CreateNode("ProgressBG", data.icons->GetAnim(MGI_Square), { 15.0f, 320.0f, 0.0f }, { 350.0f, 290.0f, 0.0f }, nullptr);
 	catchZone = data.hierarchy->CreateNode("CatchZone", data.icons->GetAnim(MGI_Square), { 20.0f, 65.0f, 0.0f }, { 320.0f, 290.0f, 0.0f }, nullptr);
-	fish = data.hierarchy->CreateNode("Fish", data.icons->GetAnim(MGI_Spinball), { 24.0f, 24.0f, 0.0f }, { 320.0f, 290.0f, 0.0f }, nullptr);
+	fish = data.hierarchy->CreateNode("Fish", data.icons->GetAnim(MGI_Chopper), { 24.0f, 24.0f, 0.0f }, { 320.0f, 290.0f, 0.0f }, nullptr);
 	progressBar = data.hierarchy->CreateNode("ProgressBar", data.icons->GetAnim(MGI_Square), { 15.0f, 320.0f, 0.0f }, { 350.0f, 290.0f, 0.0f }, nullptr);
 
 	catchZone->color = { 1.0f,0.0f,0.0f,1.0f };

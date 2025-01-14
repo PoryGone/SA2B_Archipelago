@@ -28,7 +28,8 @@ void FishingEasy::OnFrame(MinigameManagerData data)
 			}
 			else if (timer.IsElapsed())
 			{
-				biteIndicator->color = { 1.0f, 0.0f, 0.0f, 1.0f };
+				biteIndicator->anim = data.icons->GetAnim(MGI_Bobber_Splash);
+				//biteIndicator->color = { 1.0f, 0.0f, 0.0f, 1.0f };
 				timer.Start(1.0f);
 				fs_state = FES_FishOnLine;
 			}
@@ -36,12 +37,14 @@ void FishingEasy::OnFrame(MinigameManagerData data)
 		case FishingEasy::FES_FishOnLine:
 			if (data.inputPress & anyDPad)
 			{
-				biteIndicator->color = { 1.0f, 0.0f, 1.0f, 0.0f };
+				biteIndicator->anim = data.icons->GetAnim(MGI_Caught_Banner);
+				//biteIndicator->color = { 1.0f, 0.0f, 1.0f, 0.0f };
 				timer.Start(2.0f);
 				fs_state = FES_Caught;
 			}
 			else if (timer.IsElapsed())
 			{
+				biteIndicator->anim = data.icons->GetAnim(MGI_Miss_Banner);
 				FishEscaped();
 			}
 			break;
@@ -65,8 +68,8 @@ void FishingEasy::CreateHierarchy(MinigameManagerData data)
 {
 	AddDPadToHierarchy(anyDPad, { 65.0f, 130.0f, 0.0f }, 45.0f, *data.icons, *data.hierarchy);
 
-	biteIndicator = data.hierarchy->CreateNode("Indicator", data.icons->GetAnim(MGI_Circle), { 100, 100, 0.0f }, { data.icons->xCenter, data.icons->yCenter, 0.0f }, nullptr);
-	biteIndicator->color = { 1.0f, 0.5f, 0.5f, 0.5f };
+	biteIndicator = data.hierarchy->CreateNode("Indicator", data.icons->GetAnim(MGI_Bobber), { 200, 100, 0.0f }, { data.icons->xCenter, data.icons->yCenter, 0.0f }, nullptr);
+	//biteIndicator->color = { 1.0f, 0.5f, 0.5f, 0.5f };
 	
 	/*
 	SpriteNode* textOne = data.hierarchy->CreateNode("Haha_One");
@@ -77,7 +80,7 @@ void FishingEasy::CreateHierarchy(MinigameManagerData data)
 
 void FishingEasy::FishEscaped()
 {
-	biteIndicator->color = { 1.0f, 1.0f, 0.0f, 0.0f };
+	//biteIndicator->color = { 1.0f, 1.0f, 0.0f, 0.0f };
 	timer.Start(2.0f);
 	fs_state = FES_Escaped;
 }

@@ -4,10 +4,24 @@
 
 void Pinball::OnGameStart(MinigameManagerData data)
 {
-	normIndex = 0;
+	//normIndex = 0;
+	this->currentState = MGS_InProgress;
+	data.timers->push_back(&endTimer);
+	switch (data.difficulty)
+	{
+	case MGD_Easy:
+		lives = 6;
+		break;
+	case MGD_Medium:
+		lives = 4;
+		break;
+	case MGD_Hard:
+		lives = 3;
+		break;
+	}
+
 	CreateHierarchy(data);
-	float randOffset = RandomFloat(50.0f, 120.0f);
-	ball->SetPositionGlobal({ (RandomFloat(0.0, 1.0f) < 0.5 ? 320.0f - randOffset : 320.0f + randOffset), 290.0f });
+	SpawnBall();
 }
 
 void Pinball::OnFrame(MinigameManagerData data)
@@ -17,7 +31,7 @@ void Pinball::OnFrame(MinigameManagerData data)
 		UpdateBallActive(data);
 		if (data.inputPress & RIF_B)
 		{
-			currentState = MGS_Draw;
+			this->currentState = MGS_Draw;
 		}
 	}
 }
@@ -160,22 +174,42 @@ void Pinball::UpdateBallActive(MinigameManagerData data)
 	}
 	if (data.collision->IsColliding(ball, drain) || ball->GetPositionGlobal().y > 485.0f || data.inputPress & RIF_RightTrigger)
 	{
-		ballVelocity = { 0.0f, 0.0f, 0.0f };
-		float randOffset = RandomFloat(50.0f, 120.0f);
-		ball->SetPositionGlobal({ (RandomFloat(0.0, 1.0f) < 0.5 ? 320.0f - randOffset : 320.0f + randOffset), 290.0f });
+		if (lives <= 0)
+		{
+
+		}
+		else
+		{
+			SpawnBall();
+		}
 	}
+}
+
+void Pinball::SpawnBall()
+{
+	lives--;
+	for (int i = 0; i < livesCounter.size(); i++)
+	{
+		livesCounter[i]->SetEnabled(i < lives);
+	}
+	ballVelocity = { 0.0f, 0.0f, 0.0f };
+	float randOffset = RandomFloat(50.0f, 120.0f);
+	ball->SetPositionGlobal({ (RandomFloat(0.0, 1.0f) < 0.5 ? 320.0f - randOffset : 320.0f + randOffset), 290.0f });
 }
 
 void Pinball::OnCleanup(MinigameManagerData data)
 {
 	boardObjs.clear();
 	boardObjsNoFlippers.clear();
-	normObjs.clear();
-	colPtObjs.clear();
+	livesCounter.clear();
+	//normObjs.clear();
+	//colPtObjs.clear();
 }
 
 void Pinball::CreateHierarchy(MinigameManagerData data)
 {
+	float ballDiameter = ballRadius * 2.0f;
+
 	AddDPadToHierarchy(RIF_ANY_D_PAD, { 65.0f, 130.0f, 0.0f }, 45.0f, *data.icons, *data.hierarchy);
 
 	drain = data.hierarchy->CreateNode("Drain");
@@ -273,11 +307,18 @@ void Pinball::CreateHierarchy(MinigameManagerData data)
 	rightFlipper->SetRotation(-189.5f);
 	boardObjs.push_back(rightFlipper);
 
-	ball = data.hierarchy->CreateNode("Ball", data.icons->GetAnim(MGI_Spinball), { ballRadius * 2.0f, ballRadius * 2.0f }, { 320.0f, 290.0f });
+	ball = data.hierarchy->CreateNode("Ball", data.icons->GetAnim(MGI_Spinball), { ballDiameter, ballDiameter }, { 320.0f, 290.0f });
 	data.collision->AddCollision(ball, std::make_shared<CircleCollider>(ballRadius, NJS_POINT3({ 0.0f, 0.0f })));
 	ball->components.push_back(new Rotator(ballRotationDelta));
 
+	for (int i = 0; i < lives; i++)
+	{
+		SpriteNode* lifeIcon = data.hierarchy->CreateNode("LifeIcon", data.icons->GetAnim(MGI_Spinball), { ballDiameter, ballDiameter }, { 545.0f, 320.0f - (i * (ballDiameter + 2.0f)) });
+		livesCounter.push_back(lifeIcon);
+	}
+
 	//DEBUG
+	/*
 	for (int i = 0; i < 10; i++)
 	{
 		SpriteNode* normObj = data.hierarchy->CreateNode("Norm", data.icons->GetAnim(MGI_White_Box), { 2.0f, 15.0f }, { 0.0f, 0.0f }, boardParent);
@@ -289,4 +330,5 @@ void Pinball::CreateHierarchy(MinigameManagerData data)
 		ptObj->SetEnabled(false);
 		colPtObjs.push_back(ptObj);
 	}
+	*/
 }
