@@ -5,7 +5,7 @@ void Snake::OnGameStart(MinigameManagerData data)
 {
 	this->currentState = MGS_InProgress;
 	this->localState = SnakeState::SS_Game;
-	this->endingTimer = 120;
+	this->endingTimer = 150;
 
 	PlayUnshuffledVoice(2, 671);
 

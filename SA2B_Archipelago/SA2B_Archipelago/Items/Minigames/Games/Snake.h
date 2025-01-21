@@ -64,14 +64,6 @@ private:
 	int sizeX = 20;
 	int sizeY = 15;
 
-	std::vector<NJS_ARGB> colors = {
-		{ 0.0f, 0.0f, 0.0f, 0.0f }, // None
-		{ 1.0f, 0.0f, 1.0f, 0.0f }, // Head
-		{ 1.0f, 0.0f, 0.5f, 0.0f }, // Body
-		{ 1.0f, 0.0f, 0.0f, 0.5f }, // Tail
-		{ 1.0f, 1.0f, 0.0f, 0.0f }, // Food
-	};
-
 	std::vector<MinigameIcon> snakeIcons = {
 		MGI_Snake_Head,
 		MGI_Snake_Straight,
