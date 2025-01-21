@@ -1,6 +1,7 @@
 #pragma once
 #include "../MinigameBase.h"
 #include "../MinigameUtilities.h"
+#include "../Components/TextBox.h"
 
 class Pinball : public MinigameBase
 {
@@ -21,10 +22,20 @@ public:
 
 private:
 	void CreateHierarchy(MinigameManagerData data);
+	void UpdateCountdown(MinigameManagerData data);
 	void UpdateBallActive(MinigameManagerData data);
+	void UpdateGameEnd(MinigameManagerData data);
 	void SpawnBall();
+	void AddScore(int score, MinigameManagerData data);
+	void Win(MinigameManagerData data);
+	void Lose(MinigameManagerData data);
 
+	PinballState state;
+	int countdown = 3;
 	int lives;
+	int totalScore;
+	int scoreMult;
+	int goalScore;
 	float ballRotationDelta = 2.0f;
 	float gravity = 0.05f;
 	float flipperForceMin = 1.0f;
@@ -53,6 +64,11 @@ private:
 	std::vector<SpriteNode*> boardObjs;
 	std::vector<SpriteNode*> boardObjsNoFlippers;
 	std::vector<SpriteNode*> livesCounter;
+	SpriteNode* scoreBoxNode;
+	TextBox* scoreBox;
+	SpriteNode* countdownNode;
+	TextBox* countdownBox;
+	SpriteNode* endIcon;
 
 	//DEBUG
 	/*

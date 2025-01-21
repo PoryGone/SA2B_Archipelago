@@ -58,6 +58,7 @@ static NJS_TEXANIM MGAnim[] = {
 	{128, 128, 64, 64, 0x80, 0x40, 0xBF, 0x7F, 15, 0}, //Green Check
 	{128, 128, 64, 64, 0xC0, 0x40, 0xFF, 0x7F, 15, 0}, //Green Circle
 	{128, 128, 64, 64, 0x00, 0x80, 0x3F, 0xBF, 15, 0}, //Red X
+	{128, 128, 64, 64, 0x40, 0x80, 0x7F, 0xBF, 15, 0}, //Bobber Circle
 	//Pokemon
 	//Poke Atlas 0
 	{128, 128, 64, 64, 0x00, 0x00, 0x3F, 0x3F, 12, 0},
@@ -97,7 +98,7 @@ static NJS_TEXANIM MGAnim[] = {
 	{40, 32, 20, 16, 0x0A, 0x10, 0x34, 0x30, 0, 0},
 };
 
-static const int MinigameAnimLength = 76;
+static const int MinigameAnimLength = 77;
 
 FunctionPointer(void, ReleaseTextureList, (NJS_TEXLIST* a1), 0x77F9F0);
 

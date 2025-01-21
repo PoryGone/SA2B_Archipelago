@@ -58,6 +58,8 @@ private:
 	std::vector<float> yPositions = { 220.0f, 290.0f, 360.0f };
 	std::vector<float> xPositions = { 140.0f, 320.0f, 500.0f };
 	FishingState fs_state;
+	SpriteNode* fish;
+	SpriteNode* endIcon;
 };
 
 class FishingHard
@@ -80,11 +82,12 @@ private:
 	void MoveFish();
 	void UpdateZone();
 	void UpdateProgress(MinigameManagerData data);
-	void Caught();
-	void Escaped();
+	void Caught(MinigameManagerData data);
+	void Escaped(MinigameManagerData data);
 	SpriteNode* fish;
 	SpriteNode* catchZone;
 	SpriteNode* progressBar;
+	SpriteNode* endIcon;
 	FishingState fs_state;
 	Timer endTimer;
 	float progress;

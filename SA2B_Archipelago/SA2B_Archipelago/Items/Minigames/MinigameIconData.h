@@ -1,6 +1,6 @@
 #pragma once
 
-#define POKE_START 49
+#define POKE_START 50
 
 enum MinigameIcon
 {
@@ -53,6 +53,7 @@ enum MinigameIcon
 	MGI_Green_Check				= 46,
 	MGI_Green_Circle			= 47,
 	MGI_Red_X					= 48,
+	MGI_Bobber_Circle			= 49,
 
 	//Pokemon
 	MGI_Aron					= POKE_START + 0,

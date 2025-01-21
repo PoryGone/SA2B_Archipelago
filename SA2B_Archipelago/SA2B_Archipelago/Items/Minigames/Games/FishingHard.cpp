@@ -69,6 +69,9 @@ void FishingHard::CreateHierarchy(MinigameManagerData data)
 	data.collision->AddCollision(catchZone, std::make_shared<PolygonCollider>(NJS_POINT3({ 20.0f, 65.0f, 0.0f })));
 	data.collision->AddCollision(fish, std::make_shared<PolygonCollider>(NJS_POINT3({ 24.0f, 24.0f, 0.0f })));
 
+
+	endIcon = data.hierarchy->CreateNode("Indicator", data.icons->GetAnim(MGI_Caught_Banner), { 200, 100, 0.0f }, { data.icons->xCenter, data.icons->yCenter, 0.0f }, nullptr);
+	endIcon->SetEnabled(false);
 	/*
 	SpriteNode* textOne = data.hierarchy->CreateNode("Haha_One");
 	textOne->SetPositionGlobal({ 320.0f, 290.0f, 0.0f });
@@ -128,7 +131,7 @@ void FishingHard::UpdateProgress(MinigameManagerData data)
 		progress += progressChangeRate * progressIncreaseMultiplier;
 		if (progress >= 1.0f)
 		{
-			Caught();
+			Caught(data);
 		}
 	}
 	else
@@ -136,20 +139,24 @@ void FishingHard::UpdateProgress(MinigameManagerData data)
 		progress -= progressChangeRate;
 		if (progress <= 0.0f)
 		{
-			Escaped();
+			Escaped(data);
 		}
 	}
 	SetFillAmount(progress);
 }
 
-void FishingHard::Caught()
+void FishingHard::Caught(MinigameManagerData data)
 {
+	endIcon->anim = data.icons->GetAnim(MGI_Caught_Banner);
+	endIcon->SetEnabled(true);
 	fs_state = FHS_Caught;
 	endTimer.Start(2.0f);
 }
 
-void FishingHard::Escaped()
+void FishingHard::Escaped(MinigameManagerData data)
 {
+	endIcon->anim = data.icons->GetAnim(MGI_Miss_Banner);
+	endIcon->SetEnabled(true);
 	fs_state = FHS_Escaped;
 	endTimer.Start(2.0f);
 	catchZone->color = { 1.0f,1.0f,0.0f,0.0f };

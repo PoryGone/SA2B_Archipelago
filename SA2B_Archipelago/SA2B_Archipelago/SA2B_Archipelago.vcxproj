@@ -181,6 +181,7 @@
     <ClInclude Include="Items\Minigames\Backend\Time\Timer.h" />
     <ClInclude Include="Items\Minigames\Backend\Time\TimeUtilities.h" />
     <ClInclude Include="Items\Minigames\Components\AssignColorToChildren.h" />
+    <ClInclude Include="Items\Minigames\Components\Flipbook.h" />
     <ClInclude Include="Items\Minigames\Components\ParticleEmitter.h" />
     <ClInclude Include="Items\Minigames\Components\Rotator.h" />
     <ClInclude Include="Items\Minigames\Components\TextBox.h" />
@@ -345,6 +346,12 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../../../../pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="Items\Minigames\Components\AssignColorToChildren.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../../pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../../pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../../../pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../../../pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="Items\Minigames\Components\Flipbook.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../../pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../../pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../../../pch.h</PrecompiledHeaderFile>

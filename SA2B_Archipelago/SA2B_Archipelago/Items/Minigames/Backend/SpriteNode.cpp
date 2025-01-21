@@ -56,11 +56,11 @@ void SpriteNode::Translate(NJS_POINT3 delta)
 void SpriteNode::SetRotation(float r)
 {
 	rotation = r;
-	while (r > 360.0f)
+	if (rotation > 360.01f)
 	{
 		rotation -= 360.0f;
 	}
-	while (rotation < 0.0f)
+	if (rotation < 0.0f)
 	{
 		rotation += 360.0f;
 	}
@@ -80,16 +80,7 @@ float SpriteNode::GetRotationGlobal()
 
 void SpriteNode::Rotate(float r)
 {
-	rotation += r;
-	while (r > 360.0f)
-	{
-		rotation -= 360.0f;
-	}
-	while (rotation < 0.0f)
-	{
-		rotation += 360.0f;
-	}
-	SetBranchDirty();
+	SetRotation(rotation + r);
 }
 
 void SpriteNode::SetEnabled(bool enabled)

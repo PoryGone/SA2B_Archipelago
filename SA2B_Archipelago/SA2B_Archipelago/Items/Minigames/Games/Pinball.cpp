@@ -11,14 +11,22 @@ void Pinball::OnGameStart(MinigameManagerData data)
 	{
 	case MGD_Easy:
 		lives = 6;
+		goalScore = 100;
 		break;
 	case MGD_Medium:
 		lives = 4;
+		goalScore = 100;
 		break;
 	case MGD_Hard:
 		lives = 3;
+		goalScore = 150;
 		break;
 	}
+	totalScore = 0;
+	scoreMult = 1;
+	countdown = 3;
+	state = PS_Countdown;
+	endTimer.Start(1.0f);
 
 	CreateHierarchy(data);
 	SpawnBall();
@@ -28,10 +36,40 @@ void Pinball::OnFrame(MinigameManagerData data)
 {
 	if (data.managerState == MGS_InProgress)
 	{
-		UpdateBallActive(data);
+		if (state == PS_Countdown)
+		{
+			UpdateCountdown(data);
+		}
+		else if (state == PS_BallActive)
+		{
+			UpdateBallActive(data);
+		}
+		else if (state == PS_Victory || state == PS_Defeat)
+		{
+			UpdateGameEnd(data);
+		}
+		
 		if (data.inputPress & RIF_B)
 		{
 			this->currentState = MGS_Draw;
+		}
+	}
+}
+
+void Pinball::UpdateCountdown(MinigameManagerData data)
+{
+	if (endTimer.IsElapsed())
+	{
+		countdown--;
+		if (countdown > 0)
+		{
+			countdownBox->UpdateText(std::to_string(countdown));
+			endTimer.Start(1.0f);
+		}
+		else
+		{
+			countdownNode->SetEnabled(false);
+			state = PS_BallActive;
 		}
 	}
 }
@@ -99,14 +137,15 @@ void Pinball::UpdateBallActive(MinigameManagerData data)
 			if (Point3AngleDegrees({ 0.0f, -1.0f }, results.surfaceNormal) < 80.0f)
 			{
 				surfaceDampening = bumperDampening;
+
+				AddScore(5, data);
 			}
 		}
 		else if (results.firstHitObject->name == "Bumper")
 		{
 			surfaceDampening = bumperDampening;
 
-			// TODO: TEMP UNTIL REAL WIN CONDITION
-			this->currentState = MinigameState::MGS_Victory;
+			AddScore(10, data);
 		}
 		NJS_POINT3 initialPosition = ball->GetPositionGlobal();
 		float initialVelocity = Point3Magnitude(ballVelocity);
@@ -176,11 +215,31 @@ void Pinball::UpdateBallActive(MinigameManagerData data)
 	{
 		if (lives <= 0)
 		{
-
+			Lose(data);
 		}
 		else
 		{
 			SpawnBall();
+		}
+	}
+}
+
+void Pinball::UpdateGameEnd(MinigameManagerData data)
+{
+	if (endIcon->color.a < 1.0f)
+	{
+		endIcon->color.a += 1.0f / 30.0f;
+		endIcon->displaySize = Point3MoveTowards(endIcon->displaySize, { 200.0f, 200.0f }, 200.0f / 30.0f);
+	}
+	if (endTimer.IsElapsed())
+	{
+		if (state == PS_Victory)
+		{
+			this->currentState = MinigameState::MGS_Victory;
+		}
+		else
+		{
+			this->currentState = MinigameState::MGS_Loss;
 		}
 	}
 }
@@ -195,6 +254,36 @@ void Pinball::SpawnBall()
 	ballVelocity = { 0.0f, 0.0f, 0.0f };
 	float randOffset = RandomFloat(50.0f, 120.0f);
 	ball->SetPositionGlobal({ (RandomFloat(0.0, 1.0f) < 0.5 ? 320.0f - randOffset : 320.0f + randOffset), 290.0f });
+}
+
+void Pinball::AddScore(int score, MinigameManagerData data)
+{
+	totalScore += score * scoreMult;
+	std::string text = "Score:\n";
+	text.append(std::to_string(totalScore));
+	text.append("\nGoal:\n");
+	text.append(std::to_string(goalScore));
+	scoreBox->UpdateText(text);
+	if (totalScore >= goalScore)
+	{
+		Win(data);
+	}
+}
+
+void Pinball::Win(MinigameManagerData data)
+{
+	state = PS_Victory;
+	endIcon->anim = data.icons->GetAnim(MGI_Green_Check);
+	endIcon->SetEnabled(true);
+	endTimer.Start(2.0f);
+}
+
+void Pinball::Lose(MinigameManagerData data)
+{
+	state = PS_Defeat;
+	endIcon->anim = data.icons->GetAnim(MGI_Red_X);
+	endIcon->SetEnabled(true);
+	endTimer.Start(2.0f);
 }
 
 void Pinball::OnCleanup(MinigameManagerData data)
@@ -294,6 +383,7 @@ void Pinball::CreateHierarchy(MinigameManagerData data)
 	SpriteNode* leftFlipperImage = data.hierarchy->CreateNode("LeftFlipper", data.icons->GetAnim(MGI_Triangle), { 5.0f, flipperLength }, { 0.0f, 0.0f }, leftFlipper);
 	leftFlipperImage->SetPosition({ flipperLength * 0.5f, 0.0f });
 	leftFlipperImage->SetRotation(90.0f);
+	//data.collision->AddCollision(leftFlipper, std::make_shared<CapsuleCollider>(2.4f, leftFlipper, NJS_POINT3({ 0.0f, 0.0f }), NJS_POINT3({ flipperLength - 2.4f, 0.0f })));
 	data.collision->AddCollision(leftFlipper, std::make_shared<PolygonCollider>(std::vector<NJS_POINT3>({ {0.0f, 2.4f}, {flipperLength, 0.0f}, {0.0f, -2.4f} })));
 	leftFlipper->SetRotation(9.5f);
 	boardObjs.push_back(leftFlipper);
@@ -303,6 +393,7 @@ void Pinball::CreateHierarchy(MinigameManagerData data)
 	SpriteNode* rightFlipperImage = data.hierarchy->CreateNode("LeftFlipper", data.icons->GetAnim(MGI_Triangle), { 5.0f, flipperLength }, { 0.0f, 0.0f }, rightFlipper);
 	rightFlipperImage->SetPosition({ flipperLength * 0.5f, 0.0f });
 	rightFlipperImage->SetRotation(90.0f);
+	//data.collision->AddCollision(rightFlipper, std::make_shared<CapsuleCollider>(2.4f, rightFlipper, NJS_POINT3({ 0.0f, 0.0f }), NJS_POINT3({ flipperLength - 2.4f, 0.0f })));
 	data.collision->AddCollision(rightFlipper, std::make_shared<PolygonCollider>(std::vector<NJS_POINT3>({ {0.0f, 2.4f}, {flipperLength, 0.0f}, {0.0f, -2.4f} })));
 	rightFlipper->SetRotation(-189.5f);
 	boardObjs.push_back(rightFlipper);
@@ -316,6 +407,21 @@ void Pinball::CreateHierarchy(MinigameManagerData data)
 		SpriteNode* lifeIcon = data.hierarchy->CreateNode("LifeIcon", data.icons->GetAnim(MGI_Spinball), { ballDiameter, ballDiameter }, { 545.0f, 320.0f - (i * (ballDiameter + 2.0f)) });
 		livesCounter.push_back(lifeIcon);
 	}
+
+	scoreBoxNode = data.hierarchy->CreateNode("Score Box");
+	scoreBoxNode->SetPositionGlobal({ 540.0f, 100.0f});
+	scoreBox = new TextBox("", 20.0f, TextAlignment::Left, data.text);
+	scoreBoxNode->renderComponents.push_back(scoreBox);
+	AddScore(0, data);
+
+	countdownNode = data.hierarchy->CreateNode("Coundown");
+	countdownNode->SetPositionGlobal({ data.icons->xCenter, 100.0f });
+	countdownBox = new TextBox("3", 100.0f, TextAlignment::Center, data.text);
+	countdownNode->renderComponents.push_back(countdownBox);
+
+	endIcon = data.hierarchy->CreateNode("End Icon", data.icons->GetAnim(MGI_Green_Check), { 400.0f, 400.0f }, {data.icons->xCenterSafe, data.icons->yCenterSafe});
+	endIcon->color.a = 0.0f;
+	endIcon->SetEnabled(false);
 
 	//DEBUG
 	/*

@@ -42,6 +42,12 @@ void FishingMedium::OnFrame(MinigameManagerData data)
 				timers[1].Resume();
 			}
 			bool inputUsed = false;
+			if (successCount < ringCount)
+			{
+				fish->SetPositionGlobal(Point3MoveTowards(fish->GetPositionGlobal(), Point3Add(zones[successCount]->GetPositionGlobal(), { RandomFloat(-2.0f, 2.0f), 45.0f }), 5.0f));
+				float normAng = Point3SignedAngleDegrees({ 0.0f, 1.0f }, Point3Substract(zones[successCount]->GetPositionGlobal(), fish->GetPositionGlobal()));
+				fish->SetRotation(normAng + 180.0f);
+			}
 			for (int i = successCount; i < ringCount; i++)
 			{
 				if (rings[i]->IsEnabled())
@@ -54,6 +60,8 @@ void FishingMedium::OnFrame(MinigameManagerData data)
 					}
 					if (ringSizes[i] <= 0.0f)
 					{
+						endIcon->anim = data.icons->GetAnim(MGI_Miss_Banner);
+						endIcon->SetEnabled(true);
 						fs_state = FMS_Escaped;
 						endTimer.Start(2.0f);
 						zones[i]->color = { 1.0f, 1.0f, 0.0f, 0.0f };
@@ -71,6 +79,8 @@ void FishingMedium::OnFrame(MinigameManagerData data)
 							//zones[i]->SetEnabled(false);
 							if (successCount == ringCount)
 							{
+								endIcon->anim = data.icons->GetAnim(MGI_Caught_Banner);
+								endIcon->SetEnabled(true);
 								fs_state = FMS_Caught;
 								endTimer.Start(2.0f);
 								return;
@@ -78,6 +88,8 @@ void FishingMedium::OnFrame(MinigameManagerData data)
 						}
 						else
 						{
+							endIcon->anim = data.icons->GetAnim(MGI_Miss_Banner);
+							endIcon->SetEnabled(true);
 							fs_state = FMS_Escaped;
 							endTimer.Start(2.0f);
 							zones[i]->color = { 1.0f, 1.0f, 0.0f, 0.0f };
@@ -112,15 +124,16 @@ void FishingMedium::OnFrame(MinigameManagerData data)
 
 void FishingMedium::CreateHierarchy(MinigameManagerData data)
 {
+	fish = data.hierarchy->CreateNode("Fish", data.icons->GetAnim(MGI_Chopper), { 64.0f, 64.0f }, { data.icons->xCenter, data.icons->yMax });
 	SpriteNode* zoneParent = data.hierarchy->CreateNode("Zones");
 	SpriteNode* ringParent = data.hierarchy->CreateNode("Rings");
 	for (int i = 0; i < ringCount; i++)
 	{
 		float x = xPositions[i] + RandomFloat(-20.0f, 20.0f);
 		float y = yPositions[i] + RandomFloat(-20.0f, 20.0f);
-		zones[i] = data.hierarchy->CreateNode("Zone", data.icons->GetAnim(MGI_Circle), { zoneSizes[i], zoneSizes[i], 0.0f }, { x, y, 0.0f }, zoneParent);
+		zones[i] = data.hierarchy->CreateNode("Zone", data.icons->GetAnim(MGI_Bobber_Circle), { zoneSizes[i], zoneSizes[i], 0.0f }, { x, y, 0.0f }, zoneParent);
 		rings[i] = data.hierarchy->CreateNode("Ring", data.icons->GetAnim(MGI_Circle_Outline), { ringSizes[i], ringSizes[i], 0.0f }, { x, y, 0.0f }, ringParent);
-		zones[i]->color = { 0.7f, 0.91f, 0.58f, 0.03f };
+		//zones[i]->color = { 0.7f, 0.91f, 0.58f, 0.03f };
 		rings[i]->color = { 1.0f, 0.0f, 0.0f, 1.0f };
 		if (i > 0)
 		{
@@ -128,6 +141,9 @@ void FishingMedium::CreateHierarchy(MinigameManagerData data)
 			zones[i]->SetEnabled(false);
 		}
 	}
+
+	endIcon = data.hierarchy->CreateNode("Indicator", data.icons->GetAnim(MGI_Caught_Banner), { 200, 100, 0.0f }, { data.icons->xCenter, data.icons->yCenter, 0.0f }, nullptr);
+	endIcon->SetEnabled(false);
 
 	AddDPadToHierarchy(anyDPad, { 65.0f, 130.0f, 0.0f }, 45.0f, *data.icons, *data.hierarchy);
 
