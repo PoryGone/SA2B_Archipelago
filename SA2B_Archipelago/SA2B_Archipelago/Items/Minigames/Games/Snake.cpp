@@ -4,6 +4,10 @@
 void Snake::OnGameStart(MinigameManagerData data)
 {
 	this->currentState = MGS_InProgress;
+	this->localState = SnakeState::SS_Game;
+	this->endingTimer = 120;
+
+	PlayUnshuffledVoice(2, 671);
 
 	this->playerCells.clear();
 	this->playerCells.push_back(std::pair<int, int>(10, 10));
@@ -17,7 +21,7 @@ void Snake::OnGameStart(MinigameManagerData data)
 	CreateHierarchy(data);
 	this->GenerateFood();
 
-	FillGrid();
+	FillGrid(data);
 }
 
 void Snake::OnFrame(MinigameManagerData data)
@@ -26,21 +30,58 @@ void Snake::OnFrame(MinigameManagerData data)
 	{
 		return;
 	}
-	if (data.inputPress & RIF_Up)
+
+	if (this->localState == SnakeState::SS_EndingWin)
 	{
-		playerDirection = SnakeTileDirection::STD_Up;
+		this->endingTimer--;
+
+		if (this->endingTimer == 90)
+		{
+			PlaySoundProbably((int)MinigameSounds::RankReveal, 0, 0, 0);
+			this->resultNode->anim = data.icons->GetAnim(MGI_Green_Check);
+			this->resultNode->SetEnabled(true);
+		}
+		else if (this->endingTimer <= 0)
+		{
+			this->currentState = MinigameState::MGS_Victory;
+		}
+		return;
 	}
-	if (data.inputPress & RIF_Down)
+	else if (this->localState == SnakeState::SS_EndingLose)
 	{
-		playerDirection = SnakeTileDirection::STD_Down;
+		this->endingTimer--;
+
+		if (this->endingTimer == 90)
+		{
+			PlaySoundProbably((int)MinigameSounds::RankReveal, 0, 0, 0);
+			this->resultNode->anim = data.icons->GetAnim(MGI_F_Rank);
+			this->resultNode->SetEnabled(true);
+		}
+		else if (this->endingTimer <= 0)
+		{
+			this->currentState = MinigameState::MGS_Loss;
+		}
+		return;
 	}
-	if (data.inputPress & RIF_Left)
+
+	if (this->playerCells.size() >= 2)
 	{
-		playerDirection = SnakeTileDirection::STD_Left;
-	}
-	if (data.inputPress & RIF_Right)
-	{
-		playerDirection = SnakeTileDirection::STD_Right;
+		if ((data.inputPress & RIF_Up) && (this->playerCells[0].second - 1 != this->playerCells[1].second))
+		{
+			playerDirection = SnakeTileDirection::STD_Up;
+		}
+		if ((data.inputPress & RIF_Down) && (this->playerCells[0].second + 1 != this->playerCells[1].second))
+		{
+			playerDirection = SnakeTileDirection::STD_Down;
+		}
+		if ((data.inputPress & RIF_Left) && (this->playerCells[0].first - 1 != this->playerCells[1].first))
+		{
+			playerDirection = SnakeTileDirection::STD_Left;
+		}
+		if ((data.inputPress & RIF_Right) && (this->playerCells[0].first + 1 != this->playerCells[1].first))
+		{
+			playerDirection = SnakeTileDirection::STD_Right;
+		}
 	}
 
 	this->frameCount++;
@@ -50,7 +91,7 @@ void Snake::OnFrame(MinigameManagerData data)
 		this->frameCount = 0;
 
 		this->Tick();
-		this->FillGrid();
+		this->FillGrid(data);
 	}
 }
 
@@ -64,23 +105,106 @@ void Snake::OnCleanup(MinigameManagerData data)
 	this->playerCells.clear();
 }
 
-void Snake::FillGrid()
+void Snake::FillGrid(MinigameManagerData data)
 {
 	for (int i = 0; i < this->playerCells.size(); i++)
 	{
 		std::pair<int, int> pos = this->playerCells[i];
+		this->grid[pos.first][pos.second].mirror = false;
 
 		if (i == 0)
 		{
+			std::pair<int, int> nextPos = this->playerCells[i + 1];
 			this->grid[pos.first][pos.second].type = SnakeTileType::STT_Head;
+
+			if (nextPos.first > pos.first)
+			{
+				this->grid[pos.first][pos.second].direction = SnakeTileDirection::STD_Left;
+			}
+			else if (nextPos.first < pos.first)
+			{
+				this->grid[pos.first][pos.second].direction = SnakeTileDirection::STD_Right;
+			}
+			else if(nextPos.second > pos.second)
+			{
+				this->grid[pos.first][pos.second].direction = SnakeTileDirection::STD_Up;
+			}
+			else if(nextPos.second > pos.second)
+			{
+				this->grid[pos.first][pos.second].direction = SnakeTileDirection::STD_Down;
+			}
 		}
 		else if (i == this->playerCells.size() - 1)
 		{
+			std::pair<int, int> prevPos = this->playerCells[i - 1];
 			this->grid[pos.first][pos.second].type = SnakeTileType::STT_Tail;
+			if (prevPos.first < pos.first)
+			{
+				this->grid[pos.first][pos.second].direction = SnakeTileDirection::STD_Left;
+			}
+			else if (prevPos.first > pos.first)
+			{
+				this->grid[pos.first][pos.second].direction = SnakeTileDirection::STD_Right;
+			}
+			else if (prevPos.second < pos.second)
+			{
+				this->grid[pos.first][pos.second].direction = SnakeTileDirection::STD_Up;
+			}
+			else if (prevPos.second > pos.second)
+			{
+				this->grid[pos.first][pos.second].direction = SnakeTileDirection::STD_Down;
+			}
 		}
 		else
 		{
-			this->grid[pos.first][pos.second].type = SnakeTileType::STT_Body;
+			std::pair<int, int> prevPos = this->playerCells[i - 1];
+			std::pair<int, int> nextPos = this->playerCells[i + 1];
+
+			if (prevPos.first == nextPos.first || prevPos.second == nextPos.second)
+			{
+				this->grid[pos.first][pos.second].type = SnakeTileType::STT_BodyStraight;
+			}
+			else
+			{
+				this->grid[pos.first][pos.second].type = SnakeTileType::STT_BodyTurn;
+			}
+
+			if (prevPos.first < pos.first)
+			{
+				this->grid[pos.first][pos.second].direction = SnakeTileDirection::STD_Left;
+
+				if (nextPos.second < pos.second)
+				{
+					this->grid[pos.first][pos.second].mirror = true;
+				}
+			}
+			else if (prevPos.first > pos.first)
+			{
+				this->grid[pos.first][pos.second].direction = SnakeTileDirection::STD_Right;
+
+				if (nextPos.second > pos.second)
+				{
+					this->grid[pos.first][pos.second].mirror = true;
+				}
+			}
+			else if (prevPos.second < pos.second)
+			{
+				this->grid[pos.first][pos.second].direction = SnakeTileDirection::STD_Up;
+
+				if (nextPos.first > pos.first)
+				{
+					this->grid[pos.first][pos.second].mirror = true;
+				}
+			}
+			else if (prevPos.second > pos.second)
+			{
+				this->grid[pos.first][pos.second].direction = SnakeTileDirection::STD_Down;
+
+				if (nextPos.first < pos.first)
+				{
+					this->grid[pos.first][pos.second].mirror = true;
+				}
+			}
 		}
 	}
 
@@ -88,7 +212,29 @@ void Snake::FillGrid()
 	{
 		for (int y = 0; y < grid[x].size(); y++)
 		{
-			this->grid[x][y].cellParent->color = this->colors[this->grid[x][y].type];
+			this->grid[x][y].cellParent->color.a = 1.0f;
+			if (this->grid[x][y].type != SnakeTileType::STT_None)
+			{
+				MinigameIcon icon = this->snakeIcons[this->grid[x][y].type - 1];
+				this->grid[x][y].cellParent->anim = data.icons->GetAnim(icon);
+				if (this->grid[x][y].mirror)
+				{
+					icon = (MinigameIcon)((int)icon + 1);
+					this->grid[x][y].cellParent->anim = data.icons->GetAnim(icon);
+				}
+				if (this->grid[x][y].direction != SnakeTileDirection::STD_None)
+				{
+					this->grid[x][y].cellParent->SetRotation((this->grid[x][y].direction - 1) * 90.0f);
+				}
+				else
+				{
+					this->grid[x][y].cellParent->SetRotation(0.0f);
+				}
+			}
+			else
+			{
+				this->grid[x][y].cellParent->color.a = 0.0f;
+			}
 		}
 	}
 }
@@ -102,7 +248,8 @@ void Snake::Tick()
 	case SnakeTileDirection::STD_Up:
 		if (this->playerCells[0].second == 0)
 		{
-			this->currentState = MinigameState::MGS_Loss;
+			PlaySoundProbably((int)MinigameSounds::Explosion, 0, 0, 0);
+			this->localState = SnakeState::SS_EndingLose;
 		}
 		else
 		{
@@ -112,7 +259,8 @@ void Snake::Tick()
 	case SnakeTileDirection::STD_Down:
 		if (this->playerCells[0].second == this->sizeY - 1)
 		{
-			this->currentState = MinigameState::MGS_Loss;
+			PlaySoundProbably((int)MinigameSounds::Explosion, 0, 0, 0);
+			this->localState = SnakeState::SS_EndingLose;
 		}
 		else
 		{
@@ -122,7 +270,8 @@ void Snake::Tick()
 	case SnakeTileDirection::STD_Left:
 		if (this->playerCells[0].first == 0)
 		{
-			this->currentState = MinigameState::MGS_Loss;
+			PlaySoundProbably((int)MinigameSounds::Explosion, 0, 0, 0);
+			this->localState = SnakeState::SS_EndingLose;
 		}
 		else
 		{
@@ -132,7 +281,8 @@ void Snake::Tick()
 	case SnakeTileDirection::STD_Right:
 		if (this->playerCells[0].first == this->sizeX - 1)
 		{
-			this->currentState = MinigameState::MGS_Loss;
+			PlaySoundProbably((int)MinigameSounds::Explosion, 0, 0, 0);
+			this->localState = SnakeState::SS_EndingLose;
 		}
 		else
 		{
@@ -141,16 +291,18 @@ void Snake::Tick()
 		break;
 	}
 
-	if (this->grid[nextHead.first][nextHead.second].type == SnakeTileType::STT_Food)
+	if (this->grid[nextHead.first][nextHead.second].type >= SnakeTileType::STT_Food)
 	{
 		this->playerCells.insert(this->playerCells.begin(), nextHead);
 
 		if (this->playerCells.size() >= this->goalLength)
 		{
-			this->currentState = MinigameState::MGS_Victory;
+			PlaySoundProbably((int)MinigameSounds::CollectEmblem, 0, 0, 0);
+			this->localState = SnakeState::SS_EndingWin;
 		}
 		else
 		{
+			PlaySoundProbably((int)MinigameSounds::CollectAnimal, 0, 0, 0);
 			this->GenerateFood();
 		}
 
@@ -158,11 +310,13 @@ void Snake::Tick()
 	}
 	else if (this->grid[nextHead.first][nextHead.second].type != SnakeTileType::STT_None)
 	{
-		this->currentState = MinigameState::MGS_Loss;
+		PlaySoundProbably((int)MinigameSounds::Explosion, 0, 0, 0);
+		this->localState = SnakeState::SS_EndingLose;
 		return;
 	}
 
 	this->grid[this->playerCells[this->playerCells.size() - 1].first][this->playerCells[this->playerCells.size() - 1].second].type = SnakeTileType::STT_None;
+	this->grid[this->playerCells[this->playerCells.size() - 1].first][this->playerCells[this->playerCells.size() - 1].second].direction = SnakeTileDirection::STD_None;
 
 	for (int i = this->playerCells.size() - 1; i > 0; i--)
 	{
@@ -183,6 +337,10 @@ void Snake::GenerateFood()
 		if (this->grid[chosenCell.first][chosenCell.second].type == SnakeTileType::STT_None)
 		{
 			this->grid[chosenCell.first][chosenCell.second].type = SnakeTileType::STT_Food;
+			if (RandomInt(0, 2) == 0)
+			{
+				this->grid[chosenCell.first][chosenCell.second].type = SnakeTileType::STT_Food2;
+			}
 			this->foodCell = chosenCell;
 
 			break;
@@ -228,4 +386,8 @@ void Snake::CreateHierarchy(MinigameManagerData data)
 		{ gridCenterX, gridStart.y + (-1 * this->cellSize) + halfCellSize * 1.5f }, this->gridParent); // Top
 	data.hierarchy->CreateNode("Grid_Wall", data.icons->GetAnim(MGI_Square), { gridTotalX + this->cellSize, this->cellSize / 2 },
 		{ gridCenterX, gridStart.y + (this->sizeY * this->cellSize) + halfCellSize / 2 }, this->gridParent); // Bottom
+
+	this->resultNode = data.hierarchy->CreateNode("Result", data.icons->GetAnim(MGI_Green_Check), { 128, 128 },
+													{ data.icons->xCenter, data.icons->yCenter });
+	this->resultNode->SetEnabled(false);
 }

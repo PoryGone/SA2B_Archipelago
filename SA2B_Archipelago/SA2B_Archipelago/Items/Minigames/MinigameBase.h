@@ -1,6 +1,7 @@
 #pragma once
 #include "MinigameIconData.h"
 #include "TextDisplayData.h"
+#include "../../Aesthetics/MusicManager.h"
 #include "../../Utilities/SpriteUtilities.h"
 #include "../../Utilities/EasingUtilities.h"
 #include "Backend/MinigameBackend.h"

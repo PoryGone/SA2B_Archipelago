@@ -5,28 +5,38 @@
 
 class Snake : public MinigameBase
 {
+	enum SnakeState
+	{
+		SS_Game = 0,
+		SS_EndingWin,
+		SS_EndingLose,
+	};
+
 	enum SnakeTileType
 	{
 		STT_None,
 		STT_Head,
-		STT_Body,
+		STT_BodyStraight,
+		STT_BodyTurn,
 		STT_Tail,
 		STT_Food,
+		STT_Food2,
 	};
 
 	enum SnakeTileDirection
 	{
 		STD_None,
-		STD_Up,
-		STD_Right,
 		STD_Down,
 		STD_Left,
+		STD_Up,
+		STD_Right,
 	};
 
 	struct SnakeGridCell
 	{
 		SnakeTileType type;
 		SnakeTileDirection direction;
+		bool mirror = false;
 		SpriteNode* cellParent;
 	};
 
@@ -38,9 +48,13 @@ public:
 private:
 	void CreateHierarchy(MinigameManagerData data);
 
-	void FillGrid();
+	void FillGrid(MinigameManagerData data);
 	void Tick();
 	void GenerateFood();
+
+	SnakeState localState;
+	int endingTimer = 120;
+	SpriteNode* resultNode;
 
 	SnakeTileDirection playerDirection = SnakeTileDirection::STD_Right;
 
@@ -56,6 +70,15 @@ private:
 		{ 1.0f, 0.0f, 0.5f, 0.0f }, // Body
 		{ 1.0f, 0.0f, 0.0f, 0.5f }, // Tail
 		{ 1.0f, 1.0f, 0.0f, 0.0f }, // Food
+	};
+
+	std::vector<MinigameIcon> snakeIcons = {
+		MGI_Snake_Head,
+		MGI_Snake_Straight,
+		MGI_Snake_Turn,
+		MGI_Snake_Tail,
+		MGI_Super_Sonic,
+		MGI_Super_Shadow,
 	};
 
 	float cellSize = 16.0f;
