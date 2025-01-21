@@ -172,13 +172,13 @@ void MinigameManager::UpdateCurrentMinigame()
 	
 	else
 	{
-		if (_data.inputPress & RIF_Down)
+		/*if (_data.inputPress & RIF_Down)
 		{
 			//this->_data.isLocationCheck = true;
 			this->SetDifficulty(MGD_Medium);
 			this->currentMinigame = &this->pinball;
 			this->currentMinigameItem = ItemValue::IV_PongTrap;
-		}
+		}*/
 	}
 	
 }
