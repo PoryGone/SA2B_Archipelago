@@ -1,6 +1,6 @@
 #pragma once
 
-#define POKE_START 31
+#define POKE_START 48
 
 enum MinigameIcon
 {
@@ -37,12 +37,21 @@ enum MinigameIcon
 	MGI_Barrel					= 30,
 	MGI_F_Rank					= 31,
 	MGI_Chopper					= 32,
-	MGI_Bobber					= 33,
-	MGI_Bobber_Splash			= 34,
-	MGI_Big_0					= 35,
-	MGI_Big_1					= 36,
-	MGI_Caught_Banner			= 37,
-	MGI_Miss_Banner				= 38,
+	MGI_Snake_Head				= 33,
+	MGI_Snake_Tail				= 34,
+	MGI_Snake_Straight			= 35,
+	MGI_Snake_Turn				= 36,
+	MGI_Bobber					= 37,
+	MGI_Bobber_Splash			= 38,
+	MGI_Big_0					= 39,
+	MGI_Big_1					= 40,
+	MGI_Caught_Banner			= 41,
+	MGI_Miss_Banner				= 42,
+	MGI_Sonic_Head				= 43,
+	MGI_Bomb					= 44,
+	MGI_Green_Check				= 45,
+	MGI_Green_Circle			= 46,
+	MGI_Red_X					= 47,
 
 	//Pokemon
 	MGI_Aron					= POKE_START + 0,

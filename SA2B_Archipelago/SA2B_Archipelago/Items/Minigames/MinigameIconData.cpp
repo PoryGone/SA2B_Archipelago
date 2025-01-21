@@ -41,6 +41,10 @@ static NJS_TEXANIM MGAnim[] = {
 	{128, 128, 64, 64, 0x00, 0x40, 0x3F, 0x7F, 14, 0}, //Barrel
 	{64, 64, 32, 32, 0x40, 0x40, 0x9F, 0x5F, 14, 0}, //F Rank
 	{128, 128, 64, 64, 0x80, 0x40, 0xBF, 0x7F, 14, 0}, //Chopper
+	{64, 64, 32, 32, 0xC0, 0x40, 0xDF, 0x5F, 14, 0}, //Bio Snake Head
+	{64, 64, 32, 32, 0xE0, 0x40, 0xFF, 0x5F, 14, 0}, //Bio Snake Tail
+	{64, 64, 32, 32, 0xC0, 0x60, 0xDF, 0x7F, 14, 0}, //Bio Snake Body Straight
+	{64, 64, 32, 32, 0xE0, 0x60, 0xFF, 0x7F, 14, 0}, //Bio Snake Body Turn
 	{256, 128, 128, 64, 0x00, 0x80, 0x7F, 0xBF, 14, 0}, //Bobber
 	{256, 128, 128, 64, 0x00, 0xC0, 0x7F, 0xFF, 14, 0}, //Bobber Splash
 	{256, 128, 128, 64, 0x80, 0x80, 0xFF, 0xBF, 14, 0}, //Big 0
@@ -48,6 +52,11 @@ static NJS_TEXANIM MGAnim[] = {
 	//Minigame Atlas 1
 	{256, 128, 128, 64, 0x00, 0x00, 0x7F, 0x3F, 15, 0}, //Caught Banner
 	{256, 128, 128, 64, 0x80, 0x00, 0xFF, 0x3F, 15, 0}, //Miss Banner
+	{128, 128, 64, 64, 0x00, 0x40, 0x3F, 0x7F, 15, 0}, //Sonic Head
+	{128, 128, 64, 64, 0x40, 0x40, 0x7F, 0x7F, 15, 0}, //Bomb
+	{128, 128, 64, 64, 0x80, 0x40, 0xBF, 0x7F, 15, 0}, //Green Check
+	{128, 128, 64, 64, 0xC0, 0x40, 0xFF, 0x7F, 15, 0}, //Green Circle
+	{128, 128, 64, 64, 0x00, 0x80, 0x3F, 0xBF, 15, 0}, //Red X
 	//Pokemon
 	//Poke Atlas 0
 	{128, 128, 64, 64, 0x00, 0x00, 0x3F, 0x3F, 12, 0},
@@ -87,7 +96,7 @@ static NJS_TEXANIM MGAnim[] = {
 	{40, 32, 20, 16, 0x0A, 0x10, 0x34, 0x30, 0, 0},
 };
 
-static const int MinigameAnimLength = 66;
+static const int MinigameAnimLength = 75;
 
 FunctionPointer(void, ReleaseTextureList, (NJS_TEXLIST* a1), 0x77F9F0);
 
