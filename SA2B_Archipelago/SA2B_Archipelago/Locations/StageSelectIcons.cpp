@@ -25,6 +25,14 @@ static std::map<int, StageSelectStageData>* StageSelectDataMap_ptr;
 static float minXPos;
 static float maxXPos;
 
+#define PAGE_SWAP_TIME 120
+
+static int currentPage = 0;
+static int paginateTimer = PAGE_SWAP_TIME;
+static bool paginateManual = false;
+static int lastGameMode;
+static int lastTile;
+
 std::map<char, NumberDisplayData> NumberMap = {
 	{'0', NumberDisplayData(-1, 40.0f, 0.0f, 4.0f)},
 	{'1', NumberDisplayData(0, 18.0f, 0.0f, 4.0f)},
@@ -404,224 +412,281 @@ void UpdateLevelCheckIcons()
 		int animalsFound = locMan->GetCompletedAnimalLocationsForLevel(currentTileStageIndex);
 		int animalsTotal = locMan->GetTotalAnimalLocationsForLevel(currentTileStageIndex);
 
-		if ((*StageSelectDataMap_ptr).at(currentTileStageIndex).UpgradeAddress > 0x00)
+		bool paginate = itemBoxes.size() > 0 && currentTileStageIndex != SSS_Route101 && currentTileStageIndex != SSS_Route280;
+		if (paginate)
 		{
-			int icon = *(char*)(*StageSelectDataMap_ptr).at(currentTileStageIndex).UpgradeAddress > 0x00 ? SSI_Upgrade : SSI_UpgradeDisabled;
-			StageSelectSprite.tanim = &StageSelectAnim[icon];
-			StageSelectSprite.p = { maxXPos - ((xCount + 1) * 32.0f), yPos, 0.0f };
-			DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
-			xCount++;
-		}
-		if (beetles.size() > 0)
-		{
-			for (int i = beetles.size() - 1; i >= 0; i--)
+			if (lastTile != currentTileStageIndex)
 			{
-				int beetleIcon = *(char*)beetles[i] == 0x01 ? SSI_GoldBeetle : SSI_GoldBeetleDisabled;
-				StageSelectSprite.tanim = &StageSelectAnim[beetleIcon];
+				if (!paginateManual)
+				{
+					lastTile = currentTileStageIndex;
+					currentPage = 0;
+					paginateTimer = PAGE_SWAP_TIME;
+				}
+			}
+			if (lastGameMode != GameMode)
+			{
+				lastGameMode = GameMode;
+				paginateManual = false;
+				currentPage = 0;
+				paginateTimer = PAGE_SWAP_TIME;
+			}
+			if (ControllersRaw->press & 0b1000000000)
+			{
+				paginateManual = true;
+				currentPage = (currentPage == 0) ? 1 : 0;
+			}
+			paginateTimer--;
+			if (paginateTimer <= 0)
+			{
+				paginateTimer = PAGE_SWAP_TIME;
+				if (!paginateManual)
+				{
+					currentPage = (currentPage == 0) ? 1 : 0;
+				}
+			}
+		}
+
+		if (!paginate || currentPage == 0)
+		{
+			if ((*StageSelectDataMap_ptr).at(currentTileStageIndex).UpgradeAddress > 0x00)
+			{
+				int icon = *(char*)(*StageSelectDataMap_ptr).at(currentTileStageIndex).UpgradeAddress > 0x00 ? SSI_Upgrade : SSI_UpgradeDisabled;
+				StageSelectSprite.tanim = &StageSelectAnim[icon];
 				StageSelectSprite.p = { maxXPos - ((xCount + 1) * 32.0f), yPos, 0.0f };
 				DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
 				xCount++;
 			}
-		}
-		if (chaoKeys.size() > 0)
-		{
-			itemCount = chaoKeys.size();
-			for (int i = chaoKeys.size() - 1; i >= 0; i--)
+			if (beetles.size() > 0)
 			{
-				int chaoIcon = *(char*)chaoKeys[i] == 0x01 ? SSI_ChaoKey : SSI_ChaoKeyDisabled;
-				float x = maxXPos - ((xCount + 1) * 32.0f);
-				StageSelectSprite.tanim = &StageSelectAnim[chaoIcon];
-				StageSelectSprite.p = { x, yPos, 0.0f };
-				DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
-				x += 4;
-				DrawString(std::to_string(itemCount), x, yPos + 24.0f, 0.25f);
-				xCount++;
-				itemCount--;
-			}
-		}
-		if (animalsTotal > 0)
-		{
-			int animalsIcon = animalsFound == animalsTotal ? SSI_Animals : SSI_AnimalsDisabled;
-			float x = maxXPos - ((xCount + 1) * 32.0f);
-			StageSelectSprite.tanim = &StageSelectAnim[animalsIcon];
-			StageSelectSprite.p = { x, yPos, 0.0f };
-			DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
-			x += 4;
-			DrawString(std::to_string(animalsFound), x, yPos + 8.0f, 0.25f);
-			DrawString(std::to_string(animalsTotal), x, yPos + 24.0f, 0.25f);
-			xCount++;
-		}
-		if (bigs.size() > 0)
-		{
-			itemCount = bigs.size();
-			for (int i = bigs.size() - 1; i >= 0; i--)
-			{
-				int bigIcon = bigs[i] == 0x01 ? SSI_Upgrade : SSI_UpgradeDisabled;
-				float x = maxXPos - ((xCount + 1) * 32.0f);
-				StageSelectSprite.tanim = &StageSelectAnim[bigIcon];
-				StageSelectSprite.p = { x, yPos, 0.0f };
-				DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
-				x += 4;
-				if (bigs.size() > 1)
+				for (int i = beetles.size() - 1; i >= 0; i--)
 				{
+					int beetleIcon = *(char*)beetles[i] == 0x01 ? SSI_GoldBeetle : SSI_GoldBeetleDisabled;
+					StageSelectSprite.tanim = &StageSelectAnim[beetleIcon];
+					StageSelectSprite.p = { maxXPos - ((xCount + 1) * 32.0f), yPos, 0.0f };
+					DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+					xCount++;
+				}
+			}
+			if (chaoKeys.size() > 0)
+			{
+				itemCount = chaoKeys.size();
+				for (int i = chaoKeys.size() - 1; i >= 0; i--)
+				{
+					int chaoIcon = *(char*)chaoKeys[i] == 0x01 ? SSI_ChaoKey : SSI_ChaoKeyDisabled;
+					float x = maxXPos - ((xCount + 1) * 32.0f);
+					StageSelectSprite.tanim = &StageSelectAnim[chaoIcon];
+					StageSelectSprite.p = { x, yPos, 0.0f };
+					DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+					x += 4;
 					DrawString(std::to_string(itemCount), x, yPos + 24.0f, 0.25f);
+					xCount++;
+					itemCount--;
 				}
-				xCount++;
-				itemCount--;
 			}
-		}
-		StageSelectSprite.sx = 0.1875f;
-		StageSelectSprite.sy = 0.1875f;
-		if (xCount > 0)
-		{
-			xCount = 0;
-			yPos = 32.0f;
-		}
-		if (pipes.size() > 0)
-		{
-			itemCount = pipes.size();
-			for (int i = pipes.size() - 1; i >= 0; i--)
+			if (animalsTotal > 0)
 			{
-				int pipeIcon = *(char*)pipes[i] == 0x01 ? SSI_Pipe : SSI_PipeDisabled;
-				float x = maxXPos - ((xCount + 1 + hiddens.size()) * 24.0f);
-				StageSelectSprite.tanim = &StageSelectAnim[pipeIcon];
+				int animalsIcon = animalsFound == animalsTotal ? SSI_Animals : SSI_AnimalsDisabled;
+				float x = maxXPos - ((xCount + 1) * 32.0f);
+				StageSelectSprite.tanim = &StageSelectAnim[animalsIcon];
 				StageSelectSprite.p = { x, yPos, 0.0f };
 				DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
-				x += 2;
-				DrawString(std::to_string(itemCount), x, yPos + 18.0f, 0.1875f);
+				x += 4;
+				DrawString(std::to_string(animalsFound), x, yPos + 8.0f, 0.25f);
+				DrawString(std::to_string(animalsTotal), x, yPos + 24.0f, 0.25f);
 				xCount++;
-				itemCount--;
 			}
-			xCount = 0;
-		}
-		if (hiddens.size() > 0)
-		{
-			itemCount = hiddens.size();
-			for (int i = hiddens.size() - 1; i >= 0; i--)
+			if (bigs.size() > 0)
 			{
-				int hiddenIcon = *(char*)hiddens[i] == 0x01 ? SSI_Hidden : SSI_HiddenDisabled;
-				float x = maxXPos - ((xCount + 1) * 24.0f);
-				StageSelectSprite.tanim = &StageSelectAnim[hiddenIcon];
-				StageSelectSprite.p = { x, yPos, 0.0f };
-				DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
-				x += 2;
-				DrawString(std::to_string(itemCount), x, yPos + 18.0f, 0.1875f);
-				xCount++;
-				itemCount--;
-			}
-		}
-		if (pipes.size() > 0 || hiddens.size() > 0)
-		{
-			yPos += 24.0f;
-			xCount = 0;
-		}
-		if (omochao.size() > 0)
-		{
-			itemCount = omochao.size();
-			int rows = 0;
-			for (int i = itemCount; i > 0; i -= omochaoIconsPerRow)
-			{
-				rows++;
-			}
-			int numInRow = itemCount % omochaoIconsPerRow;
-			numInRow = numInRow == 0 ? omochaoIconsPerRow : numInRow;
-			yPos += (rows - 1) * 24.0f;
-			while (itemCount > 0)
-			{
-				int omochaoIcon = *(char*)omochao[itemCount - 1] == 0x01 ? SSI_Omochao : SSI_OmochaoDisabled;
-				float x = maxXPos - ((xCount + 1) * 24.0f);
-				StageSelectSprite.tanim = &StageSelectAnim[omochaoIcon];
-				StageSelectSprite.p = { x, yPos, 0.0f };
-				DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
-				x += 2;
-				DrawString(std::to_string(itemCount), x, yPos + 18.0f, 0.1875f);
-				xCount++;
-				itemCount--;
-				numInRow--;
-				if (numInRow <= 0)
+				itemCount = bigs.size();
+				for (int i = bigs.size() - 1; i >= 0; i--)
 				{
-					xCount = 0;
-					yPos -= 24.0f;
-					numInRow = omochaoIconsPerRow;
+					int bigIcon = bigs[i] == 0x01 ? SSI_Upgrade : SSI_UpgradeDisabled;
+					float x = maxXPos - ((xCount + 1) * 32.0f);
+					StageSelectSprite.tanim = &StageSelectAnim[bigIcon];
+					StageSelectSprite.p = { x, yPos, 0.0f };
+					DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+					x += 4;
+					if (bigs.size() > 1)
+					{
+						DrawString(std::to_string(itemCount), x, yPos + 24.0f, 0.25f);
+					}
+					xCount++;
+					itemCount--;
 				}
 			}
-			for (int omoRows = 0; omoRows < ((float)omochao.size() / (float)omochaoIconsPerRow) + 1; omoRows++)
+			StageSelectSprite.sx = 0.1875f;
+			StageSelectSprite.sy = 0.1875f;
+			if (xCount > 0)
+			{
+				xCount = 0;
+				yPos = 32.0f;
+			}
+			if (pipes.size() > 0)
+			{
+				itemCount = pipes.size();
+				for (int i = pipes.size() - 1; i >= 0; i--)
+				{
+					int pipeIcon = *(char*)pipes[i] == 0x01 ? SSI_Pipe : SSI_PipeDisabled;
+					float x = maxXPos - ((xCount + 1 + hiddens.size()) * 24.0f);
+					StageSelectSprite.tanim = &StageSelectAnim[pipeIcon];
+					StageSelectSprite.p = { x, yPos, 0.0f };
+					DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+					x += 2;
+					DrawString(std::to_string(itemCount), x, yPos + 18.0f, 0.1875f);
+					xCount++;
+					itemCount--;
+				}
+				xCount = 0;
+			}
+			if (hiddens.size() > 0)
+			{
+				itemCount = hiddens.size();
+				for (int i = hiddens.size() - 1; i >= 0; i--)
+				{
+					int hiddenIcon = *(char*)hiddens[i] == 0x01 ? SSI_Hidden : SSI_HiddenDisabled;
+					float x = maxXPos - ((xCount + 1) * 24.0f);
+					StageSelectSprite.tanim = &StageSelectAnim[hiddenIcon];
+					StageSelectSprite.p = { x, yPos, 0.0f };
+					DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+					x += 2;
+					DrawString(std::to_string(itemCount), x, yPos + 18.0f, 0.1875f);
+					xCount++;
+					itemCount--;
+				}
+			}
+			if (pipes.size() > 0 || hiddens.size() > 0)
 			{
 				yPos += 24.0f;
 				xCount = 0;
 			}
-		}
-		if (lifeBoxes.size() > 0)
-		{
-			itemCount = lifeBoxes.size();
-			int rows = 0;
-			for (int i = itemCount; i > 0; i -= itemBoxIconsPerRow)
+			if (omochao.size() > 0)
 			{
-				rows++;
-			}
-			int numInRow = itemCount % itemBoxIconsPerRow;
-			numInRow = numInRow == 0 ? itemBoxIconsPerRow : numInRow;
-			yPos += (rows - 1) * 24.0f;
-			while (itemCount > 0)
-			{
-				int lifeBoxIcon = lifeBoxes[itemCount - 1] == 0x01 ? SSI_Pipe : SSI_PipeDisabled;
-				float x = maxXPos - ((xCount + 1) * 24.0f);
-				StageSelectSprite.tanim = &StageSelectAnim[lifeBoxIcon];
-				StageSelectSprite.p = { x, yPos, 0.0f };
-				DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
-				x += 2;
-				DrawString(std::to_string(itemCount), x, yPos + 18.0f, 0.1875f);
-				xCount++;
-				itemCount--;
-				numInRow--;
-				if (numInRow <= 0)
+				itemCount = omochao.size();
+				int rows = 0;
+				for (int i = itemCount; i > 0; i -= omochaoIconsPerRow)
 				{
+					rows++;
+				}
+				int numInRow = itemCount % omochaoIconsPerRow;
+				numInRow = numInRow == 0 ? omochaoIconsPerRow : numInRow;
+				yPos += (rows - 1) * 24.0f;
+				while (itemCount > 0)
+				{
+					int omochaoIcon = *(char*)omochao[itemCount - 1] == 0x01 ? SSI_Omochao : SSI_OmochaoDisabled;
+					float x = maxXPos - ((xCount + 1) * 24.0f);
+					StageSelectSprite.tanim = &StageSelectAnim[omochaoIcon];
+					StageSelectSprite.p = { x, yPos, 0.0f };
+					DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+					x += 2;
+					DrawString(std::to_string(itemCount), x, yPos + 18.0f, 0.1875f);
+					xCount++;
+					itemCount--;
+					numInRow--;
+					if (numInRow <= 0)
+					{
+						xCount = 0;
+						yPos -= 24.0f;
+						numInRow = omochaoIconsPerRow;
+					}
+				}
+				for (int omoRows = 0; omoRows < ((float)omochao.size() / (float)omochaoIconsPerRow) + 1; omoRows++)
+				{
+					yPos += 24.0f;
 					xCount = 0;
-					yPos -= 24.0f;
-					numInRow = itemBoxIconsPerRow;
 				}
 			}
-			for (int lifeBoxRows = 0; lifeBoxRows < ceil((float)lifeBoxes.size() / (float)itemBoxIconsPerRow) + 1; lifeBoxRows++)
-			{
-				yPos += 24.0f;
-				xCount = 0;
-			}
 		}
-		if (itemBoxes.size() > 0)
+		if (!paginate || currentPage == 1)
 		{
-			itemCount = itemBoxes.size();
-			int rows = 0;
-			for (int i = itemCount; i > 0; i -= itemBoxIconsPerRow)
+			StageSelectSprite.sx = 0.1875f;
+			StageSelectSprite.sy = 0.1875f;
+			if (lifeBoxes.size() > 0)
 			{
-				rows++;
-			}
-			int numInRow = itemCount % itemBoxIconsPerRow;
-			numInRow = numInRow == 0 ? itemBoxIconsPerRow : numInRow;
-			yPos += (rows - 1) * 24.0f;
-			while (itemCount > 0)
-			{
-				int itemBoxIcon = itemBoxes[itemCount - 1] == 0x01 ? SSI_Hidden : SSI_HiddenDisabled;
-				float x = maxXPos - ((xCount + 1) * 24.0f);
-				StageSelectSprite.tanim = &StageSelectAnim[itemBoxIcon];
-				StageSelectSprite.p = { x, yPos, 0.0f };
-				DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
-				x += 2;
-				DrawString(std::to_string(itemCount), x, yPos + 18.0f, 0.1875f);
-				xCount++;
-				itemCount--;
-				numInRow--;
-				if (numInRow <= 0)
+				itemCount = lifeBoxes.size();
+				int rows = 0;
+				for (int i = itemCount; i > 0; i -= itemBoxIconsPerRow)
 				{
+					rows++;
+				}
+				int numInRow = itemCount % itemBoxIconsPerRow;
+				numInRow = numInRow == 0 ? itemBoxIconsPerRow : numInRow;
+				yPos += (rows - 1) * 24.0f;
+				while (itemCount > 0)
+				{
+					int lifeBoxIcon = lifeBoxes[itemCount - 1] == 0x01 ? SSI_Pipe : SSI_PipeDisabled;
+					float x = maxXPos - ((xCount + 1) * 24.0f);
+					StageSelectSprite.tanim = &StageSelectAnim[lifeBoxIcon];
+					StageSelectSprite.p = { x, yPos, 0.0f };
+					DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+					x += 2;
+					DrawString(std::to_string(itemCount), x, yPos + 18.0f, 0.1875f);
+					xCount++;
+					itemCount--;
+					numInRow--;
+					if (numInRow <= 0)
+					{
+						xCount = 0;
+						yPos -= 24.0f;
+						numInRow = itemBoxIconsPerRow;
+					}
+				}
+				for (int lifeBoxRows = 0; lifeBoxRows < ceil((float)lifeBoxes.size() / (float)itemBoxIconsPerRow) + 1; lifeBoxRows++)
+				{
+					yPos += 24.0f;
 					xCount = 0;
-					yPos -= 24.0f;
-					numInRow = itemBoxIconsPerRow;
 				}
 			}
-			for (int itemBoxRows = 0; itemBoxRows < ceil((float)itemBoxes.size() / (float)itemBoxIconsPerRow) + 1; itemBoxRows++)
+		}
+		if ((paginate && currentPage == 1) ||
+			(currentTileStageIndex == SSS_Route101 || currentTileStageIndex == SSS_Route280))
+		{
+			if (itemBoxes.size() > 0)
 			{
-				yPos += 24.0f;
-				xCount = 0;
+				itemCount = itemBoxes.size();
+				int rows = 0;
+				for (int i = itemCount; i > 0; i -= itemBoxIconsPerRow)
+				{
+					rows++;
+				}
+				int numInRow = itemCount % itemBoxIconsPerRow;
+				numInRow = numInRow == 0 ? itemBoxIconsPerRow : numInRow;
+				yPos += (rows - 1) * 24.0f;
+				while (itemCount > 0)
+				{
+					int itemBoxIcon = itemBoxes[itemCount - 1] == 0x01 ? SSI_Hidden : SSI_HiddenDisabled;
+					float x = maxXPos - ((xCount + 1) * 24.0f);
+					StageSelectSprite.tanim = &StageSelectAnim[itemBoxIcon];
+					StageSelectSprite.p = { x, yPos, 0.0f };
+					DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+					x += 2;
+					DrawString(std::to_string(itemCount), x, yPos + 18.0f, 0.1875f);
+					xCount++;
+					itemCount--;
+					numInRow--;
+					if (numInRow <= 0)
+					{
+						xCount = 0;
+						yPos -= 24.0f;
+						numInRow = itemBoxIconsPerRow;
+					}
+				}
+				for (int itemBoxRows = 0; itemBoxRows < ceil((float)itemBoxes.size() / (float)itemBoxIconsPerRow) + 1; itemBoxRows++)
+				{
+					yPos += 24.0f;
+					xCount = 0;
+				}
 			}
+		}
+		if (paginate)
+		{
+			StageSelectSprite.sx = 0.25f;
+			StageSelectSprite.sy = 0.25f;
+			// TODO: RAS: Add Y button here
+			int buttonIcon = (paginateTimer / 60) == 1 ? SSI_Emerald_None : SSI_Emerald_Cyan;
+			StageSelectSprite.tanim = &StageSelectAnim[buttonIcon];
+			StageSelectSprite.p = { maxXPos - ((xCount + 1) * 32.0f), yPos, 0.0f };
+			DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
 		}
 	}
 }
