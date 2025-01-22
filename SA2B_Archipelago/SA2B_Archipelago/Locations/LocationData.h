@@ -4167,16 +4167,18 @@ enum BigCheck
 struct BigCheckData
 {
     BigCheckData() {}
-    BigCheckData(int address, int addressBit, int levelID, NJS_VECTOR position) : Address(address), AddressBit(addressBit), LevelID(levelID), Position(position) {}
-    BigCheckData(int address, int addressBit, int levelID, NJS_VECTOR position, float range) : Address(address), AddressBit(addressBit), LevelID(levelID), Position(position), Range(range) {}
-    BigCheckData(int address, int addressBit, int levelID, NJS_VECTOR position, float range, bool teleAfter, NJS_VECTOR telePos) : Address(address), AddressBit(addressBit), LevelID(levelID), Position(position), Range(range), TeleAfter(teleAfter), TelePosition(telePos) {}
-    BigCheckData(int address, int addressBit, int levelID, NJS_VECTOR position, NJS_VECTOR hardPosition) : Address(address), AddressBit(addressBit), LevelID(levelID), Position(position), HardPosition(hardPosition) {}
-    BigCheckData(int address, int addressBit, int levelID, NJS_VECTOR position, NJS_VECTOR hardPosition, float range) : Address(address), AddressBit(addressBit), LevelID(levelID), Position(position), HardPosition(hardPosition), Range(range) {}
+    BigCheckData(int address, int addressBit, int levelID, bool showIndicator, NJS_VECTOR position) : Address(address), AddressBit(addressBit), LevelID(levelID), ShowIndicator(showIndicator), Position(position) {}
+    BigCheckData(int address, int addressBit, int levelID, bool showIndicator, NJS_VECTOR position, float range) : Address(address), AddressBit(addressBit), LevelID(levelID), ShowIndicator(showIndicator), Position(position), Range(range) {}
+    BigCheckData(int address, int addressBit, int levelID, bool showIndicator, NJS_VECTOR position, float range, bool teleAfter, NJS_VECTOR telePos) : Address(address), AddressBit(addressBit), LevelID(levelID), ShowIndicator(showIndicator), Position(position), Range(range), TeleAfter(teleAfter), TelePosition(telePos) {}
+    BigCheckData(int address, int addressBit, int levelID, bool showIndicator, NJS_VECTOR position, bool showIndicatorHard, NJS_VECTOR hardPosition) : Address(address), AddressBit(addressBit), LevelID(levelID), ShowIndicator(showIndicator), Position(position), ShowIndicatorHard(showIndicatorHard), HardPosition(hardPosition) {}
+    BigCheckData(int address, int addressBit, int levelID, bool showIndicator, NJS_VECTOR position, bool showIndicatorHard, NJS_VECTOR hardPosition, float range) : Address(address), AddressBit(addressBit), LevelID(levelID), ShowIndicator(showIndicator), Position(position), ShowIndicatorHard(showIndicatorHard), HardPosition(hardPosition), Range(range) {}
 
     int Address = 0x00;
     int AddressBit = 0x00;
     int LevelID = 0x00;
+    bool ShowIndicator = false;
     NJS_VECTOR Position = { 0, 0, 0 };
+    bool ShowIndicatorHard = false;
     NJS_VECTOR HardPosition = { 0, 0, 0 };
     bool TeleAfter = false;
     NJS_VECTOR TelePosition = { 0, 0, 0 };

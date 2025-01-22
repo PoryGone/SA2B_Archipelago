@@ -223,13 +223,10 @@ ObjectMaster* LoadBig(NJS_VECTOR* position)
 			if (ent_data_2)
 			{
 				obj->EntityData2 = (UnknownData2*)ent_data_2;
+				position->y += 8.0f;
 				ent_data_1->Position = *position;
 				ent_data_1->Rotation = MainCharObj1[0]->Rotation;
 				ent_data_1->Scale.x = 2;
-				//ent_data_1->Scale.y = 0.5;
-				//ent_data_1->Scale.z = 0.5;
-				//ent_data_1->NextAction |= 3; // force Omochao to follow the player
-				//ent_data_1->Action = 5; // force Omochao into the talking action
 				return obj;
 			}
 			else
@@ -352,22 +349,27 @@ void LocationManager::OnInputFunction()
 								relevantPos = checkData.HardPosition;
 							}
 
-							// TODO: REPLACE WITH BETTER INDICATOR
-							if (this->_BigIndicators.find(i) == this->_BigIndicators.end())
+							if ((checkData.ShowIndicator && this->_logicDifficulty == 0) ||
+								(checkData.ShowIndicator && this->_logicDifficulty > 0 &&
+									(checkData.HardPosition.x + checkData.HardPosition.y + checkData.HardPosition.z) == 0.0f) ||
+								(checkData.ShowIndicatorHard && this->_logicDifficulty > 0))
 							{
-								ObjectMaster* newBig = LoadBig(&relevantPos);
-								this->_BigIndicators[i] = newBig;
-							}
-							else if (this->_BigIndicators[i] != nullptr && this->_BigIndicators[i]->Data1.Entity != nullptr)
-							{
-								Angle newZrot = this->_BigIndicators[i]->Data1.Entity->Rotation.z + 1;
-								newZrot = newZrot % 360;
-								this->_BigIndicators[i]->Data1.Entity->Rotation.z = newZrot;
-							}
-							else
-							{
-								ObjectMaster* newBig = LoadBig(&relevantPos);
-								this->_BigIndicators[i] = newBig;
+								if (this->_BigIndicators.find(i) == this->_BigIndicators.end())
+								{
+									ObjectMaster* newBig = LoadBig(&relevantPos);
+									this->_BigIndicators[i] = newBig;
+								}
+								else if (this->_BigIndicators[i] != nullptr && this->_BigIndicators[i]->Data1.Entity != nullptr)
+								{
+									Angle newZrot = this->_BigIndicators[i]->Data1.Entity->Rotation.z + 1;
+									newZrot = newZrot % 360;
+									this->_BigIndicators[i]->Data1.Entity->Rotation.z = newZrot;
+								}
+								else
+								{
+									ObjectMaster* newBig = LoadBig(&relevantPos);
+									this->_BigIndicators[i] = newBig;
+								}
 							}
 
 							if (dist(relevantPos, MainCharObj1[0]->Position) < checkData.Range)
@@ -392,12 +394,14 @@ void LocationManager::OnInputFunction()
 						{
 							if (this->_BigIndicators.find(i) != this->_BigIndicators.end())
 							{
-								DeleteObject_(this->_BigIndicators[i]);
+								if (this->_BigIndicators[i] != nullptr)
+								{
+									this->_BigIndicators[i]->MainSub = DeleteObject_;
+								}
 								this->_BigIndicators.erase(i);
 							}
 						}
 					}
-
 				}
 			}
 		}
@@ -416,6 +420,7 @@ void LocationManager::OnFrameFunction()
 
 	this->OnFrameChaoGarden();
 	this->OnFrameRouteBalloons();
+	this->OnFrameBig();
 
 	this->_timer++;
 
@@ -432,7 +437,6 @@ void LocationManager::OnFrameFunction()
 		this->OnFrameOmochao();
 		this->OnFrameAnimals();
 		this->OnFrameItemBoxes();
-		this->OnFrameBig();
 		this->OnFrameKartRace();
 	}
 }
