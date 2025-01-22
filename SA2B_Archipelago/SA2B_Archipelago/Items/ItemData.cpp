@@ -273,4 +273,12 @@ std::map<std::string, ItemValue> item_name_to_value = {
 
     // Common other trap names
     {"Stun Trap",               ItemValue::IV_TimeStopTrap},
+    {"Freeze Trap",             ItemValue::IV_TimeStopTrap},
+    {"Frozen Trap",             ItemValue::IV_TimeStopTrap},
+    {"Paralyze Trap",           ItemValue::IV_TimeStopTrap},
+    {"Slowness Trap",           ItemValue::IV_SlowTrap},
+    {"Reversal Trap",           ItemValue::IV_ReverseTrap},
+    {"Fuzzy Trap",              ItemValue::IV_ConfuseTrap},
+    {"Confusion Trap",          ItemValue::IV_ConfuseTrap},
+    {"Confound Trap",           ItemValue::IV_ConfuseTrap},
 };
