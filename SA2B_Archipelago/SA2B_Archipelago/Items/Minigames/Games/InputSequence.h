@@ -24,14 +24,20 @@ private:
 	void UpdateTimerFill();
 	void OnFramePlayer(MinigameManagerData data);
 
-	InputSequenceState state;
+	InputSequenceState localState;
+	int endingTimer = 150;
+	SpriteNode* resultNode;
+
 	Timer timer;
 	float guessTime = 10.0f;
 
 	int selectedIndex = 0;
 	std::vector<RawInputFlags> chosenInputs;
 	std::vector<SpriteNode*> dPads;
+	std::vector<SpriteNode*> inputResults;
 
 	SpriteNode* timerBarBG;
 	SpriteNode* timerBar;
+	SpriteNode* timerBomb;
+	SpriteNode* timerSonic;
 };
