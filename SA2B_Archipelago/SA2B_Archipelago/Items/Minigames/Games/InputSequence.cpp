@@ -183,6 +183,10 @@ void InputSequence::UpdateTimerFill()
 
 void InputSequence::CreateHierarchy(MinigameManagerData data)
 {
+	float bg_x = this->chosenInputs.size() * 64.0f;
+	SpriteNode* bg_box = data.hierarchy->CreateNode("Inputs Background", data.icons->GetAnim(MGI_White_Box), { bg_x, 60.0f }, { 320.0f, 240.0f });
+	bg_box->color = { 0.5f, 0.0f, 0.0f, 0.0f };
+
 	for (int i = 0; i < this->chosenInputs.size(); i++)
 	{
 		float x = (320.0f - (this->chosenInputs.size() - 1) * 32.0f) + (i * 64.0f);
@@ -193,8 +197,6 @@ void InputSequence::CreateHierarchy(MinigameManagerData data)
 		result->SetEnabled(false);
 		this->inputResults.push_back(result);
 	}
-	
-	float xPos = 180.0f;
 	this->timerBarBG = data.hierarchy->CreateNode("Timer_Background", data.icons->GetAnim(MGI_White_Box), { 200.0f, 10.0f }, { 320.0f, 106.0f });
 	this->timerBarBG->color = { 1.0f, 0.0f, 0.0f, 0.0f };
 	this->timerBar = data.hierarchy->CreateNode("Timer_Fill", data.icons->GetAnim(MGI_White_Box), { 200.0f, 10.0f }, { 320.0f, 106.0f }, this->timerBarBG);
@@ -202,6 +204,8 @@ void InputSequence::CreateHierarchy(MinigameManagerData data)
 	this->timerBarBG->SetEnabled(true);
 	this->timerBomb = data.hierarchy->CreateNode("Timer_Sonic", data.icons->GetAnim(MGI_Sonic_Head), { 32.0f, 32.0f }, { 220.0f, 80.0f }, this->timerBarBG);
 	this->timerBomb = data.hierarchy->CreateNode("Timer_Bomb", data.icons->GetAnim(MGI_Bomb), { 32.0f, 32.0f }, { 420.0f, 80.0f }, this->timerBarBG);
+	Wiggle* bombWiggle = new Wiggle(RandomFloat(0.45f, 0.65f), -25.0f, 25.0f, true);
+	timerBomb->components.push_back(bombWiggle);
 
 	this->resultNode = data.hierarchy->CreateNode("Result", data.icons->GetAnim(MGI_Green_Check), { 128, 128 },
 													{ data.icons->xCenter, data.icons->yCenter });

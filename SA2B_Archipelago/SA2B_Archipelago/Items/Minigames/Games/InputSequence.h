@@ -2,6 +2,7 @@
 #include "../MinigameBase.h"
 #include "../MinigameUtilities.h"
 #include "../Components/TextBox.h"
+#include "../Components/Wiggle.h"
 #include <array>
 
 class InputSequence : public MinigameBase
