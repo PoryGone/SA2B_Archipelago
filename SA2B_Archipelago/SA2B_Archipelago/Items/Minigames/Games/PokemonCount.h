@@ -9,14 +9,12 @@
 #include "PokemonData.h"
 
 
-// Sound Data
-#define POKEMON_COUNT_SOUND_BEGIN    0x8019
-
 enum PokemonCountState
 {
 	PCS_Parade = 0,
 	PCS_AnswerTime,
-	PCS_Results,
+	PCS_Win,
+	PCS_Lose,
 };
 
 struct PokemonSpawn
@@ -38,17 +36,30 @@ class PokemonCount : public MinigameBase
 public:
 	void OnGameStart(MinigameManagerData data) override;
 	void OnFrame(MinigameManagerData data) override;
+	void OnCleanup(MinigameManagerData data) override;
 
+private:
 	void CreateHierarchy(MinigameManagerData data);
-
+	void UpdateTimerFill();
 	void OnFramePlayer(MinigameManagerData data);
 	void OnFrameSimulate(MinigameManagerData data);
 
-private:
+	int endingTimer = 150;
+	SpriteNode* resultNode;
+	std::vector<SpriteNode*> inputResults;
+
+	SpriteNode* timerBarBG;
+	SpriteNode* timerBar;
+	SpriteNode* timerBomb;
+	SpriteNode* timerSonic;
+
+	Timer timer;
+	float guessTime = 7.0f;
+
 	int correctAnswer = 0;
 	int correctAnswerSlot = 0;
 
-	PokemonCountState state = PokemonCountState::PCS_Parade;
+	PokemonCountState localState = PokemonCountState::PCS_Parade;
 
 	RawInputFlags anyDPad = RIF_Up | RIF_Down | RIF_Left | RIF_Right;
 

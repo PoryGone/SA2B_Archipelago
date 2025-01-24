@@ -2,23 +2,42 @@
 #include "../MinigameBase.h"
 #include "../MinigameUtilities.h"
 #include "../Components/TextBox.h"
-
-
-// Sound Data
-#define MATH_QUIZ_SOUND_BEGIN    0x8019
+#include "../Components/Wiggle.h"
 
 
 class MathQuiz : public MinigameBase
 {
 public:
+	enum MathQuizState
+	{
+		MQS_Start,
+		MQS_InGame,
+		MQS_Win,
+		MQS_Lose,
+	};
+
 	void OnGameStart(MinigameManagerData data) override;
 	void OnFrame(MinigameManagerData data) override;
-
-	void CreateHierarchy(MinigameManagerData data);
-
-	void OnFramePlayer(MinigameManagerData data);
+	void OnCleanup(MinigameManagerData data) override;
 
 private:
+	void CreateHierarchy(MinigameManagerData data);
+	void UpdateTimerFill();
+	void OnFramePlayer(MinigameManagerData data);
+
+	MathQuizState localState;
+	int endingTimer = 150;
+	SpriteNode* resultNode;
+	std::vector<SpriteNode*> inputResults;
+
+	SpriteNode* timerBarBG;
+	SpriteNode* timerBar;
+	SpriteNode* timerBomb;
+	SpriteNode* timerSonic;
+
+	Timer timer;
+	float guessTime = 10.0f;
+
 	int correctAnswerSlot = 0;
 
 	RawInputFlags anyDPad = RIF_Up | RIF_Down | RIF_Left | RIF_Right;

@@ -2,10 +2,8 @@
 #include "../MinigameBase.h"
 #include "../MinigameUtilities.h"
 #include "../Components/TextBox.h"
+#include "../Components/Wiggle.h"
 
-
-// Sound Data
-#define TRIVIA_SOUND_BEGIN    0x8019
 
 struct TriviaQuestion
 {
@@ -29,14 +27,36 @@ struct TriviaQuestion
 class Trivia : public MinigameBase
 {
 public:
+	enum TriviaState
+	{
+		TS_Start,
+		TS_InGame,
+		TS_Win,
+		TS_Lose,
+	};
+
 	void OnGameStart(MinigameManagerData data) override;
 	void OnFrame(MinigameManagerData data) override;
-
-	void CreateHierarchy(MinigameManagerData data);
-
-	void OnFramePlayer(MinigameManagerData data);
+	void OnCleanup(MinigameManagerData data) override;
 
 private:
+	void CreateHierarchy(MinigameManagerData data);
+	void UpdateTimerFill();
+	void OnFramePlayer(MinigameManagerData data);
+
+	TriviaState localState;
+	int endingTimer = 150;
+	SpriteNode* resultNode;
+	std::vector<SpriteNode*> inputResults;
+
+	SpriteNode* timerBarBG;
+	SpriteNode* timerBar;
+	SpriteNode* timerBomb;
+	SpriteNode* timerSonic;
+
+	Timer timer;
+	float guessTime = 10.0f;
+
 	int correctAnswerSlot = 0;
 
 	RawInputFlags anyDPad = RIF_Up | RIF_Down | RIF_Left | RIF_Right;

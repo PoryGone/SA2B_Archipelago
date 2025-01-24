@@ -15,24 +15,72 @@
 void PokemonCount::OnGameStart(MinigameManagerData data)
 {
 	this->currentState = MinigameState::MGS_InProgress;
+	this->localState = PCS_Parade;
+	this->endingTimer = 150;
+	data.timers->push_back(&this->timer);
 
 	this->CreateHierarchy(data);
 
-	PlaySoundProbably(POKEMON_COUNT_SOUND_BEGIN, 0, 0, 0);
+	PlaySoundProbably((int)MinigameSounds::LevelStart, 0, 0, 0);
 }
 
 void PokemonCount::OnFrame(MinigameManagerData data)
 {
-	if (data.managerState == MinigameState::MGS_InProgress)
+	if (data.managerState != MinigameState::MGS_InProgress)
 	{
-		if (this->state == PokemonCountState::PCS_AnswerTime)
+		return;
+	}
+
+	if (this->localState == PokemonCountState::PCS_Parade)
+	{
+		this->OnFrameSimulate(data);
+	}
+
+	switch (this->localState)
+	{
+	case PCS_Parade:
+		this->OnFrameSimulate(data);
+		break;
+	case PCS_AnswerTime:
+		this->UpdateTimerFill();
+		if (timer.IsElapsed())
+		{
+			PlaySoundProbably((int)MinigameSounds::Explosion, 0, 0, 0);
+			this->localState = PCS_Lose;
+		}
+		else
 		{
 			this->OnFramePlayer(data);
 		}
-		else if (this->state == PokemonCountState::PCS_Parade)
+		break;
+	case PCS_Win:
+		this->endingTimer--;
+
+		if (this->endingTimer == 90)
 		{
-			this->OnFrameSimulate(data);
+			PlaySoundProbably((int)MinigameSounds::RankReveal, 0, 0, 0);
+			this->resultNode->anim = data.icons->GetAnim(MGI_Green_Check);
+			this->resultNode->SetEnabled(true);
 		}
+		else if (this->endingTimer <= 0)
+		{
+			this->currentState = MinigameState::MGS_Victory;
+		}
+		return;
+	case PCS_Lose:
+		this->endingTimer--;
+
+		if (this->endingTimer == 90)
+		{
+			PlaySoundProbably((int)MinigameSounds::RankReveal, 0, 0, 0);
+			this->resultNode->anim = data.icons->GetAnim(MGI_F_Rank);
+			this->resultNode->SetEnabled(true);
+		}
+		else if (this->endingTimer <= 0)
+		{
+			this->currentState = MinigameState::MGS_Loss;
+		}
+		return;
 	}
 }
 
@@ -61,14 +109,19 @@ void PokemonCount::OnFramePlayer(MinigameManagerData data)
 		return;
 	}
 
-	// TODO: Change to results state here and use that to display answer result, then send victory/loss later
 	if (chosenAnswer == this->correctAnswerSlot)
 	{
-		this->currentState = MinigameState::MGS_Victory;
+		this->inputResults[chosenAnswer - 1]->anim = data.icons->GetAnim(MGI_Green_Circle);
+		this->inputResults[chosenAnswer - 1]->SetEnabled(true);
+		PlaySoundProbably((int)MinigameSounds::Checkpoint, 0, 0, 0);
+		this->localState = PCS_Win;
 	}
 	else
 	{
-		this->currentState = MinigameState::MGS_Loss;
+		this->inputResults[chosenAnswer - 1]->anim = data.icons->GetAnim(MGI_Red_X);
+		this->inputResults[chosenAnswer - 1]->SetEnabled(true);
+		PlaySoundProbably((int)MinigameSounds::Explosion, 0, 0, 0);
+		this->localState = PCS_Lose;
 	}
 }
 
@@ -101,15 +154,37 @@ void PokemonCount::OnFrameSimulate(MinigameManagerData data)
 	{
 		// Time for the answers
 		this->answerHolderNode->SetEnabled(true);
-		this->state = PokemonCountState::PCS_AnswerTime;
+		this->timer.Start(this->guessTime);
+		this->localState = PokemonCountState::PCS_AnswerTime;
 	}
+}
+
+void PokemonCount::OnCleanup(MinigameManagerData data)
+{
+	this->inputResults.clear();
+}
+
+void PokemonCount::UpdateTimerFill()
+{
+	float amount = this->timer.TimeRemaining() / this->guessTime;
+	amount = amount < 0.0f ? 0.0f : amount;
+	amount = amount > 1.0f ? 1.0f : amount;
+	float width = this->timerBarBG->displaySize.x * amount;
+	float bgX = -(this->timerBarBG->displaySize.x * 0.5f);
+	NJS_POINT3 pos = { bgX + width * 0.5f, 0.0f };
+	this->timerBar->displaySize.x = width;
+	this->timerBar->SetPosition(pos);
+
+	NJS_POINT3 bombPos = this->timerBomb->GetPosition();
+	bombPos.x = bgX + width;
+	this->timerBomb->SetPosition(bombPos);
 }
 
 void PokemonCount::CreateHierarchy(MinigameManagerData data)
 {
 	this->pokemonSpawns.clear();
 	this->questionOptions.clear();
-	this->state = PokemonCountState::PCS_Parade;
+	this->localState = PokemonCountState::PCS_Parade;
 
 	float x = -60.0f;
 	float y = 80.0f;
@@ -246,4 +321,32 @@ void PokemonCount::CreateHierarchy(MinigameManagerData data)
 	this->answer4Node->renderComponents.push_back(this->answer4Box);
 
 	this->answerHolderNode->SetEnabled(false);
+
+	// Timer
+	this->timerBarBG = data.hierarchy->CreateNode("Timer_Background", data.icons->GetAnim(MGI_White_Box), { 200.0f, 10.0f }, { 320.0f, 72.0f });
+	this->timerBarBG->color = { 1.0f, 0.0f, 0.0f, 0.0f };
+	this->timerBar = data.hierarchy->CreateNode("Timer_Fill", data.icons->GetAnim(MGI_White_Box), { 200.0f, 10.0f }, { 320.0f, 72.0f }, this->timerBarBG);
+	this->timerBar->color = { 1.0f, 0.0f, 1.0f, 0.0f };
+	this->timerBarBG->SetEnabled(true);
+	this->timerBomb = data.hierarchy->CreateNode("Timer_Sonic", data.icons->GetAnim(MGI_Sonic_Head), { 32.0f, 32.0f }, { 220.0f, 46.0f }, this->timerBarBG);
+	this->timerBomb = data.hierarchy->CreateNode("Timer_Bomb", data.icons->GetAnim(MGI_Bomb), { 32.0f, 32.0f }, { 420.0f, 46.0f }, this->timerBarBG);
+	Wiggle* bombWiggle = new Wiggle(RandomFloat(0.45f, 0.65f), -25.0f, 25.0f, true);
+	timerBomb->components.push_back(bombWiggle);
+
+	SpriteNode* result_1 = data.hierarchy->CreateNode("Input_Result_1", data.icons->GetAnim(MGI_Green_Circle), { 32.0f, 32.0f }, this->answer1Box->CalculateTextBounds(*this->answer1Node).center);
+	SpriteNode* result_2 = data.hierarchy->CreateNode("Input_Result_2", data.icons->GetAnim(MGI_Green_Circle), { 32.0f, 32.0f }, this->answer2Box->CalculateTextBounds(*this->answer2Node).center);
+	SpriteNode* result_3 = data.hierarchy->CreateNode("Input_Result_3", data.icons->GetAnim(MGI_Green_Circle), { 32.0f, 32.0f }, this->answer3Box->CalculateTextBounds(*this->answer3Node).center);
+	SpriteNode* result_4 = data.hierarchy->CreateNode("Input_Result_4", data.icons->GetAnim(MGI_Green_Circle), { 32.0f, 32.0f }, this->answer4Box->CalculateTextBounds(*this->answer4Node).center);
+	result_1->SetEnabled(false);
+	result_2->SetEnabled(false);
+	result_3->SetEnabled(false);
+	result_4->SetEnabled(false);
+	this->inputResults.push_back(result_1);
+	this->inputResults.push_back(result_2);
+	this->inputResults.push_back(result_3);
+	this->inputResults.push_back(result_4);
+
+	this->resultNode = data.hierarchy->CreateNode("Result", data.icons->GetAnim(MGI_Green_Check), { 128, 128 },
+		{ data.icons->xCenter, data.icons->yCenter });
+	this->resultNode->SetEnabled(false);
 }

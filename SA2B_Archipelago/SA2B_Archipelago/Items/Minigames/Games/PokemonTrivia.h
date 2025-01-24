@@ -2,12 +2,10 @@
 #include "../MinigameBase.h"
 #include "../MinigameUtilities.h"
 #include "../Components/TextBox.h"
+#include "../Components/Wiggle.h"
 #include "PokemonData.h"
 #include "Trivia.h"
 
-
-// Sound Data
-#define POKEMON_TRIVIA_SOUND_BEGIN    0x8019
 
 struct PokemonTriviaQuestion: public TriviaQuestion
 {
@@ -40,14 +38,36 @@ struct PokemonTriviaQuestion: public TriviaQuestion
 class PokemonTrivia : public Trivia
 {
 public:
+	enum PokemonTriviaState
+	{
+		PTS_Start,
+		PTS_InGame,
+		PTS_Win,
+		PTS_Lose,
+	};
+
 	void OnGameStart(MinigameManagerData data) override;
 	void OnFrame(MinigameManagerData data) override;
-
-	void CreateHierarchy(MinigameManagerData data);
-
-	void OnFramePlayer(MinigameManagerData data);
+	void OnCleanup(MinigameManagerData data) override;
 
 private:
+	void CreateHierarchy(MinigameManagerData data);
+	void UpdateTimerFill();
+	void OnFramePlayer(MinigameManagerData data);
+
+	PokemonTriviaState localState;
+	int endingTimer = 150;
+	SpriteNode* resultNode;
+	std::vector<SpriteNode*> inputResults;
+
+	SpriteNode* timerBarBG;
+	SpriteNode* timerBar;
+	SpriteNode* timerBomb;
+	SpriteNode* timerSonic;
+
+	Timer timer;
+	float guessTime = 10.0f;
+
 	int correctAnswerSlot = 0;
 
 	RawInputFlags anyDPad = RIF_Up | RIF_Down | RIF_Left | RIF_Right;
