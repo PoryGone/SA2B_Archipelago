@@ -1,6 +1,7 @@
 #pragma once
 #include "../Backend/SpriteNode.h"
 #include "../TextDisplayData.h"
+#include "../Backend/MinigameBackend.h"
 #include <string>
 
 enum TextAlignment
@@ -34,6 +35,7 @@ public:
 	void OnRender(SpriteNode& node, NJS_SPRITE& sprite) override;
 	void UpdateText(std::string newText);
 	void UpdateFontSize(float newSize);
+	BoundingBox CalculateTextBounds(SpriteNode& node);
 
 	float GetHeight();
 

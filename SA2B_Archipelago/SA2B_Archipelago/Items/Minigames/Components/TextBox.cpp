@@ -176,3 +176,60 @@ void TextBox::UpdateLineData(SpriteNode& node)
 
 	isDirty = false;
 }
+
+BoundingBox TextBox::CalculateTextBounds(SpriteNode& node)
+{
+	if (isDirty)
+	{
+		UpdateLineData(node);
+	}
+	if (lines.size() == 0)
+	{
+		return BoundingBox(node.GetPositionGlobal(), {});
+	}
+
+	float rotation = node.GetRotationGlobal();
+	NJS_POINT3 right = Point3RotateAround({ 1.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, rotation);
+	NJS_POINT3 down = Point3RotateAround({ 0.0f, 1.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, rotation);
+	NJS_POINT3 pos = node.GetPositionGlobal();
+	pos.x -= node.displaySize.x * 0.5f;
+	pos.y -= (node.displaySize.y * 0.5f) - (fontSize * 0.5);
+	pos = Point3RotateAround(pos, node.GetPositionGlobal(), rotation);
+
+	BoundingBox box = BoundingBox(pos, {});
+
+	int l = 0;
+	while (l < lines.size())
+	{
+		NJS_POINT3 linePos = Point3Add(pos, Point3Scale(down, l * fontSize));
+		linePos = Point3Add(linePos, Point3Scale(right, lines[l].offset));
+		if (l == 0)
+		{
+			box = BoundingBox(linePos, {});
+		}
+		for (int i = lines[l].startIndex; i < lines[l].lastIndex; i++)
+		{
+			if (text[i] >= ' ' && text[i] <= '~')
+			{
+				TextDataAndAnim charData = textData->GetAnimAndData(text[i]);
+				float charScale = charData.data->height / 42.0f;
+				float sX = (fontSize / (float)charData.anim->sx) * charData.data->ratio * charScale;
+				float sY = fontSize / (float)charData.anim->sy * charScale;
+				float cWidth = fontSize * charData.data->ratio * charScale;
+				if (i == lines[l].startIndex)
+				{
+					box.Add(linePos);
+					box.Add(Point3Add(linePos, Point3Scale(down, fontSize)));
+				}
+				linePos = Point3Add(linePos, Point3Scale(right, cWidth));
+				if (i == lines[l].lastIndex - 1)
+				{
+					box.Add(linePos);
+					box.Add(Point3Add(linePos, Point3Scale(down, fontSize)));
+				}
+			}
+		}
+		l++;
+	}
+	return box;
+}
