@@ -41,9 +41,63 @@ void StatsManager::DeathLinkReceived()
 	apStats.ReceivedDeaths++;
 }
 
+void StatsManager::RingLinkSent(int amount)
+{
+	if (amount < 0)
+	{
+		apStats.NegativeRingsSent += abs(amount);
+	}
+	else
+	{
+		apStats.PositiveRingsSent += abs(amount);
+	}
+}
+
+void StatsManager::RingLinkReceived(int amount)
+{
+	if (amount < 0)
+	{
+		apStats.NegativeRingsReceived += abs(amount);
+	}
+	else
+	{
+		apStats.PositiveRingsReceived += abs(amount);
+	}
+}
+
+void StatsManager::TrapLinkSent()
+{
+	apStats.SentTrapLinks++;
+}
+
+void StatsManager::TrapLinkReceived()
+{
+	apStats.ReceivedTrapLinks++;
+}
+
+void StatsManager::MinigameWon()
+{
+	apStats.MinigamesWon++;
+}
+
+void StatsManager::MinigameLost()
+{
+	apStats.MinigamesLost++;
+}
+
 void StatsManager::DeathLinkActive(bool isActive)
 {
 	_deathLinkActive = isActive;
+}
+
+void StatsManager::RingLinkActive(bool isActive)
+{
+	_ringLinkActive = isActive;
+}
+
+void StatsManager::TrapLinkActive(bool isActive)
+{
+	_trapLinkActive = isActive;
 }
 
 void StatsManager::HintMonitorUsed()
@@ -146,6 +200,7 @@ void StatsManager::Victory()
 	}
 	creditsEntries.emplace_back(CreateStatsEntry("TOTAL TIME", FormatGameTime(TimeTotal)));
 
+	// TODO: RAS: Add new fields to credits
 
 	CreditsManager::GetInstance().UpdateCredits(creditsEntries);
 }

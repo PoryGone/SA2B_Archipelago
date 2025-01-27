@@ -19,6 +19,7 @@
 #include "Games/Snake.h"
 #include "Games/InputSequence.h"
 #include "../ItemData.h"
+#include "../../Aesthetics/StatsManager.h"
 #include <ctime>
 
 

@@ -298,6 +298,8 @@ void MinigameManager::HandleVictory()
 		ItemManager::getInstance().HandleJunk(itemToSend);
 		ItemManager::getInstance().HandleMinigameCompletion(this->currentMinigameItem);
 	}
+
+	StatsManager::GetInstance().MinigameWon();
 }
 
 void MinigameManager::HandleLoss()
@@ -311,6 +313,8 @@ void MinigameManager::HandleLoss()
 		ArchipelagoManager::getInstance().SetDeathCause((DeathCause)this->currentMinigameItem);
 		ArchipelagoManager::getInstance().AP_KillPlayer();
 	}
+
+	StatsManager::GetInstance().MinigameLost();
 }
 
 void MinigameManager::SetDifficulty(int difficulty)

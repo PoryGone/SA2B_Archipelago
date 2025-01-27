@@ -391,6 +391,8 @@ void SA2_HandleBouncedPacket(AP_Bounce bouncePacket)
 
                 // Make sure you don't re-link out your received link
                 apm->_lastSentRingCount += realDiff;
+
+                StatsManager::GetInstance().RingLinkReceived(realDiff);
             }
         }
         else if (!strcmp((*bouncePacket.tags)[i].c_str(), "TrapLink"))
@@ -413,6 +415,8 @@ void SA2_HandleBouncedPacket(AP_Bounce bouncePacket)
             ItemManager* itemManager = &ItemManager::getInstance();
 
             itemManager->HandleTrapLink(trap_name, message);
+
+            StatsManager::GetInstance().TrapLinkReceived();
         }
     }
 }
@@ -468,6 +472,10 @@ void SA2_SetRingLink(int ringLinkActive)
     ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
 
     apm->SetRingLink(ringLinkActive != 0);
+
+    StatsManager* stats = &StatsManager::GetInstance();
+
+    stats->RingLinkActive(ringLinkActive != 0);
 }
 
 void SA2_SetTrapLink(int trapLinkActive)
@@ -475,6 +483,10 @@ void SA2_SetTrapLink(int trapLinkActive)
     ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
 
     apm->SetTrapLink(trapLinkActive != 0);
+
+    StatsManager* stats = &StatsManager::GetInstance();
+
+    stats->TrapLinkActive(trapLinkActive != 0);
 }
 
 void SA2_SetGoal(int goal)
@@ -1471,6 +1483,8 @@ void ArchipelagoManager::TrapLinkSend(std::string trapName)
     std::string message = "Linked " + trapName + " sent";
 
     MessageQueue::GetInstance().AddMessage(message.c_str());
+
+    StatsManager::GetInstance().TrapLinkSent();
 }
 
 // RingLink Functions
@@ -1522,6 +1536,8 @@ void ArchipelagoManager::OnFrameRingLink()
             std::vector<std::string> tags = { std::string("RingLink") };
             b.tags = &tags;
             AP_SendBounce(b);
+
+            StatsManager::GetInstance().RingLinkSent(ringLinkAmount);
         }
     }
     else
