@@ -704,8 +704,14 @@ void UpdateChaosEmeraldIcons()
 		{
 			int emeraldIcon = *(char*)chaosEmeralds[i] == 0x01 ? SSI_Emerald_White + i : SSI_Emerald_None;
 			float x = 208.0f + (i * 32.0f);
+			float y = 380.0f;
+			if (GameState == GameStates::GameStates_Pause && GameMode == GameMode::GameMode_Level)
+			{
+				x = (i * 32.0f);
+				y = 448.0f;
+			}
 			StageSelectSprite.tanim = &StageSelectAnim[emeraldIcon];
-			StageSelectSprite.p = { x, 380.0f, 0.0f };
+			StageSelectSprite.p = { x, y, 0.0f };
 			DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
 		}
 	}
@@ -723,6 +729,11 @@ void UpdateChaosEmeraldIcons()
 			int minigameIcon = minigamesWon >= itemMan->RequiredMinigames ? SSI_Bat + (i * 2) : SSI_Bat + (i * 2) + 1;
 			float x = (320.0f - (minigames.size() - 1) * 16.0f) + (i * 32.0f);
 			float y = 380.0f;
+			if (GameState == GameStates::GameStates_Pause && GameMode == GameMode::GameMode_Level)
+			{
+				x = (i * 32.0f);
+				y = 448.0f;
+			}
 			StageSelectSprite.tanim = &StageSelectAnim[minigameIcon];
 			StageSelectSprite.p = { x, y, 0.0f };
 			DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
@@ -1029,6 +1040,7 @@ void DrawUpgradeIcon_IL(ObjectMaster* obj)
 			UpdateMissionInLevel();
 		}
 		UpdateLevelCheckIcons();
+		UpdateChaosEmeraldIcons();
 	}
 
 	if (GameMode == GameMode::GameMode_Level)
