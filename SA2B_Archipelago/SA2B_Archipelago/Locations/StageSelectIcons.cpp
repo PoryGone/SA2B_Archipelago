@@ -50,7 +50,8 @@ std::map<char, NumberDisplayData> NumberMap = {
 };
 
 static const int Anim_Length = 29;
-static const int Stage_Anim_Length = 120;
+static const int Stage_Anim_Length = 153;
+static const int Stage_Tex_Length = 122;
 static const int Num_Anim_Length = 24;
 
 static NJS_TEXNAME UpgradeIconsTexName[Anim_Length];
@@ -60,7 +61,171 @@ static NJS_TEXNAME NumTexName[Num_Anim_Length];
 
 static NJS_TEXANIM UpgradeIconsAnim[Anim_Length];
 static NJS_TEXANIM UpgradeIconsAnim_Inactive[Anim_Length];
-static NJS_TEXANIM StageSelectAnim[Stage_Anim_Length];
+static NJS_TEXANIM StageSelectAnim[Stage_Anim_Length] = {
+	//Padding
+	{40, 32, 20, 16, 0x0A, 0x10, 0x34, 0x30, 1, 0},
+	//Checks
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 0, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 1, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 2, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 3, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 4, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 5, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 6, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 7, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 8, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 9, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 10, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 11, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 12, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 13, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 14, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 15, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 16, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 17, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 18, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 19, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 20, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 21, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 22, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 23, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 24, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 25, 0},
+	{ 128, 256, 64, 128, 0, 0, 0x100, 0x100, 26, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 27, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 28, 0},
+
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 29, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 30, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 31, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 32, 0},
+	
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 33, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 34, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 35, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 36, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 37, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 38, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 39, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 40, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 41, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 42, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 43, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 44, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 45, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 46, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 47, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 48, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 49, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 50, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 51, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 52, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 53, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 54, 0},
+
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 55, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 56, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 57, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 58, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 59, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 60, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 61, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 62, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 63, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 64, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 65, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 66, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 67, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 68, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 69, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 70, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 71, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 72, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 73, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 74, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 75, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 76, 0},
+
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 77, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 78, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 79, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 80, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 81, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 82, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 83, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 84, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 85, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 86, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 87, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 88, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 89, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 90, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 91, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 92, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 93, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 94, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 95, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 96, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 97, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 98, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 99, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 100, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 101, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 102, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 103, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 104, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 105, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 106, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 107, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 108, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 109, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 110, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 111, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 112, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 113, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 114, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 115, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 116, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 117, 0},
+	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 118, 0},
+	//Atlas 0
+	{ 128, 128, 0, 0, 0x00, 0x00, 0x3F, 0x3F, 119, 0},
+	{ 128, 128, 0, 0, 0x40, 0x00, 0x7F, 0x3F, 119, 0},
+	{ 128, 128, 0, 0, 0x80, 0x00, 0xBF, 0x3F, 119, 0},
+	{ 128, 128, 0, 0, 0xC0, 0x00, 0xFF, 0x3F, 119, 0},
+	{ 128, 128, 0, 0, 0x00, 0x40, 0x3F, 0x7F, 119, 0},
+	{ 128, 128, 0, 0, 0x40, 0x40, 0x7F, 0x7F, 119, 0},
+	{ 128, 128, 0, 0, 0x80, 0x40, 0xBF, 0x7F, 119, 0},
+	{ 128, 128, 0, 0, 0xC0, 0x40, 0xFF, 0x7F, 119, 0},
+	{ 128, 128, 0, 0, 0x00, 0x80, 0x3F, 0xBF, 119, 0},
+	{ 128, 128, 0, 0, 0x40, 0x80, 0x7F, 0xBF, 119, 0},
+	{ 128, 128, 0, 0, 0x80, 0x80, 0xBF, 0xBF, 119, 0},
+	{ 128, 128, 0, 0, 0xC0, 0x80, 0xFF, 0xBF, 119, 0},
+	{ 128, 128, 0, 0, 0x00, 0xC0, 0x3F, 0xFF, 119, 0},
+	{ 128, 128, 0, 0, 0x40, 0xC0, 0x7F, 0xFF, 119, 0},
+	{ 128, 128, 0, 0, 0x80, 0xC0, 0xBF, 0xFF, 119, 0},
+	{ 128, 128, 0, 0, 0xC0, 0xC0, 0xFF, 0xFF, 119, 0},
+	//Atlas 1
+	{ 128, 128, 0, 0, 0x00, 0x00, 0x3F, 0x3F, 120, 0},
+	{ 128, 128, 0, 0, 0x40, 0x00, 0x7F, 0x3F, 120, 0},
+	{ 128, 128, 0, 0, 0x80, 0x00, 0xBF, 0x3F, 120, 0},
+	{ 128, 128, 0, 0, 0xC0, 0x00, 0xFF, 0x3F, 120, 0},
+	{ 128, 128, 0, 0, 0x00, 0x40, 0x3F, 0x7F, 120, 0},
+	{ 128, 128, 0, 0, 0x40, 0x40, 0x7F, 0x7F, 120, 0},
+	{ 128, 128, 0, 0, 0x80, 0x40, 0xBF, 0x7F, 120, 0},
+	{ 128, 128, 0, 0, 0xC0, 0x40, 0xFF, 0x7F, 120, 0},
+	{ 128, 128, 0, 0, 0x00, 0x80, 0x3F, 0xBF, 120, 0},
+	{ 128, 128, 0, 0, 0x40, 0x80, 0x7F, 0xBF, 120, 0},
+	{ 128, 128, 0, 0, 0x80, 0x80, 0xBF, 0xBF, 120, 0},
+	{ 128, 128, 0, 0, 0xC0, 0x80, 0xFF, 0xBF, 120, 0},
+	{ 128, 128, 0, 0, 0x00, 0xC0, 0x3F, 0xFF, 120, 0},
+	{ 128, 128, 0, 0, 0x40, 0xC0, 0x7F, 0xFF, 120, 0},
+	{ 128, 128, 0, 0, 0x80, 0xC0, 0xBF, 0xFF, 120, 0},
+	{ 128, 128, 0, 0, 0xC0, 0xC0, 0xFF, 0xFF, 120, 0},
+	//Padding
+	{40, 32, 20, 16, 0x0A, 0x10, 0x34, 0x30, 1, 0},
+};
+
 static NJS_TEXANIM NumAnim[] = {
 	//Numbers
 	{40, 32, 20, 16, 0x0A, 0x10, 0x34, 0x30, 0, 0},
@@ -102,7 +267,7 @@ static NJS_TEXLIST UpgradeIconsTex = { UpgradeIconsTexName, Anim_Length };
 
 static NJS_TEXLIST UpgradeIconsTex_Inactive = { UpgradeIconsTexName_Inactive, Anim_Length };
 
-static NJS_TEXLIST StageSelectTex = { StageSelectTexName, Stage_Anim_Length };
+static NJS_TEXLIST StageSelectTex = { StageSelectTexName, Stage_Tex_Length };
 
 static NJS_TEXLIST NumTex = { NumTexName, Num_Anim_Length };
 
@@ -501,7 +666,7 @@ void UpdateLevelCheckIcons()
 				itemCount = bigs.size();
 				for (int i = bigs.size() - 1; i >= 0; i--)
 				{
-					int bigIcon = bigs[i] == 0x01 ? SSI_Upgrade : SSI_UpgradeDisabled;
+					int bigIcon = bigs[i] == 0x01 ? SSI_Big : SSI_BigDisabled;
 					float x = maxXPos - ((xCount + 1) * 32.0f);
 					StageSelectSprite.tanim = &StageSelectAnim[bigIcon];
 					StageSelectSprite.p = { x, yPos, 0.0f };
@@ -614,7 +779,7 @@ void UpdateLevelCheckIcons()
 				yPos += (rows - 1) * 24.0f;
 				while (itemCount > 0)
 				{
-					int lifeBoxIcon = lifeBoxes[itemCount - 1] == 0x01 ? SSI_Pipe : SSI_PipeDisabled;
+					int lifeBoxIcon = lifeBoxes[itemCount - 1] == 0x01 ? SSI_LifeBox : SSI_LifeBoxDisabled;
 					float x = maxXPos - ((xCount + 1) * 24.0f);
 					StageSelectSprite.tanim = &StageSelectAnim[lifeBoxIcon];
 					StageSelectSprite.p = { x, yPos, 0.0f };
@@ -654,7 +819,7 @@ void UpdateLevelCheckIcons()
 				yPos += (rows - 1) * 24.0f;
 				while (itemCount > 0)
 				{
-					int itemBoxIcon = itemBoxes[itemCount - 1] == 0x01 ? SSI_Hidden : SSI_HiddenDisabled;
+					int itemBoxIcon = itemBoxes[itemCount - 1] == 0x01 ? SSI_ItemBox : SSI_ItemBoxDisabled;
 					float x = maxXPos - ((xCount + 1) * 24.0f);
 					StageSelectSprite.tanim = &StageSelectAnim[itemBoxIcon];
 					StageSelectSprite.p = { x, yPos, 0.0f };
@@ -680,12 +845,12 @@ void UpdateLevelCheckIcons()
 		}
 		if (paginate)
 		{
-			StageSelectSprite.sx = 0.25f;
-			StageSelectSprite.sy = 0.25f;
+			StageSelectSprite.sx = 0.5f;
+			StageSelectSprite.sy = 0.5f;
 			// TODO: RAS: Add Y button here
-			int buttonIcon = (paginateTimer / 60) == 1 ? SSI_Emerald_None : SSI_Emerald_Cyan;
+			int buttonIcon = (paginateTimer / 60) == 1 ? SSI_UISwitch_0 : SSI_UISwitch_1;
 			StageSelectSprite.tanim = &StageSelectAnim[buttonIcon];
-			StageSelectSprite.p = { maxXPos - ((xCount + 1) * 32.0f), yPos, 0.0f };
+			StageSelectSprite.p = { maxXPos - ((xCount + 1) * 64.0f), yPos, 0.0f };
 			DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
 		}
 	}
@@ -726,7 +891,7 @@ void UpdateChaosEmeraldIcons()
 			char minigamesWon = *(char*)(minigames[i] + 0x30);
 
 			// TODO: RAS: Minigame Icons
-			int minigameIcon = minigamesWon >= itemMan->RequiredMinigames ? SSI_Bat + (i * 2) : SSI_Bat + (i * 2) + 1;
+			int minigameIcon = minigamesWon >= itemMan->RequiredMinigames ? SSI_Pong + (i * 2) : SSI_Pong + (i * 2) + 1;
 			float x = (320.0f - (minigames.size() - 1) * 16.0f) + (i * 32.0f);
 			float y = 380.0f;
 			if (GameState == GameStates::GameStates_Pause && GameMode == GameMode::GameMode_Level)
@@ -1078,7 +1243,7 @@ void StageSelectIcons::OnInit(std::map<int, StageSelectStageData>* stageSelectDa
 		UpgradeIconsAnim_Inactive[i] = { 0x80, 0x80, 0, 0, 0, 0, 0x100, 0x100, (Sint16)(i - 1), NJD_SPRITE_ALPHA };
 	}
 
-	for (int i = 0; i < Stage_Anim_Length; i++)
+	/*for (int i = 0; i < Stage_Anim_Length; i++)
 	{
 		if (i == SSI_CCUnlocked + 1)
 		{
@@ -1088,7 +1253,7 @@ void StageSelectIcons::OnInit(std::map<int, StageSelectStageData>* stageSelectDa
 		{
 			StageSelectAnim[i] = { 0x80, 0x80, 0, 0, 0, 0, 0x100, 0x100, (Sint16)(i - 1), NJD_SPRITE_ALPHA };
 		}
-	}
+	}*/
 
 	float ratio = 480.0f / VerticalResolution;
 	float adjustedHorizontal = HorizontalResolution * ratio;

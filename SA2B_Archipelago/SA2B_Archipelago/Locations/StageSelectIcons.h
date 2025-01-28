@@ -41,6 +41,7 @@ struct NumberDisplayData
 };
 
 enum StageSelectIcon {
+	//Checks part 1
 	SSI_ChaoKey					= 0,
 	SSI_ChaoKeyDisabled			= 1,
 	SSI_Pipe					= 2,
@@ -70,12 +71,12 @@ enum StageSelectIcon {
 	SSI_CCUnlocked				= 26,
 	SSI_Animals					= 27,
 	SSI_AnimalsDisabled			= 28,
-
+	//Chao misc
 	SSI_Clock					= 29,
 	SSI_ChaoCoin				= 30,
 	SSI_BlackMarket				= 31,
 	SSI_BlackMarketDisabled		= 32,
-
+	//Chao race/karate
 	SSI_Beginner				= 33,
 	SSI_BeginnerDisabled		= 34,
 	SSI_Challenge				= 35,
@@ -98,7 +99,7 @@ enum StageSelectIcon {
 	SSI_DiamondDisabled			= 52,
 	SSI_Karate					= 53,
 	SSI_KarateDisabled			= 54,
-
+	//Chao stats/school
 	SSI_Swim					= 55,
 	SSI_SwimDisabled			= 56,
 	SSI_Fly						= 57,
@@ -121,7 +122,7 @@ enum StageSelectIcon {
 	SSI_SongDisabled			= 74,
 	SSI_Instrument				= 75,
 	SSI_InstrumentDisabled		= 76,
-
+	//Animals
 	SSI_Bat						= 77,
 	SSI_BatDisabled				= 78,
 	SSI_Bear					= 79,
@@ -164,4 +165,39 @@ enum StageSelectIcon {
 	SSI_UnicornDisabled			= 116,
 	SSI_Vulture					= 117,
 	SSI_VultureDisabled			= 118,
+	//Traps
+	SSI_Pong					= 119,
+	SSI_PongDisabled			= 120,
+	SSI_Breakout				= 121,
+	SSI_BreakoutDisabled		= 122,
+	SSI_Fishing					= 123,
+	SSI_FishingDisabled			= 124,
+	SSI_Trivia					= 125,
+	SSI_TriviaDisabled			= 126,
+	SSI_PokemonTrivia			= 127,
+	SSI_PokemonTriviaDisabled	= 128,
+	SSI_PokemonCount			= 129,
+	SSI_PokemonCountDisabled	= 130,
+	SSI_NumberSequence			= 131,
+	SSI_NumberSequenceDisabled	= 132,
+	SSI_LightUpPath				= 133,
+	SSI_LightUpPathDisabled		= 134,
+	SSI_Pinball					= 135,
+	SSI_PinballDisabled			= 136,
+	SSI_MathQuiz				= 137,
+	SSI_MathQuizDisabled		= 138,
+	SSI_Snake					= 139,
+	SSI_SnakeDisabled			= 140,
+	SSI_InputSequence			= 141,
+	SSI_InputSequenceDisabled	= 142,
+	//Checks part 2
+	SSI_Big						= 143,
+	SSI_BigDisabled				= 144,
+	SSI_LifeBox					= 145,
+	SSI_LifeBoxDisabled			= 146,
+	SSI_ItemBox					= 147,
+	SSI_ItemBoxDisabled			= 148,
+	//Other Icons
+	SSI_UISwitch_0				= 149,
+	SSI_UISwitch_1				= 150,
 };
