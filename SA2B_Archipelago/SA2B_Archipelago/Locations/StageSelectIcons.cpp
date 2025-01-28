@@ -847,7 +847,7 @@ void UpdateLevelCheckIcons()
 		{
 			StageSelectSprite.sx = 0.5f;
 			StageSelectSprite.sy = 0.5f;
-			// TODO: RAS: Add Y button here
+
 			int buttonIcon = (paginateTimer / 60) == 1 ? SSI_UISwitch_0 : SSI_UISwitch_1;
 			StageSelectSprite.tanim = &StageSelectAnim[buttonIcon];
 			StageSelectSprite.p = { maxXPos - ((xCount + 1) * 64.0f), yPos, 0.0f };
@@ -890,7 +890,6 @@ void UpdateChaosEmeraldIcons()
 		{
 			char minigamesWon = *(char*)(minigames[i] + 0x30);
 
-			// TODO: RAS: Minigame Icons
 			int minigameIcon = minigamesWon >= itemMan->RequiredMinigames ? SSI_Pong + (i * 2) : SSI_Pong + (i * 2) + 1;
 			float x = (320.0f - (minigames.size() - 1) * 16.0f) + (i * 32.0f);
 			float y = 380.0f;
@@ -1339,8 +1338,7 @@ void StageSelectIcons::MinigameReplaySystem()
 	char minigamesReceived = *(char*)(minigames[this->minigameReplayIndex]);
 	bool isActivatable = minigamesReceived >= itemMan->RequiredMinigames;
 
-	// TODO: RAS: Minigame Icons
-	int minigameIcon = isActivatable ? SSI_Bat + (this->minigameReplayIndex * 2) : SSI_Bat + (this->minigameReplayIndex * 2) + 1;
+	int minigameIcon = isActivatable ? SSI_Pong + (this->minigameReplayIndex * 2) : SSI_Pong + (this->minigameReplayIndex * 2) + 1;
 	float x = maxXPos - 64.0f;
 	float y = 16.0f;
 	StageSelectSprite.tanim = &StageSelectAnim[minigameIcon];

@@ -740,6 +740,8 @@ void ItemManager::HandleTrapLink(std::string item_name, std::string message)
 			this->_TrapLinkMessage = message;
 		}
 	}
+
+	StatsManager::GetInstance().TrapLinkReceived();
 }
 
 bool ItemManager::IsActiveTrapValid()

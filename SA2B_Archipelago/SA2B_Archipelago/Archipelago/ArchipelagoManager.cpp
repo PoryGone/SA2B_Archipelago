@@ -415,8 +415,6 @@ void SA2_HandleBouncedPacket(AP_Bounce bouncePacket)
             ItemManager* itemManager = &ItemManager::getInstance();
 
             itemManager->HandleTrapLink(trap_name, message);
-
-            StatsManager::GetInstance().TrapLinkReceived();
         }
     }
 }
