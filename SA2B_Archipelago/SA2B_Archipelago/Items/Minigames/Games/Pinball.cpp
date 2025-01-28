@@ -404,7 +404,7 @@ void Pinball::CreateHierarchy(MinigameManagerData data)
 
 	for (int i = 0; i < lives; i++)
 	{
-		SpriteNode* lifeIcon = data.hierarchy->CreateNode("LifeIcon", data.icons->GetAnim(MGI_Spinball), { ballDiameter, ballDiameter }, { 545.0f, 320.0f - (i * (ballDiameter + 2.0f)) });
+		SpriteNode* lifeIcon = data.hierarchy->CreateNode("LifeIcon", data.icons->GetAnim(MGI_Life_Box), { 24.0f, 24.0f }, { 545.0f, 350.0f - (i * (24.0f + 2.0f)) });
 		livesCounter.push_back(lifeIcon);
 	}
 
