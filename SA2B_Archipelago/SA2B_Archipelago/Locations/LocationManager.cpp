@@ -291,6 +291,7 @@ void LocationManager::OnInputFunction()
 	if (GameMode != GameMode::GameMode_Level)
 	{
 		this->_inBigFishing = false;
+		TimeStopped = 0;
 		this->_FreezePos = NJS_VECTOR();
 
 		return;
@@ -312,6 +313,11 @@ void LocationManager::OnInputFunction()
 				TimeStopped = 0;
 				WriteData<1>((void*)0x4D2E50, 0);
 				this->_inBigFishing = false;
+				if ((MainCharObj1[0]) && (MainCharObj2[0]))
+				{
+					MainCharObj1[0]->Status &= ~(1 << StatusBits::StatusBits_DisableControl);
+					MainCharObj2[0]->Powerups &= ~(1 << PowerupBits::PowerupBits_Invincibility);
+				}
 			}
 
 			if (this->_inBigFishing)
@@ -322,6 +328,9 @@ void LocationManager::OnInputFunction()
 				if ((MainCharObj1[0]) && (MainCharObj2[0]))
 				{
 					MainCharObj1[0]->Action = Action_None;
+					MainCharObj1[0]->NextAction = Action_None;
+					MainCharObj1[0]->Status |= (1 << StatusBits::StatusBits_DisableControl);
+					MainCharObj2[0]->Powerups |= (1 << PowerupBits::PowerupBits_Invincibility);
 					MainCharObj1[0]->Position = this->_FreezePos;
 					MainCharObj2[0]->Speed.x = 0.0;
 					MainCharObj2[0]->Speed.y = 0.0;
