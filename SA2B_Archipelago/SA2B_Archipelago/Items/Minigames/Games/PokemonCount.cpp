@@ -7,11 +7,6 @@
 #include "../Backend/Time/Timer.h"
 
 
-// TODO: More questions
-// TODO: Add Timer
-// TODO: Show Correct/Incorrect on selection
-
-
 void PokemonCount::OnGameStart(MinigameManagerData data)
 {
 	this->currentState = MinigameState::MGS_InProgress;

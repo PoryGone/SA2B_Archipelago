@@ -8,8 +8,6 @@
 
 
 // TODO: More questions
-// TODO: Add Timer
-// TODO: Show Correct/Incorrect on selection
 
 
 std::vector<TriviaQuestion> easy_questions =
@@ -22,6 +20,7 @@ std::vector<TriviaQuestion> easy_questions =
 	TriviaQuestion("What is the name of the main theme of this game?", {"Live & Learn"}, {"Open Your Heart", "Knight of the Wind", "Seven Rings in Hand", "Sonic Heroes", "It Doesn't Matter", "I am... All of Me", "His World", "A New Venture", "Endless Possibility", "Reach for the Stars"}),
 	TriviaQuestion("How many (real) Chaos Emeralds are there (in this game)?", {"7"}, {"6", "8", "5", "16"}),
 	TriviaQuestion("Which character is known to have met the President of the United States in person?", {"Sonic", "Tails"}, {"Knuckles", "Eggman", "Rouge", "Amy", "Shadow"}),
+	TriviaQuestion("Which character has the largest number of upgrades?", {"Sonic"}, {"Tails", "Knuckles", "Eggman", "Rouge", "Amy", "Shadow"}),
 	//TriviaQuestion("", {"", ""}, {"", ""}),
 };
 
@@ -36,6 +35,7 @@ std::vector<TriviaQuestion> medium_questions =
 	TriviaQuestion("Which character has no stage in the desert or pyramid areas?", {"Shadow"}, {"Sonic", "Rouge", "Tails", "Knuckles", "Eggman"}),
 	TriviaQuestion("Which character cannot be the menu narrator?", {"Chaos", "Tikal"}, {"Sonic", "Shadow", "Tails", "Eggman", "Knuckles", "Rouge", "Maria", "Omochao", "President's Secretary", "Amy"}),
 	TriviaQuestion("What is the name of Tails's mech in this game?", {"The Cyclone"}, {"The Tornado", "The Tornado 2", "The Hurricane", "The Tailsmobile", "The Tails Walker"}),
+	TriviaQuestion("Which character has the largest number of Progression upgrades?", {"Knuckles"}, {"Sonic", "Tails", "Eggman", "Rouge", "Amy", "Shadow"}),
 	//TriviaQuestion("", {"", ""}, {"", ""}),
 };
 
@@ -45,6 +45,8 @@ std::vector<TriviaQuestion> hard_questions =
 	TriviaQuestion("How many types of Animals exist in SA2?", {"21"}, {"20", "15", "22", "25"}),
 	TriviaQuestion("In which stage does an Omochao say 'Be careful not to fall!'? ", {"White Jungle"}, {"Cosmic Wall", "Metal Harbor", "Radical Highway", "Final Rush"}),
 	TriviaQuestion("Where was the Yellow Chaos Emerald located at the beginning of the game?", {"Tails had it"}, {"Eggman had it", "Security Hall", "Shadow stole it"}),
+	TriviaQuestion("Where was the Purple Chaos Emerald located at the beginning of the game?", {"Security Hall"}, {"Eggman had it", "Tails had it", "Shadow stole it"}),
+	TriviaQuestion("Where was the White Chaos Emerald located at the beginning of the game?", {"Eggman had it"}, {"Security Hall", "Tails had it", "Shadow stole it"}),
 	TriviaQuestion("In which stage does Knuckles first encounter a ghost?", {"Pumpkin Hill"}, {"Wild Canyon", "Egg Quarters", "Death Chamber", "Aquatic Mine", "Meteor Herd"}),
 	TriviaQuestion("Which of Shadow's stages was Sonic seen navigating in an early preview of the game?", {"Sky Rail"}, {"Radical Highway", "Final Chase", "White Jungle"}),
 	TriviaQuestion("In which stage does Big the Cat appear more than once?", {"White Jungle", "Cannon's Core"}, {"Cosmic Wall", "Final Chase", "Final Rush", "Security Hall", "City Escape", "Meteor Herd", "Pyramid Cave", "Egg Quarters", "Death Chamber", "Metal Harbor", "Mission Street"}),
@@ -295,7 +297,6 @@ void Trivia::CreateHierarchy(MinigameManagerData data)
 	Wiggle* bombWiggle = new Wiggle(RandomFloat(0.45f, 0.65f), -25.0f, 25.0f, true);
 	timerBomb->components.push_back(bombWiggle);
 
-	// TODO: Position these at Text Center if we get that capability
 	SpriteNode* result_1 = data.hierarchy->CreateNode("Input_Result_1", data.icons->GetAnim(MGI_Green_Circle), { 32.0f, 32.0f }, this->answer1Box->CalculateTextBounds(*this->answer1Node).center);
 	SpriteNode* result_2 = data.hierarchy->CreateNode("Input_Result_2", data.icons->GetAnim(MGI_Green_Circle), { 32.0f, 32.0f }, this->answer2Box->CalculateTextBounds(*this->answer2Node).center);
 	SpriteNode* result_3 = data.hierarchy->CreateNode("Input_Result_3", data.icons->GetAnim(MGI_Green_Circle), { 32.0f, 32.0f }, this->answer3Box->CalculateTextBounds(*this->answer3Node).center);

@@ -165,17 +165,6 @@ void ItemManager::OnInputFunction()
 				ControllersRaw->y2 = Sint16(max(min(ControllersRaw->y2 + yOffset, 255), -255));
 			}
 		}
-
-		// TODO: Remove once behavior is validated
-		//std::string msg1 = "driftMagnitude: ";
-		//msg1.append(std::to_string(driftMagnitude));
-		//_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 0), msg1.c_str());
-		//
-		//std::string msg2 = "ControllersRaw->x1: ";
-		//msg2.append(std::to_string(ControllersRaw->x1));
-		//msg2.append(" | ControllersRaw->y1: ");
-		//msg2.append(std::to_string(ControllersRaw->y1));
-		//_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 2), msg2.c_str());
 	}
 
 	if (this->_ReverseTrapActive &&

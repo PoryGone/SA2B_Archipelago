@@ -7,11 +7,6 @@
 #include "../Backend/Time/Timer.h"
 
 
-// TODO: More questions
-// TODO: Add Timer
-// TODO: Show Correct/Incorrect on selection
-
-
 enum PokemonQuestionType
 {
 	PQT_Name,
@@ -387,7 +382,6 @@ void PokemonTrivia::CreateHierarchy(MinigameManagerData data)
 	Wiggle* bombWiggle = new Wiggle(RandomFloat(0.45f, 0.65f), -25.0f, 25.0f, true);
 	timerBomb->components.push_back(bombWiggle);
 
-	// TODO: Position these at Text Center if we get that capability
 	SpriteNode* result_1 = data.hierarchy->CreateNode("Input_Result_1", data.icons->GetAnim(MGI_Green_Circle), { 32.0f, 32.0f }, this->answer1Box->CalculateTextBounds(*this->answer1Node).center);
 	SpriteNode* result_2 = data.hierarchy->CreateNode("Input_Result_2", data.icons->GetAnim(MGI_Green_Circle), { 32.0f, 32.0f }, this->answer2Box->CalculateTextBounds(*this->answer2Node).center);
 	SpriteNode* result_3 = data.hierarchy->CreateNode("Input_Result_3", data.icons->GetAnim(MGI_Green_Circle), { 32.0f, 32.0f }, this->answer3Box->CalculateTextBounds(*this->answer3Node).center);
