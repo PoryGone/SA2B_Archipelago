@@ -79,33 +79,50 @@ void PokemonTrivia::OnFrame(MinigameManagerData data)
 		}
 		break;
 	case PTS_Win:
-		this->endingTimer--;
-
-		if (this->endingTimer == 90)
+		if (this->resultNode->color.a < 1.0f)
 		{
-			PlaySoundProbably((int)MinigameSounds::RankReveal, 0, 0, 0);
-			this->resultNode->anim = data.icons->GetAnim(MGI_Green_Check);
 			this->resultNode->SetEnabled(true);
+			this->resultNode->anim = data.icons->GetAnim(MGI_Green_Check);
+			this->resultNode->color.a += 1.0f / 30.0f;
+			this->resultNode->displaySize = Point3MoveTowards(this->resultNode->displaySize, { 128.0f, 128.0f }, 72.0f / 30.0f);
 		}
-		else if (this->endingTimer <= 0)
+		else
 		{
-			this->currentState = MinigameState::MGS_Victory;
+			if (this->endingTimer == 120)
+			{
+				PlaySoundProbably((int)MinigameSounds::RankReveal, 0, 0, 0);
+			}
+
+			this->endingTimer--;
+
+			if (this->endingTimer <= 0)
+			{
+				this->currentState = MinigameState::MGS_Victory;
+			}
 		}
 		return;
 	case PTS_Lose:
-		this->endingTimer--;
-
-		if (this->endingTimer == 90)
+		if (this->resultNode->color.a < 1.0f)
 		{
-			PlaySoundProbably((int)MinigameSounds::RankReveal, 0, 0, 0);
-			this->resultNode->anim = data.icons->GetAnim(MGI_F_Rank);
 			this->resultNode->SetEnabled(true);
+			this->resultNode->anim = data.icons->GetAnim(MGI_F_Rank);
+			this->resultNode->color.a += 1.0f / 30.0f;
+			this->resultNode->displaySize = Point3MoveTowards(this->resultNode->displaySize, { 128.0f, 128.0f }, 72.0f / 30.0f);
 		}
-		else if (this->endingTimer <= 0)
+		else
 		{
-			this->currentState = MinigameState::MGS_Loss;
+			if (this->endingTimer == 120)
+			{
+				PlaySoundProbably((int)MinigameSounds::RankReveal, 0, 0, 0);
+			}
+
+			this->endingTimer--;
+
+			if (this->endingTimer <= 0)
+			{
+				this->currentState = MinigameState::MGS_Loss;
+			}
 		}
-		return;
 	}
 }
 
@@ -395,7 +412,8 @@ void PokemonTrivia::CreateHierarchy(MinigameManagerData data)
 	this->inputResults.push_back(result_3);
 	this->inputResults.push_back(result_4);
 
-	this->resultNode = data.hierarchy->CreateNode("Result", data.icons->GetAnim(MGI_Green_Check), { 128, 128 },
+	this->resultNode = data.hierarchy->CreateNode("Result", data.icons->GetAnim(MGI_Green_Check), { 200, 200 },
 		{ data.icons->xCenter, data.icons->yCenter });
+	this->resultNode->color.a = 0.0f;
 	this->resultNode->SetEnabled(false);
 }
