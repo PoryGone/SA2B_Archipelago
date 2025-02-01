@@ -1,6 +1,7 @@
 #pragma once
 #include "../MinigameBase.h"
 #include "../MinigameUtilities.h"
+#include "../Components/Wiggle.h"
 
 
 class LightUpPath : public MinigameBase
@@ -31,12 +32,21 @@ public:
 
 private:
 	void CreateHierarchy(MinigameManagerData data);
+	void UpdateTimerFill();
 
 	void FillGrid(MinigameDifficulty difficulty);
 	void Move(int x, int y);
 	void Set(int x, int y);
 	LightUpPathTileType GetCellType(int index, int x, int y, MinigameDifficulty difficulty);
 	PathGridCell* GetCell(int x, int y);
+
+	SpriteNode* timerBarBG;
+	SpriteNode* timerBar;
+	SpriteNode* timerBomb;
+	SpriteNode* timerSonic;
+
+	Timer timer;
+	float guessTime = 20.0f;
 
 	//0,0 is top left
 	int cursorX;

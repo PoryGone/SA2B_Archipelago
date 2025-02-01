@@ -1,6 +1,9 @@
 #include "../../../pch.h"
 #include "LightUpPath.h"
 
+// TODO: Handle results feedback
+// TODO: SFX
+
 void LightUpPath::OnGameStart(MinigameManagerData data)
 {
 	currentState = MGS_InProgress;
@@ -8,6 +11,8 @@ void LightUpPath::OnGameStart(MinigameManagerData data)
 	cursorY = 0;
 	CreateHierarchy(data);
 	FillGrid(data.difficulty);
+	data.timers->push_back(&this->timer);
+	this->timer.Start(this->guessTime);
 }
 
 void LightUpPath::OnFrame(MinigameManagerData data)
@@ -31,6 +36,13 @@ void LightUpPath::OnFrame(MinigameManagerData data)
 	if (data.inputPress & RIF_Right)
 	{
 		Move(1, 0);
+	}
+
+	this->UpdateTimerFill();
+	if (timer.IsElapsed())
+	{
+		PlaySoundProbably((int)MinigameSounds::Explosion, 0, 0, 0);
+		this->currentState = MinigameState::MGS_Loss;
 	}
 }
 
@@ -203,6 +215,22 @@ LightUpPath::PathGridCell* LightUpPath::GetCell(int x, int y)
 	return nullptr;
 }
 
+void LightUpPath::UpdateTimerFill()
+{
+	float amount = this->timer.TimeRemaining() / this->guessTime;
+	amount = amount < 0.0f ? 0.0f : amount;
+	amount = amount > 1.0f ? 1.0f : amount;
+	float width = this->timerBarBG->displaySize.x * amount;
+	float bgX = -(this->timerBarBG->displaySize.x * 0.5f);
+	NJS_POINT3 pos = { bgX + width * 0.5f, 0.0f };
+	this->timerBar->displaySize.x = width;
+	this->timerBar->SetPosition(pos);
+
+	NJS_POINT3 bombPos = this->timerBomb->GetPosition();
+	bombPos.x = bgX + width;
+	this->timerBomb->SetPosition(bombPos);
+}
+
 void LightUpPath::CreateHierarchy(MinigameManagerData data)
 {
 	AddDPadToHierarchy(RIF_ANY_D_PAD, { 65.0f, 130.0f, 0.0f }, 45.0f, *data.icons, *data.hierarchy);
@@ -239,4 +267,16 @@ void LightUpPath::CreateHierarchy(MinigameManagerData data)
 			grid[x][y].rightArrow->SetRotation(90.0f);
 		}
 	}
+
+	// Timer
+	this->timerBarBG = data.hierarchy->CreateNode("Timer_Background", data.icons->GetAnim(MGI_White_Box), { 200.0f, 10.0f }, { 320.0f, 72.0f });
+	this->timerBarBG->color = { 1.0f, 0.0f, 0.0f, 0.0f };
+	this->timerBar = data.hierarchy->CreateNode("Timer_Fill", data.icons->GetAnim(MGI_White_Box), { 200.0f, 10.0f }, { 320.0f, 72.0f }, this->timerBarBG);
+	this->timerBar->color = { 1.0f, 0.0f, 1.0f, 0.0f };
+	this->timerBarBG->SetEnabled(true);
+	this->timerBomb = data.hierarchy->CreateNode("Timer_Sonic", data.icons->GetAnim(MGI_Sonic_Head), { 32.0f, 32.0f }, { 220.0f, 46.0f }, this->timerBarBG);
+	this->timerBomb = data.hierarchy->CreateNode("Timer_Bomb", data.icons->GetAnim(MGI_Bomb), { 32.0f, 32.0f }, { 420.0f, 46.0f }, this->timerBarBG);
+	Wiggle* bombWiggle = new Wiggle(RandomFloat(0.45f, 0.65f), -25.0f, 25.0f, true);
+	timerBomb->components.push_back(bombWiggle);
+
 }

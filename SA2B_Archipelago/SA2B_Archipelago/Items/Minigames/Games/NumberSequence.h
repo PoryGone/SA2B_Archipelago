@@ -1,6 +1,7 @@
 #pragma once
 #include "../MinigameBase.h"
 #include "../MinigameUtilities.h"
+#include "../Components/Wiggle.h"
 #include "../Components/TextBox.h"
 #include <array>
 
@@ -45,6 +46,12 @@ private:
 	NumberSequenceState state;
 	Timer timer;
 	int guessesRemaining = 0;
+
+	SpriteNode* timerBarBG;
+	SpriteNode* timerBar;
+	SpriteNode* timerBomb;
+	SpriteNode* timerSonic;
+
 	float guessTime = 10.0f;
 
 	std::array<int, 9> numbers = { 1, 2, 3, 4, 5, 6, 7, 8, 9};
@@ -62,9 +69,6 @@ private:
 	SpriteNode* submitUp;
 	SpriteNode* submitDown;
 	TextBox* submitText;
-
-	SpriteNode* timerBarBG;
-	SpriteNode* timerBar;
 
 	std::array<SpriteNode*, 15> questionMarks;
 	TextBox* questionMarkText;

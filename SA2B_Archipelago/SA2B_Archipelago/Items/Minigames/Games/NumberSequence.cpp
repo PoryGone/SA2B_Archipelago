@@ -1,6 +1,8 @@
 #include "../../../pch.h"
 #include "NumberSequence.h"
 
+// TODO: Results feedback
+
 void NumberSequence::OnGameStart(MinigameManagerData data)
 {
 	currentState = MGS_InProgress;
@@ -18,15 +20,15 @@ void NumberSequence::OnGameStart(MinigameManagerData data)
 	switch (data.difficulty)
 	{
 	case MGD_Easy:
-		guessTime = 15.0f;
+		guessTime = 30.0f;
 		guessesRemaining = 9;
 		break;
 	case MGD_Medium:
-		guessTime = 12.0f;
+		guessTime = 25.0f;
 		guessesRemaining = 7;
 		break;
 	case MGD_Hard:
-		guessTime = 10.0f;
+		guessTime = 20.0f;
 		guessesRemaining = 5;
 		break;
 	}
@@ -48,11 +50,11 @@ void NumberSequence::OnFrame(MinigameManagerData data)
 	switch (state)
 	{
 	case NSS_Start:
-		timer.Start(guessTime);
+		this->timer.Start(guessTime);
 		state = NSS_InGame;
 		break;
 	case NSS_InGame:
-		//UpdateTimerFill();
+		this->UpdateTimerFill();
 		if (data.inputPress & RIF_Up && selectedIndex < numberObjs.size())
 		{
 			Increment(&numberObjs[selectedIndex]);
@@ -73,12 +75,11 @@ void NumberSequence::OnFrame(MinigameManagerData data)
 		{
 			SetSelectedIndex(selectedIndex + 1);
 		}
-		/*
-		if (timer.IsElapsed())
+		if (this->timer.IsElapsed())
 		{
-			SubmitSequence();
+			this->state = NSS_Lose;
+			this->timer.Start(1.0f);
 		}
-		*/
 		break;
 	case NSS_Win:
 		if (timer.IsElapsed())
@@ -225,17 +226,18 @@ void NumberSequence::SubmitSequence()
 	}
 	if (correctCount == numberObjs.size())
 	{
-		state = NSS_Win;
-		timer.Start(1.0f);
+		this->state = NSS_Win;
+		this->timer.Start(1.0f);
 	}
 	else if(guessesRemaining == 0)
 	{
-		state = NSS_Lose;
-		timer.Start(1.0f);
+		this->state = NSS_Lose;
+		this->timer.Start(1.0f);
 	}
 	else
 	{
-		timer.Start(guessTime);
+		// TODO: I think a single global timer is better than per-guess, but left this just in case you disagree
+		//this->timer.Start(guessTime);
 		guessesRemaining--;
 		for (int i = 0; i < questionMarks.size(); i++)
 		{
@@ -246,14 +248,18 @@ void NumberSequence::SubmitSequence()
 
 void NumberSequence::UpdateTimerFill()
 {
-	float amount = timer.TimeRemaining() / guessTime;
+	float amount = this->timer.TimeRemaining() / this->guessTime;
 	amount = amount < 0.0f ? 0.0f : amount;
 	amount = amount > 1.0f ? 1.0f : amount;
-	float width = timerBarBG->displaySize.x * amount;
-	float bgX = -(timerBarBG->displaySize.x * 0.5f);
+	float width = this->timerBarBG->displaySize.x * amount;
+	float bgX = -(this->timerBarBG->displaySize.x * 0.5f);
 	NJS_POINT3 pos = { bgX + width * 0.5f, 0.0f };
-	timerBar->displaySize.x = width;
-	timerBar->SetPosition(pos);
+	this->timerBar->displaySize.x = width;
+	this->timerBar->SetPosition(pos);
+
+	NJS_POINT3 bombPos = this->timerBomb->GetPosition();
+	bombPos.x = bgX + width;
+	this->timerBomb->SetPosition(bombPos);
 }
 
 void NumberSequence::CreateHierarchy(MinigameManagerData data)
@@ -294,12 +300,15 @@ void NumberSequence::CreateHierarchy(MinigameManagerData data)
 	submitUp->renderComponents.push_back(submitText);
 	submitDown->renderComponents.push_back(submitText);
 
-	timerBarBG = data.hierarchy->CreateNode("Timer_Background", data.icons->GetAnim(MGI_White_Box), { 200.0f, 10.0f }, { 320.0f, 106.0f });
-	timerBarBG->color = { 1.0f, 1.0f, 0.0f, 0.0f };
-	timerBar = data.hierarchy->CreateNode("Timer_Fill", data.icons->GetAnim(MGI_White_Box), { 200.0f, 10.0f }, { 320.0f, 106.0f }, timerBarBG);
-	timerBar->color = { 1.0f, 0.0f, 0.0f, 1.0f };
-	timerBarBG->SetEnabled(false); //Disabling timer for now
-
+	this->timerBarBG = data.hierarchy->CreateNode("Timer_Background", data.icons->GetAnim(MGI_White_Box), { 200.0f, 10.0f }, { 320.0f, 72.0f });
+	this->timerBarBG->color = { 1.0f, 0.0f, 0.0f, 0.0f };
+	this->timerBar = data.hierarchy->CreateNode("Timer_Fill", data.icons->GetAnim(MGI_White_Box), { 200.0f, 10.0f }, { 320.0f, 72.0f }, this->timerBarBG);
+	this->timerBar->color = { 1.0f, 0.0f, 1.0f, 0.0f };
+	this->timerBarBG->SetEnabled(true);
+	this->timerBomb = data.hierarchy->CreateNode("Timer_Sonic", data.icons->GetAnim(MGI_Sonic_Head), { 32.0f, 32.0f }, { 220.0f, 46.0f }, this->timerBarBG);
+	this->timerBomb = data.hierarchy->CreateNode("Timer_Bomb", data.icons->GetAnim(MGI_Bomb), { 32.0f, 32.0f }, { 420.0f, 46.0f }, this->timerBarBG);
+	Wiggle* bombWiggle = new Wiggle(RandomFloat(0.45f, 0.65f), -25.0f, 25.0f, true);
+	timerBomb->components.push_back(bombWiggle);
 
 	questionMarkText = new TextBox("?", 25.0f, TextAlignment::Left, data.text);
 	xPos = data.icons->xCenter - 100.0f;
