@@ -57,14 +57,16 @@ void FishingHard::CreateHierarchy(MinigameManagerData data)
 {
 	AddDPadToHierarchy(anyDPad, { 65.0f, 130.0f, 0.0f }, 45.0f, *data.icons, *data.hierarchy);
 
-	data.hierarchy->CreateNode("FishingBG", data.icons->GetAnim(MGI_Square), { 20.0f, 320.0f, 0.0f }, { 320.0f, 290.0f, 0.0f }, nullptr);
-	data.hierarchy->CreateNode("ProgressBG", data.icons->GetAnim(MGI_Square), { 15.0f, 320.0f, 0.0f }, { 350.0f, 290.0f, 0.0f }, nullptr);
-	catchZone = data.hierarchy->CreateNode("CatchZone", data.icons->GetAnim(MGI_Square), { 20.0f, 65.0f, 0.0f }, { 320.0f, 290.0f, 0.0f }, nullptr);
+	data.hierarchy->CreateNode("FishingBG", data.icons->GetAnim(MGI_Fishing_BG), { 20.0f, 320.0f, 0.0f }, { 320.0f, 290.0f, 0.0f }, nullptr);
+	data.hierarchy->CreateNode("ProgressBG", data.icons->GetAnim(MGI_Fishing_Bar_Outline), { 15.0f, 280.0f, 0.0f }, { 350.0f, 290.0f, 0.0f }, nullptr);
+	SpriteNode* barBottom = data.hierarchy->CreateNode("ProgressBG_Bottom", data.icons->GetAnim(MGI_Fishing_Bar_Cap), { 15.0f, 20.0f, 0.0f }, { 350.0f, 440.0f, 0.0f }, nullptr);
+	barBottom->SetRotation(180.0f);
+	data.hierarchy->CreateNode("ProgressBG_Top", data.icons->GetAnim(MGI_Fishing_Bar_Cap), { 15.0f, 20.0f, 0.0f }, { 350.0f, 140.0f, 0.0f }, nullptr);
+	catchZone = data.hierarchy->CreateNode("CatchZone", data.icons->GetAnim(MGI_Fishing_Catch_Bar), { 20.0f, 65.0f, 0.0f }, { 320.0f, 290.0f, 0.0f }, nullptr);
 	fish = data.hierarchy->CreateNode("Fish", data.icons->GetAnim(MGI_Chopper), { 24.0f, 24.0f, 0.0f }, { 320.0f, 290.0f, 0.0f }, nullptr);
-	progressBar = data.hierarchy->CreateNode("ProgressBar", data.icons->GetAnim(MGI_Square), { 15.0f, 320.0f, 0.0f }, { 350.0f, 290.0f, 0.0f }, nullptr);
+	progressBar = data.hierarchy->CreateNode("ProgressBar", data.icons->GetAnim(MGI_Square), { 11.0f, 320.0f, 0.0f }, { 350.0f, 290.0f, 0.0f }, nullptr);
 
-	catchZone->color = { 1.0f,0.0f,0.0f,1.0f };
-	progressBar->color = { 1.0f,0.0f,1.0f,0.0f };
+	progressBar->color = { 1.0f,0.0f,0.0f,1.18f };
 
 	data.collision->AddCollision(catchZone, std::make_shared<PolygonCollider>(NJS_POINT3({ 20.0f, 65.0f, 0.0f })));
 	data.collision->AddCollision(fish, std::make_shared<PolygonCollider>(NJS_POINT3({ 24.0f, 24.0f, 0.0f })));
@@ -83,8 +85,8 @@ void FishingHard::SetFillAmount(float amount)
 {
 	amount = amount < 0.0f ? 0.0f : amount;
 	amount = amount > 1.0f ? 1.0f : amount;
-	float height = 320.0f * amount;
-	NJS_POINT3 pos = { 350.0f, 450.0f - height * 0.5f, 0.0f };
+	float height = 280.0f * amount;
+	NJS_POINT3 pos = { 350.0f, 430.0f - height * 0.5f, 0.0f };
 	progressBar->displaySize.y = height;
 	progressBar->SetPositionGlobal(pos);
 }
@@ -147,7 +149,7 @@ void FishingHard::UpdateProgress(MinigameManagerData data)
 
 void FishingHard::Caught(MinigameManagerData data)
 {
-	endIcon->anim = data.icons->GetAnim(MGI_Caught_Banner);
+	endIcon->anim = data.icons->GetAnim(data.isLocationCheck ? MGI_Caught_Big_Banner : MGI_Caught_Banner);
 	endIcon->SetEnabled(true);
 	fs_state = FHS_Caught;
 	endTimer.Start(2.0f);
@@ -155,7 +157,7 @@ void FishingHard::Caught(MinigameManagerData data)
 
 void FishingHard::Escaped(MinigameManagerData data)
 {
-	endIcon->anim = data.icons->GetAnim(MGI_Miss_Banner);
+	endIcon->anim = data.icons->GetAnim(data.isLocationCheck ? MGI_Miss_Big_Banner : MGI_Miss_Banner);
 	endIcon->SetEnabled(true);
 	fs_state = FHS_Escaped;
 	endTimer.Start(2.0f);

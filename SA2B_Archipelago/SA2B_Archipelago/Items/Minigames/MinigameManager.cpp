@@ -174,9 +174,9 @@ void MinigameManager::UpdateCurrentMinigame()
 	{
 		/*if (_data.inputPress & RIF_Down)
 		{
-			//this->_data.isLocationCheck = true;
-			this->SetDifficulty(MGD_Medium);
-			this->currentMinigame = &this->pinball;
+			this->_data.isLocationCheck = true;
+			this->SetDifficulty(MGD_Hard);
+			this->currentMinigame = &this->fishing;
 			this->currentMinigameItem = ItemValue::IV_PongTrap;
 		}*/
 	}

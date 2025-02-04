@@ -37,14 +37,14 @@ void FishingEasy::OnFrame(MinigameManagerData data)
 		case FishingEasy::FES_FishOnLine:
 			if (data.inputPress & anyDPad)
 			{
-				biteIndicator->anim = data.icons->GetAnim(MGI_Caught_Banner);
+				biteIndicator->anim = data.icons->GetAnim(data.isLocationCheck ? MGI_Caught_Big_Banner : MGI_Caught_Banner);
 				//biteIndicator->color = { 1.0f, 0.0f, 1.0f, 0.0f };
 				timer.Start(2.0f);
 				fs_state = FES_Caught;
 			}
 			else if (timer.IsElapsed())
 			{
-				biteIndicator->anim = data.icons->GetAnim(MGI_Miss_Banner);
+				biteIndicator->anim = data.icons->GetAnim(data.isLocationCheck ? MGI_Miss_Big_Banner : MGI_Miss_Banner);
 				FishEscaped();
 			}
 			break;

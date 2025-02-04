@@ -60,7 +60,7 @@ void FishingMedium::OnFrame(MinigameManagerData data)
 					}
 					if (ringSizes[i] <= 0.0f)
 					{
-						endIcon->anim = data.icons->GetAnim(MGI_Miss_Banner);
+						endIcon->anim = data.icons->GetAnim(data.isLocationCheck ? MGI_Miss_Big_Banner : MGI_Miss_Banner);
 						endIcon->SetEnabled(true);
 						fs_state = FMS_Escaped;
 						endTimer.Start(2.0f);
@@ -79,7 +79,7 @@ void FishingMedium::OnFrame(MinigameManagerData data)
 							//zones[i]->SetEnabled(false);
 							if (successCount == ringCount)
 							{
-								endIcon->anim = data.icons->GetAnim(MGI_Caught_Banner);
+								endIcon->anim = data.icons->GetAnim(data.isLocationCheck ? MGI_Caught_Big_Banner : MGI_Caught_Banner);
 								endIcon->SetEnabled(true);
 								fs_state = FMS_Caught;
 								endTimer.Start(2.0f);
@@ -88,7 +88,7 @@ void FishingMedium::OnFrame(MinigameManagerData data)
 						}
 						else
 						{
-							endIcon->anim = data.icons->GetAnim(MGI_Miss_Banner);
+							endIcon->anim = data.icons->GetAnim(data.isLocationCheck ? MGI_Miss_Big_Banner : MGI_Miss_Banner);
 							endIcon->SetEnabled(true);
 							fs_state = FMS_Escaped;
 							endTimer.Start(2.0f);
