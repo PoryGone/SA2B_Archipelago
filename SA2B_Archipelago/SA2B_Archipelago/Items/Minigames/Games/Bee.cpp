@@ -21,7 +21,7 @@ void BeeTrap::OnGameStart(MinigameManagerData data)
 {
 	this->currentState = MinigameState::MGS_InProgress;
 
-	this->timer.Start(20.0f);
+	this->timer.Start(25.0f);
 
 	this->CreateHierarchy(data);
 }
