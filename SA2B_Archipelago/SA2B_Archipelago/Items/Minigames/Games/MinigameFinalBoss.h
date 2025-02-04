@@ -210,6 +210,7 @@ private:
 	int onHitIFrames = 15;
 	int onHitRingDamage = 5;
 	int ringEmitterIndex = 0;
+	int ringCap = 50;
 
 	float characterSpeed = 4.0f;
 	float enemyBulletSpeed = 3.0f;

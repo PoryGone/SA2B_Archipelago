@@ -65,10 +65,10 @@ void MinigameFinalBoss::OnFrame(MinigameManagerData data)
 			break;
 		}
 	}
-	if (data.inputPress & RIF_Y)
+	/*if (data.inputPress & RIF_Y)
 	{
 		currentState = MGS_Draw;
-	}
+	}*/
 }
 
 void MinigameFinalBoss::RunIntro(MinigameManagerData data)
@@ -142,6 +142,12 @@ void MinigameFinalBoss::RunIntro(MinigameManagerData data)
 
 void MinigameFinalBoss::RunInGame(MinigameManagerData data)
 {
+	if (leftBar->color.a < 1.0f)
+	{
+		float a = min(leftBar->color.a + 0.05f, 1.0f);
+		leftBar->color.a = a;
+		rightBar->color.a = a;
+	}
 	UpdateCharacterPosition(data);
 	UpdateBullets(data);
 	UpdateWeakPoint();
@@ -214,7 +220,8 @@ void MinigameFinalBoss::RunWin(MinigameManagerData data)
 	UpdateBullets(data);
 	if (sequenceTimer.IsElapsed())
 	{
-		currentState = MGS_Victory;
+		//currentState = MGS_Victory;
+		AwardWin(0);
 	}
 }
 
@@ -361,11 +368,11 @@ void MinigameFinalBoss::UpdateCharacterRingGrowthDecay(MinigameManagerData data)
 	{
 		if (sonicIsActive)
 		{
-			shadowRingCount = shadowRingCount < 999 ? shadowRingCount + 1 : shadowRingCount;
+			shadowRingCount = shadowRingCount < ringCap ? shadowRingCount + 1 : shadowRingCount;
 		}
 		else
 		{
-			sonicRingCount = sonicRingCount < 999 ? sonicRingCount + 1 : sonicRingCount;
+			sonicRingCount = sonicRingCount < ringCap ? sonicRingCount + 1 : sonicRingCount;
 		}
 		ringGrowthTimer.Start(ringGrowthCooldown);
 	}
@@ -697,7 +704,20 @@ void MinigameFinalBoss::CreateHierarchy(MinigameManagerData data)
 {
 	//Create Background
 	background = data.hierarchy->CreateNode("BG", data.icons->GetAnim(MGI_White_Box), { data.icons->xMax - data.icons->xMin + 2.0f, data.icons->yMax + 2.0f, 0.0f }, { data.icons->xCenter, data.icons->yCenter, 0.0f });
-	background->color = { 0.0f, 0.0f, 0.0f, 0.0f };
+	background->color = { 1.0f, 0.0f, 0.0f, 0.0f };
+
+	float starSize = 240.0f;
+	float starX = data.icons->xMin + (starSize * 0.5f);
+	float starY = starSize * 0.5f;
+	while (starX < data.icons->xMax)
+	{
+		data.hierarchy->CreateNode("Stars", data.icons->GetAnim(MGI_Stars_BG), { starSize, starSize }, { starX, starY });
+		data.hierarchy->CreateNode("Stars", data.icons->GetAnim(MGI_Stars_BG), { starSize, starSize }, { starX, starY + starSize });
+		starX += starSize;
+	}
+
+	SpriteNode* earth = data.hierarchy->CreateNode("Earth", data.icons->GetAnim(MGI_Earth), { 300.0f, 50.0f }, { data.icons->xCenter, data.icons->yMax - 10.0f});
+	earth->color = { 1.0f, 0.7f, 0.7f, 0.7f };
 
 	//Create Boss Beams
 	bossBeamParent = data.hierarchy->CreateNode("Boss_Beams");
