@@ -6,16 +6,18 @@
 #include "../Backend/Time/Timer.h"
 #include "../Components/Rotator.h"
 
-std::vector<NJS_ARGB> brickColors = {
-	{ 1.0f, 0.0f, 1.0f, 0.0f },
-	{ 1.0f, 1.0f, 1.0f, 0.0f },
-	{ 1.0f, 1.0f, 0.5f, 0.0f },
-	{ 1.0f, 1.0f, 0.0f, 0.0f },
+std::vector<MinigameIcon> brickAnims = {
+	MinigameIcon::MGI_Block_Green,
+	MinigameIcon::MGI_Block_Purple,
+	MinigameIcon::MGI_Block_Deep_Purple,
+	MinigameIcon::MGI_Block_Deep_Purple,
 };
 
 void Breakout::OnGameStart(MinigameManagerData data)
 {
 	this->currentState = MinigameState::MGS_InProgress;
+	this->localState = BreakoutState::BS_Game;
+	this->endingTimer = 120;
 
 	this->CreateHierarchy(data);
 
@@ -30,6 +32,57 @@ void Breakout::OnGameStart(MinigameManagerData data)
 
 void Breakout::OnFrame(MinigameManagerData data)
 {
+	if (this->localState == BreakoutState::BS_EndingWin)
+	{
+		if (this->resultNode->color.a < 1.0f)
+		{
+			this->resultNode->SetEnabled(true);
+			this->resultNode->anim = data.icons->GetAnim(MGI_Green_Check);
+			this->resultNode->color.a += 1.0f / 30.0f;
+			this->resultNode->displaySize = Point3MoveTowards(this->resultNode->displaySize, { 128.0f, 128.0f }, 72.0f / 30.0f);
+		}
+		else
+		{
+			if (this->endingTimer == 120)
+			{
+				PlaySoundProbably((int)MinigameSounds::RankReveal, 0, 0, 0);
+			}
+
+			this->endingTimer--;
+
+			if (this->endingTimer <= 0)
+			{
+				this->currentState = MinigameState::MGS_Victory;
+			}
+		}
+		return;
+	}
+	else if (this->localState == BreakoutState::BS_EndingLose)
+	{
+		if (this->resultNode->color.a < 1.0f)
+		{
+			this->resultNode->SetEnabled(true);
+			this->resultNode->anim = data.icons->GetAnim(MGI_F_Rank);
+			this->resultNode->color.a += 1.0f / 30.0f;
+			this->resultNode->displaySize = Point3MoveTowards(this->resultNode->displaySize, { 128.0f, 128.0f }, 72.0f / 30.0f);
+		}
+		else
+		{
+			if (this->endingTimer == 120)
+			{
+				PlaySoundProbably((int)MinigameSounds::RankReveal, 0, 0, 0);
+			}
+
+			this->endingTimer--;
+
+			if (this->endingTimer <= 0)
+			{
+				this->currentState = MinigameState::MGS_Loss;
+			}
+		}
+		return;
+	}
+
 	this->OnFramePlayer(data);
 	if (data.managerState == MinigameState::MGS_InProgress)
 	{
@@ -94,9 +147,7 @@ void Breakout::HandleCollision(MinigameManagerData data)
 	// You Lose (past the Player Paddle)
 	if ((this->ball->GetPositionGlobal().y + BREAKOUT_BALL_RADIUS) >= BREAKOUT_BOTTOM)
 	{
-		this->currentState = MinigameState::MGS_Loss;
-
-		PlaySoundProbably(BREAKOUT_SOUND_LOSE, 0, 0, 0);
+		this->localState = BreakoutState::BS_EndingLose;
 	}
 
 	// Top Bounce
@@ -145,17 +196,25 @@ void Breakout::HandleCollision(MinigameManagerData data)
 				float xDist = abs(this->bricks[i].sprite->GetPositionGlobal().x - this->ball->GetPositionGlobal().x);
 				float yDist = abs(this->bricks[i].sprite->GetPositionGlobal().y - this->ball->GetPositionGlobal().y);
 
-				if (xDist <= (BREAKOUT_BRICK_COLL_WIDTH / 2.0f))
+				if (xDist <= (BREAKOUT_BRICK_COLL_WIDTH / 2.0f) + 1)
 				{
 					this->ballSpeedY = -this->ballSpeedY;
+					this->ball->Translate({ 0, this->ballSpeedY, 0 });
 				}
-				if (yDist <= (BREAKOUT_BRICK_COLL_THICKNESS / 2.0f))
+				else if (yDist <= (BREAKOUT_BRICK_COLL_THICKNESS / 2.0f) + 1)
 				{
 					this->ballSpeedX = -this->ballSpeedX;
+					this->ball->Translate({ this->ballSpeedX, 0, 0 });
+				}
+				else
+				{
+					this->ballSpeedX = -this->ballSpeedX;
+					this->ballSpeedY = -this->ballSpeedY;
+					this->ball->Translate({ this->ballSpeedX, this->ballSpeedY, 0 });
 				}
 
 				this->bricks[i].health--;
-				this->bricks[i].sprite->color = brickColors[this->bricks[i].health - 1];
+				this->bricks[i].sprite->anim = data.icons->GetAnim(brickAnims[this->bricks[i].health - 1]);
 
 				if (this->bricks[i].health == 0)
 				{
@@ -167,9 +226,7 @@ void Breakout::HandleCollision(MinigameManagerData data)
 
 	if (allBroken)
 	{
-		this->currentState = MinigameState::MGS_Victory;
-
-		PlaySoundProbably(BREAKOUT_SOUND_WIN, 0, 0, 0);
+		this->localState = BreakoutState::BS_EndingWin;
 	}
 }
 
@@ -184,18 +241,18 @@ void Breakout::CreateHierarchy(MinigameManagerData data)
 	float middle = BREAKOUT_LEFT + (BREAKOUT_RIGHT - BREAKOUT_LEFT) / 2.0f;
 
 	// Player Paddle
-	SpriteNode* top = data.hierarchy->CreateNode("LP_Top", data.icons->GetAnim(MGI_RoundedBarDark_Top), { width, BREAKOUT_PADDLE_THICKNESS, 1 }, { 0, 0, 0 }, paddleBack);
-	SpriteNode* bottom = data.hierarchy->CreateNode("LP_Bottom", data.icons->GetAnim(MGI_RoundedBarDark_Bottom), { width, BREAKOUT_PADDLE_THICKNESS, 1 }, { 0, 0, 0 }, paddleBack);
-	SpriteNode* mid = data.hierarchy->CreateNode("LP_Mid", data.icons->GetAnim(MGI_RoundedBarDark_Mid), { midWidth, BREAKOUT_PADDLE_THICKNESS, 1 }, { 0, 0, 0 }, paddleBack);
+	SpriteNode* top = data.hierarchy->CreateNode("LP_Top", data.icons->GetAnim(MGI_RoundedBarDark_Top), { BREAKOUT_PADDLE_THICKNESS, width, 1 }, { 0, 0, 0 }, paddleBack);
+	SpriteNode* bottom = data.hierarchy->CreateNode("LP_Bottom", data.icons->GetAnim(MGI_RoundedBarDark_Bottom), { BREAKOUT_PADDLE_THICKNESS, width, 1 }, { 0, 0, 0 }, paddleBack);
+	SpriteNode* mid = data.hierarchy->CreateNode("LP_Mid", data.icons->GetAnim(MGI_RoundedBarDark_Mid), { BREAKOUT_PADDLE_THICKNESS, midWidth, 1 }, { 0, 0, 0 }, paddleBack);
 	this->playerPaddle = data.hierarchy->CreateNode("LP_Paddle", data.icons->GetAnim(MGI_RoundedBar), { BREAKOUT_PADDLE_THICKNESS, width, 1 }, { 0, 0, 0 });
 	paddleBack->SetPositionGlobal({ middle, BREAKOUT_BOTTOM - (BREAKOUT_PADDLE_THICKNESS), 0 });
 	top->SetPosition({ 0, (BREAKOUT_LEFT + BREAKOUT_PLAYER_PADDLE_HALFLENGTH) - middle, 0 });
 	bottom->SetPosition({ 0, (BREAKOUT_RIGHT - BREAKOUT_PLAYER_PADDLE_HALFLENGTH) - middle, 0 });
 	mid->SetPosition({ 0, 0, 0 });
 	paddleBack->SetRotation(90.0f);
-	top->SetRotation(90.0f);
-	bottom->SetRotation(90.0f);
-	mid->SetRotation(90.0f);
+	//top->SetRotation(90.0f);
+	//bottom->SetRotation(90.0f);
+	//mid->SetRotation(90.0f);
 	this->playerPaddle->SetPosition({ middle, BREAKOUT_BOTTOM - (BREAKOUT_PADDLE_THICKNESS), 0 });
 	this->playerPaddle->SetRotation(90.0f);
 
@@ -231,10 +288,15 @@ void Breakout::CreateHierarchy(MinigameManagerData data)
 
 			newBrick.health = brickHealth;
 			newBrick.sprite = data.hierarchy->CreateNode("Brick", data.icons->GetAnim(MGI_Square), { BREAKOUT_BRICK_COLL_WIDTH, BREAKOUT_BRICK_COLL_THICKNESS, 1 }, { brickX, brickY, 0 });
-			newBrick.sprite->color = brickColors[brickHealth - 1];
+			newBrick.sprite->anim = data.icons->GetAnim(brickAnims[brickHealth - 1]);
 			data.collision->AddCollision(newBrick.sprite, std::make_shared<PolygonCollider>(NJS_POINT3({ BREAKOUT_BRICK_COLL_WIDTH, BREAKOUT_BRICK_COLL_THICKNESS, 0.0f })));
 
 			this->bricks.push_back(newBrick);
 		}
 	}
+
+	this->resultNode = data.hierarchy->CreateNode("Result", data.icons->GetAnim(MGI_Green_Check), { 200, 200 },
+		{ data.icons->xCenter, data.icons->yCenter });
+	this->resultNode->color.a = 0.0f;
+	this->resultNode->SetEnabled(false);
 }

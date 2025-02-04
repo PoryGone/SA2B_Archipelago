@@ -54,6 +54,13 @@ struct BreakoutBrick
 
 class Breakout : public MinigameBase
 {
+	enum BreakoutState
+	{
+		BS_Game = 0,
+		BS_EndingWin,
+		BS_EndingLose,
+	};
+
 public:
 	void OnGameStart(MinigameManagerData data) override;
 	void OnFrame(MinigameManagerData data) override;
@@ -67,6 +74,10 @@ public:
 	void HandleCollision(MinigameManagerData data);
 
 private:
+	BreakoutState localState;
+	int endingTimer = 120;
+	SpriteNode* resultNode;
+
 	float ballSpeedX = 2.0f;
 	float ballSpeedY = 2.0f;
 
