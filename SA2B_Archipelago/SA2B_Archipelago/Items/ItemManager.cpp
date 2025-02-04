@@ -1014,6 +1014,7 @@ bool ItemManager::IsActiveTrapValid()
 		}
 		break;
 	case ItemValue::IV_LiteratureTrap:
+	case ItemValue::IV_BeeTrap:
 	case ItemValue::IV_PongTrap:
 	case ItemValue::IV_BreakoutTrap:
 	case ItemValue::IV_FishingTrap:
@@ -1291,6 +1292,10 @@ void ItemManager::OnFrameTrapQueue()
 	{
 		// Nothing
 	}
+	else if (this->_ActiveTrap == ItemValue::IV_BeeTrap)
+	{
+		// Nothing
+	}
 	else if (this->_ActiveTrap == ItemValue::IV_ControllerDriftTrap)
 	{
 		// Nothing
@@ -1523,6 +1528,8 @@ void ItemManager::OnFrameTrapQueue()
 		break;
 	case ItemValue::IV_LiteratureTrap:
 		PlayUnshuffledVoice(2, 85);
+	case ItemValue::IV_BeeTrap:
+		PlayUnshuffledVoice(2, 1757);
 	case ItemValue::IV_PongTrap:
 	case ItemValue::IV_BreakoutTrap:
 	case ItemValue::IV_FishingTrap:

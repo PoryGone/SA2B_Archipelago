@@ -4,6 +4,7 @@
 
 #include "MinigameBase.h"
 #include "Games/Literature.h"
+#include "Games/Bee.h"
 #include "Games/Pong.h"
 #include "Games/Fishing.h"
 #include "Games/Breakout.h"
@@ -73,6 +74,7 @@ private:
 
 	//Minigames
 	Literature literature			= Literature();
+	BeeTrap bee						= BeeTrap();
 	Pong pong						= Pong();
 	Fishing fishing					= Fishing();
 	Breakout breakout				= Breakout();

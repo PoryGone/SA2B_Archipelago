@@ -175,6 +175,14 @@ float Point3AngleRadians(NJS_POINT3 a, NJS_POINT3 b)
 	return acos(Point3DotProduct(Point3Normalize(a), Point3Normalize(b)));
 }
 
+float Point3SignedAngleRadians(NJS_POINT3 a, NJS_POINT3 b)
+{
+	float ang = Point3AngleRadians(a, b);
+	float sign = a.x * b.y - a.y * b.x;
+	sign = sign < 0.0f ? -1.0f : 1.0f;
+	return ang * sign;
+}
+
 std::string Point3String(NJS_POINT3 a)
 {
 	std::string str("(");

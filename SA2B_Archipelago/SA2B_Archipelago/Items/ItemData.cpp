@@ -68,6 +68,7 @@ void InitializeItemData(std::map<int, ItemData> &outItemData)
     outItemData[ItemValue::IV_LiteratureTrap]      = ItemData(0x0000000, std::string("Literature Trap"), std::string(), 0);
     outItemData[ItemValue::IV_ControllerDriftTrap] = ItemData(0x0000000, std::string("Controller Drift Trap"), std::string(), 0);
     outItemData[ItemValue::IV_PoisonTrap]          = ItemData(0x0000000, std::string("Poison Trap"), std::string(), 0);
+    outItemData[ItemValue::IV_BeeTrap]             = ItemData(0x0000000, std::string("Bee Trap"), std::string(), 0);
 
     outItemData[ItemValue::IV_WhiteChaosEmerald]  = ItemData(0x01DEEAF8, std::string("White Chaos Emerald"), std::string(), 0);
     outItemData[ItemValue::IV_RedChaosEmerald]    = ItemData(0x01DEEAF9, std::string("Red Chaos Emerald"), std::string(), 0);
@@ -229,6 +230,7 @@ std::map<ItemValue, std::string> item_value_to_name = {
     {ItemValue::IV_LiteratureTrap,      "Literature Trap"},
     {ItemValue::IV_ControllerDriftTrap, "Controller Drift Trap"},
     {ItemValue::IV_PoisonTrap,          "Poison Trap"},
+    {ItemValue::IV_BeeTrap,             "Bee Trap"},
     {ItemValue::IV_PongTrap,            "Pong Trap"},
     {ItemValue::IV_BreakoutTrap,        "Breakout Trap"},
     {ItemValue::IV_FishingTrap,         "Fishing Trap"},
@@ -258,6 +260,7 @@ std::map<std::string, ItemValue> item_name_to_value = {
     {"Literature Trap",         ItemValue::IV_LiteratureTrap},
     {"Controller Drift Trap",   ItemValue::IV_ControllerDriftTrap},
     {"Poison Trap",             ItemValue::IV_PoisonTrap},
+    {"Bee Trap",                ItemValue::IV_BeeTrap},
     {"Pong Trap",               ItemValue::IV_PongTrap},
     {"Breakout Trap",           ItemValue::IV_BreakoutTrap},
     {"Fishing Trap",            ItemValue::IV_FishingTrap},

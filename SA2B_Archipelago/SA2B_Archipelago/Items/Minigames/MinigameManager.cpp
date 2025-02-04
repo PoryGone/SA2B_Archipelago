@@ -18,7 +18,7 @@ void DrawUpgradeIcon_MG(ObjectMaster* obj)
 	{
 		MinigameManager::GetInstance().Resume();
 		MinigameManager::GetInstance().UpdateCurrentMinigame();
-	} 
+	}
 	else
 	{
 		MinigameManager::GetInstance().Pause();
@@ -169,18 +169,16 @@ void MinigameManager::UpdateCurrentMinigame()
 		}
 	}
 	//Debug Test Minigame
-	
 	else
 	{
 		/*if (_data.inputPress & RIF_Down)
 		{
-			this->_data.isLocationCheck = true;
-			this->SetDifficulty(MGD_Hard);
-			this->currentMinigame = &this->fishing;
+			//this->_data.isLocationCheck = true;
+			this->SetDifficulty(MGD_Medium);
+			this->currentMinigame = &this->pinball;
 			this->currentMinigameItem = ItemValue::IV_PongTrap;
 		}*/
 	}
-	
 }
 
 void MinigameManager::EndMinigame()
@@ -208,6 +206,9 @@ void MinigameManager::StartMinigame(ItemValue item, bool locationGame, bool link
 	{
 	case ItemValue::IV_LiteratureTrap:
 		this->currentMinigame = &this->literature;
+		break;
+	case ItemValue::IV_BeeTrap:
+		this->currentMinigame = &this->bee;
 		break;
 	case ItemValue::IV_PongTrap:
 		this->currentMinigame = &this->pong;
