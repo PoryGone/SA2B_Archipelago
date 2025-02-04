@@ -6,6 +6,8 @@
 void Pong::OnGameStart(MinigameManagerData data)
 {
 	this->currentState = MGS_InProgress;
+	this->localState = PongState::PS_Game;
+	this->endingTimer = 120;
 
 	this->CreateHierarchy(data);
 
@@ -34,6 +36,57 @@ void Pong::OnGameStart(MinigameManagerData data)
 
 void Pong::OnFrame(MinigameManagerData data)
 {
+	if (this->localState == PongState::PS_EndingWin)
+	{
+		if (this->resultNode->color.a < 1.0f)
+		{
+			this->resultNode->SetEnabled(true);
+			this->resultNode->anim = data.icons->GetAnim(MGI_Green_Check);
+			this->resultNode->color.a += 1.0f / 30.0f;
+			this->resultNode->displaySize = Point3MoveTowards(this->resultNode->displaySize, { 128.0f, 128.0f }, 72.0f / 30.0f);
+		}
+		else
+		{
+			if (this->endingTimer == 120)
+			{
+				PlaySoundProbably((int)MinigameSounds::RankReveal, 0, 0, 0);
+			}
+
+			this->endingTimer--;
+
+			if (this->endingTimer <= 0)
+			{
+				this->currentState = MinigameState::MGS_Victory;
+			}
+		}
+		return;
+	}
+	else if (this->localState == PongState::PS_EndingLose)
+	{
+		if (this->resultNode->color.a < 1.0f)
+		{
+			this->resultNode->SetEnabled(true);
+			this->resultNode->anim = data.icons->GetAnim(MGI_F_Rank);
+			this->resultNode->color.a += 1.0f / 30.0f;
+			this->resultNode->displaySize = Point3MoveTowards(this->resultNode->displaySize, { 128.0f, 128.0f }, 72.0f / 30.0f);
+		}
+		else
+		{
+			if (this->endingTimer == 120)
+			{
+				PlaySoundProbably((int)MinigameSounds::RankReveal, 0, 0, 0);
+			}
+
+			this->endingTimer--;
+
+			if (this->endingTimer <= 0)
+			{
+				this->currentState = MinigameState::MGS_Loss;
+			}
+		}
+		return;
+	}
+
 	this->OnFramePlayer(data);
 	if (data.managerState == MinigameState::MGS_InProgress)
 	{
@@ -125,17 +178,13 @@ void Pong::HandleCollision(MinigameManagerData data)
 	// You Win (past the AI Paddle)
 	if ((this->ball->GetPositionGlobal().x + PONG_BALL_RADIUS) >= PONG_RIGHT)
 	{
-		this->currentState = MinigameState::MGS_Victory;
-
-		PlaySoundProbably(PONG_SOUND_WIN, 0, 0, 0);
+		this->localState = PongState::PS_EndingWin;
 	}
 
 	// You Lose (past the Player Paddle)
 	if ((this->ball->GetPositionGlobal().x - PONG_BALL_RADIUS) <= PONG_LEFT)
 	{
-		this->currentState = MinigameState::MGS_Loss;
-
-		PlaySoundProbably(PONG_SOUND_LOSE, 0, 0, 0);
+		this->localState = PongState::PS_EndingLose;
 	}
 
 	// Top/bottom bounce
@@ -208,5 +257,9 @@ void Pong::CreateHierarchy(MinigameManagerData data)
 	float ballY = PONG_TOP + (PONG_BOTTOM - PONG_TOP) / 2.0f;
 	ball = data.hierarchy->CreateNode("Ball", data.icons->GetAnim(MGI_Spinball), { PONG_BALL_RADIUS * 2, PONG_BALL_RADIUS * 2, 1 }, { ballX, ballY, 0 });
 	ball->components.push_back(new Rotator(rotationDelta));
-	
+
+	this->resultNode = data.hierarchy->CreateNode("Result", data.icons->GetAnim(MGI_Green_Check), { 200, 200 },
+		{ data.icons->xCenter, data.icons->yCenter });
+	this->resultNode->color.a = 0.0f;
+	this->resultNode->SetEnabled(false);
 }

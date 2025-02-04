@@ -44,6 +44,13 @@
 
 class Pong : public MinigameBase
 {
+	enum PongState
+	{
+		PS_Game = 0,
+		PS_EndingWin,
+		PS_EndingLose,
+	};
+
 public:
 	void OnGameStart(MinigameManagerData data) override;
 	void OnFrame(MinigameManagerData data) override;
@@ -56,6 +63,10 @@ public:
 	void HandleCollision(MinigameManagerData data);
 
 private:
+	PongState localState;
+	int endingTimer = 120;
+	SpriteNode* resultNode;
+
 	float ballSpeedX = 2.0f;
 	float ballSpeedY = 2.0f;
 
