@@ -71,5 +71,5 @@ private:
 	TextBox* submitText;
 
 	std::array<SpriteNode*, 15> questionMarks;
-	TextBox* questionMarkText;
+	//TextBox* questionMarkText;
 };

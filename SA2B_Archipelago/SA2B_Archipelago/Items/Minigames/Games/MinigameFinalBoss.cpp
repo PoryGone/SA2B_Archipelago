@@ -394,6 +394,8 @@ void MinigameFinalBoss::UpdateCharacterRingGrowthDecay(MinigameManagerData data)
 	text = "Shadow\n";
 	text.append(std::to_string(shadowRingCount));
 	shadowRingsText->UpdateText(text);
+	sonicRings->color = sonicRingCount == ringCap ? NJS_ARGB{ 1.0f, 0.96f, 0.89f, 0.26f } : NJS_ARGB{ 1.0f, 1.0f, 1.0f, 1.0f };
+	shadowRings->color = shadowRingCount == ringCap ? NJS_ARGB{ 1.0f, 0.96f, 0.89f, 0.26f } : NJS_ARGB{ 1.0f, 1.0f, 1.0f, 1.0f };
 	if (shadowRingCount <= 0 || sonicRingCount <= 0)
 	{
 		Defeat(data);
@@ -853,11 +855,11 @@ void MinigameFinalBoss::CreateHierarchy(MinigameManagerData data)
 	FHHealthBar->color = { 1.0f, 0.0f, 0.0f, 1.0f };
 
 	//Create Text
-	sonicRings = data.hierarchy->CreateNode("Sonic_Rings", nullptr, { 100.0f, 30.0f }, { 70.0f, 450.0f });
-	sonicRingsText = new TextBox("Sonic\n50", 15.0f, TextAlignment::Left, data.text);
+	sonicRings = data.hierarchy->CreateNode("Sonic_Rings", nullptr, { 100.0f, 30.0f }, { 70.0f, 445.0f });
+	sonicRingsText = new TextBox("Sonic\n50", 20.0f, TextAlignment::Left, data.text);
 	sonicRings->renderComponents.push_back(sonicRingsText);
-	shadowRings = data.hierarchy->CreateNode("Shadow_Rings", nullptr, { 100.0f, 30.0f }, { 570.0f, 450.0f });
-	shadowRingsText = new TextBox("Shadow\n50", 15.0f, TextAlignment::Right, data.text);
+	shadowRings = data.hierarchy->CreateNode("Shadow_Rings", nullptr, { 100.0f, 30.0f }, { 570.0f, 445.0f });
+	shadowRingsText = new TextBox("Shadow\n50", 20.0f, TextAlignment::Right, data.text);
 	shadowRings->renderComponents.push_back(shadowRingsText);
 
 	endTextNode = data.hierarchy->CreateNode("End_Text", nullptr, { 100.0f, 30.0f }, { 320.0f, 240.0f });

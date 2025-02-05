@@ -20,15 +20,15 @@ void NumberSequence::OnGameStart(MinigameManagerData data)
 	switch (data.difficulty)
 	{
 	case MGD_Easy:
-		guessTime = 30.0f;
+		guessTime = 35.0f;
 		guessesRemaining = 9;
 		break;
 	case MGD_Medium:
-		guessTime = 25.0f;
+		guessTime = 30.0f;
 		guessesRemaining = 7;
 		break;
 	case MGD_Hard:
-		guessTime = 20.0f;
+		guessTime = 25.0f;
 		guessesRemaining = 5;
 		break;
 	}
@@ -289,7 +289,7 @@ void NumberSequence::CreateHierarchy(MinigameManagerData data)
 		xPos += 70.0f;
 	}
 
-	submitParent = data.hierarchy->CreateNode("Submit_Parent", data.icons->GetAnim(MGI_Circle), { 30.0f, 30.0f }, { xPos, data.icons->yCenter }, nullptr);
+	submitParent = data.hierarchy->CreateNode("Submit_Parent", data.icons->GetAnim(MGI_Safe_Handle), { 50.0f, 50.0f }, { xPos, data.icons->yCenter }, nullptr);
 	submitUp = data.hierarchy->CreateNode("Submit_Parent", submitParent);
 	submitUp->SetPosition({ 0.0f, -60.0f });
 	submitUp->displaySize = { 50.0f, smallTextSize };
@@ -310,16 +310,16 @@ void NumberSequence::CreateHierarchy(MinigameManagerData data)
 	Wiggle* bombWiggle = new Wiggle(RandomFloat(0.45f, 0.65f), -25.0f, 25.0f, true);
 	timerBomb->components.push_back(bombWiggle);
 
-	questionMarkText = new TextBox("?", 25.0f, TextAlignment::Left, data.text);
-	xPos = data.icons->xCenter - 100.0f;
+	//questionMarkText = new TextBox("?", 25.0f, TextAlignment::Left, data.text);
+	xPos = data.icons->xCenter - 95.0f;
 	for (int i = 0; i < questionMarks.size(); i++)
 	{
-		questionMarks[i] = data.hierarchy->CreateNode("Question_Mark");
-		questionMarks[i]->displaySize = { 0.0f, 0.0f };
-		questionMarks[i]->SetPositionGlobal({ xPos, 81.0f });
-		questionMarks[i]->color = { 1.0f, 1.0f, 1.0f, 0.0f };
-		questionMarks[i]->renderComponents.push_back(questionMarkText);
-		xPos += 10.0f;
+		questionMarks[i] = data.hierarchy->CreateNode("Question_Mark", data.icons->GetAnim(MGI_Life_Box), { 20.0f, 20.0f }, { xPos, 100.0f });
+		//questionMarks[i]->displaySize = { 0.0f, 0.0f };
+		//questionMarks[i]->SetPositionGlobal({ xPos, 81.0f });
+		//questionMarks[i]->color = { 1.0f, 1.0f, 1.0f, 1.0f };
+		//questionMarks[i]->renderComponents.push_back(questionMarkText);
+		xPos += 25.0f;
 	}
 
 }	
