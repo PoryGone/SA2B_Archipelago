@@ -154,9 +154,21 @@ void ArchipelagoManager::OnFrameFunction()
         }
     }
 
-    if (this->_badSaveFile || this->_badSaveName)
+    if (this->_badSaveFile)
     {
-        std::string msg1 = "Incorrect Save File Loaded.";
+        std::string msg1 = "Incorrect Save File Loaded. (Wrong Seed)";
+        std::string msg2 = "Relaunch game and load the correct save.";
+        _helperFunctions->SetDebugFontSize(16);
+        _helperFunctions->SetDebugFontColor(this->_errorColor);
+        _helperFunctions->DisplayDebugString(NJM_LOCATION(0, 0), msg1.c_str());
+        _helperFunctions->DisplayDebugString(NJM_LOCATION(0, 1), msg2.c_str());
+
+        return;
+    }
+
+    if (this->_badSaveName)
+    {
+        std::string msg1 = "Incorrect Save File Loaded. (Wrong Slot)";
         std::string msg2 = "Relaunch game and load the correct save.";
         _helperFunctions->SetDebugFontSize(16);
         _helperFunctions->SetDebugFontColor(this->_errorColor);
@@ -257,6 +269,17 @@ void ArchipelagoManager::OnFrameFunction()
                     {
                         this->_badSaveFile = true;
 
+                        PrintDebug("Incorrect Save Loaded - Seed Hash Mismatch");
+                        std::string errorLog = "Server Name: ";
+                        errorLog += this->_seedName;
+                        PrintDebug(errorLog.c_str());
+                        errorLog = "Server Name Hash: ";
+                        errorLog += std::to_string(seedHash);
+                        PrintDebug(errorLog.c_str());
+                        errorLog = "Save Name Hash: ";
+                        errorLog += std::to_string(SeedHash);
+                        PrintDebug(errorLog.c_str());
+
                         return;
                     }
                 }
@@ -281,6 +304,17 @@ void ArchipelagoManager::OnFrameFunction()
                         if (!this->_settingsINI->getBool("AP", "IgnoreFileSafety", false))
                         {
                             this->_badSaveName = true;
+
+                            PrintDebug("Incorrect Save Loaded - Player Name Hash Mismatch");
+                            std::string errorLog = "Config INI Name: ";
+                            errorLog += playerName;
+                            PrintDebug(errorLog.c_str());
+                            errorLog = "Config INI Name Hash: ";
+                            errorLog += std::to_string(playerNameHash);
+                            PrintDebug(errorLog.c_str());
+                            errorLog = "Save Name Hash: ";
+                            errorLog += std::to_string(PlayerNameHash);
+                            PrintDebug(errorLog.c_str());
 
                             return;
                         }
