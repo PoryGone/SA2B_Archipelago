@@ -110,6 +110,8 @@ public:
 
 	bool AreAllRacesComplete();
 
+	bool shouldShowBigPrompt = false;
+
 private:
 	const HelperFunctions* _helperFunctions;
 	ArchipelagoManager* _archipelagoManager;

@@ -304,6 +304,7 @@ void LocationManager::OnInputFunction()
 
 	if (this->_bigEnabled)
 	{
+		shouldShowBigPrompt = false;
 		if (GameState != GameStates::GameStates_Pause)
 		{
 			MinigameManager* minigameManager = &MinigameManager::GetInstance();
@@ -384,9 +385,10 @@ void LocationManager::OnInputFunction()
 							if (dist(relevantPos, MainCharObj1[0]->Position) < checkData.Range)
 							{
 								// TODO: RAS: Show prompt for Big
-								std::string msg1 = "PRESS Y TO FISH";
-								_helperFunctions->SetDebugFontColor(0xFFF542C8);
-								_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 2), msg1.c_str());
+								shouldShowBigPrompt = true;
+								//std::string msg1 = "PRESS Y TO FISH";
+								//_helperFunctions->SetDebugFontColor(0xFFF542C8);
+								//_helperFunctions->DisplayDebugString(NJM_LOCATION(0, 2), msg1.c_str());
 
 								if (PressedButtons & 0b1000000000)
 								{

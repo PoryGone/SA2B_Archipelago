@@ -1039,6 +1039,21 @@ void UpdateEmblemRequirements()
 	}
 }
 
+void UpdateBigPrompt()
+{
+	LocationManager* locMan = &LocationManager::getInstance();
+
+	if (locMan->shouldShowBigPrompt)
+	{
+		StageSelectSprite.sx = 1.0f;
+		StageSelectSprite.sy = 1.0f;
+
+		StageSelectSprite.tanim = &StageSelectAnim[SSI_Y_To_Fish];
+		StageSelectSprite.p = { 320.0f, 64.0f, 0.0f };
+		DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+	}
+}
+
 void UpdateChaoCoinRequirements()
 {
 	int currentTileStageIndex = TileIDtoStageIndex[SS_SelectedTile];
@@ -1234,6 +1249,7 @@ void DrawUpgradeIcon_IL(ObjectMaster* obj)
 
 	if (GameMode == GameMode::GameMode_Level)
 	{
+		UpdateBigPrompt();
 		UpdateChaoCoinRequirements();
 		UpdateTimescale();
 
