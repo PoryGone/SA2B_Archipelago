@@ -10,7 +10,7 @@ void LightUpPath::OnGameStart(MinigameManagerData data)
 	cursorX = 0;
 	cursorY = 0;
 	CreateHierarchy(data);
-	FillGrid(data.difficulty);
+	FillGrid(data.difficulty, data);
 	data.timers->push_back(&this->timer);
 	this->timer.Start(this->guessTime);
 }
@@ -23,19 +23,19 @@ void LightUpPath::OnFrame(MinigameManagerData data)
 	}
 	if (data.inputPress & RIF_Up)
 	{
-		Move(0, -1);
+		Move(0, -1, data);
 	}
 	if (data.inputPress & RIF_Down)
 	{
-		Move(0, 1);
+		Move(0, 1, data);
 	}
 	if (data.inputPress & RIF_Left)
 	{
-		Move(-1, 0);
+		Move(-1, 0, data);
 	}
 	if (data.inputPress & RIF_Right)
 	{
-		Move(1, 0);
+		Move(1, 0, data);
 	}
 
 	this->UpdateTimerFill();
@@ -55,7 +55,7 @@ void LightUpPath::OnCleanup(MinigameManagerData data)
 	grid.clear();
 }
 
-void LightUpPath::FillGrid(MinigameDifficulty difficulty)
+void LightUpPath::FillGrid(MinigameDifficulty difficulty, MinigameManagerData data)
 {
 	int startX = 0;
 	int startY = 0;
@@ -96,38 +96,41 @@ void LightUpPath::FillGrid(MinigameDifficulty difficulty)
 				grid[x][y].cellParent->SetEnabled(true);
 				grid[x][y].active = true;
 				grid[x][y].used = false;
-				grid[x][y].cellParent->color = openColor;
+				grid[x][y].cellParent->anim = data.icons->GetAnim(MGI_Tile_Unlit);
+				//grid[x][y].cellParent->color = openColor;
 				break;
 			case LightUpPath::LTT_Closed:
 				grid[x][y].cellParent->SetEnabled(true);
 				grid[x][y].active = false;
 				grid[x][y].used = false;
-				grid[x][y].cellParent->color = closedColor;
+				grid[x][y].cellParent->anim = data.icons->GetAnim(MGI_Tile_Disabled);
+				//grid[x][y].cellParent->color = closedColor;
 				break;
 			case LightUpPath::LTT_Start:
 				grid[x][y].cellParent->SetEnabled(true);
 				grid[x][y].active = true;
 				grid[x][y].used = true;
-				grid[x][y].cellParent->color = usedColor;
+				grid[x][y].cellParent->anim = data.icons->GetAnim(MGI_Tile_Lit);
+				//grid[x][y].cellParent->color = usedColor;
 				startX = x;
 				startY = y;
 				break;
 			}
 		}
 	}
-	Set(startX, startY);
+	Set(startX, startY, data);
 }
 
-void LightUpPath::Move(int x, int y)
+void LightUpPath::Move(int x, int y, MinigameManagerData data)
 {
 	auto cell = GetCell(cursorX + x, cursorY + y);
 	if (cell && cell->active && !cell->used)
 	{
-		Set(cursorX + x, cursorY + y);
+		Set(cursorX + x, cursorY + y, data);
 	}
 }
 
-void LightUpPath::Set(int x, int y)
+void LightUpPath::Set(int x, int y, MinigameManagerData data)
 {
 	bool nActive = false;
 	bool anyActive = false;
@@ -137,7 +140,8 @@ void LightUpPath::Set(int x, int y)
 	cell->leftArrow->SetEnabled(false);
 	cell->rightArrow->SetEnabled(false);
 	cell = &grid[x][y];
-	cell->cellParent->color = usedColor;
+	cell->cellParent->anim = data.icons->GetAnim(MGI_Tile_Lit);
+	//cell->cellParent->color = usedColor;
 	cell->used = true;
 	cursorX = x;
 	cursorY = y;
@@ -248,23 +252,24 @@ void LightUpPath::CreateHierarchy(MinigameManagerData data)
 		grid[x].resize(sizeY);
 		for (int y = 0; y < grid[x].size(); y++)
 		{
-			grid[x][y].cellParent = data.hierarchy->CreateNode("Grid_Cell", data.icons->GetAnim(MGI_Square), { cellSize * 0.8f, cellSize * 0.8f },
+			grid[x][y].cellParent = data.hierarchy->CreateNode("Grid_Cell", data.icons->GetAnim(MGI_Tile_Unlit), { cellSize * 0.8f, cellSize * 0.8f },
 				{gridStart.x + (x * cellSize) + halfCellSize, gridStart.y + (y * cellSize) + halfCellSize }, gridParent);
-			grid[x][y].upArrow = data.hierarchy->CreateNode("Cell_Up", data.icons->GetAnim(MGI_Triangle), { cellSize * 0.4f, cellSize * 0.1f }, {}, grid[x][y].cellParent);
+			grid[x][y].upArrow = data.hierarchy->CreateNode("Cell_Up", data.icons->GetAnim(MGI_Tile_Arrow), { cellSize * 0.1f, cellSize * 0.4f }, {}, grid[x][y].cellParent);
 			grid[x][y].upArrow->SetPosition({ 0.0f, cellSize * -0.5f });
 			grid[x][y].upArrow->SetEnabled(false);
-			grid[x][y].downArrow = data.hierarchy->CreateNode("Cell_Down", data.icons->GetAnim(MGI_Triangle), { cellSize * 0.4f, cellSize * 0.1f }, {}, grid[x][y].cellParent);
+			grid[x][y].upArrow->SetRotation(270.0f);
+			grid[x][y].downArrow = data.hierarchy->CreateNode("Cell_Down", data.icons->GetAnim(MGI_Tile_Arrow), { cellSize * 0.1f, cellSize * 0.4f }, {}, grid[x][y].cellParent);
 			grid[x][y].downArrow->SetPosition({ 0.0f, cellSize * 0.5f });
 			grid[x][y].downArrow->SetEnabled(false);
-			grid[x][y].downArrow->SetRotation(180.0f);
-			grid[x][y].leftArrow = data.hierarchy->CreateNode("Cell_Left", data.icons->GetAnim(MGI_Triangle), { cellSize * 0.4f, cellSize * 0.1f }, {}, grid[x][y].cellParent);
+			grid[x][y].downArrow->SetRotation(90.0f);
+			grid[x][y].leftArrow = data.hierarchy->CreateNode("Cell_Left", data.icons->GetAnim(MGI_Tile_Arrow), { cellSize * 0.1f, cellSize * 0.4f }, {}, grid[x][y].cellParent);
 			grid[x][y].leftArrow->SetPosition({ cellSize * -0.5f, 0.0f });
 			grid[x][y].leftArrow->SetEnabled(false);
-			grid[x][y].leftArrow->SetRotation(270.0f);
-			grid[x][y].rightArrow = data.hierarchy->CreateNode("Cell_Right", data.icons->GetAnim(MGI_Triangle), { cellSize * 0.4f, cellSize * 0.1f }, {}, grid[x][y].cellParent);
+			grid[x][y].leftArrow->SetRotation(180.0f);
+			grid[x][y].rightArrow = data.hierarchy->CreateNode("Cell_Right", data.icons->GetAnim(MGI_Tile_Arrow), { cellSize * 0.1f, cellSize * 0.4f }, {}, grid[x][y].cellParent);
 			grid[x][y].rightArrow->SetPosition({ cellSize * 0.5f, 0.0f });
 			grid[x][y].rightArrow->SetEnabled(false);
-			grid[x][y].rightArrow->SetRotation(90.0f);
+			grid[x][y].rightArrow->SetRotation(0.0f);
 		}
 	}
 

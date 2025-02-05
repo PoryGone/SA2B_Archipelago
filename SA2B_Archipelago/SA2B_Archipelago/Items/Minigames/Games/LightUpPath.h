@@ -34,9 +34,9 @@ private:
 	void CreateHierarchy(MinigameManagerData data);
 	void UpdateTimerFill();
 
-	void FillGrid(MinigameDifficulty difficulty);
-	void Move(int x, int y);
-	void Set(int x, int y);
+	void FillGrid(MinigameDifficulty difficulty, MinigameManagerData data);
+	void Move(int x, int y, MinigameManagerData data);
+	void Set(int x, int y, MinigameManagerData data);
 	LightUpPathTileType GetCellType(int index, int x, int y, MinigameDifficulty difficulty);
 	PathGridCell* GetCell(int x, int y);
 
@@ -46,7 +46,7 @@ private:
 	SpriteNode* timerSonic;
 
 	Timer timer;
-	float guessTime = 20.0f;
+	float guessTime = 25.0f;
 
 	//0,0 is top left
 	int cursorX;
@@ -55,9 +55,9 @@ private:
 	int sizeX = 5;
 	int sizeY = 5;
 
-	NJS_ARGB closedColor = { 1.0f, 1.0f, 0.0f, 0.0f };
-	NJS_ARGB openColor = { 1.0f, 1.0f, 1.0f, 1.0f };
-	NJS_ARGB usedColor = { 1.0f, 1.0f, 1.0f, 0.0f };
+	//NJS_ARGB closedColor = { 1.0f, 1.0f, 0.0f, 0.0f };
+	//NJS_ARGB openColor = { 1.0f, 1.0f, 1.0f, 1.0f };
+	//NJS_ARGB usedColor = { 1.0f, 1.0f, 1.0f, 0.0f };
 
 	float cellSize = 50.0f;
 
