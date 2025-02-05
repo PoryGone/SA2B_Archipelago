@@ -200,4 +200,8 @@ enum StageSelectIcon {
 	//Other Icons
 	SSI_UISwitch_0				= 149,
 	SSI_UISwitch_1				= 150,
+	SSI_Y_To_Fish				= 151,
+	SSI_Y_To_Play				= 152,
+	SSI_DPad_Up_Down			= 153,
+	SSI_DPad_Left_Right			= 154,
 };

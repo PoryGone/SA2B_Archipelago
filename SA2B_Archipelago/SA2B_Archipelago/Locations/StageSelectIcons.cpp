@@ -50,8 +50,8 @@ std::map<char, NumberDisplayData> NumberMap = {
 };
 
 static const int Anim_Length = 29;
-static const int Stage_Anim_Length = 153;
-static const int Stage_Tex_Length = 122;
+static const int Stage_Anim_Length = 157;
+static const int Stage_Tex_Length = 123;
 static const int Num_Anim_Length = 24;
 
 static NJS_TEXNAME UpgradeIconsTexName[Anim_Length];
@@ -222,6 +222,11 @@ static NJS_TEXANIM StageSelectAnim[Stage_Anim_Length] = {
 	{ 128, 128, 0, 0, 0x40, 0xC0, 0x7F, 0xFF, 120, 0},
 	{ 128, 128, 0, 0, 0x80, 0xC0, 0xBF, 0xFF, 120, 0},
 	{ 128, 128, 0, 0, 0xC0, 0xC0, 0xFF, 0xFF, 120, 0},
+	//Atlas 2
+	{ 256, 128, 0, 0, 0x00, 0x00, 0x7F, 0x3F, 121, 0},
+	{ 256, 128, 0, 0, 0x80, 0x00, 0xFF, 0x3F, 121, 0},
+	{ 128, 128, 0, 0, 0x00, 0x40, 0x3F, 0x7F, 121, 0},
+	{ 128, 128, 0, 0, 0x40, 0x40, 0x7F, 0x7F, 121, 0},
 	//Padding
 	{40, 32, 20, 16, 0x0A, 0x10, 0x34, 0x30, 1, 0},
 };
