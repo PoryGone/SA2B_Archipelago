@@ -50,7 +50,7 @@ std::map<char, NumberDisplayData> NumberMap = {
 };
 
 static const int Anim_Length = 29;
-static const int Stage_Anim_Length = 157;
+static const int Stage_Anim_Length = 158;
 static const int Stage_Tex_Length = 123;
 static const int Num_Anim_Length = 24;
 
@@ -223,10 +223,11 @@ static NJS_TEXANIM StageSelectAnim[Stage_Anim_Length] = {
 	{ 128, 128, 0, 0, 0x80, 0xC0, 0xBF, 0xFF, 120, 0},
 	{ 128, 128, 0, 0, 0xC0, 0xC0, 0xFF, 0xFF, 120, 0},
 	//Atlas 2
-	{ 256, 128, 0, 0, 0x00, 0x00, 0x7F, 0x3F, 121, 0},
-	{ 256, 128, 0, 0, 0x80, 0x00, 0xFF, 0x3F, 121, 0},
-	{ 128, 128, 0, 0, 0x00, 0x40, 0x3F, 0x7F, 121, 0},
-	{ 128, 128, 0, 0, 0x40, 0x40, 0x7F, 0x7F, 121, 0},
+	{ 256, 128, 128, 64, 0x00, 0x00, 0x7F, 0x3F, 121, 0},
+	{ 256, 128, 128, 64, 0x80, 0x00, 0xFF, 0x3F, 121, 0},
+	{ 128, 128, 64, 64, 0x00, 0x40, 0x3F, 0x7F, 121, 0},
+	{ 128, 128, 64, 64, 0x40, 0x40, 0x7F, 0x7F, 121, 0},
+	{ 128, 128, 0, 0, 0x80, 0x40, 0xBF, 0x7F, 121, 0 },
 	//Padding
 	{40, 32, 20, 16, 0x0A, 0x10, 0x34, 0x30, 1, 0},
 };
@@ -342,6 +343,17 @@ void DrawString(std::string string, float xPos, float yPos, float scale = 1.0f)
 		xPos += data.width * 0.5f * scale;
 		DrawSprite2D(&NumSprite, 1, 1, NJD_SPRITE_ALPHA);
 	}
+}
+
+float GetStringWidth(std::string string, float scale = 1.0f)
+{
+	float width = 0;
+	for (std::string::iterator it = string.begin(); it != string.end(); ++it)
+	{
+		auto data = NumberMap[*it];
+		width += data.width * scale;
+	}
+	return width;
 }
 
 void UpdateLevelCheckIcons()
@@ -1094,10 +1106,18 @@ void UpdateTimescale()
 		return;
 	}
 
+	StageSelectSprite.sx = 0.3f;
+	StageSelectSprite.sy = 0.3f;
+
+	float timescaleX = minXPos + 20.0f;
+	StageSelectSprite.tanim = &StageSelectAnim[SSI_DPad_Up_Down];
+	StageSelectSprite.p = { timescaleX + 4, timescaleY + 4, 0.0f };
+	DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+
+	timescaleX += 20.0f;
 	StageSelectSprite.sx = 0.25f;
 	StageSelectSprite.sy = 0.25f;
 
-	float timescaleX = minXPos;
 	StageSelectSprite.tanim = &StageSelectAnim[SSI_Clock];
 	StageSelectSprite.p = { timescaleX + 4, timescaleY - 12.0f, 0.0f };
 	DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
@@ -1341,22 +1361,48 @@ void StageSelectIcons::MinigameReplaySystem()
 	StageSelectSprite.sx = 0.5f;
 	StageSelectSprite.sy = 0.5f;
 	char minigamesReceived = *(char*)(minigames[this->minigameReplayIndex]);
+	char minigamesWon = *(char*)(minigames[this->minigameReplayIndex] + 0x30);
 	bool isActivatable = minigamesReceived >= itemMan->RequiredMinigames;
+	bool isComplete = minigamesWon >= itemMan->RequiredMinigames;
 
 	int minigameIcon = isActivatable ? SSI_Pong + (this->minigameReplayIndex * 2) : SSI_Pong + (this->minigameReplayIndex * 2) + 1;
 	float x = maxXPos - 64.0f;
-	float y = 16.0f;
+	float y = 32.0f;
 	StageSelectSprite.tanim = &StageSelectAnim[minigameIcon];
 	StageSelectSprite.p = { x, y, 0.0f };
 	DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
 
+	if (isComplete)
+	{
+		StageSelectSprite.tanim = &StageSelectAnim[SSI_Check_Mark];
+		StageSelectSprite.p = { x, y, 0.0f };
+		DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+	}
+
+	x = maxXPos - 96.0f;
+	y = 64.0f;
+	StageSelectSprite.tanim = &StageSelectAnim[SSI_DPad_Left_Right];
+	StageSelectSprite.p = { x, y, 0.0f };
+	DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+
+	if (isActivatable)
+	{
+		x = maxXPos - 60.0f;
+		y = 16.0f;
+		StageSelectSprite.tanim = &StageSelectAnim[SSI_Y_To_Play];
+		StageSelectSprite.p = { x, y, 0.0f };
+		DrawSprite2D(&StageSelectSprite, 1, 1, NJD_SPRITE_ALPHA);
+	}
+
 	std::string minigameMessage = "";
 	minigameMessage.append(std::to_string(minigamesReceived));
 	minigameMessage.append("/");
+	minigameMessage.append(std::to_string(minigamesWon));
+	minigameMessage.append("/");
 	minigameMessage.append(std::to_string(itemMan->RequiredMinigames));
-	x = maxXPos - 120.0f;
-	DrawString(minigameMessage, x, 96.0f, 0.75f);
-	// TODO: Show "Y to replay"
+	float stringWidth = GetStringWidth(minigameMessage, 0.75f);
+	x = maxXPos - stringWidth - 10.0f;
+	DrawString(minigameMessage, x, 112.0f, 0.75f);
 
 	Uint32 PressedButtons = ControllersRaw->press;
 	if ((PressedButtons & 0b1000000) != 0) // Left

@@ -204,4 +204,5 @@ enum StageSelectIcon {
 	SSI_Y_To_Play				= 152,
 	SSI_DPad_Up_Down			= 153,
 	SSI_DPad_Left_Right			= 154,
+	SSI_Check_Mark				= 155,
 };
