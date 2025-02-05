@@ -344,32 +344,28 @@ void Pinball::CreateHierarchy(MinigameManagerData data)
 	data.collision->AddCollision(wall_10, std::make_shared<PolygonCollider>(NJS_POINT3({ 5.0f, 50.0f })));
 	boardObjs.push_back(wall_10);
 	//Tri-Bumpers
-	SpriteNode* triBump_0 = data.hierarchy->CreateNode("TriBumper", data.icons->GetAnim(MGI_Triangle), { 85.0f, 30.0f }, { 197.0f, 326.0f }, boardParent);
-	data.collision->AddCollision(triBump_0, std::make_shared<PolygonCollider>(std::vector<NJS_POINT3>({ {-42.0f, 14.5f}, {42.0f, 14.5f}, {0.0f, -15.0f} })));
-	triBump_0->SetRotation(230.0f);
-	triBump_0->color = { 1.0f, 0.85f, 0.0f, 0.0f };
+	SpriteNode* triBump_0 = data.hierarchy->CreateNode("TriBumper", data.icons->GetAnim(MGI_Tri_Bumper_Right), { 85.0f, 30.0f }, { 197.0f, 326.0f }, boardParent);
+	data.collision->AddCollision(triBump_0, std::make_shared<PolygonCollider>(std::vector<NJS_POINT3>({ {-42.0f, 14.5f}, {42.0f, 14.5f}, {21.0f, -15.0f} })));
+	triBump_0->SetRotation(220.0f);
 	boardObjs.push_back(triBump_0);
-	SpriteNode* triBump_1 = data.hierarchy->CreateNode("TriBumper", data.icons->GetAnim(MGI_Triangle), { 85.0f, 30.0f }, { 443.0f, 326.0f }, boardParent);
-	data.collision->AddCollision(triBump_1, std::make_shared<PolygonCollider>(std::vector<NJS_POINT3>({ {-42.0f, 14.5f}, {42.0f, 14.5f}, {0.0f, -15.0f} })));
-	triBump_1->SetRotation(130.0f);
-	triBump_1->color = { 1.0f, 0.85f, 0.0f, 0.0f };
+	data.hierarchy->CreateNode("Star", data.icons->GetAnim(MGI_Star), { 12.0f, 12.0f }, { 197.0f - 15.0f, 317.0f }, boardParent);
+	SpriteNode* triBump_1 = data.hierarchy->CreateNode("TriBumper", data.icons->GetAnim(MGI_Tri_Bumper_Left), { 85.0f, 30.0f }, { 443.0f, 326.0f }, boardParent);
+	data.collision->AddCollision(triBump_1, std::make_shared<PolygonCollider>(std::vector<NJS_POINT3>({ {-42.0f, 14.5f}, {42.0f, 14.5f}, {-21.0f, -15.0f} })));
+	triBump_1->SetRotation(140.0f);
 	boardObjs.push_back(triBump_1);
+	data.hierarchy->CreateNode("Star", data.icons->GetAnim(MGI_Star), { 12.0f, 12.0f }, { 443.0f + 15.0f, 317.0f }, boardParent);
 	//Circle Bumpers
-	SpriteNode* Bump_0 = data.hierarchy->CreateNode("Bumper", data.icons->GetAnim(MGI_Circle), { 40.0f, 40.0f }, { 185.0f, 210.0f }, boardParent);
+	SpriteNode* Bump_0 = data.hierarchy->CreateNode("Bumper", data.icons->GetAnim(MGI_Bumper), { 40.0f, 40.0f }, { 185.0f, 210.0f }, boardParent);
 	data.collision->AddCollision(Bump_0, std::make_shared<CircleCollider>(20.0f, NJS_POINT3({ 0.0f, 0.0f })));
-	Bump_0->color = { 1.0f, 0.85f, 0.0f, 0.0f };
 	boardObjs.push_back(Bump_0);
-	SpriteNode* Bump_1 = data.hierarchy->CreateNode("Bumper", data.icons->GetAnim(MGI_Circle), { 40.0f, 40.0f }, { 270.0f, 165.0f }, boardParent);
+	SpriteNode* Bump_1 = data.hierarchy->CreateNode("Bumper", data.icons->GetAnim(MGI_Bumper), { 40.0f, 40.0f }, { 270.0f, 165.0f }, boardParent);
 	data.collision->AddCollision(Bump_1, std::make_shared<CircleCollider>(20.0f, NJS_POINT3({ 0.0f, 0.0f })));
-	Bump_1->color = { 1.0f, 0.85f, 0.0f, 0.0f };
 	boardObjs.push_back(Bump_1);
-	SpriteNode* Bump_2 = data.hierarchy->CreateNode("Bumper", data.icons->GetAnim(MGI_Circle), { 40.0f, 40.0f }, { 370.0f, 165.0f }, boardParent);
+	SpriteNode* Bump_2 = data.hierarchy->CreateNode("Bumper", data.icons->GetAnim(MGI_Bumper), { 40.0f, 40.0f }, { 370.0f, 165.0f }, boardParent);
 	data.collision->AddCollision(Bump_2, std::make_shared<CircleCollider>(20.0f, NJS_POINT3({ 0.0f, 0.0f })));
-	Bump_2->color = { 1.0f, 0.85f, 0.0f, 0.0f };
 	boardObjs.push_back(Bump_2);
-	SpriteNode* Bump_3 = data.hierarchy->CreateNode("Bumper", data.icons->GetAnim(MGI_Circle), { 40.0f, 40.0f }, { 455.0f, 210.0f }, boardParent);
+	SpriteNode* Bump_3 = data.hierarchy->CreateNode("Bumper", data.icons->GetAnim(MGI_Bumper), { 40.0f, 40.0f }, { 455.0f, 210.0f }, boardParent);
 	data.collision->AddCollision(Bump_3, std::make_shared<CircleCollider>(20.0f, NJS_POINT3({ 0.0f, 0.0f })));
-	Bump_3->color = { 1.0f, 0.85f, 0.0f, 0.0f };
 	boardObjs.push_back(Bump_3);
 	
 	for (int i = 0; i < boardObjs.size(); i++)
@@ -380,21 +376,21 @@ void Pinball::CreateHierarchy(MinigameManagerData data)
 	//Create Flippers
 	leftFlipper = data.hierarchy->CreateNode("Flipper", boardParent);
 	leftFlipper->SetPositionGlobal({ 265.75f, 382.76f });
-	SpriteNode* leftFlipperImage = data.hierarchy->CreateNode("LeftFlipper", data.icons->GetAnim(MGI_Triangle), { 5.0f, flipperLength }, { 0.0f, 0.0f }, leftFlipper);
-	leftFlipperImage->SetPosition({ flipperLength * 0.5f, 0.0f });
+	SpriteNode* leftFlipperImage = data.hierarchy->CreateNode("LeftFlipper", data.icons->GetAnim(MGI_Flipper), { 5.0f, flipperLength }, { 0.0f, 0.0f }, leftFlipper);
+	leftFlipperImage->SetPosition({ flipperLength * 0.64f, 0.0f });
 	leftFlipperImage->SetRotation(90.0f);
 	//data.collision->AddCollision(leftFlipper, std::make_shared<CapsuleCollider>(2.4f, leftFlipper, NJS_POINT3({ 0.0f, 0.0f }), NJS_POINT3({ flipperLength - 2.4f, 0.0f })));
-	data.collision->AddCollision(leftFlipper, std::make_shared<PolygonCollider>(std::vector<NJS_POINT3>({ {0.0f, 2.4f}, {flipperLength, 0.0f}, {0.0f, -2.4f} })));
+	data.collision->AddCollision(leftFlipper, std::make_shared<PolygonCollider>(std::vector<NJS_POINT3>({ {-0.2f, 2.4f}, {flipperLength, 0.0f}, {-0.2f, -2.4f} })));
 	leftFlipper->SetRotation(9.5f);
 	boardObjs.push_back(leftFlipper);
 
 	rightFlipper = data.hierarchy->CreateNode("Flipper", boardParent);
 	rightFlipper->SetPositionGlobal({ 374.25f, 382.76 });
-	SpriteNode* rightFlipperImage = data.hierarchy->CreateNode("LeftFlipper", data.icons->GetAnim(MGI_Triangle), { 5.0f, flipperLength }, { 0.0f, 0.0f }, rightFlipper);
-	rightFlipperImage->SetPosition({ flipperLength * 0.5f, 0.0f });
+	SpriteNode* rightFlipperImage = data.hierarchy->CreateNode("LeftFlipper", data.icons->GetAnim(MGI_Flipper), { 5.0f, flipperLength }, { 0.0f, 0.0f }, rightFlipper);
+	rightFlipperImage->SetPosition({ flipperLength * 0.64f, 0.0f });
 	rightFlipperImage->SetRotation(90.0f);
 	//data.collision->AddCollision(rightFlipper, std::make_shared<CapsuleCollider>(2.4f, rightFlipper, NJS_POINT3({ 0.0f, 0.0f }), NJS_POINT3({ flipperLength - 2.4f, 0.0f })));
-	data.collision->AddCollision(rightFlipper, std::make_shared<PolygonCollider>(std::vector<NJS_POINT3>({ {0.0f, 2.4f}, {flipperLength, 0.0f}, {0.0f, -2.4f} })));
+	data.collision->AddCollision(rightFlipper, std::make_shared<PolygonCollider>(std::vector<NJS_POINT3>({ {-0.2f, 2.4f}, {flipperLength, 0.0f}, {-0.2f, -2.4f} })));
 	rightFlipper->SetRotation(-189.5f);
 	boardObjs.push_back(rightFlipper);
 
