@@ -769,20 +769,15 @@ void MinigameFinalBoss::CreateHierarchy(MinigameManagerData data)
 	FHRArmBase->components.push_back(FHRWiggle);
 	FHLArm = data.hierarchy->CreateNode("Final_Hazard_Arm_L", data.icons->GetAnim(MGI_Boss_Arm), { 100.0f, 45.0f }, { 0.0f, 0.0f }, FHLArmBase);
 	FHLArm->SetPosition({ -50.0f, 0.0f });
-	//FHLArm->color = { 1.0f, 1.0f, 0.5f, 0.0f };
 	FHRArm = data.hierarchy->CreateNode("Final_Hazard_Arm_R", data.icons->GetAnim(MGI_Boss_Arm), { 100.0f, 45.0f }, { 0.0f, 0.0f}, FHRArmBase);
 	FHRArm->SetRotation(180.0f);
 	FHRArm->SetPosition({ 50.0f, 0.0f });
-	//FHRArm->color = { 1.0f, 1.0f, 0.5f, 0.0f };
 	FHBody = data.hierarchy->CreateNode("Final_Hazard_Body", data.icons->GetAnim(MGI_Boss_Body), { 300.0f, 50.0f }, { 0.0f, 0.0f }, FHParent);
 	FHBody->SetPosition({ 0.0f, 25.0f });
-	//FHBody->color = { 1.0f, 1.0f, 0.5f, 0.0f };
 	FHHead = data.hierarchy->CreateNode("Final_Hazard_Head", data.icons->GetAnim(MGI_Boss_Head), { 75.0f, 100.0f }, { 0.0f, 0.0f }, FHParent);
 	FHHead->SetPosition({ 0.0f, 60.0f });
-	//FHHead->color = { 1.0f, 1.0f, 0.5f, 0.0f };
-	FHWeakPoint = data.hierarchy->CreateNode("Final_Hazard_Weak_Point", data.icons->GetAnim(MGI_Circle), { 50.0f,50.0f }, {}, FHParent);
+	FHWeakPoint = data.hierarchy->CreateNode("Final_Hazard_Weak_Point", data.icons->GetAnim(MGI_Boss_Weakpoint), { 50.0f,50.0f }, {}, FHParent);
 	FHWeakPoint->SetEnabled(false);
-	FHWeakPoint->color = { 1.0f, 1.0f, 0.0f, 0.0f };
 	data.collision->AddCollision(FHWeakPoint, std::make_shared<CircleCollider>(25.0f));
 
 	FHExplostion = data.hierarchy->CreateNode("Final_Hazard_Explosion");
@@ -853,6 +848,12 @@ void MinigameFinalBoss::CreateHierarchy(MinigameManagerData data)
 	FHHealthBarBG->SetEnabled(false);
 	FHHealthBar = data.hierarchy->CreateNode("Boss_Health_Bar_Fill", data.icons->GetAnim(MGI_White_Box), { 200.0f, 10.0f }, { 320.0f, 6.0f }, FHHealthBarBG);
 	FHHealthBar->color = { 1.0f, 0.0f, 0.0f, 1.0f };
+	SpriteNode* barLeft = data.hierarchy->CreateNode("BarLeft", data.icons->GetAnim(MGI_Boss_Bar_Cap_Left), { 12.0f, 12.0f }, {}, FHHealthBarBG);
+	barLeft->SetPosition({-106.0f, 0.0f});
+	SpriteNode* barRight = data.hierarchy->CreateNode("BarRight", data.icons->GetAnim(MGI_Boss_Bar_Cap_Right), { 12.0f, 12.0f }, {}, FHHealthBarBG);
+	barRight->SetPosition({ 106.0f, 0.0f });
+	SpriteNode* barCenter = data.hierarchy->CreateNode("BarRight", data.icons->GetAnim(MGI_Boss_Bar_Center), { 200.0f, 12.0f }, {}, FHHealthBarBG);
+	barCenter->SetPosition({ 0.0f, 0.0f });
 
 	//Create Text
 	sonicRings = data.hierarchy->CreateNode("Sonic_Rings", nullptr, { 100.0f, 30.0f }, { 70.0f, 445.0f });

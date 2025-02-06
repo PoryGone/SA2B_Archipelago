@@ -1,6 +1,6 @@
 #pragma once
 
-#define POKE_START 76
+#define POKE_START 80
 
 enum MinigameIcon
 {
@@ -80,6 +80,10 @@ enum MinigameIcon
 	MGI_Block_Deep_Purple		= 73, //Smoke on the Breakout Block
 	MGI_Fishing_Catch_Bar		= 74,
 	MGI_Tile_Arrow				= 75,
+	MGI_Boss_Weakpoint			= 76,
+	MGI_Boss_Bar_Cap_Left		= 77,
+	MGI_Boss_Bar_Cap_Right		= 78,
+	MGI_Boss_Bar_Center			= 79,
 
 	//Pokemon
 	MGI_Aron					= POKE_START + 0,

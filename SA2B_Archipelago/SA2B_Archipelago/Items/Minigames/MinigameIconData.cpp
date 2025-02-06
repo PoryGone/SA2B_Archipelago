@@ -87,6 +87,11 @@ static NJS_TEXANIM MGAnim[] = {
 	{70, 20, 35, 10, 0x67, 0x29, 0xAD, 0x3D, 16, 0}, // Block Deep Purple
 	{20, 65, 10, 32, 0xAC, 0x00, 0xC1, 0x41, 16, 0}, // Fishing Catch Bar
 	{59, 232, 30, 116, 0xC4, 0x00, 0xFF, 0xE7, 16, 0}, // Tile Arrow
+	//Boss Part 2
+	{64, 64, 32, 32, 0x80, 0x40, 0x9F, 0x7F, 10, 0}, //Boss Weakpoint
+	{10, 10, 5, 5, 0x00, 0xEC, 0x05, 0xF5, 10, 0}, //Boss Bar Left
+	{10, 10, 5, 5, 0x10, 0xEC, 0x15, 0xF5, 10, 0}, //Boss Bar Right
+	{128, 10, 64, 5, 0x00, 0xF6, 0x3F, 0xFF, 10, 0}, //Boss Bar Center
 	//Pokemon
 	//Poke Atlas 0
 	{128, 128, 64, 64, 0x00, 0x00, 0x3F, 0x3F, 11, 0},
@@ -126,7 +131,7 @@ static NJS_TEXANIM MGAnim[] = {
 	{40, 32, 20, 16, 0x0A, 0x10, 0x34, 0x30, 0, 0},
 };
 
-static const int MinigameAnimLength = 109;
+static const int MinigameAnimLength = 113;
 
 FunctionPointer(void, ReleaseTextureList, (NJS_TEXLIST* a1), 0x77F9F0);
 
