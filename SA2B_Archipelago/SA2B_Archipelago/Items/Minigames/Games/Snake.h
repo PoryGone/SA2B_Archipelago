@@ -61,8 +61,8 @@ private:
 	std::vector<std::pair<int, int> > playerCells;
 	std::pair<int, int> foodCell;
 
-	int sizeX = 20;
-	int sizeY = 15;
+	int sizeX = 12;
+	int sizeY = 9;
 
 	std::vector<MinigameIcon> snakeIcons = {
 		MGI_Snake_Head,
@@ -73,7 +73,7 @@ private:
 		MGI_Super_Shadow,
 	};
 
-	float cellSize = 16.0f;
+	float cellSize = 24.0f;
 
 	int activeSpeed;
 	std::vector<int> speeds = { 30, 15, 8 };

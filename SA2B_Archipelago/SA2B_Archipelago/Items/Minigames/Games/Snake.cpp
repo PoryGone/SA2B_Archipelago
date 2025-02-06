@@ -10,9 +10,9 @@ void Snake::OnGameStart(MinigameManagerData data)
 	PlayUnshuffledVoice(2, 671);
 
 	this->playerCells.clear();
-	this->playerCells.push_back(std::pair<int, int>(10, 10));
-	this->playerCells.push_back(std::pair<int, int>(9, 10));
-	this->playerCells.push_back(std::pair<int, int>(8, 10));
+	this->playerCells.push_back(std::pair<int, int>(7, 4));
+	this->playerCells.push_back(std::pair<int, int>(6, 4));
+	this->playerCells.push_back(std::pair<int, int>(5, 4));
 
 	this->activeSpeed = this->speeds[data.difficulty];
 	this->goalLength = this->goalLengths[data.difficulty];
