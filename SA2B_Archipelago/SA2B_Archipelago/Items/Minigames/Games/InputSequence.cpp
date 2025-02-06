@@ -215,13 +215,21 @@ void InputSequence::CreateHierarchy(MinigameManagerData data)
 		result->SetEnabled(false);
 		this->inputResults.push_back(result);
 	}
-	this->timerBarBG = data.hierarchy->CreateNode("Timer_Background", data.icons->GetAnim(MGI_White_Box), { 200.0f, 10.0f }, { 320.0f, 72.0f });
+
+	// Timer
+	this->timerBarBG = data.hierarchy->CreateNode("Timer_Background", data.icons->GetAnim(MGI_White_Box), { 160.0f, 13.0f }, { 320.0f, 73.0f });
 	this->timerBarBG->color = { 1.0f, 0.0f, 0.0f, 0.0f };
-	this->timerBar = data.hierarchy->CreateNode("Timer_Fill", data.icons->GetAnim(MGI_White_Box), { 200.0f, 10.0f }, { 320.0f, 72.0f }, this->timerBarBG);
-	this->timerBar->color = { 1.0f, 0.0f, 1.0f, 0.0f };
+	this->timerBar = data.hierarchy->CreateNode("Timer_Fill", data.icons->GetAnim(MGI_White_Box), { 200.0f, 13.0f }, { 320.0f, 73.0f }, this->timerBarBG);
+	this->timerBar->color = { 1.0f, 0.0f, 0.0f, 0.84f };
+	SpriteNode* timerBarFG = data.hierarchy->CreateNode("Timer_Foreground", data.icons->GetAnim(MGI_Fishing_Bar_Outline), { 16.0f, 200.0f }, { 320.0f, 74.0f });
+	timerBarFG->SetRotation(-90.0f);
+	SpriteNode* timeCapL = data.hierarchy->CreateNode("Timer_CapL", data.icons->GetAnim(MGI_Fishing_Bar_Cap), { 15.0f, 20.0f }, { 230.0f, 74.0f });
+	timeCapL->SetRotation(-90.0f);
+	SpriteNode* timeCapR = data.hierarchy->CreateNode("Timer_CapR", data.icons->GetAnim(MGI_Fishing_Bar_Cap), { 15.0f, 20.0f }, { 410.0f, 72.0f });
+	timeCapR->SetRotation(90.0f);
 	this->timerBarBG->SetEnabled(true);
-	this->timerBomb = data.hierarchy->CreateNode("Timer_Sonic", data.icons->GetAnim(MGI_Sonic_Head), { 32.0f, 32.0f }, { 220.0f, 46.0f }, this->timerBarBG);
-	this->timerBomb = data.hierarchy->CreateNode("Timer_Bomb", data.icons->GetAnim(MGI_Bomb), { 32.0f, 32.0f }, { 420.0f, 46.0f }, this->timerBarBG);
+	this->timerBomb = data.hierarchy->CreateNode("Timer_Sonic", data.icons->GetAnim(MGI_Sonic_Head), { 32.0f, 32.0f }, { 240.0f, 46.0f }, this->timerBarBG);
+	this->timerBomb = data.hierarchy->CreateNode("Timer_Bomb", data.icons->GetAnim(MGI_Bomb), { 32.0f, 32.0f }, { 400.0f, 46.0f }, this->timerBarBG);
 	Wiggle* bombWiggle = new Wiggle(RandomFloat(0.45f, 0.65f), -25.0f, 25.0f, true);
 	timerBomb->components.push_back(bombWiggle);
 
