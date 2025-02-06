@@ -43,6 +43,10 @@ private:
 	void SubmitSequence();
 	void UpdateTimerFill();
 
+	NumberSequenceState localState;
+	int endingTimer = 120;
+	SpriteNode* resultNode;
+
 	NumberSequenceState state;
 	Timer timer;
 	int guessesRemaining = 0;

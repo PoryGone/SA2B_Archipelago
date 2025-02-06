@@ -6,6 +6,7 @@
 void NumberSequence::OnGameStart(MinigameManagerData data)
 {
 	currentState = MGS_InProgress;
+	this->endingTimer = 120;
 	std::shuffle(numbers.begin(), numbers.end(), RNG());
 	for (int i = 0; i < numberObjs.size(); i++)
 	{
@@ -14,7 +15,7 @@ void NumberSequence::OnGameStart(MinigameManagerData data)
 		numberObjs[i].current = i + 1;
 	}
 	selectedIndex = 0;
-	state = NSS_Start;
+	localState = NSS_Start;
 	data.timers->push_back(&timer);
 
 	switch (data.difficulty)
@@ -47,11 +48,11 @@ void NumberSequence::OnFrame(MinigameManagerData data)
 	{
 		return;
 	}
-	switch (state)
+	switch (localState)
 	{
 	case NSS_Start:
 		this->timer.Start(guessTime);
-		state = NSS_InGame;
+		localState = NSS_InGame;
 		break;
 	case NSS_InGame:
 		this->UpdateTimerFill();
@@ -77,20 +78,54 @@ void NumberSequence::OnFrame(MinigameManagerData data)
 		}
 		if (this->timer.IsElapsed())
 		{
-			this->state = NSS_Lose;
+			this->localState = NSS_Lose;
 			this->timer.Start(1.0f);
 		}
 		break;
 	case NSS_Win:
-		if (timer.IsElapsed())
+		if (this->resultNode->color.a < 1.0f)
 		{
-			currentState = MGS_Victory;
+			this->resultNode->SetEnabled(true);
+			this->resultNode->anim = data.icons->GetAnim(MGI_Green_Check);
+			this->resultNode->color.a += 1.0f / 30.0f;
+			this->resultNode->displaySize = Point3MoveTowards(this->resultNode->displaySize, { 128.0f, 128.0f }, 72.0f / 30.0f);
+		}
+		else
+		{
+			if (this->endingTimer == 120)
+			{
+				PlaySoundProbably((int)MinigameSounds::RankReveal, 0, 0, 0);
+			}
+
+			this->endingTimer--;
+
+			if (this->endingTimer <= 0)
+			{
+				this->currentState = MinigameState::MGS_Victory;
+			}
 		}
 		break;
 	case NSS_Lose:
-		if (timer.IsElapsed())
+		if (this->resultNode->color.a < 1.0f)
 		{
-			currentState = MGS_Loss;
+			this->resultNode->SetEnabled(true);
+			this->resultNode->anim = data.icons->GetAnim(MGI_F_Rank);
+			this->resultNode->color.a += 1.0f / 30.0f;
+			this->resultNode->displaySize = Point3MoveTowards(this->resultNode->displaySize, { 128.0f, 128.0f }, 72.0f / 30.0f);
+		}
+		else
+		{
+			if (this->endingTimer == 120)
+			{
+				PlaySoundProbably((int)MinigameSounds::RankReveal, 0, 0, 0);
+			}
+
+			this->endingTimer--;
+
+			if (this->endingTimer <= 0)
+			{
+				this->currentState = MinigameState::MGS_Loss;
+			}
 		}
 		break;
 	}
@@ -226,18 +261,14 @@ void NumberSequence::SubmitSequence()
 	}
 	if (correctCount == numberObjs.size())
 	{
-		this->state = NSS_Win;
-		this->timer.Start(1.0f);
+		this->localState = NSS_Win;
 	}
 	else if(guessesRemaining == 0)
 	{
-		this->state = NSS_Lose;
-		this->timer.Start(1.0f);
+		this->localState = NSS_Lose;
 	}
 	else
 	{
-		// TODO: I think a single global timer is better than per-guess, but left this just in case you disagree
-		//this->timer.Start(guessTime);
 		guessesRemaining--;
 		for (int i = 0; i < questionMarks.size(); i++)
 		{
@@ -317,16 +348,15 @@ void NumberSequence::CreateHierarchy(MinigameManagerData data)
 	Wiggle* bombWiggle = new Wiggle(RandomFloat(0.45f, 0.65f), -25.0f, 25.0f, true);
 	timerBomb->components.push_back(bombWiggle);
 
-	//questionMarkText = new TextBox("?", 25.0f, TextAlignment::Left, data.text);
 	xPos = data.icons->xCenter - 95.0f;
 	for (int i = 0; i < questionMarks.size(); i++)
 	{
 		questionMarks[i] = data.hierarchy->CreateNode("Question_Mark", data.icons->GetAnim(MGI_Life_Box), { 20.0f, 20.0f }, { xPos, 100.0f });
-		//questionMarks[i]->displaySize = { 0.0f, 0.0f };
-		//questionMarks[i]->SetPositionGlobal({ xPos, 81.0f });
-		//questionMarks[i]->color = { 1.0f, 1.0f, 1.0f, 1.0f };
-		//questionMarks[i]->renderComponents.push_back(questionMarkText);
 		xPos += 25.0f;
 	}
 
+	this->resultNode = data.hierarchy->CreateNode("Result", data.icons->GetAnim(MGI_Green_Check), { 200, 200 },
+		{ data.icons->xCenter, data.icons->yCenter });
+	this->resultNode->color.a = 0.0f;
+	this->resultNode->SetEnabled(false);
 }	

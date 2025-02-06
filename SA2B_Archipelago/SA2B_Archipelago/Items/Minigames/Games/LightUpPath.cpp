@@ -7,6 +7,8 @@
 void LightUpPath::OnGameStart(MinigameManagerData data)
 {
 	currentState = MGS_InProgress;
+	this->localState = LightUpPathState::LUPS_Game;
+	this->endingTimer = 120;
 	cursorX = 0;
 	cursorY = 0;
 	CreateHierarchy(data);
@@ -21,6 +23,58 @@ void LightUpPath::OnFrame(MinigameManagerData data)
 	{
 		return;
 	}
+
+	if (this->localState == LightUpPathState::LUPS_EndingWin)
+	{
+		if (this->resultNode->color.a < 1.0f)
+		{
+			this->resultNode->SetEnabled(true);
+			this->resultNode->anim = data.icons->GetAnim(MGI_Green_Check);
+			this->resultNode->color.a += 1.0f / 30.0f;
+			this->resultNode->displaySize = Point3MoveTowards(this->resultNode->displaySize, { 128.0f, 128.0f }, 72.0f / 30.0f);
+		}
+		else
+		{
+			if (this->endingTimer == 120)
+			{
+				PlaySoundProbably((int)MinigameSounds::RankReveal, 0, 0, 0);
+			}
+
+			this->endingTimer--;
+
+			if (this->endingTimer <= 0)
+			{
+				this->currentState = MinigameState::MGS_Victory;
+			}
+		}
+		return;
+	}
+	else if (this->localState == LightUpPathState::LUPS_EndingLose)
+	{
+		if (this->resultNode->color.a < 1.0f)
+		{
+			this->resultNode->SetEnabled(true);
+			this->resultNode->anim = data.icons->GetAnim(MGI_F_Rank);
+			this->resultNode->color.a += 1.0f / 30.0f;
+			this->resultNode->displaySize = Point3MoveTowards(this->resultNode->displaySize, { 128.0f, 128.0f }, 72.0f / 30.0f);
+		}
+		else
+		{
+			if (this->endingTimer == 120)
+			{
+				PlaySoundProbably((int)MinigameSounds::RankReveal, 0, 0, 0);
+			}
+
+			this->endingTimer--;
+
+			if (this->endingTimer <= 0)
+			{
+				this->currentState = MinigameState::MGS_Loss;
+			}
+		}
+		return;
+	}
+
 	if (data.inputPress & RIF_Up)
 	{
 		Move(0, -1, data);
@@ -42,7 +96,7 @@ void LightUpPath::OnFrame(MinigameManagerData data)
 	if (timer.IsElapsed())
 	{
 		PlaySoundProbably((int)MinigameSounds::Explosion, 0, 0, 0);
-		this->currentState = MinigameState::MGS_Loss;
+		this->localState = LightUpPathState::LUPS_EndingLose;
 	}
 }
 
@@ -175,11 +229,11 @@ void LightUpPath::Set(int x, int y, MinigameManagerData data)
 	}
 	if (inactiveCount <= 0)
 	{
-		currentState = MGS_Victory;
+		this->localState = LightUpPathState::LUPS_EndingWin;
 	}
 	else if (!anyActive)
 	{
-		currentState = MGS_Loss;
+		this->localState = LightUpPathState::LUPS_EndingLose;
 	}
 }
 
@@ -289,5 +343,10 @@ void LightUpPath::CreateHierarchy(MinigameManagerData data)
 	this->timerBomb = data.hierarchy->CreateNode("Timer_Bomb", data.icons->GetAnim(MGI_Bomb), { 32.0f, 32.0f }, { 400.0f, 46.0f }, this->timerBarBG);
 	Wiggle* bombWiggle = new Wiggle(RandomFloat(0.45f, 0.65f), -25.0f, 25.0f, true);
 	timerBomb->components.push_back(bombWiggle);
+
+	this->resultNode = data.hierarchy->CreateNode("Result", data.icons->GetAnim(MGI_Green_Check), { 200, 200 },
+		{ data.icons->xCenter, data.icons->yCenter });
+	this->resultNode->color.a = 0.0f;
+	this->resultNode->SetEnabled(false);
 
 }

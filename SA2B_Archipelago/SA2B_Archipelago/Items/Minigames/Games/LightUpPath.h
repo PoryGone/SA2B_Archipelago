@@ -6,6 +6,13 @@
 
 class LightUpPath : public MinigameBase
 {
+	enum LightUpPathState
+	{
+		LUPS_Game = 0,
+		LUPS_EndingWin,
+		LUPS_EndingLose,
+	};
+
 	enum LightUpPathTileType
 	{
 		LTT_None, //Grid position does not exist
@@ -47,6 +54,10 @@ private:
 
 	Timer timer;
 	float guessTime = 25.0f;
+
+	LightUpPathState localState;
+	int endingTimer = 120;
+	SpriteNode* resultNode;
 
 	//0,0 is top left
 	int cursorX;
