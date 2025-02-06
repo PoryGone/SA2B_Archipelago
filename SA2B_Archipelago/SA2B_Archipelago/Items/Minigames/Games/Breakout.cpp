@@ -216,6 +216,8 @@ void Breakout::HandleCollision(MinigameManagerData data)
 				this->bricks[i].health--;
 				this->bricks[i].sprite->anim = data.icons->GetAnim(brickAnims[this->bricks[i].health - 1]);
 
+				PlaySoundProbably(BREAKOUT_SOUND_BRICK, 0, 0, 0);
+
 				if (this->bricks[i].health == 0)
 				{
 					this->bricks[i].sprite->SetEnabled(false);

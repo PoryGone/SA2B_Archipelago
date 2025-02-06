@@ -1,7 +1,6 @@
 #include "../../../pch.h"
 #include "NumberSequence.h"
 
-// TODO: Results feedback
 
 void NumberSequence::OnGameStart(MinigameManagerData data)
 {
@@ -261,14 +260,17 @@ void NumberSequence::SubmitSequence()
 	}
 	if (correctCount == numberObjs.size())
 	{
+		PlaySoundProbably((int)MinigameSounds::CollectEmblem, 0, 0, 0);
 		this->localState = NSS_Win;
 	}
 	else if(guessesRemaining == 0)
 	{
+		PlaySoundProbably((int)MinigameSounds::Explosion, 0, 0, 0);
 		this->localState = NSS_Lose;
 	}
 	else
 	{
+		PlaySoundProbably((int)MinigameSounds::MenuError, 0, 0, 0);
 		guessesRemaining--;
 		for (int i = 0; i < questionMarks.size(); i++)
 		{

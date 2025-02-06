@@ -572,6 +572,11 @@ void ItemManager::OnFrameJunkQueue()
 		return;
 	}
 
+	if (CurrentLevel == LevelIDs_Biolizard && MinigameManager::GetInstance().IsInFinalBoss())
+	{
+		return;
+	}
+
 	if (TimerStopped)
 	{
 		this->_JunkCooldownTimer = 60;

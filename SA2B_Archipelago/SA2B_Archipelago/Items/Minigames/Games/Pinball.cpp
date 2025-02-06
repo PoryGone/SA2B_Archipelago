@@ -83,6 +83,7 @@ void Pinball::UpdateBallActive(MinigameManagerData data)
 	float flipperRange = flipperLength + ballRadius;
 	if (data.inputPress & leftFlipperInput)
 	{
+		PlaySoundProbably((int)MinigameSounds::Punch, 0, 0, 0);
 		NJS_POINT3 toBall = Point3Substract(ball->GetPositionGlobal(), leftFlipper->GetPositionGlobal());
 		NJS_POINT3 toTip = Point3RotateAround({ 1.0f, 0.0f }, { 0.0f, 0.0f }, 9.5f);
 		float ballAng = Point3SignedAngleDegrees(toTip, toBall);
@@ -138,6 +139,7 @@ void Pinball::UpdateBallActive(MinigameManagerData data)
 			{
 				surfaceDampening = bumperDampening;
 
+				PlaySoundProbably((int)MinigameSounds::Spring, 0, 0, 0);
 				AddScore(5, data);
 			}
 		}
@@ -145,6 +147,7 @@ void Pinball::UpdateBallActive(MinigameManagerData data)
 		{
 			surfaceDampening = bumperDampening;
 
+			PlaySoundProbably((int)MinigameSounds::Spring, 0, 0, 0);
 			AddScore(10, data);
 		}
 		NJS_POINT3 initialPosition = ball->GetPositionGlobal();
@@ -213,6 +216,7 @@ void Pinball::UpdateBallActive(MinigameManagerData data)
 	}
 	if (data.collision->IsColliding(ball, drain) || ball->GetPositionGlobal().y > 485.0f || data.inputPress & RIF_RightTrigger)
 	{
+		PlaySoundProbably((int)MinigameSounds::MenuBack, 0, 0, 0);
 		if (lives <= 0)
 		{
 			Lose(data);
@@ -228,6 +232,7 @@ void Pinball::UpdateGameEnd(MinigameManagerData data)
 {
 	if (endIcon->color.a < 1.0f)
 	{
+		// TODO RAS: Figure out how to time playing the Rank Reveal sound once here when it's done animating
 		endIcon->color.a += 1.0f / 30.0f;
 		endIcon->displaySize = Point3MoveTowards(endIcon->displaySize, { 200.0f, 200.0f }, 200.0f / 30.0f);
 	}

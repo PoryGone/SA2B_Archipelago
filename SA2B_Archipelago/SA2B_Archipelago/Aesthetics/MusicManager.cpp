@@ -61,7 +61,7 @@ static int __cdecl GetShuffledVoice(int inVoice)
 {
     MusicManager* musicMan = &MusicManager::getInstance();
 
-    if (musicMan == NULL || musicMan->_VoiceMap.size() == 0)
+    if (musicMan == NULL || musicMan->_VoiceMap.size() == 0 || inVoice == 705)
     {
         return inVoice;
     }

@@ -46,6 +46,7 @@ public:
 	void HandleLoss();
 
 	void SetDifficulty(int difficulty);
+	bool IsInFinalBoss();
 
 	void Pause();
 	void Resume();

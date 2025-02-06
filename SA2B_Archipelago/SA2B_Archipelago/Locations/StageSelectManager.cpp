@@ -249,13 +249,22 @@ std::vector<int> StageSelectManager::GetGateRequirements()
 
 std::vector<int> StageSelectManager::GetCurrentStageMissions()
 {
+	std::vector<int> activeOrder;
+
+	if (StageSelectIcons::GetInstance().IsCurrentTileBoss() ||
+		CurrentLevel == LevelIDs_Biolizard ||
+		CurrentLevel == LevelIDs_FinalHazard ||
+		CurrentLevel == LevelIDs_GreenHill ||
+		CurrentLevel == LevelIDs_ChaoWorld)
+	{
+		return activeOrder;
+	}
+
 	int currentTileStageIndex = this->TileIDtoStageIndex[SS_SelectedTile];
 	int missionOrderIndex = this->_chosenMissionsMap.at(currentTileStageIndex);
 	std::array<int, 5> chosenMissionOrder = this->_potentialMissionOrders.at(missionOrderIndex);
 
 	int missionCount = this->_missionCountMap[currentTileStageIndex];
-
-	std::vector<int> activeOrder;
 
 	for (int i = 0; i < missionCount; i++)
 	{
@@ -267,13 +276,22 @@ std::vector<int> StageSelectManager::GetCurrentStageMissions()
 
 std::vector<int> StageSelectManager::GetCurrentStageRanks()
 {
+	std::vector<int> activeRanks;
+
+	if (StageSelectIcons::GetInstance().IsCurrentTileBoss() ||
+		CurrentLevel == LevelIDs_Biolizard ||
+		CurrentLevel == LevelIDs_FinalHazard ||
+		CurrentLevel == LevelIDs_GreenHill ||
+		CurrentLevel == LevelIDs_ChaoWorld)
+	{
+		return activeRanks;
+	}
+
 	int currentTileStageIndex = this->TileIDtoStageIndex[SS_SelectedTile];
 	int missionOrderIndex = this->_chosenMissionsMap.at(currentTileStageIndex);
 	std::array<int, 5> chosenMissionOrder = this->_potentialMissionOrders.at(missionOrderIndex);
 
 	int missionCount = this->_missionCountMap[currentTileStageIndex];
-
-	std::vector<int> activeRanks;
 
 	int rankAddr = this->_stageSelectDataMap.at(currentTileStageIndex).UnlockMemAddress - 5;
 

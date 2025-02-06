@@ -1,8 +1,6 @@
 #include "../../../pch.h"
 #include "LightUpPath.h"
 
-// TODO: Handle results feedback
-// TODO: SFX
 
 void LightUpPath::OnGameStart(MinigameManagerData data)
 {
@@ -229,11 +227,17 @@ void LightUpPath::Set(int x, int y, MinigameManagerData data)
 	}
 	if (inactiveCount <= 0)
 	{
+		PlaySoundProbably((int)MinigameSounds::CollectEmblem, 0, 0, 0);
 		this->localState = LightUpPathState::LUPS_EndingWin;
 	}
 	else if (!anyActive)
 	{
+		PlaySoundProbably((int)MinigameSounds::Explosion, 0, 0, 0);
 		this->localState = LightUpPathState::LUPS_EndingLose;
+	}
+	else
+	{
+		PlaySoundProbably((int)MinigameSounds::SwitchPress, 0, 0, 0);
 	}
 }
 

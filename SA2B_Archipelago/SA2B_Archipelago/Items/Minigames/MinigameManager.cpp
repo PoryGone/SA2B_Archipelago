@@ -324,6 +324,11 @@ void MinigameManager::SetDifficulty(int difficulty)
 	this->_data.difficulty = this->_baseDifficulty;
 }
 
+bool MinigameManager::IsInFinalBoss()
+{
+	return this->currentMinigameItem == IV_Maria;
+}
+
 void MinigameManager::Pause()
 {
 	if (!this->isPaused)

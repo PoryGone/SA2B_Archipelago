@@ -10,6 +10,7 @@ void MinigameFinalBoss::OnGameStart(MinigameManagerData data)
 	state = FBS_Intro;
 	introState = FBIS_FadeIn;
 	sonicIsActive = true;
+	phaseHasChanged = false;
 	bossHealth = bossMaxHealth;
 	sonicRingCount = 50;
 	shadowRingCount = 50;
@@ -23,6 +24,7 @@ void MinigameFinalBoss::OnGameStart(MinigameManagerData data)
 	data.timers->push_back(&ringGrowthTimer);
 	data.timers->push_back(&weakPointTimer);
 	data.timers->push_back(&sequenceTimer);
+	WriteData<1>((void*)0x0174AFCC, 0);
 	for (int i = 0; i < patternProgress.size(); i++)
 	{
 		patternProgress[i] = BossPatternRuntimeData();
@@ -88,6 +90,8 @@ void MinigameFinalBoss::RunIntro(MinigameManagerData data)
 		leftBar->color.a = 1.0f;
 		rightBar->color.a = 1.0f;
 		state = FBS_InGame;
+
+		PlayUnshuffledVoice(2, 671);
 	}
 	switch (introState)
 	{
@@ -135,6 +139,8 @@ void MinigameFinalBoss::RunIntro(MinigameManagerData data)
 			currentSequence = nullptr;
 			sequenceTimer.Start(RandomFloat(1.0f, 2.0f));
 			state = FBS_InGame;
+
+			PlayUnshuffledVoice(2, 671);
 		}
 		break;
 	}
@@ -161,16 +167,24 @@ void MinigameFinalBoss::RunInGame(MinigameManagerData data)
 		if (sonicIsActive)
 		{
 			shadow->SetPositionGlobal(shadowOffScreenPos);
+			PlayUnshuffledVoice(2, 664);
 		}
 		else
 		{
 			sonic->SetPositionGlobal(sonicOffScreenPos);
+			PlayUnshuffledVoice(2, 168);
 		}
 		sonicIsActive = !sonicIsActive;
 		state = FBS_Swap;
 	}
 	CheckCharacterCollision(data);
 	UpdateCharacterRingGrowthDecay(data);
+
+	if (!phaseHasChanged && (bossHealth / bossMaxHealth < 0.5f))
+	{
+		PlayUnshuffledVoice(2, 671);
+		phaseHasChanged = true;
+	}
 }
 
 void MinigameFinalBoss::RunSwap(MinigameManagerData data)
@@ -246,6 +260,7 @@ void MinigameFinalBoss::Victory(MinigameManagerData data)
 	endTextNode->SetEnabled(true);
 	sequenceTimer.Start(2.0f);
 	FHExplosionEmitter->Play();
+	PlaySoundProbably((int)MinigameSounds::Explosion, 0, 0, 0);
 	state = FBS_Win;
 }
 
@@ -273,6 +288,7 @@ void MinigameFinalBoss::CharacterShoot(MinigameManagerData data)
 			characterBullets[i].node->SetPositionGlobal(characterParent->GetPositionGlobal());
 			characterBullets[i].velocity = Point3Scale({ 0.0f,-1.0f }, characterBulletSpeed);
 			characterShootTimer.Start(characterBulletCooldown);
+			//PlaySoundProbably((int)MinigameSounds::MenuNav, 0, 0, 0); // Every single sound I tried here was miserable
 			return;
 		}
 	}
@@ -293,6 +309,7 @@ void MinigameFinalBoss::UpdateBullets(MinigameManagerData data)
 			if (data.collision->IsColliding(FHWeakPoint, characterBullets[i].node))
 			{
 				bossHealth -= 1.0f;
+				PlaySoundProbably((int)MinigameSounds::Punch, 0, 0, 0);
 				characterBullets[i].node->SetEnabled(false);
 				UpdateHealthBarFill();
 				if (bossHealth <= 0.0f)
@@ -694,11 +711,13 @@ void MinigameFinalBoss::OnCharacterHit()
 	{
 		sonicRingCount -= onHitRingDamage;
 		sonicRingCount = max(sonicRingCount, 0);
+		PlaySoundProbably((int)MinigameSounds::LoseRings, 0, 0, 0);
 	}
 	else
 	{
 		shadowRingCount -= onHitRingDamage;
 		shadowRingCount = max(shadowRingCount, 0);
+		PlaySoundProbably((int)MinigameSounds::LoseRings, 0, 0, 0);
 	}
 }
 
@@ -880,6 +899,7 @@ void MinigameFinalBoss::OnCleanup(MinigameManagerData data)
 {
 	bossBullets.clear();
 	characterBullets.clear();
+	WriteData<1>((void*)0x0174AFCC, 1);
 	for (int i = 0; i < patternProgress.size(); i++)
 	{
 		patternProgress[i] = BossPatternRuntimeData();

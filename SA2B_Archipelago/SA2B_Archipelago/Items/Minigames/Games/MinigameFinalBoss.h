@@ -203,6 +203,7 @@ private:
 
 	float bossMaxHealth = 150.0f;
 	float bossHealth;
+	bool phaseHasChanged = false;
 	int sonicRingCount;
 	int shadowRingCount;
 	bool sonicIsActive;
