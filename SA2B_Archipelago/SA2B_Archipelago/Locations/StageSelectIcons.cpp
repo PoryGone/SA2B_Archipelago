@@ -889,7 +889,7 @@ void UpdateChaosEmeraldIcons()
 			float y = 380.0f;
 			if (GameState == GameStates::GameStates_Pause && GameMode == GameMode::GameMode_Level)
 			{
-				x = (i * 32.0f);
+				x = minXPos + (i * 32.0f);
 				y = 448.0f;
 			}
 			StageSelectSprite.tanim = &StageSelectAnim[emeraldIcon];
@@ -912,7 +912,7 @@ void UpdateChaosEmeraldIcons()
 			float y = 380.0f;
 			if (GameState == GameStates::GameStates_Pause && GameMode == GameMode::GameMode_Level)
 			{
-				x = (i * 32.0f);
+				x = minXPos + (i * 32.0f);
 				y = 448.0f;
 			}
 			StageSelectSprite.tanim = &StageSelectAnim[minigameIcon];
