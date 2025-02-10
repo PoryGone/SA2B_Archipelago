@@ -293,6 +293,7 @@ void LocationManager::OnInputFunction()
 		this->_inBigFishing = false;
 		TimeStopped = 0;
 		this->_FreezePos = NJS_VECTOR();
+		this->_BigIndicators.clear();
 
 		return;
 	}
