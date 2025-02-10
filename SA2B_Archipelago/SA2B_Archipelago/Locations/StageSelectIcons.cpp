@@ -1353,6 +1353,13 @@ void StageSelectIcons::MinigameReplaySystem()
 		return;
 	}
 
+	if (MainCharObj2[0] != nullptr && (MainCharObj2[0]->Powerups & (1 << PowerupBits::PowerupBits_Dead)))
+	{
+		// Don't start a new minigame while dying from the last one
+
+		return;
+	}
+
 	if (GameState != GameStates_Ingame)
 	{
 		this->minigameReplayIndex = 0;
