@@ -116,6 +116,8 @@ private:
 	bool _badSaveFile = false;
 	bool _badSaveName = false;
 	bool _badModVersion = false;
+	bool _betaModVersion = false;
+	bool _betaServerVersion = false;
 
 	int _serverModVersion = 0;
 

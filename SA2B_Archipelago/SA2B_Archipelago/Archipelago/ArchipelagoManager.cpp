@@ -178,6 +178,32 @@ void ArchipelagoManager::OnFrameFunction()
         return;
     }
 
+    if (this->_betaModVersion)
+    {
+        std::string msg1 = "This Mod Version is for beta tests only.";
+        std::string msg2 = "To play in normal multiworlds,";
+        std::string msg3 = "please download an official release.";
+        _helperFunctions->SetDebugFontSize(16);
+        _helperFunctions->SetDebugFontColor(this->_errorColor);
+        _helperFunctions->DisplayDebugString(NJM_LOCATION(0, 0), msg1.c_str());
+        _helperFunctions->DisplayDebugString(NJM_LOCATION(0, 1), msg2.c_str());
+        _helperFunctions->DisplayDebugString(NJM_LOCATION(0, 2), msg3.c_str());
+
+        return;
+    }
+
+    if (this->_betaServerVersion)
+    {
+        std::string msg1 = "This Server is running a beta test.";
+        std::string msg2 = "Please connect using the provided Mod.";
+        _helperFunctions->SetDebugFontSize(16);
+        _helperFunctions->SetDebugFontColor(this->_errorColor);
+        _helperFunctions->DisplayDebugString(NJM_LOCATION(0, 0), msg1.c_str());
+        _helperFunctions->DisplayDebugString(NJM_LOCATION(0, 1), msg2.c_str());
+
+        return;
+    }
+
     if (this->_badModVersion)
     {
         std::string msg1 = "Incorrect Mod Version.";
@@ -1164,7 +1190,12 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
 
 bool ArchipelagoManager::IsInit()
 {
-    return (AP_IsInit() && !this->_badSaveFile && !this->_badSaveName && !this->_badModVersion);
+    return (AP_IsInit() &&
+            !this->_badSaveFile &&
+            !this->_badSaveName &&
+            !this->_badModVersion &&
+            !this->_betaModVersion &&
+            !this->_betaServerVersion);
 }
 
 bool ArchipelagoManager::IsAuth()
@@ -1730,7 +1761,18 @@ void ArchipelagoManager::VerfyModVersion(int modVersion)
 {
     if (modVersion != MOD_VERSION)
     {
-        this->_badModVersion = true;
+        if (MOD_VERSION > 1000)
+        {
+            this->_betaModVersion = true;
+        }
+        else if (modVersion > 1000)
+        {
+            this->_betaServerVersion = true;
+        }
+        else
+        {
+            this->_badModVersion = true;
+        }
         this->_serverModVersion = modVersion;
     }
 }
