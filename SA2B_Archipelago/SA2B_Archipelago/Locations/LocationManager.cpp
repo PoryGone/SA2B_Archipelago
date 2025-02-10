@@ -333,6 +333,7 @@ void LocationManager::OnInputFunction()
 					MainCharObj1[0]->NextAction = Action_None;
 					MainCharObj1[0]->Status |= (1 << StatusBits::StatusBits_DisableControl);
 					MainCharObj2[0]->Powerups |= (1 << PowerupBits::PowerupBits_Invincibility);
+					MainCharObj2[0]->UnderwaterTime = 0;
 					MainCharObj1[0]->Position = this->_FreezePos;
 					MainCharObj2[0]->Speed.x = 0.0;
 					MainCharObj2[0]->Speed.y = 0.0;
