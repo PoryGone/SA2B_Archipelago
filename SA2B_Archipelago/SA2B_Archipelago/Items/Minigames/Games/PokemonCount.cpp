@@ -11,7 +11,8 @@ void PokemonCount::OnGameStart(MinigameManagerData data)
 {
 	this->currentState = MinigameState::MGS_InProgress;
 	this->localState = PCS_Parade;
-	this->endingTimer = 150;
+	this->endingTimer = 120;
+	this->pregameTime = 3.0f;
 	data.timers->push_back(&this->timer);
 
 	this->CreateHierarchy(data);
@@ -24,11 +25,6 @@ void PokemonCount::OnFrame(MinigameManagerData data)
 	if (data.managerState != MinigameState::MGS_InProgress)
 	{
 		return;
-	}
-
-	if (this->localState == PokemonCountState::PCS_Parade)
-	{
-		this->OnFrameSimulate(data);
 	}
 
 	switch (this->localState)
@@ -286,6 +282,7 @@ void PokemonCount::CreateHierarchy(MinigameManagerData data)
 		newSpawnBase->components.push_back(pokeWiggle);
 
 		pokemon->node = newSpawnBase;
+		pokemon->node->SetEnabled(false);
 		pokemon->moveSpeed = RandomFloat(1.5f, 4.0f);
 
 		SpriteNode* newSpawn = data.hierarchy->CreateNode("Spawn", newSpawnBase);

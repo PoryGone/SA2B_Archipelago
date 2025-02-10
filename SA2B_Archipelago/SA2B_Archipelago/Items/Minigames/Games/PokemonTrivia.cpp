@@ -45,7 +45,7 @@ void PokemonTrivia::OnGameStart(MinigameManagerData data)
 {
 	this->currentState = MinigameState::MGS_InProgress;
 	this->localState = PTS_Start;
-	this->endingTimer = 150;
+	this->endingTimer = 120;
 	data.timers->push_back(&this->timer);
 
 	this->CreateHierarchy(data);

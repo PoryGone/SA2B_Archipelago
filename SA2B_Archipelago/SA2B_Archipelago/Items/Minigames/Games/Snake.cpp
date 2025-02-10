@@ -19,9 +19,9 @@ void Snake::OnGameStart(MinigameManagerData data)
 	this->playerDirection = SnakeTileDirection::STD_Right;
 
 	CreateHierarchy(data);
-	this->GenerateFood();
 
 	FillGrid(data);
+	this->GenerateFood();
 }
 
 void Snake::OnFrame(MinigameManagerData data)

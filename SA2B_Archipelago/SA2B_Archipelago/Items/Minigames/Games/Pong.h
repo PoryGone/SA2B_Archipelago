@@ -64,7 +64,7 @@ public:
 
 private:
 	PongState localState;
-	int endingTimer = 120;
+	int endingTimer;
 	SpriteNode* resultNode;
 
 	float ballSpeedX = 2.0f;

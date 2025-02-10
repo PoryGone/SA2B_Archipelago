@@ -53,7 +53,7 @@ private:
 	void GenerateFood();
 
 	SnakeState localState;
-	int endingTimer = 120;
+	int endingTimer;
 	SpriteNode* resultNode;
 
 	SnakeTileDirection playerDirection = SnakeTileDirection::STD_Right;
@@ -76,7 +76,7 @@ private:
 	float cellSize = 24.0f;
 
 	int activeSpeed;
-	std::vector<int> speeds = { 30, 15, 8 };
+	std::vector<int> speeds = { 30, 15, 10 };
 	int goalLength;
 	std::vector<int> goalLengths = { 8, 15, 20 };
 

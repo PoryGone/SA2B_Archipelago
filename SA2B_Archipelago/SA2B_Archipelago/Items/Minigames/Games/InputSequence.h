@@ -26,7 +26,7 @@ private:
 	void OnFramePlayer(MinigameManagerData data);
 
 	InputSequenceState localState;
-	int endingTimer = 150;
+	int endingTimer;
 	SpriteNode* resultNode;
 
 	Timer timer;

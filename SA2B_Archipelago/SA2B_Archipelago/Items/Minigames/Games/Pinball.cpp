@@ -30,6 +30,8 @@ void Pinball::OnGameStart(MinigameManagerData data)
 
 	CreateHierarchy(data);
 	SpawnBall();
+
+	PlaySoundProbably((int)MinigameSounds::LevelStart, 0, 0, 0);
 }
 
 void Pinball::OnFrame(MinigameManagerData data)

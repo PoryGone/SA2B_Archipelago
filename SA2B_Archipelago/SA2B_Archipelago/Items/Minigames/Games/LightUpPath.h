@@ -56,7 +56,7 @@ private:
 	float guessTime = 25.0f;
 
 	LightUpPathState localState;
-	int endingTimer = 120;
+	int endingTimer;
 	SpriteNode* resultNode;
 
 	//0,0 is top left

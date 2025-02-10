@@ -35,12 +35,12 @@ void MathQuiz::OnGameStart(MinigameManagerData data)
 {
 	this->currentState = MinigameState::MGS_InProgress;
 	this->localState = MQS_Start;
-	this->endingTimer = 150;
+	this->endingTimer = 120;
 	data.timers->push_back(&this->timer);
 
 	this->CreateHierarchy(data);
 
-	PlaySoundProbably((int)MinigameSounds::LevelStart, 0, 0, 0);
+	PlayUnshuffledVoice(2, 562);
 }
 
 void MathQuiz::OnFrame(MinigameManagerData data)

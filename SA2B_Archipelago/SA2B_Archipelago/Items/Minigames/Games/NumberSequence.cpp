@@ -39,6 +39,8 @@ void NumberSequence::OnGameStart(MinigameManagerData data)
 	{
 		questionMarks[i]->SetEnabled(i < guessesRemaining);
 	}
+
+	PlaySoundProbably((int)MinigameSounds::LevelStart, 0, 0, 0);
 }
 
 void NumberSequence::OnFrame(MinigameManagerData data)

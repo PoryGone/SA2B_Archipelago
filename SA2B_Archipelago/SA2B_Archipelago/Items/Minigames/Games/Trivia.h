@@ -45,7 +45,7 @@ private:
 	void OnFramePlayer(MinigameManagerData data);
 
 	TriviaState localState;
-	int endingTimer = 150;
+	int endingTimer;
 	SpriteNode* resultNode;
 	std::vector<SpriteNode*> inputResults;
 

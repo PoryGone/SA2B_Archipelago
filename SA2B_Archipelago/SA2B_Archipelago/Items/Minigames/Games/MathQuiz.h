@@ -26,7 +26,7 @@ private:
 	void OnFramePlayer(MinigameManagerData data);
 
 	MathQuizState localState;
-	int endingTimer = 150;
+	int endingTimer;
 	SpriteNode* resultNode;
 	std::vector<SpriteNode*> inputResults;
 

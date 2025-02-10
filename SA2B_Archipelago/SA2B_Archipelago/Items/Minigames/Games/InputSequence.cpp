@@ -6,7 +6,7 @@ void InputSequence::OnGameStart(MinigameManagerData data)
 	this->currentState = MGS_InProgress;
 	this->selectedIndex = 0;
 	this->localState = ISS_Start;
-	this->endingTimer = 150;
+	this->endingTimer = 120;
 	data.timers->push_back(&this->timer);
 
 	int numInputs = 3;

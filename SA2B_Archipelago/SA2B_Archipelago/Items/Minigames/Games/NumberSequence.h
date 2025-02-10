@@ -44,7 +44,7 @@ private:
 	void UpdateTimerFill();
 
 	NumberSequenceState localState;
-	int endingTimer = 120;
+	int endingTimer;
 	SpriteNode* resultNode;
 
 	NumberSequenceState state;

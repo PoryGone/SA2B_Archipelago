@@ -18,6 +18,7 @@ void Breakout::OnGameStart(MinigameManagerData data)
 	this->currentState = MinigameState::MGS_InProgress;
 	this->localState = BreakoutState::BS_Game;
 	this->endingTimer = 120;
+	this->pregameTime = 2.0f;
 
 	this->CreateHierarchy(data);
 
@@ -252,15 +253,12 @@ void Breakout::CreateHierarchy(MinigameManagerData data)
 	bottom->SetPosition({ 0, (BREAKOUT_RIGHT - BREAKOUT_PLAYER_PADDLE_HALFLENGTH) - middle, 0 });
 	mid->SetPosition({ 0, 0, 0 });
 	paddleBack->SetRotation(90.0f);
-	//top->SetRotation(90.0f);
-	//bottom->SetRotation(90.0f);
-	//mid->SetRotation(90.0f);
 	this->playerPaddle->SetPosition({ middle, BREAKOUT_BOTTOM - (BREAKOUT_PADDLE_THICKNESS), 0 });
 	this->playerPaddle->SetRotation(90.0f);
 
 	// Ball
 	float ballX = BREAKOUT_LEFT + (BREAKOUT_RIGHT - BREAKOUT_LEFT) / 2.0f;
-	float ballY = BREAKOUT_TOP + (BREAKOUT_BOTTOM - BREAKOUT_TOP) / 2.0f;
+	float ballY = BREAKOUT_TOP - 50.0f + (BREAKOUT_BOTTOM - BREAKOUT_TOP) / 2.0f;
 	this->ball = data.hierarchy->CreateNode("Ball", data.icons->GetAnim(MGI_Spinball), { BREAKOUT_BALL_RADIUS * 2, BREAKOUT_BALL_RADIUS * 2, 1 }, { ballX, ballY, 0 });
 	this->ball->components.push_back(new Rotator(rotationDelta));
 

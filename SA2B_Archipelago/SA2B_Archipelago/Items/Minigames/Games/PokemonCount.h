@@ -44,7 +44,7 @@ private:
 	void OnFramePlayer(MinigameManagerData data);
 	void OnFrameSimulate(MinigameManagerData data);
 
-	int endingTimer = 150;
+	int endingTimer;
 	SpriteNode* resultNode;
 	std::vector<SpriteNode*> inputResults;
 

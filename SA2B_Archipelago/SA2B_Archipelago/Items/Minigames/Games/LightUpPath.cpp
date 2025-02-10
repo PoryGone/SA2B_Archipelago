@@ -13,6 +13,8 @@ void LightUpPath::OnGameStart(MinigameManagerData data)
 	FillGrid(data.difficulty, data);
 	data.timers->push_back(&this->timer);
 	this->timer.Start(this->guessTime);
+
+	PlaySoundProbably((int)MinigameSounds::LevelStart, 0, 0, 0);
 }
 
 void LightUpPath::OnFrame(MinigameManagerData data)

@@ -56,7 +56,7 @@ private:
 	void OnFramePlayer(MinigameManagerData data);
 
 	PokemonTriviaState localState;
-	int endingTimer = 150;
+	int endingTimer;
 	SpriteNode* resultNode;
 	std::vector<SpriteNode*> inputResults;
 
