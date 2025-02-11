@@ -7,6 +7,7 @@ void Pinball::OnGameStart(MinigameManagerData data)
 	//normIndex = 0;
 	this->currentState = MGS_InProgress;
 	data.timers->push_back(&endTimer);
+	data.stopwatches->push_back(&resetSW);
 	switch (data.difficulty)
 	{
 	case MGD_Easy:
@@ -72,6 +73,8 @@ void Pinball::UpdateCountdown(MinigameManagerData data)
 		{
 			countdownNode->SetEnabled(false);
 			state = PS_BallActive;
+			resetSW.Start();
+			ballStuckPosition = ball->GetPositionGlobal();
 		}
 	}
 }
@@ -228,6 +231,15 @@ void Pinball::UpdateBallActive(MinigameManagerData data)
 			SpawnBall();
 		}
 	}
+	if (Point3Distance(ball->GetPositionGlobal(), ballStuckPosition) > ballStuckThreshold)
+	{
+		ballStuckPosition = ball->GetPositionGlobal();
+		resetSW.Start();
+	}
+	if (resetSW.TimeElapsed() > ballStuckTime)
+	{
+		SpawnBall(true);
+	}
 }
 
 void Pinball::UpdateGameEnd(MinigameManagerData data)
@@ -237,6 +249,10 @@ void Pinball::UpdateGameEnd(MinigameManagerData data)
 		// TODO RAS: Figure out how to time playing the Rank Reveal sound once here when it's done animating
 		endIcon->color.a += 1.0f / 30.0f;
 		endIcon->displaySize = Point3MoveTowards(endIcon->displaySize, { 200.0f, 200.0f }, 200.0f / 30.0f);
+		if (endIcon->color.a >= 1.0f)
+		{
+			PlaySoundProbably((int)MinigameSounds::RankReveal, 0, 0, 0);
+		}
 	}
 	if (endTimer.IsElapsed())
 	{
@@ -251,9 +267,12 @@ void Pinball::UpdateGameEnd(MinigameManagerData data)
 	}
 }
 
-void Pinball::SpawnBall()
+void Pinball::SpawnBall(bool isFree)
 {
-	lives--;
+	if (!isFree)
+	{
+		lives--;
+	}
 	for (int i = 0; i < livesCounter.size(); i++)
 	{
 		livesCounter[i]->SetEnabled(i < lives);
@@ -261,6 +280,8 @@ void Pinball::SpawnBall()
 	ballVelocity = { 0.0f, 0.0f, 0.0f };
 	float randOffset = RandomFloat(50.0f, 120.0f);
 	ball->SetPositionGlobal({ (RandomFloat(0.0, 1.0f) < 0.5 ? 320.0f - randOffset : 320.0f + randOffset), 290.0f });
+	resetSW.Start();
+	ballStuckPosition = ball->GetPositionGlobal();
 }
 
 void Pinball::AddScore(int score, MinigameManagerData data)

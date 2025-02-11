@@ -25,7 +25,7 @@ private:
 	void UpdateCountdown(MinigameManagerData data);
 	void UpdateBallActive(MinigameManagerData data);
 	void UpdateGameEnd(MinigameManagerData data);
-	void SpawnBall();
+	void SpawnBall(bool isFree = false);
 	void AddScore(int score, MinigameManagerData data);
 	void Win(MinigameManagerData data);
 	void Lose(MinigameManagerData data);
@@ -48,18 +48,21 @@ private:
 	float maxVelocity = 9.0f;
 	float baseDampening = 0.3f;
 	float bumperDampening = 1.3f;
+	float ballStuckThreshold = 3.0f;
+	float ballStuckTime = 5.0f;
 
 	RawInputFlags leftFlipperInput = RIF_Left | RIF_Up | RIF_Down;
 	RawInputFlags rightFlipperInput = RIF_Right | RIF_Up | RIF_Down;
 
 	Timer endTimer;
+	Stopwatch resetSW;
 
 	NJS_POINT3 ballVelocity;
+	NJS_POINT3 ballStuckPosition;
 	SpriteNode* leftFlipper;
 	SpriteNode* rightFlipper;
 	SpriteNode* ball;
 	SpriteNode* drain;
-	Timer timer;
 	SpriteNode* boardParent;
 	std::vector<SpriteNode*> boardObjs;
 	std::vector<SpriteNode*> boardObjsNoFlippers;
