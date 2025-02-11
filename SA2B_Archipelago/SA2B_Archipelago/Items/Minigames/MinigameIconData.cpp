@@ -92,6 +92,8 @@ static NJS_TEXANIM MGAnim[] = {
 	{10, 10, 5, 5, 0x00, 0xEC, 0x05, 0xF5, 10, 0}, //Boss Bar Left
 	{10, 10, 5, 5, 0x10, 0xEC, 0x15, 0xF5, 10, 0}, //Boss Bar Right
 	{128, 10, 64, 5, 0x00, 0xF6, 0x3F, 0xFF, 10, 0}, //Boss Bar Center
+	{160, 38, 80, 19, 0x20, 0xC0, 0x6F, 0xE6, 10, 0}, //A To Shoot
+	{160, 38, 80, 19, 0x70, 0xC0, 0xBF, 0xE6, 10, 0}, //B To Switch
 	//Pokemon
 	//Poke Atlas 0
 	{128, 128, 64, 64, 0x00, 0x00, 0x3F, 0x3F, 11, 0},
@@ -131,7 +133,7 @@ static NJS_TEXANIM MGAnim[] = {
 	{40, 32, 20, 16, 0x0A, 0x10, 0x34, 0x30, 0, 0},
 };
 
-static const int MinigameAnimLength = 113;
+static const int MinigameAnimLength = 115;
 
 FunctionPointer(void, ReleaseTextureList, (NJS_TEXLIST* a1), 0x77F9F0);
 

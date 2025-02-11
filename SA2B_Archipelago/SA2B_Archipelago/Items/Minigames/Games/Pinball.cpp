@@ -93,7 +93,7 @@ void Pinball::UpdateBallActive(MinigameManagerData data)
 		if (ballAng < 0.0f && abs(ballAng) < flipperAngle && ballDist <= flipperRange)
 		{
 			float flipT = ballDist / flipperRange;
-			NJS_POINT3 awayVector = Point3RotateAround(toTip, { 0.0f, 0.0f }, -EaseInterpolate(flipperAngForceAngMax, flipperAngForceAngMin, flipT, ET_QuadOut));
+			NJS_POINT3 awayVector = Point3RotateAround(toTip, { 0.0f, 0.0f }, -EaseInterpolate(flipperAngForceAngMax, flipperAngForceAngMin, flipT, ET_QuadIn));
 			awayVector = Point3Scale(awayVector, Lerp(flipperForceMin, flipperForceMax, flipT));
 			ballVelocity = awayVector;
 			flipperUsed = true;
@@ -115,7 +115,7 @@ void Pinball::UpdateBallActive(MinigameManagerData data)
 			if (ballAng > 0.0f && abs(ballAng) < flipperAngle && ballDist <= flipperRange)
 			{
 				float flipT = ballDist / flipperRange;
-				NJS_POINT3 awayVector = Point3RotateAround(toTip, { 0.0f, 0.0f }, EaseInterpolate(flipperAngForceAngMax, flipperAngForceAngMin, flipT, ET_QuadOut));
+				NJS_POINT3 awayVector = Point3RotateAround(toTip, { 0.0f, 0.0f }, EaseInterpolate(flipperAngForceAngMax, flipperAngForceAngMin, flipT, ET_QuadIn));
 				awayVector = Point3Scale(awayVector, Lerp(flipperForceMin, flipperForceMax, flipT));
 				ballVelocity = awayVector;
 				flipperUsed = true;

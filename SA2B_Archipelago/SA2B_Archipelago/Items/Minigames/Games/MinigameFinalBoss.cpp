@@ -5,7 +5,7 @@
 void MinigameFinalBoss::OnGameStart(MinigameManagerData data)
 {
 	ResetMusic();
-	PlayMusic("mg_boss.adx");
+	PlayMusic("mg_bonus.adx");
 	currentState = MGS_InProgress;
 	state = FBS_Intro;
 	introState = FBIS_FadeIn;

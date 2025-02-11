@@ -45,7 +45,7 @@ private:
 	float flipperAngle = 60.0f; //Change in flipper angle when flipped
 	float flipperLength = 45.0f;
 	float ballRadius = 7.5f;
-	float maxVelocity = 12.0f;
+	float maxVelocity = 9.0f;
 	float baseDampening = 0.3f;
 	float bumperDampening = 1.3f;
 
