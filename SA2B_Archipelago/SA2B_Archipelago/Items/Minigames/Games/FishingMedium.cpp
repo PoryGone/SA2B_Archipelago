@@ -26,6 +26,7 @@ void FishingMedium::OnGameStart(MinigameManagerData data)
 	std::shuffle(xPositions.begin(), xPositions.end(), RNG());
 	std::shuffle(yPositions.begin(), yPositions.end(), RNG());
 	CreateHierarchy(data);
+	PlaySoundProbably((int)MinigameSounds::LevelStart, 0, 0, 0);
 }
 
 void FishingMedium::OnFrame(MinigameManagerData data)
@@ -56,6 +57,10 @@ void FishingMedium::OnFrame(MinigameManagerData data)
 					rings[i]->displaySize = { ringSizes[i], ringSizes[i], 0.0f };
 					if (ringSizes[i] <= zoneSizes[i])
 					{
+						if (rings[i]->color.g < 0.5f)
+						{
+							PlayUnshuffledVoice(2, 2687);
+						}
 						rings[i]->color = { 1.0f, 0.0f, 1.0f, 0.0f };
 					}
 					if (ringSizes[i] <= 0.0f)
@@ -64,6 +69,7 @@ void FishingMedium::OnFrame(MinigameManagerData data)
 						endIcon->SetEnabled(true);
 						fs_state = FMS_Escaped;
 						endTimer.Start(2.0f);
+						PlayUnshuffledVoice(2, 1798);
 						zones[i]->color = { 1.0f, 1.0f, 0.0f, 0.0f };
 						return;
 					}
@@ -83,6 +89,7 @@ void FishingMedium::OnFrame(MinigameManagerData data)
 								endIcon->SetEnabled(true);
 								fs_state = FMS_Caught;
 								endTimer.Start(2.0f);
+								PlayUnshuffledVoice(2, 104);
 								return;
 							}
 						}
@@ -92,6 +99,7 @@ void FishingMedium::OnFrame(MinigameManagerData data)
 							endIcon->SetEnabled(true);
 							fs_state = FMS_Escaped;
 							endTimer.Start(2.0f);
+							PlayUnshuffledVoice(2, 1798);
 							zones[i]->color = { 1.0f, 1.0f, 0.0f, 0.0f };
 							return;
 						}

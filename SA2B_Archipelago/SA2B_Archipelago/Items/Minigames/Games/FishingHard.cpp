@@ -13,6 +13,7 @@ void FishingHard::OnGameStart(MinigameManagerData data)
 	fishTimer.Start(0.0f);
 
 	CreateHierarchy(data);
+	PlaySoundProbably((int)MinigameSounds::LevelStart, 0, 0, 0);
 }
 
 void FishingHard::OnFrame(MinigameManagerData data)
@@ -154,6 +155,7 @@ void FishingHard::Caught(MinigameManagerData data)
 	endIcon->SetEnabled(true);
 	fs_state = FHS_Caught;
 	endTimer.Start(2.0f);
+	PlayUnshuffledVoice(2, 104);
 }
 
 void FishingHard::Escaped(MinigameManagerData data)
@@ -163,4 +165,5 @@ void FishingHard::Escaped(MinigameManagerData data)
 	fs_state = FHS_Escaped;
 	endTimer.Start(2.0f);
 	catchZone->color = { 1.0f,1.0f,0.0f,0.0f };
+	PlayUnshuffledVoice(2, 1798);
 }

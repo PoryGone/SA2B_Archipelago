@@ -126,6 +126,7 @@ void TextBox::UpdateLineData(SpriteNode& node)
 	startIndex = 0;
 	length = 0;
 	i = 0;
+	charWidth = 0.0f;
 	while (i < words.size())
 	{
 		length++;
@@ -149,6 +150,10 @@ void TextBox::UpdateLineData(SpriteNode& node)
 				lines.emplace_back(TextBoxLineData((width - charWidth) * 0.5f, lineStart, lineEnd));
 				break;
 			case TextAlignment::Right:
+				if (words[i].length == 0) //A bit hacky but it seems to work
+				{
+					charWidth -= spaceWidth;
+				}
 				lines.emplace_back(TextBoxLineData(width - charWidth, lineStart, lineEnd));
 				break;
 			}

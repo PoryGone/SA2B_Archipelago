@@ -9,6 +9,7 @@ void FishingEasy::OnGameStart(MinigameManagerData data)
 	data.timers->push_back(&timer);
 
 	CreateHierarchy(data);
+	PlaySoundProbably((int)MinigameSounds::LevelStart, 0, 0, 0);
 }
 
 void FishingEasy::OnFrame(MinigameManagerData data)
@@ -24,7 +25,9 @@ void FishingEasy::OnFrame(MinigameManagerData data)
 		case FishingEasy::FES_WaitForFish:
 			if (data.inputPress & anyDPad)
 			{
+				biteIndicator->anim = data.icons->GetAnim(data.isLocationCheck ? MGI_Miss_Big_Banner : MGI_Miss_Banner);
 				FishEscaped();
+				PlayUnshuffledVoice(2, 1798);
 			}
 			else if (timer.IsElapsed())
 			{
@@ -32,6 +35,7 @@ void FishingEasy::OnFrame(MinigameManagerData data)
 				//biteIndicator->color = { 1.0f, 0.0f, 0.0f, 1.0f };
 				timer.Start(1.0f);
 				fs_state = FES_FishOnLine;
+				PlayUnshuffledVoice(2, 2687);
 			}
 			break;
 		case FishingEasy::FES_FishOnLine:
@@ -41,11 +45,13 @@ void FishingEasy::OnFrame(MinigameManagerData data)
 				//biteIndicator->color = { 1.0f, 0.0f, 1.0f, 0.0f };
 				timer.Start(2.0f);
 				fs_state = FES_Caught;
+				PlayUnshuffledVoice(2, 104);
 			}
 			else if (timer.IsElapsed())
 			{
 				biteIndicator->anim = data.icons->GetAnim(data.isLocationCheck ? MGI_Miss_Big_Banner : MGI_Miss_Banner);
 				FishEscaped();
+				PlayUnshuffledVoice(2, 1798);
 			}
 			break;
 		case FishingEasy::FES_Caught:
