@@ -180,13 +180,40 @@ void StatsManager::Victory()
 	{
 		creditsEntries.emplace_back(CreateStatsEntry("DEATHS", std::to_string(apStats.SentDeaths)));
 	}
-	if (apStats.HintMonitorsUsed > 0)
+	if (_trapLinkActive)
+	{
+		creditsEntries.emplace_back(CreateStatsEntry("TRAPS SENT", std::to_string(apStats.SentTrapLinks)));
+		creditsEntries.emplace_back(CreateStatsEntry("TRAPS RECEIVED", std::to_string(apStats.ReceivedTrapLinks)));
+	}
+	if (_ringLinkActive)
+	{
+		std::string ringSend = "+";
+		ringSend.append(std::to_string(apStats.PositiveRingsSent));
+		ringSend.append(" / -");
+		ringSend.append(std::to_string(apStats.NegativeRingsSent));
+		creditsEntries.emplace_back(CreateStatsEntry("RINGS SENT", ringSend));
+
+		std::string ringReceive = "+";
+		ringReceive.append(std::to_string(apStats.PositiveRingsReceived));
+		ringReceive.append(" / -");
+		ringReceive.append(std::to_string(apStats.NegativeRingsReceived));
+		creditsEntries.emplace_back(CreateStatsEntry("RINGS RECEIVED", ringReceive));
+	}
+	if ((apStats.MinigamesWon + apStats.MinigamesLost) > 0)
+	{
+		std::string minigameStats = "";
+		minigameStats.append(std::to_string(apStats.MinigamesWon));
+		minigameStats.append("/");
+		minigameStats.append(std::to_string((apStats.MinigamesWon + apStats.MinigamesLost)));
+		creditsEntries.emplace_back(CreateStatsEntry("MINIGAMES WON", minigameStats));
+	}
+	/*if (apStats.HintMonitorsUsed > 0)
 	{
 		creditsEntries.emplace_back(CreateStatsEntry("HINT MONITORS USED", std::to_string(apStats.HintMonitorsUsed)));
-	}
+	}*/
 	if (apStats.CCUnlockFrames > 0)
 	{
-		creditsEntries.emplace_back(CreateStatsEntry("CANONS CORE UNLOCK TIME", FormatGameTime(apStats.CCUnlockFrames)));
+		creditsEntries.emplace_back(CreateStatsEntry("CANNONS CORE UNLOCK TIME", FormatGameTime(apStats.CCUnlockFrames)));
 	}
 	for (int i = 0; i < 5; i++)
 	{

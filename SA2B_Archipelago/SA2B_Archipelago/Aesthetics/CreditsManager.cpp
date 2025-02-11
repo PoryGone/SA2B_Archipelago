@@ -45,12 +45,12 @@ void GenerateAPCredits(std::vector<SA2BCreditsEntry>& apCredits)
 	apCredits.emplace_back();
 	apCredits.push_back(SA2BCreditsEntry(CreditsEntryType::CET_Title, SA2B_AP_Color, "AP Randomizer Special Thanks"));
 	apCredits.emplace_back();
-	apCredits.push_back(SA2BCreditsEntry(CreditsEntryType::CET_Name, SA2B_AP_Color, "MAINMEMORY"));
-	apCredits.push_back(SA2BCreditsEntry(CreditsEntryType::CET_Name, SA2B_AP_Color, "N00BYKING"));
-	apCredits.push_back(SA2BCreditsEntry(CreditsEntryType::CET_Name, SA2B_AP_Color, "ENTISS"));
-	apCredits.push_back(SA2BCreditsEntry(CreditsEntryType::CET_Name, SA2B_AP_Color, "THEBULBLAXEMPIRE"));
-	apCredits.push_back(SA2BCreditsEntry(CreditsEntryType::CET_Name, SA2B_AP_Color, "X-HAX COMMUNITY"));
-	apCredits.push_back(SA2BCreditsEntry(CreditsEntryType::CET_Name, SA2B_AP_Color, "ARCHIPELAGO COMMUNITY"));
+	apCredits.push_back(SA2BCreditsEntry(CreditsEntryType::CET_Name, SA2B_AP_Color, "MAINMEMORY ~ X-HAX COMMUNITY"));
+	apCredits.push_back(SA2BCreditsEntry(CreditsEntryType::CET_Name, SA2B_AP_Color, "N00BYKING ~ THEBULBLAXEMPIRE"));
+	apCredits.push_back(SA2BCreditsEntry(CreditsEntryType::CET_Name, SA2B_AP_Color, "ENTISS ~ ARCHIPELAGO COMMUNITY"));
+	//apCredits.push_back(SA2BCreditsEntry(CreditsEntryType::CET_Name, SA2B_AP_Color, "THEBULBLAXEMPIRE"));
+	//apCredits.push_back(SA2BCreditsEntry(CreditsEntryType::CET_Name, SA2B_AP_Color, "X-HAX COMMUNITY"));
+	//apCredits.push_back(SA2BCreditsEntry(CreditsEntryType::CET_Name, SA2B_AP_Color, "ARCHIPELAGO COMMUNITY"));
 }
 
 void OverwriteCredits(std::vector<SA2BCreditsEntry>& newCredits)
@@ -89,7 +89,7 @@ void CreditsManager::UpdateCredits(std::vector<SA2BCreditsEntry> statsEntries)
 		updatedCredits.push_back(statsEntries[i]);
 	}
 
-	//14 entries for stats
+	//17 entries for stats
 
 	OverwriteCredits(updatedCredits);
 }
