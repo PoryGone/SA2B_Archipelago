@@ -84,8 +84,8 @@ enum MinigameIcon
 	MGI_Boss_Bar_Cap_Left		= 77,
 	MGI_Boss_Bar_Cap_Right		= 78,
 	MGI_Boss_Bar_Center			= 79,
-	MGI_Boss_A_Input			= 80,
-	MGI_Boss_B_Input			= 81,
+	MGI_Boss_B_Input			= 80,
+	MGI_Boss_A_Input			= 81,
 
 	//Pokemon
 	MGI_Aron					= POKE_START + 0,
