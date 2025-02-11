@@ -179,6 +179,10 @@ void TextBox::UpdateLineData(SpriteNode& node)
 
 BoundingBox TextBox::CalculateTextBounds(SpriteNode& node)
 {
+	// Note to future selves: technically this bound calculation is imperfect
+	// For simplicity, we do not factor down-hanging characters for the text height
+	// i.e. j, q, p, g
+
 	if (isDirty)
 	{
 		UpdateLineData(node);
@@ -193,7 +197,7 @@ BoundingBox TextBox::CalculateTextBounds(SpriteNode& node)
 	NJS_POINT3 down = Point3RotateAround({ 0.0f, 1.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, rotation);
 	NJS_POINT3 pos = node.GetPositionGlobal();
 	pos.x -= node.displaySize.x * 0.5f;
-	pos.y -= (node.displaySize.y * 0.5f) - (fontSize * 0.5);
+	pos.y -= (node.displaySize.y * 0.5f);
 	pos = Point3RotateAround(pos, node.GetPositionGlobal(), rotation);
 
 	BoundingBox box = BoundingBox(pos, {});
@@ -213,8 +217,6 @@ BoundingBox TextBox::CalculateTextBounds(SpriteNode& node)
 			{
 				TextDataAndAnim charData = textData->GetAnimAndData(text[i]);
 				float charScale = charData.data->height / 42.0f;
-				float sX = (fontSize / (float)charData.anim->sx) * charData.data->ratio * charScale;
-				float sY = fontSize / (float)charData.anim->sy * charScale;
 				float cWidth = fontSize * charData.data->ratio * charScale;
 				if (i == lines[l].startIndex)
 				{
