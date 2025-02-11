@@ -204,6 +204,8 @@ private:
 	float bossMaxHealth = 150.0f;
 	float bossHealth;
 	bool phaseHasChanged = false;
+	bool inLowRings = false;
+	bool inVeryLowRings = false;
 	int sonicRingCount;
 	int shadowRingCount;
 	bool sonicIsActive;
@@ -261,6 +263,9 @@ private:
 	Wiggle* FHRWiggle;
 	SpriteNode* FHExplostion;
 	ParticleEmitter* FHExplosionEmitter;
+
+	SpriteNode* APrompt;
+	SpriteNode* BPrompt;
 
 	SpriteNode* FHHealthBar;
 	SpriteNode* FHHealthBarBG;

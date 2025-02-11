@@ -1162,6 +1162,16 @@ void StageSelectManager::HandleMinigameMadness()
 			return;
 		}
 
+		if (GameState == GameStates_Ingame &&
+			MainCharObj2[0] != NULL && ((MainCharObj2[0]->Powerups & (1 << PowerupBits::PowerupBits_Dead)) == 0))
+		{
+			MinigameManager* minigameManager = &MinigameManager::GetInstance();
+			if (minigameManager->state == MinigameState::MGS_None)
+			{
+				minigameManager->StartMinigame(ItemValue::IV_Maria);
+			}
+		}
+
 		if (TimerMinutes == 0 && TimerSeconds < 5)
 		{
 			WriteData<1>((void*)0x1DEB060, 0xD0);
@@ -1178,14 +1188,6 @@ void StageSelectManager::HandleMinigameMadness()
 			WriteData<1>((void*)0x1DEB320, 0x03);
 
 			WriteData<1>((void*)0x174B044, 0x0C);
-		}
-
-		// TODO: Make this not re-proc at the end
-
-		MinigameManager* minigameManager = &MinigameManager::GetInstance();
-		if (minigameManager->state == MinigameState::MGS_None)
-		{
-			minigameManager->StartMinigame(ItemValue::IV_Maria);
 		}
 	}
 }

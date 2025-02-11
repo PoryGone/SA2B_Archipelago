@@ -19,6 +19,10 @@ void DrawUpgradeIcon_MG(ObjectMaster* obj)
 		MinigameManager::GetInstance().Resume();
 		MinigameManager::GetInstance().UpdateCurrentMinigame();
 	}
+	else if (MinigameManager::GetInstance().IsInFinalBoss() && GameState == GameStates_NormalRestart)
+	{
+		MinigameManager::GetInstance().EndMinigame();
+	}
 	else
 	{
 		MinigameManager::GetInstance().Pause();

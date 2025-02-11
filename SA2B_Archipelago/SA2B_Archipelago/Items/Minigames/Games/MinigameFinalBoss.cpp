@@ -153,6 +153,9 @@ void MinigameFinalBoss::RunInGame(MinigameManagerData data)
 		float a = min(leftBar->color.a + 0.05f, 1.0f);
 		leftBar->color.a = a;
 		rightBar->color.a = a;
+		this->BPrompt->color.a = a;
+		this->APrompt->color.a = a;
+
 	}
 	UpdateCharacterPosition(data);
 	UpdateBullets(data);
@@ -164,6 +167,7 @@ void MinigameFinalBoss::RunInGame(MinigameManagerData data)
 	}
 	if (data.inputPress & RIF_B)
 	{
+		this->BPrompt->SetEnabled(false);
 		if (sonicIsActive)
 		{
 			shadow->SetPositionGlobal(shadowOffScreenPos);
@@ -280,6 +284,7 @@ void MinigameFinalBoss::Defeat(MinigameManagerData data)
 
 void MinigameFinalBoss::CharacterShoot(MinigameManagerData data)
 {
+	this->APrompt->SetEnabled(false);
 	for (int i = 0; i < characterBullets.size(); i++)
 	{
 		if (!characterBullets[i].node->IsEnabled())
@@ -398,21 +403,69 @@ void MinigameFinalBoss::UpdateCharacterRingGrowthDecay(MinigameManagerData data)
 		if (sonicIsActive)
 		{
 			sonicRingCount = sonicRingCount > 0 ? sonicRingCount - 1 : sonicRingCount;
+
+			if (sonicRingCount <= 5)
+			{
+				if (!this->inVeryLowRings)
+				{
+					this->inVeryLowRings = true;
+					PlayUnshuffledVoice(2, 2154);
+				}
+			}
+			else if (sonicRingCount <= 20)
+			{
+				if (!this->inLowRings)
+				{
+					this->inLowRings = true;
+					this->inVeryLowRings = false;
+					PlayUnshuffledVoice(2, 2153);
+				}
+			}
+			else
+			{
+				this->inLowRings = false;
+				this->inVeryLowRings = false;
+			}
 		}
 		else
 		{
 			shadowRingCount = shadowRingCount > 0 ? shadowRingCount - 1 : shadowRingCount;
+
+			if (shadowRingCount <= 5)
+			{
+				if (!this->inVeryLowRings)
+				{
+					this->inVeryLowRings = true;
+					PlayUnshuffledVoice(2, 2152);
+				}
+			}
+			else if (shadowRingCount <= 20)
+			{
+				if (!this->inLowRings)
+				{
+					this->inLowRings = true;
+					this->inVeryLowRings = false;
+					PlayUnshuffledVoice(2, 2151);
+				}
+			}
+			else
+			{
+				this->inLowRings = false;
+				this->inVeryLowRings = false;
+			}
 		}
 		ringDecayTimer.Start(ringDecayCooldown);
 	}
+	float sonicLowRingColor = sonicRingCount >= 20 ? 1.0f : (sonicRingCount / 20.0f);
+	float shadowLowRingColor = shadowRingCount >= 20 ? 1.0f : (shadowRingCount / 20.0f);
 	std::string text = "Sonic\n";
 	text.append(std::to_string(sonicRingCount));
 	sonicRingsText->UpdateText(text);
 	text = "Shadow\n";
 	text.append(std::to_string(shadowRingCount));
 	shadowRingsText->UpdateText(text);
-	sonicRings->color = sonicRingCount == ringCap ? NJS_ARGB{ 1.0f, 0.96f, 0.89f, 0.26f } : NJS_ARGB{ 1.0f, 1.0f, 1.0f, 1.0f };
-	shadowRings->color = shadowRingCount == ringCap ? NJS_ARGB{ 1.0f, 0.96f, 0.89f, 0.26f } : NJS_ARGB{ 1.0f, 1.0f, 1.0f, 1.0f };
+	sonicRings->color = sonicRingCount == ringCap ? NJS_ARGB{ 1.0f, 0.96f, 0.89f, 0.26f } : NJS_ARGB{ 1.0f, 1.0f, sonicLowRingColor, sonicLowRingColor };
+	shadowRings->color = shadowRingCount == ringCap ? NJS_ARGB{ 1.0f, 0.96f, 0.89f, 0.26f } : NJS_ARGB{ 1.0f, 1.0f, shadowLowRingColor, shadowLowRingColor };
 	if (shadowRingCount <= 0 || sonicRingCount <= 0)
 	{
 		Defeat(data);
@@ -712,12 +765,58 @@ void MinigameFinalBoss::OnCharacterHit()
 		sonicRingCount -= onHitRingDamage;
 		sonicRingCount = max(sonicRingCount, 0);
 		PlaySoundProbably((int)MinigameSounds::LoseRings, 0, 0, 0);
+
+		if (sonicRingCount <= 5)
+		{
+			if (!this->inVeryLowRings)
+			{
+				this->inVeryLowRings = true;
+				PlayUnshuffledVoice(2, 2154);
+			}
+		}
+		else if (sonicRingCount <= 20)
+		{
+			if (!this->inLowRings)
+			{
+				this->inLowRings = true;
+				this->inVeryLowRings = false;
+				PlayUnshuffledVoice(2, 2153);
+			}
+		}
+		else
+		{
+			this->inLowRings = false;
+			this->inVeryLowRings = false;
+		}
 	}
 	else
 	{
 		shadowRingCount -= onHitRingDamage;
 		shadowRingCount = max(shadowRingCount, 0);
 		PlaySoundProbably((int)MinigameSounds::LoseRings, 0, 0, 0);
+
+		if (shadowRingCount <= 5)
+		{
+			if (!this->inVeryLowRings)
+			{
+				this->inVeryLowRings = true;
+				PlayUnshuffledVoice(2, 2152);
+			}
+		}
+		else if (shadowRingCount <= 20)
+		{
+			if (!this->inLowRings)
+			{
+				this->inLowRings = true;
+				this->inVeryLowRings = false;
+				PlayUnshuffledVoice(2, 2151);
+			}
+		}
+		else
+		{
+			this->inLowRings = false;
+			this->inVeryLowRings = false;
+		}
 	}
 }
 
@@ -861,6 +960,12 @@ void MinigameFinalBoss::CreateHierarchy(MinigameManagerData data)
 		characterParent->renderComponents.push_back(ringEmitters[i]);
 	}
 
+	// Create A & B prompts
+	this->BPrompt = data.hierarchy->CreateNode("B_Prompt", data.icons->GetAnim(MGI_Boss_B_Input), { 160.0f, 38.0f }, { 80.0f, 19.0f });
+	this->APrompt = data.hierarchy->CreateNode("A_Prompt", data.icons->GetAnim(MGI_Boss_A_Input), { 160.0f, 38.0f }, { 80.0f, 57.0f });
+	this->BPrompt->color.a = 0.0f;
+	this->APrompt->color.a = 0.0f;
+
 	//Create Health Bar
 	FHHealthBarBG = data.hierarchy->CreateNode("Boss_Health_Bar_Background", data.icons->GetAnim(MGI_White_Box), { 200.0f, 10.0f }, { 320.0f, 6.0f });
 	FHHealthBarBG->color = { 1.0f, 1.0f, 0.0f, 0.0f };
@@ -911,5 +1016,11 @@ void MinigameFinalBoss::OnCleanup(MinigameManagerData data)
 	for (int i = 0; i < ringEmitters.size(); i++)
 	{
 		ringEmitters[i] = nullptr;
+	}
+
+	if (GameState == GameStates_NormalRestart)
+	{
+		ResetMusic();
+		PlayMusic("");
 	}
 }

@@ -5,6 +5,7 @@
 
 #include "../Aesthetics/MusicManager.h"
 #include "../Archipelago/ArchipelagoManager.h"
+#include "../Locations/StageSelectManager.h"
 #include "../Utilities/MessageQueue.h"
 
 #include "../ModLoader/MemAccess.h"
@@ -750,6 +751,11 @@ bool ItemManager::IsActiveTrapValid()
 			return false;
 		}
 
+		if (CurrentLevel == LevelIDs_Biolizard && MinigameManager::GetInstance().IsInFinalBoss())
+		{
+			return false;
+		}
+
 		if (CurrentLevel == LevelIDs_Route101280 ||
 			CurrentLevel == LevelIDs_KartRace ||
 			CurrentLevel == LevelIDs_ChaoWorld ||
@@ -808,6 +814,11 @@ bool ItemManager::IsActiveTrapValid()
 			return false;
 		}
 
+		if (CurrentLevel == LevelIDs_Biolizard && MinigameManager::GetInstance().IsInFinalBoss())
+		{
+			return false;
+		}
+
 		if (CurrentLevel == LevelIDs_Route101280 ||
 			CurrentLevel == LevelIDs_KartRace ||
 			CurrentLevel == LevelIDs_ChaoWorld)
@@ -817,6 +828,11 @@ bool ItemManager::IsActiveTrapValid()
 		break;
 	case ItemValue::IV_TinyTrap:
 		if (GameMode != GameMode::GameMode_Level)
+		{
+			return false;
+		}
+
+		if (CurrentLevel == LevelIDs_Biolizard && MinigameManager::GetInstance().IsInFinalBoss())
 		{
 			return false;
 		}
@@ -837,6 +853,11 @@ bool ItemManager::IsActiveTrapValid()
 		break;
 	case ItemValue::IV_GravityTrap:
 		if (GameMode != GameMode::GameMode_Level)
+		{
+			return false;
+		}
+
+		if (CurrentLevel == LevelIDs_Biolizard && MinigameManager::GetInstance().IsInFinalBoss())
 		{
 			return false;
 		}
@@ -921,6 +942,11 @@ bool ItemManager::IsActiveTrapValid()
 			return false;
 		}
 
+		if (CurrentLevel == LevelIDs_Biolizard && MinigameManager::GetInstance().IsInFinalBoss())
+		{
+			return false;
+		}
+
 		if (CurrentLevel == LevelIDs_Route101280 ||
 			CurrentLevel == LevelIDs_KartRace ||
 			CurrentLevel == LevelIDs_ChaoWorld ||
@@ -937,6 +963,11 @@ bool ItemManager::IsActiveTrapValid()
 		break;
 	case ItemValue::IV_SlowTrap:
 		if (GameMode != GameMode::GameMode_Level)
+		{
+			return false;
+		}
+
+		if (CurrentLevel == LevelIDs_Biolizard && MinigameManager::GetInstance().IsInFinalBoss())
 		{
 			return false;
 		}
@@ -1002,6 +1033,11 @@ bool ItemManager::IsActiveTrapValid()
 			return false;
 		}
 
+		if (CurrentLevel == LevelIDs_Biolizard && MinigameManager::GetInstance().IsInFinalBoss())
+		{
+			return false;
+		}
+
 		if (this->_DriftTrapAngle > -1)
 		{
 			return false;
@@ -1009,6 +1045,11 @@ bool ItemManager::IsActiveTrapValid()
 		break;
 	case ItemValue::IV_PoisonTrap:
 		if (GameMode != GameMode::GameMode_Level)
+		{
+			return false;
+		}
+
+		if (CurrentLevel == LevelIDs_Biolizard && MinigameManager::GetInstance().IsInFinalBoss())
 		{
 			return false;
 		}
@@ -1040,6 +1081,11 @@ bool ItemManager::IsActiveTrapValid()
 		if (minigameManager->state != MinigameState::MGS_None)
 		{
 			// Another minigame is already in-progress
+			return false;
+		}
+
+		if (CurrentLevel == LevelIDs_Biolizard && StageSelectManager::GetInstance().GetGoal() == 8)
+		{
 			return false;
 		}
 
