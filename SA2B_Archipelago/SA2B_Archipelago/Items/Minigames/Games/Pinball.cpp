@@ -88,7 +88,6 @@ void Pinball::UpdateBallActive(MinigameManagerData data)
 	float flipperRange = flipperLength + ballRadius;
 	if (data.inputPress & leftFlipperInput)
 	{
-		PlaySoundProbably((int)MinigameSounds::Punch, 0, 0, 0);
 		NJS_POINT3 toBall = Point3Substract(ball->GetPositionGlobal(), leftFlipper->GetPositionGlobal());
 		NJS_POINT3 toTip = Point3RotateAround({ 1.0f, 0.0f }, { 0.0f, 0.0f }, 9.5f);
 		float ballAng = Point3SignedAngleDegrees(toTip, toBall);
@@ -132,6 +131,10 @@ void Pinball::UpdateBallActive(MinigameManagerData data)
 	}
 	leftFlipper->SetRotation(9.5f - (data.input & leftFlipperInput ? 60.0f : 0.0f));
 	rightFlipper->SetRotation(-189.5f + (data.input & rightFlipperInput ? 60.0f : 0.0f));
+	if (data.inputPress & (leftFlipperInput | rightFlipperInput))
+	{
+		PlaySoundProbably((int)MinigameSounds::Punch, 0, 0, 0);
+	}
 	auto results = data.collision->CastCollision(ball, ballVelocity, flipperUsed ? boardObjsNoFlippers : boardObjs);
 	float distanceRemaining = Point3Magnitude(ballVelocity);
 	int loops = 0;

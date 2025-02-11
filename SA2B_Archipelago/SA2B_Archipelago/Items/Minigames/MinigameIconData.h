@@ -1,6 +1,6 @@
 #pragma once
 
-#define POKE_START 82
+#define POKE_START 83
 
 enum MinigameIcon
 {
@@ -65,27 +65,28 @@ enum MinigameIcon
 	MGI_Tile_Disabled			= 58,
 	MGI_Bumper					= 59,
 	MGI_Star					= 60,
-	MGI_Tri_Bumper_Right		= 61,
-	MGI_Tri_Bumper_Left			= 62,
-	MGI_Bee_Taters				= 63,
-	MGI_Bee_Pory				= 64,
-	MGI_Bee_Ras					= 65,
-	MGI_Bee_Unknown				= 66,
-	MGI_Fishing_BG				= 67,
-	MGI_Fishing_Bar_Outline		= 68,
-	MGI_Fishing_Bar_Cap			= 69,
-	MGI_Flipper					= 70,
-	MGI_Block_Green				= 71,
-	MGI_Block_Purple			= 72,
-	MGI_Block_Deep_Purple		= 73, //Smoke on the Breakout Block
-	MGI_Fishing_Catch_Bar		= 74,
-	MGI_Tile_Arrow				= 75,
-	MGI_Boss_Weakpoint			= 76,
-	MGI_Boss_Bar_Cap_Left		= 77,
-	MGI_Boss_Bar_Cap_Right		= 78,
-	MGI_Boss_Bar_Center			= 79,
-	MGI_Boss_B_Input			= 80,
-	MGI_Boss_A_Input			= 81,
+	MGI_Yellow_Circle			= 61,
+	MGI_Tri_Bumper_Right		= 62,
+	MGI_Tri_Bumper_Left			= 63,
+	MGI_Bee_Taters				= 64,
+	MGI_Bee_Pory				= 65,
+	MGI_Bee_Ras					= 66,
+	MGI_Bee_Unknown				= 67,
+	MGI_Fishing_BG				= 68,
+	MGI_Fishing_Bar_Outline		= 69,
+	MGI_Fishing_Bar_Cap			= 70,
+	MGI_Flipper					= 71,
+	MGI_Block_Green				= 72,
+	MGI_Block_Purple			= 73,
+	MGI_Block_Deep_Purple		= 74, //Smoke on the Breakout Block
+	MGI_Fishing_Catch_Bar		= 75,
+	MGI_Tile_Arrow				= 76,
+	MGI_Boss_Weakpoint			= 77,
+	MGI_Boss_Bar_Cap_Left		= 78,
+	MGI_Boss_Bar_Cap_Right		= 79,
+	MGI_Boss_Bar_Center			= 80,
+	MGI_Boss_B_Input			= 81,
+	MGI_Boss_A_Input			= 82,
 
 	//Pokemon
 	MGI_Aron					= POKE_START + 0,

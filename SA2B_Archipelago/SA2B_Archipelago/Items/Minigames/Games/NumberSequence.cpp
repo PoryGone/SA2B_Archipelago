@@ -20,15 +20,15 @@ void NumberSequence::OnGameStart(MinigameManagerData data)
 	switch (data.difficulty)
 	{
 	case MGD_Easy:
-		guessTime = 35.0f;
+		guessTime = 45.0f;
 		guessesRemaining = 9;
 		break;
 	case MGD_Medium:
-		guessTime = 30.0f;
+		guessTime = 40.0f;
 		guessesRemaining = 7;
 		break;
 	case MGD_Hard:
-		guessTime = 25.0f;
+		guessTime = 35.0f;
 		guessesRemaining = 5;
 		break;
 	}
@@ -67,7 +67,7 @@ void NumberSequence::OnFrame(MinigameManagerData data)
 		}
 		if ((data.inputPress & RIF_Up || data.inputPress & RIF_Down) && selectedIndex == numberObjs.size())
 		{
-			SubmitSequence();
+			SubmitSequence(data);
 		}
 		if (data.inputPress & RIF_Left)
 		{
@@ -237,7 +237,7 @@ bool NumberSequence::AnySequenceContains(int n)
 	return false;
 }
 
-void NumberSequence::SubmitSequence()
+void NumberSequence::SubmitSequence(MinigameManagerData data)
 {
 	int correctCount = 0;
 	for (int i = 0; i < numberObjs.size(); i++)
@@ -246,18 +246,21 @@ void NumberSequence::SubmitSequence()
 		if (numberObjs[i].correct == numberObjs[i].current)
 		{
 			correctCount++;
-			numberObjs[i].textNode->color = { 1.0f, 0.0f, 1.0f, 0.0f };
-			numberObjs[i].prevTextNode->color = { 1.0f, 0.0f, 1.0f, 0.0f };
+			numberObjs[i].textNode->color = greenColor;
+			numberObjs[i].prevTextNode->color = greenColor;
+			numberObjs[i].prevIcon->anim = data.icons->GetAnim(MGI_Green_Check);
 		}
 		else if (AnySequenceContains(numberObjs[i].current))
 		{
-			numberObjs[i].textNode->color = { 1.0f, 1.0f, 1.0f, 0.0f };
-			numberObjs[i].prevTextNode->color = { 1.0f, 1.0f, 1.0f, 0.0f };
+			numberObjs[i].textNode->color = yellowColor;
+			numberObjs[i].prevTextNode->color = yellowColor;
+			numberObjs[i].prevIcon->anim = data.icons->GetAnim(MGI_Yellow_Circle);
 		}
 		else
 		{
-			numberObjs[i].textNode->color = { 1.0f, 1.0f, 0.0f, 0.0f };
-			numberObjs[i].prevTextNode->color = { 1.0f, 1.0f, 0.0f, 0.0f };
+			numberObjs[i].textNode->color = redColor;
+			numberObjs[i].prevTextNode->color = redColor;
+			numberObjs[i].prevIcon->anim = data.icons->GetAnim(MGI_Red_X);
 		}
 	}
 	if (correctCount == numberObjs.size())
@@ -320,6 +323,9 @@ void NumberSequence::CreateHierarchy(MinigameManagerData data)
 		numberObjs[i].prevTextNode->displaySize = { 50.0f, 30.0f };
 		numberObjs[i].prevTextNode->renderComponents.push_back(numberObjs[i].prevText);
 		numberObjs[i].prevTextNode->SetPosition({0.0f, 90.0f});
+		numberObjs[i].prevIcon = data.hierarchy->CreateNode("Number_Text", numberObjs[i].parent);
+		numberObjs[i].prevIcon->displaySize = { 50.0f, 50.0f };
+		numberObjs[i].prevIcon->SetPosition({ 0.0f, 150.0f });
 		numberObjs[i].parent->SetPositionGlobal({ xPos, data.icons->yCenter });
 		xPos += 70.0f;
 	}

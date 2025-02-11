@@ -22,6 +22,7 @@ class NumberSequence : public MinigameBase
 		SpriteNode* downArrow;
 		SpriteNode* textNode;
 		SpriteNode* prevTextNode;
+		SpriteNode* prevIcon;
 		TextBox* text;
 		TextBox* prevText;
 		int current;
@@ -40,7 +41,7 @@ private:
 	void Decrement(NumberSequenceNumber* nsNumber);
 	void SetSelectedIndex(int index);
 	bool AnySequenceContains(int n);
-	void SubmitSequence();
+	void SubmitSequence(MinigameManagerData data);
 	void UpdateTimerFill();
 
 	NumberSequenceState localState;
@@ -66,6 +67,10 @@ private:
 	NJS_POINT3 bigArrowSize = { 40.0f, 40.0f };
 	float smallTextSize = 15.0f;
 	float bigTextSize = 30.0f;
+
+	NJS_ARGB greenColor = { 1.0f, 0.0f, 0.5647f, 0.2078f };
+	NJS_ARGB redColor = { 1.0f, 0.8f, 0.0f, 0.0f };
+	NJS_ARGB yellowColor = { 1.0f, 0.949f, 0.9804f, 0.1451f };
 
 	int selectedIndex = 0;
 

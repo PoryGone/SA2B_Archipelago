@@ -71,6 +71,7 @@ static NJS_TEXANIM MGAnim[] = {
 	{128, 128, 64, 64, 0x80, 0x00, 0xBF, 0x3F, 15, 0}, //Tile Disabled
 	{128, 128, 64, 64, 0xC1, 0x00, 0xFF, 0x3F, 15, 0}, //Bumper
 	{128, 128, 64, 64, 0x00, 0x40, 0x3F, 0x7F, 15, 0}, //Star
+	{128, 128, 64, 64, 0x40, 0x40, 0x7F, 0x7F, 15, 0}, //Yellow Circle
 	{256, 128, 128, 64, 0x00, 0x80, 0x7F, 0xBF, 15, 0}, //Tri-Bumper Right
 	{256, 128, 128, 64, 0x80, 0x80, 0xFF, 0xBF, 15, 0}, //Tri-Bumper Left
 	{128, 128, 64, 64, 0x00, 0xC0, 0x3F, 0xFF, 15, 0}, //Bee Taters
@@ -133,7 +134,7 @@ static NJS_TEXANIM MGAnim[] = {
 	{40, 32, 20, 16, 0x0A, 0x10, 0x34, 0x30, 0, 0},
 };
 
-static const int MinigameAnimLength = 115;
+static const int MinigameAnimLength = 116;
 
 FunctionPointer(void, ReleaseTextureList, (NJS_TEXLIST* a1), 0x77F9F0);
 
