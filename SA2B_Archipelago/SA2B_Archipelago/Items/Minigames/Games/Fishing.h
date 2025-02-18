@@ -60,6 +60,8 @@ private:
 	FishingState fs_state;
 	SpriteNode* fish;
 	SpriteNode* endIcon;
+	float fishDistance = 0.1f;
+	NJS_POINT3 fishStart;
 };
 
 class FishingHard

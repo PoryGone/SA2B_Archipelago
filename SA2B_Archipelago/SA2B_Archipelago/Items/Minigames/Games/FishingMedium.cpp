@@ -27,6 +27,8 @@ void FishingMedium::OnGameStart(MinigameManagerData data)
 	std::shuffle(yPositions.begin(), yPositions.end(), RNG());
 	CreateHierarchy(data);
 	PlaySoundProbably((int)MinigameSounds::LevelStart, 0, 0, 0);
+	fishStart = fish->GetPositionGlobal();
+	fishDistance = max(0.0f, ringSizes[successCount] - zones[successCount]->displaySize.x);
 }
 
 void FishingMedium::OnFrame(MinigameManagerData data)
@@ -45,7 +47,9 @@ void FishingMedium::OnFrame(MinigameManagerData data)
 			bool inputUsed = false;
 			if (successCount < ringCount)
 			{
-				fish->SetPositionGlobal(Point3MoveTowards(fish->GetPositionGlobal(), Point3Add(zones[successCount]->GetPositionGlobal(), { RandomFloat(-2.0f, 2.0f), 45.0f }), 5.0f));
+				NJS_POINT3 toPos = Point3Add(zones[successCount]->GetPositionGlobal(), { RandomFloat(-2.0f, 2.0f), 45.0f });
+				fish->SetPositionGlobal(Lerp(fishStart, toPos, 1.0f - (max(0.0f, ringSizes[successCount] - zones[successCount]->displaySize.x) / fishDistance)));
+				//fish->SetPositionGlobal(Point3MoveTowards(fish->GetPositionGlobal(), Point3Add(zones[successCount]->GetPositionGlobal(), { RandomFloat(-2.0f, 2.0f), 45.0f }), 5.0f));
 				float normAng = Point3SignedAngleDegrees({ 0.0f, 1.0f }, Point3Substract(zones[successCount]->GetPositionGlobal(), fish->GetPositionGlobal()));
 				fish->SetRotation(normAng + 180.0f);
 			}
@@ -91,6 +95,11 @@ void FishingMedium::OnFrame(MinigameManagerData data)
 								endTimer.Start(2.0f);
 								PlayUnshuffledVoice(2, 104);
 								return;
+							}
+							else
+							{
+								fishStart = fish->GetPositionGlobal();
+								fishDistance = max(0.0f, ringSizes[successCount] - zones[successCount]->displaySize.x);
 							}
 						}
 						else
