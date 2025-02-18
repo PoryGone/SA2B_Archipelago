@@ -568,6 +568,7 @@ void ItemManager::OnFrameJunkQueue()
 
 	if (MainCharObj1[0] && (MainCharObj1[0]->Action == Action_Death ||
 		MainCharObj1[0]->Action == Action_Drown ||
+		MainCharObj1[0]->Action == Action_Fall ||
 		(MainCharObj1[0]->Action == Action_Quicksand && CurrentLevel != LevelIDs_EggGolemS)))
 	{
 		return;
