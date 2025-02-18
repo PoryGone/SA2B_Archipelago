@@ -484,7 +484,7 @@ void MinigameFinalBoss::UpdateWeakPoint()
 		FHWeakPoint->SetPosition(weakPointPositions[weakSpotIndex]);
 		FHWeakPoint->SetEnabled(true);
 		weakPointTimer.Start(weakPointCooldown);
-		PlaySoundProbably((int)MinigameSounds::BalloonPop, 0, 0, 0);
+		PlaySoundProbably((int)MinigameSounds::ItemBox, 0, 0, 0);
 	}
 }
 
