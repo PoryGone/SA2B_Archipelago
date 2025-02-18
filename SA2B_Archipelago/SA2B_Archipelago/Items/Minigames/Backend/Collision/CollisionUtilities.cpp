@@ -73,7 +73,7 @@ std::tuple<int, NJS_POINT3, NJS_POINT3> GetIntersectionsOfLineSegAndCircle(LineS
 	return std::make_tuple(intersections, intersection1, intersection2);
 }
 
-NJS_POINT3 GetNormalDirectionOfPointFromSeg(LineSegment seg, NJS_POINT3 pt)
+NJS_POINT3 GetNormalDirectionOfPointFromSeg(LineSegment seg)
 {
 	//float d = (seg.b.x - seg.a.x) * (pt.y - seg.a.y) - (seg.b.y - seg.a.y) * (pt.x - seg.a.x);
 	//float d = (pt.x - seg.a.x) * (seg.b.y - seg.a.y) - (pt.y - seg.a.y) * (seg.b.x - seg.a.x);
@@ -104,7 +104,9 @@ IntersectionResults TestCapsulePolygonIntersection(CapsuleCollider& aCol, Polygo
 	{
 		int i2 = (i + 1 == bColPoints.size()) ? 0 : i + 1;
 		LineSegment seg = LineSegment(bColPoints[i], bColPoints[i2]);
+		NJS_POINT3 segNormal = GetNormalDirectionOfPointFromSeg(seg);
 		IntersectionResults results = TestLineSegmentIntersection(std::get<0>(capLines), seg);
+		if (Point3AngleDegrees(segNormal, Point3Substract(aColStart, seg.a)) > 90.0f) continue;
 		if (results.isIntersecting)
 		{
 			float dist = NonSquaredDistance(aColStart, results.point);// +NonSquaredDistance(aColEnd, results.point);
@@ -131,8 +133,7 @@ IntersectionResults TestCapsulePolygonIntersection(CapsuleCollider& aCol, Polygo
 			float dist = NonSquaredDistance(aColStart, intersection);// +NonSquaredDistance(aColEnd, intersection);
 			if (dist < currentDist || !currentResults.isIntersecting)
 			{
-				NJS_POINT3 n = GetNormalDirectionOfPointFromSeg(seg, aColStart);
-				currentResults = IntersectionResults(true, intersection, n);
+				currentResults = IntersectionResults(true, intersection, segNormal);
 				currentDist = dist;
 			}
 		}
@@ -142,8 +143,7 @@ IntersectionResults TestCapsulePolygonIntersection(CapsuleCollider& aCol, Polygo
 			float dist = NonSquaredDistance(aColStart, intersection);// +NonSquaredDistance(aColEnd, intersection);
 			if (dist < currentDist || !currentResults.isIntersecting)
 			{
-				NJS_POINT3 n = GetNormalDirectionOfPointFromSeg(seg, aColStart);
-				currentResults = IntersectionResults(true, intersection, n);
+				currentResults = IntersectionResults(true, intersection, segNormal);
 				currentDist = dist;
 			}
 		}
@@ -334,7 +334,7 @@ IntersectionResults TestCapsuleCapsuleIntersection(CapsuleCollider& aCol, Capsul
 		float dist = NonSquaredDistance(aColStart, intersection);
 		if (dist < currentDist || !currentResults.isIntersecting)
 		{
-			NJS_POINT3 n = GetNormalDirectionOfPointFromSeg(std::get<0>(bCapLines), aColStart);
+			NJS_POINT3 n = GetNormalDirectionOfPointFromSeg(std::get<0>(bCapLines));
 			currentResults = IntersectionResults(true, intersection, n);
 			currentDist = dist;
 		}
@@ -356,7 +356,7 @@ IntersectionResults TestCapsuleCapsuleIntersection(CapsuleCollider& aCol, Capsul
 		float dist = NonSquaredDistance(aColStart, intersection);
 		if (dist < currentDist || !currentResults.isIntersecting)
 		{
-			NJS_POINT3 n = GetNormalDirectionOfPointFromSeg(std::get<1>(bCapLines), aColStart);
+			NJS_POINT3 n = GetNormalDirectionOfPointFromSeg(std::get<1>(bCapLines));
 			currentResults = IntersectionResults(true, intersection, n);
 			currentDist = dist;
 		}
@@ -409,7 +409,7 @@ IntersectionResults TestLineSegmentIntersection(NJS_POINT3 a1, NJS_POINT3 a2, NJ
 		auto results2 = GetClosestPointOnSegmentToPoint(b1, b2, { x, y });
 		if (results1.t >= 0.0f && results1.t <= 1.0f && results2.t >= 0.0f && results2.t <= 1.0f)
 		{
-			NJS_POINT3 n = GetNormalDirectionOfPointFromSeg({ b1, b2 }, a1);
+			NJS_POINT3 n = GetNormalDirectionOfPointFromSeg({ b1, b2 });
 			return IntersectionResults(true, { x, y }, n);
 		}
 	}
