@@ -1100,6 +1100,18 @@ void SA2_SetMinigameDifficulty(int minigameDifficulty)
     minigameManager->SetDifficulty(minigameDifficulty);
 }
 
+void SA2_SetBigFishingDifficulty(int minigameDifficulty)
+{
+    if (!ArchipelagoManager::getInstance().IsInit())
+    {
+        return;
+    }
+
+    MinigameManager* minigameManager = &MinigameManager::GetInstance();
+
+    minigameManager->SetBigDifficulty(minigameDifficulty);
+}
+
 void SA2_SetMinigameMadnessAmount(int minigameAmount)
 {
     if (!ArchipelagoManager::getInstance().IsInit())
@@ -1177,6 +1189,7 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     AP_RegisterSlotDataMapIntIntCallback("DefaultChaoNameMap", &SA2_SetDefaultChaoNameMap);
     AP_RegisterSlotDataMapIntIntCallback("ChaoERLayout", &SA2_SetChaoERMap);
     AP_RegisterSlotDataIntCallback("MinigameTrapDifficulty", &SA2_SetMinigameDifficulty);
+    AP_RegisterSlotDataIntCallback("BigFishingDifficulty", &SA2_SetBigFishingDifficulty);
     AP_RegisterSlotDataIntCallback("MinigameMadnessAmount", &SA2_SetMinigameMadnessAmount);
     AP_RegisterSlotDataMapIntIntCallback("RegionEmblemMap", &SA2_SetRegionEmblemMap);
     AP_RegisterSlotDataMapIntIntCallback("MissionMap", &SA2_SetChosenMissionsMap);
@@ -1315,11 +1328,17 @@ void ArchipelagoManager::OnFrameDeathLink()
 
     if (this->_deathLinkTimer > 0)
     {
-        if ((TimerStopped == 0 || GameState != GameStates::GameStates_Ingame) && GameState != GameStates::GameStates_Pause)
+        if ((TimerStopped == 0 || GameState != GameStates::GameStates_Ingame) &&
+            GameState != GameStates::GameStates_Pause)
         {
             this->_deathLinkTimer--;
         }
 
+        return;
+    }
+
+    if (LocationManager::getInstance()._inBigFishing)
+    {
         return;
     }
 

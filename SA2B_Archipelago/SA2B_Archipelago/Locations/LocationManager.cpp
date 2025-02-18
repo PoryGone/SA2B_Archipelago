@@ -386,16 +386,21 @@ void LocationManager::OnInputFunction()
 
 							if (dist(relevantPos, MainCharObj1[0]->Position) < checkData.Range)
 							{
-								shouldShowBigPrompt = true;
-
-								if (PressedButtons & 0b1000000000)
+								if (MainCharObj1[0] && MainCharObj2[0] &&
+									MainCharObj1[0]->Action != Action_Death &&
+									((MainCharObj2[0]->Powerups & Powerups_Dead) == 0))
 								{
-									TimeStopped = 2;
+									shouldShowBigPrompt = true;
 
-									minigameManager->StartMinigame(ItemValue::IV_FishingTrap, true);
+									if (PressedButtons & 0b1000000000)
+									{
+										TimeStopped = 2;
 
-									this->_inBigFishing = true;
-									this->_FreezePos = MainCharObj1[0]->Position;
+										minigameManager->StartMinigame(ItemValue::IV_FishingTrap, true);
+
+										this->_inBigFishing = true;
+										this->_FreezePos = MainCharObj1[0]->Position;
+									}
 								}
 							}
 						}

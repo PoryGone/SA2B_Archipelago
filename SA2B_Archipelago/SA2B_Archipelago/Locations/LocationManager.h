@@ -111,6 +111,7 @@ public:
 	bool AreAllRacesComplete();
 
 	bool shouldShowBigPrompt = false;
+	bool _inBigFishing = false;
 
 private:
 	const HelperFunctions* _helperFunctions;
@@ -121,7 +122,6 @@ private:
 	unsigned int _chaoEntryTimer = 0;
 	unsigned int _whistleTimer = 0;
 
-	bool _inBigFishing = false;
 	std::map<int, ObjectMaster*> _BigIndicators;
 	NJS_VECTOR _FreezePos;
 

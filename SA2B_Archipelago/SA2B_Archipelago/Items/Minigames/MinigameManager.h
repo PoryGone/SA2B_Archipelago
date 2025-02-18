@@ -46,6 +46,7 @@ public:
 	void HandleLoss();
 
 	void SetDifficulty(int difficulty);
+	void SetBigDifficulty(int difficulty);
 	bool IsInFinalBoss();
 
 	void Pause();
@@ -70,6 +71,7 @@ private:
 	bool isPaused = false;
 
 	MinigameDifficulty _baseDifficulty;
+	MinigameDifficulty _bigDifficulty;
 
 	ItemValue currentMinigameItem;
 

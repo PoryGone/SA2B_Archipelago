@@ -255,9 +255,24 @@ void MinigameManager::StartMinigame(ItemValue item, bool locationGame, bool link
 		break;
 	}
 
-	if (this->_baseDifficulty == MinigameDifficulty::MGD_Chaos)
+	if (locationGame)
+	{
+		if (this->_bigDifficulty == MinigameDifficulty::MGD_Chaos)
+		{
+			this->_data.difficulty = (MinigameDifficulty)RandomInt(0, 3);
+		}
+		else
+		{
+			this->_data.difficulty = this->_bigDifficulty;
+		}
+	}
+	else if (this->_baseDifficulty == MinigameDifficulty::MGD_Chaos)
 	{
 		this->_data.difficulty = (MinigameDifficulty)RandomInt(0, 3);
+	}
+	else
+	{
+		this->_data.difficulty = this->_baseDifficulty;
 	}
 
 	this->_data.isLocationCheck = locationGame;
@@ -326,6 +341,11 @@ void MinigameManager::SetDifficulty(int difficulty)
 {
 	this->_baseDifficulty = (MinigameDifficulty)difficulty;
 	this->_data.difficulty = this->_baseDifficulty;
+}
+
+void MinigameManager::SetBigDifficulty(int difficulty)
+{
+	this->_bigDifficulty = (MinigameDifficulty)difficulty;
 }
 
 bool MinigameManager::IsInFinalBoss()
