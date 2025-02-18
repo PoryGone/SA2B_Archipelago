@@ -21,6 +21,9 @@ std::vector<TriviaQuestion> easy_questions =
 	TriviaQuestion("How many (real) Chaos Emeralds are there (in this game)?", {"7"}, {"6", "8", "5", "16"}),
 	TriviaQuestion("Which character is known to have met the President of the United States in person?", {"Sonic", "Tails"}, {"Knuckles", "Eggman", "Rouge", "Amy", "Shadow"}),
 	TriviaQuestion("Which character has the largest number of upgrades?", {"Sonic"}, {"Tails", "Knuckles", "Eggman", "Rouge", "Amy", "Shadow"}),
+	TriviaQuestion("Which boss is fought chronologically first in Sonic Adventure 2?", {"Hot Shot"}, {"Big Foot", "Sonic", "Shadow", "Chaos 0", "Egg Golem"}),
+	TriviaQuestion("Which of these characters is not playable in 2P mode?", {"Chaos Chao", "E-102 Gamma"}, {"Chaos", "Tikal", "Amy", "Metal Sonic", "Dark Chao"}),
+	TriviaQuestion("What is Mission 3 on Route 101", {"Don't hit other cars!"}, {"Find the Lost Chao!", "Don't hit the walls!", "Clear Hard mode!", "Clear Mirrored mode!"}),
 	//TriviaQuestion("", {"", ""}, {"", ""}),
 };
 
@@ -36,6 +39,7 @@ std::vector<TriviaQuestion> medium_questions =
 	TriviaQuestion("Which character cannot be the menu narrator?", {"Chaos", "Tikal"}, {"Sonic", "Shadow", "Tails", "Eggman", "Knuckles", "Rouge", "Maria", "Omochao", "President's Secretary", "Amy"}),
 	TriviaQuestion("What is the name of Tails's mech in this game?", {"The Cyclone"}, {"The Tornado", "The Tornado 2", "The Hurricane", "The Tailsmobile", "The Tails Walker"}),
 	TriviaQuestion("Which character has the largest number of Progression upgrades?", {"Knuckles"}, {"Sonic", "Tails", "Eggman", "Rouge", "Amy", "Shadow"}),
+	TriviaQuestion("What does G.U.N. stand for?", {"Guardian Units of Nations"}, {"Government Unit of Nuclear Threats", "Guns, Uniforms and Negligence", "Global Undercover Ninjas", "Grand Unification of Nations", "Guardians of Universal Nature", "General Unit of the Nations", "Global Units of the Nations", "Geriatric Umpires of Niagara", "Great Uhlliance of the Nations"}),
 	//TriviaQuestion("", {"", ""}, {"", ""}),
 };
 
@@ -51,6 +55,9 @@ std::vector<TriviaQuestion> hard_questions =
 	TriviaQuestion("Which of Shadow's stages was Sonic seen navigating in an early preview of the game?", {"Sky Rail"}, {"Radical Highway", "Final Chase", "White Jungle"}),
 	TriviaQuestion("In which stage does Big the Cat appear more than once?", {"White Jungle", "Cannon's Core"}, {"Cosmic Wall", "Final Chase", "Final Rush", "Security Hall", "City Escape", "Meteor Herd", "Pyramid Cave", "Egg Quarters", "Death Chamber", "Metal Harbor", "Mission Street"}),
 	TriviaQuestion("What language does Maria speak when launching Shadow to earth in the Japanese dub?", {"Spanish"}, {"English", "Japanese", "Italian", "Chinese", "German", "French"}),
+	TriviaQuestion("Which word is NOT present in titles of Last Story BGM song names?", {"Heart", "Shallow"}, {"Live", "Last", "Scramble", "Deep", "Core", "Supporting"}),
+	TriviaQuestion("Which Tiny Chao Garden mini-game do you get from Sonic Adventure 2: Battle?", {"Rock-Paper-Scissors"}, {"Chao Bounce", "Chao Ball", "Chao Search", "Chao Memory", "Chao Pinball"}),
+	TriviaQuestion("Which Treasure Hunting hint has no text in the Spanish translation?", {"GUN's guard for the storage area."}, {"Protector of the pond.", "Protector of the jar.", "Tears of a giant."}),
 	//TriviaQuestion("", {"", ""}, {"", ""}),
 };
 
