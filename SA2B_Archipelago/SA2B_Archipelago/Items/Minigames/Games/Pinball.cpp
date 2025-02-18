@@ -51,11 +51,6 @@ void Pinball::OnFrame(MinigameManagerData data)
 		{
 			UpdateGameEnd(data);
 		}
-		
-		if (data.inputPress & RIF_B)
-		{
-			this->currentState = MGS_Draw;
-		}
 	}
 }
 
@@ -222,7 +217,7 @@ void Pinball::UpdateBallActive(MinigameManagerData data)
 	{
 		ball->Translate(ballVelocity);
 	}
-	if (data.collision->IsColliding(ball, drain) || ball->GetPositionGlobal().y > 485.0f || data.inputPress & RIF_RightTrigger)
+	if (data.collision->IsColliding(ball, drain) || ball->GetPositionGlobal().y > 485.0f)
 	{
 		PlaySoundProbably((int)MinigameSounds::MenuBack, 0, 0, 0);
 		if (lives <= 0)
