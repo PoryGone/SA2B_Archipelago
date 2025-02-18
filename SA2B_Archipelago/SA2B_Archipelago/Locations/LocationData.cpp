@@ -2145,7 +2145,7 @@ void InitializeBigChecks(std::map<int, BigCheckData>& outBigChecks)
     outBigChecks[BigCheck::BC_SandOcean_Big_1]      = BigCheckData(0x01DEEECF, 0x00, LevelIDs_SandOcean,        true,   {  2845,    150,  -6928 });
     outBigChecks[BigCheck::BC_CrazyGadget_Big_1]    = BigCheckData(0x01DEEECF, 0x01, LevelIDs_CrazyGadget,      false,  { -9650,  -1255,  -2548 });
     outBigChecks[BigCheck::BC_HiddenBase_Big_1]     = BigCheckData(0x01DEEECF, 0x02, LevelIDs_HiddenBase,       true,   {    60,    160,  -1719 }, 40.0f);
-    outBigChecks[BigCheck::BC_EternalEngine_Big_1]  = BigCheckData(0x01DEEECF, 0x03, LevelIDs_EternalEngine,    false,  { -2166,    225,  -8342 });
+    outBigChecks[BigCheck::BC_EternalEngine_Big_1]  = BigCheckData(0x01DEEECF, 0x03, LevelIDs_EternalEngine,    false,  { -2166,    335,  -8342 });
     outBigChecks[BigCheck::BC_DeathChamber_Big_1]   = BigCheckData(0x01DEEECF, 0x04, LevelIDs_DeathChamber,     false,  {    48,    217,     97 });
     outBigChecks[BigCheck::BC_EggQuarters_Big_1]    = BigCheckData(0x01DEEECF, 0x05, LevelIDs_EggQuarters,      false,  {     0,    114,   1455 });
     outBigChecks[BigCheck::BC_LostColony_Big_1]     = BigCheckData(0x01DEEECF, 0x06, LevelIDs_LostColony,       false,  {  2891,   1241,  -2469 }, 50.0f);
