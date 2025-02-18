@@ -258,7 +258,7 @@ void Breakout::CreateHierarchy(MinigameManagerData data)
 
 	// Ball
 	float ballX = BREAKOUT_LEFT + (BREAKOUT_RIGHT - BREAKOUT_LEFT) / 2.0f;
-	float ballY = BREAKOUT_TOP - 50.0f + (BREAKOUT_BOTTOM - BREAKOUT_TOP) / 2.0f;
+	float ballY = BREAKOUT_TOP - 30.0f + (BREAKOUT_BOTTOM - BREAKOUT_TOP) / 2.0f;
 	this->ball = data.hierarchy->CreateNode("Ball", data.icons->GetAnim(MGI_Spinball), { BREAKOUT_BALL_RADIUS * 2, BREAKOUT_BALL_RADIUS * 2, 1 }, { ballX, ballY, 0 });
 	this->ball->components.push_back(new Rotator(rotationDelta));
 
@@ -275,9 +275,10 @@ void Breakout::CreateHierarchy(MinigameManagerData data)
 
 	data.collision->AddCollision(this->ball, std::make_shared<CircleCollider>(BREAKOUT_BALL_RADIUS));
 
+	float brickStartY = BREAKOUT_TOP + 20.0f;
 	for (int row = 0; row < rowCount; row++)
 	{
-		float brickY = BREAKOUT_TOP + (row * BREAKOUT_BRICK_THICKNESS) + (1.5f * BREAKOUT_BRICK_THICKNESS);
+		float brickY = brickStartY + (row * BREAKOUT_BRICK_THICKNESS) + (1.5f * BREAKOUT_BRICK_THICKNESS);
 
 		for (int i = 0; i < BREAKOUT_BRICKS_PER_ROW; i++)
 		{
