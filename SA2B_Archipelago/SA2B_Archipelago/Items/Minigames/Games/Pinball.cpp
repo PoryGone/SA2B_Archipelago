@@ -406,7 +406,7 @@ void Pinball::CreateHierarchy(MinigameManagerData data)
 	leftFlipperImage->SetPosition({ flipperLength * 0.64f, 0.0f });
 	leftFlipperImage->SetRotation(90.0f);
 	//data.collision->AddCollision(leftFlipper, std::make_shared<CapsuleCollider>(2.4f, leftFlipper, NJS_POINT3({ 0.0f, 0.0f }), NJS_POINT3({ flipperLength - 2.4f, 0.0f })));
-	data.collision->AddCollision(leftFlipper, std::make_shared<PolygonCollider>(std::vector<NJS_POINT3>({ {-0.2f, 2.4f}, {flipperLength, 0.0f}, {-0.2f, -2.4f} })));
+	data.collision->AddCollision(leftFlipper, std::make_shared<PolygonCollider>(std::vector<NJS_POINT3>({ {-0.2f, 2.4f}, {flipperLength * 0.85f, 0.0f}, {-0.2f, -2.4f} })));
 	leftFlipper->SetRotation(9.5f);
 	boardObjs.push_back(leftFlipper);
 
@@ -416,7 +416,7 @@ void Pinball::CreateHierarchy(MinigameManagerData data)
 	rightFlipperImage->SetPosition({ flipperLength * 0.64f, 0.0f });
 	rightFlipperImage->SetRotation(90.0f);
 	//data.collision->AddCollision(rightFlipper, std::make_shared<CapsuleCollider>(2.4f, rightFlipper, NJS_POINT3({ 0.0f, 0.0f }), NJS_POINT3({ flipperLength - 2.4f, 0.0f })));
-	data.collision->AddCollision(rightFlipper, std::make_shared<PolygonCollider>(std::vector<NJS_POINT3>({ {-0.2f, 2.4f}, {flipperLength, 0.0f}, {-0.2f, -2.4f} })));
+	data.collision->AddCollision(rightFlipper, std::make_shared<PolygonCollider>(std::vector<NJS_POINT3>({ {-0.2f, 2.4f}, {flipperLength * 0.85f, 0.0f}, {-0.2f, -2.4f} })));
 	rightFlipper->SetRotation(-189.5f);
 	boardObjs.push_back(rightFlipper);
 

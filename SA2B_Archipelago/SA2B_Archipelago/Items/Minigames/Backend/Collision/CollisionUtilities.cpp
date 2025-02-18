@@ -96,6 +96,9 @@ IntersectionResults TestCapsulePolygonIntersection(CapsuleCollider& aCol, Polygo
 	float currentDist = 1000000.0f;
 	NJS_POINT3 aColStart = aCol.GetPoint1();
 	NJS_POINT3 aColEnd = aCol.GetPoint2();
+	NJS_POINT3 aColNorm = Point3Normalize(Point3Substract(aColEnd, aColStart));
+	NJS_POINT3 aColStartTip = Point3Add(aColStart, Point3Scale(aColNorm, aCol.radius * -1.0f));
+	NJS_POINT3 aColEndTip = Point3Add(aColEnd, Point3Scale(aColNorm, aCol.radius));
 	float aRadius = aCol.radius;
 	auto capLines = GetCapsuleSegments(aCol);
 	auto bColPoints = bCol.GetAdjustedPoints();
@@ -105,8 +108,45 @@ IntersectionResults TestCapsulePolygonIntersection(CapsuleCollider& aCol, Polygo
 		int i2 = (i + 1 == bColPoints.size()) ? 0 : i + 1;
 		LineSegment seg = LineSegment(bColPoints[i], bColPoints[i2]);
 		NJS_POINT3 segNormal = GetNormalDirectionOfPointFromSeg(seg);
-		IntersectionResults results = TestLineSegmentIntersection(std::get<0>(capLines), seg);
 		if (Point3AngleDegrees(segNormal, Point3Substract(aColStart, seg.a)) > 90.0f) continue;
+		IntersectionResults results = TestLineSegmentIntersection(LineSegment(aColStartTip, aColEndTip), seg);
+		if (results.isIntersecting)
+		{
+			float dist = NonSquaredDistance(aColStart, results.point);// +NonSquaredDistance(aColEnd, results.point);
+			if (dist < currentDist || !currentResults.isIntersecting)
+			{
+				currentResults = results;
+				currentDist = dist;
+			}
+			continue;
+		}
+		auto intersections = GetIntersectionsOfLineSegAndCircle(seg, aColEnd, aRadius);
+		if (std::get<0>(intersections) > 0)
+		{
+			NJS_POINT3 intersection = std::get<1>(intersections);
+			float dist = NonSquaredDistance(aColStart, intersection);// +NonSquaredDistance(aColEnd, intersection);
+			if (dist < currentDist || !currentResults.isIntersecting)
+			{
+				currentResults = IntersectionResults(true, intersection, segNormal);
+				currentDist = dist;
+			}
+			if (std::get<0>(intersections) == 1)
+			{
+				continue;
+			}
+		}
+		if (std::get<0>(intersections) > 1)
+		{
+			NJS_POINT3 intersection = Lerp(std::get<1>(intersections), std::get<2>(intersections), 0.5f);
+			float dist = NonSquaredDistance(aColStart, intersection);// +NonSquaredDistance(aColEnd, intersection);
+			if (dist < currentDist || !currentResults.isIntersecting)
+			{
+				currentResults = IntersectionResults(true, intersection, segNormal);
+				currentDist = dist;
+			}
+			continue;
+		}
+		results = TestLineSegmentIntersection(std::get<0>(capLines), seg);
 		if (results.isIntersecting)
 		{
 			float dist = NonSquaredDistance(aColStart, results.point);// +NonSquaredDistance(aColEnd, results.point);
@@ -126,27 +166,8 @@ IntersectionResults TestCapsulePolygonIntersection(CapsuleCollider& aCol, Polygo
 				currentDist = dist;
 			}
 		}
-		auto intersections = GetIntersectionsOfLineSegAndCircle(seg, aColEnd, aRadius);
-		if (std::get<0>(intersections) > 0)
-		{
-			NJS_POINT3 intersection = std::get<1>(intersections);
-			float dist = NonSquaredDistance(aColStart, intersection);// +NonSquaredDistance(aColEnd, intersection);
-			if (dist < currentDist || !currentResults.isIntersecting)
-			{
-				currentResults = IntersectionResults(true, intersection, segNormal);
-				currentDist = dist;
-			}
-		}
-		if (std::get<0>(intersections) > 1)
-		{
-			NJS_POINT3 intersection = Lerp(std::get<1>(intersections), std::get<2>(intersections), 0.5f);
-			float dist = NonSquaredDistance(aColStart, intersection);// +NonSquaredDistance(aColEnd, intersection);
-			if (dist < currentDist || !currentResults.isIntersecting)
-			{
-				currentResults = IntersectionResults(true, intersection, segNormal);
-				currentDist = dist;
-			}
-		}
+		
+		
 	}
 
 	/*if (currentResults.isIntersecting)
