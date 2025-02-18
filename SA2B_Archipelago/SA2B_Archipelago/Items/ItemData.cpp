@@ -284,4 +284,12 @@ std::map<std::string, ItemValue> item_name_to_value = {
     {"Fuzzy Trap",              ItemValue::IV_ConfuseTrap},
     {"Confusion Trap",          ItemValue::IV_ConfuseTrap},
     {"Confound Trap",           ItemValue::IV_ConfuseTrap},
+    {"Police Trap",             ItemValue::IV_OmochaoTrap},
+    {"Buyon Trap",              ItemValue::IV_OmochaoTrap},
+    {"Damage Trap",             ItemValue::IV_PoisonTrap},
+    {"Gooey Bag",               ItemValue::IV_OmochaoTrap},
+};
+
+std::map<std::string, int> special_traplink_voices = {
+    {"Police Trap", 29},
 };

@@ -733,6 +733,11 @@ void ItemManager::HandleTrapLink(std::string item_name, std::string message)
 		{
 			this->_PriorityTrap = trap_value;
 			this->_TrapLinkMessage = message;
+
+			if (special_traplink_voices.find(item_name) != special_traplink_voices.end())
+			{
+				this->_PriorityTrapVoice = special_traplink_voices[item_name];
+			}
 		}
 	}
 
@@ -1442,6 +1447,7 @@ void ItemManager::OnFrameTrapQueue()
 			this->_ActiveTrap = 0;
 
 			this->_PriorityTrap = 0;
+			this->_PriorityTrapVoice = 0;
 			this->_TrapLinkMessage = "";
 
 			return;
@@ -1449,7 +1455,13 @@ void ItemManager::OnFrameTrapQueue()
 
 		MessageQueue::GetInstance().AddMessage(this->_TrapLinkMessage);
 
+		if (this->_PriorityTrapVoice != 0)
+		{
+			PlayUnshuffledVoice(2, this->_PriorityTrapVoice);
+		}
+
 		this->_PriorityTrap = 0;
+		this->_PriorityTrapVoice = 0;
 	}
 	else
 	{

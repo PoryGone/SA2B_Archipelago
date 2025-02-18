@@ -313,3 +313,4 @@ struct ChaoAnimalSlot
 
 extern std::map<ItemValue, std::string> item_value_to_name;
 extern std::map<std::string, ItemValue> item_name_to_value;
+extern std::map<std::string, int> special_traplink_voices;

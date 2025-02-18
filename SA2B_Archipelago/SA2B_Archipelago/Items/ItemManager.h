@@ -81,6 +81,7 @@ private:
 	std::queue<DialogueData> _DialogueQueue;
 
 	int _PriorityTrap;
+	int _PriorityTrapVoice;
 	std::string _TrapLinkMessage;
 	std::map<int, int> _possibleTraps;
 
