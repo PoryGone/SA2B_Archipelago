@@ -302,10 +302,19 @@ void MinigameManager::HandleVictory()
 		return;
 	}
 
-	if (this->_data.isLinkedTrap)
+	if (CurrentLevel == LevelIDs::LevelIDs_ChaoWorld && this->_data.isLinkedTrap)
+	{
+		// Don't send ring rewards for Chao Garden traps
+	}
+	else if (this->_data.isLinkedTrap)
 	{
 		// Don't count linked trap wins for goal completion
 		ItemManager::getInstance().HandleJunk(itemToSend);
+	}
+	else if (CurrentLevel == LevelIDs::LevelIDs_ChaoWorld)
+	{
+		// Don't send ring rewards for Chao Garden traps
+		ItemManager::getInstance().HandleMinigameCompletion(this->currentMinigameItem);
 	}
 	else if (this->_data.isLocationCheck)
 	{
