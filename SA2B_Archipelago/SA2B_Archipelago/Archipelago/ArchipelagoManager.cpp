@@ -18,8 +18,8 @@
 #include "../Aesthetics/StatsManager.h"
 
 
-DataPointer(unsigned int, SeedHash, 0x1DEC6FC);
-DataPointer(unsigned int, PlayerNameHash, 0x1DEC700);
+DataPointer(unsigned int, SeedHash, 0x1DEC704);
+DataPointer(unsigned int, PlayerNameHash, 0x1DEC708);
 DataPointer(char, LastStoryComplete, 0x1DEFA95);
 
 DataArray(int16_t, ChaoStatValues, 0x8A6240, 0x1F4);
@@ -425,7 +425,18 @@ void SA2_HandleBouncedPacket(AP_Bounce bouncePacket)
                 return;
             }
 
-            if (bounceData["source"].asInt() != apm->_instanceID)
+            int source_id = 0;
+
+            try
+            {
+                source_id = bounceData["source"].asInt();
+            }
+            catch (std::exception& e)
+            {
+
+            }
+
+            if (source_id != apm->_instanceID)
             {
                 // We didn't send this one
                 __int16 amount = bounceData["amount"].asInt();

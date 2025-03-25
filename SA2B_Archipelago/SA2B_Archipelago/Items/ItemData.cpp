@@ -288,6 +288,10 @@ std::map<std::string, ItemValue> item_name_to_value = {
     {"Buyon Trap",              ItemValue::IV_OmochaoTrap},
     {"Damage Trap",             ItemValue::IV_PoisonTrap},
     {"Gooey Bag",               ItemValue::IV_OmochaoTrap},
+    {"Honey Trap",              ItemValue::IV_BeeTrap},
+    {"Screen Flip Trap",        ItemValue::IV_ReverseTrap},
+    {"Poison Mushroom",         ItemValue::IV_TinyTrap},
+    {"Banana Trap",             ItemValue::IV_IceTrap},
 };
 
 std::map<std::string, int> special_traplink_voices = {

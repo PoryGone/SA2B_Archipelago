@@ -261,6 +261,17 @@ std::vector<int> StageSelectManager::GetCurrentStageMissions()
 	}
 
 	int currentTileStageIndex = this->TileIDtoStageIndex[SS_SelectedTile];
+
+	if (this->_chosenMissionsMap.find(currentTileStageIndex) == this->_chosenMissionsMap.end())
+	{
+		return activeOrder;
+	}
+
+	if (this->_missionCountMap.find(currentTileStageIndex) == this->_missionCountMap.end())
+	{
+		return activeOrder;
+	}
+
 	int missionOrderIndex = this->_chosenMissionsMap.at(currentTileStageIndex);
 	std::array<int, 5> chosenMissionOrder = this->_potentialMissionOrders.at(missionOrderIndex);
 
@@ -288,6 +299,17 @@ std::vector<int> StageSelectManager::GetCurrentStageRanks()
 	}
 
 	int currentTileStageIndex = this->TileIDtoStageIndex[SS_SelectedTile];
+
+	if (this->_chosenMissionsMap.find(currentTileStageIndex) == this->_chosenMissionsMap.end())
+	{
+		return activeRanks;
+	}
+
+	if (this->_missionCountMap.find(currentTileStageIndex) == this->_missionCountMap.end())
+	{
+		return activeRanks;
+	}
+
 	int missionOrderIndex = this->_chosenMissionsMap.at(currentTileStageIndex);
 	std::array<int, 5> chosenMissionOrder = this->_potentialMissionOrders.at(missionOrderIndex);
 
@@ -598,6 +620,16 @@ void StageSelectManager::UnlockAllLevels()
 bool StageSelectManager::IsCannonsCoreComplete()
 {
 	bool bCannonCoreComplete = true;
+
+	if (this->_chosenMissionsMap.find(StageSelectStage::SSS_CannonCore) == this->_chosenMissionsMap.end())
+	{
+		return false;
+	}
+
+	if (this->_missionCountMap.find(StageSelectStage::SSS_CannonCore) == this->_missionCountMap.end())
+	{
+		return false;
+	}
 
 	int missionOrderIndex = this->_chosenMissionsMap.at(StageSelectStage::SSS_CannonCore);
 
