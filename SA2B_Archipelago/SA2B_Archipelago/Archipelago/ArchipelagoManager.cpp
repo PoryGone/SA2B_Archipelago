@@ -571,6 +571,11 @@ void SA2_SetGoal(int goal)
     StageSelectManager* ssm = &StageSelectManager::GetInstance();
 
     ssm->SetGoal(goal);
+
+    if (goal == 7)
+    {
+        ChaoGardenManager::GetInstance().SetChaoEnabled(true);
+    }
 }
 
 void SA2_CompareModVersion(int modVersion)

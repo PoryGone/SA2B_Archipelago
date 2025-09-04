@@ -1746,6 +1746,11 @@ void LocationManager::CheckLocation(int location_id)
 void LocationManager::SetGoal(int goal)
 {
 	this->_goal = goal;
+
+	if (this->_goal == 7)
+	{
+		this->SetChaoEnabled(true);
+	}
 }
 
 void LocationManager::SetRequiredRank(int requiredRank)
