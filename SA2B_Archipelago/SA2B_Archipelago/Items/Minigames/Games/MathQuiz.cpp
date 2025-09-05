@@ -307,8 +307,8 @@ void MathQuiz::CreateHierarchy(MinigameManagerData data)
 		{
 			int maxInt = 13;
 
-			int correctAnswerInt = RandomInt(0, maxInt);
-			int num_b = RandomInt(0, maxInt);
+			int correctAnswerInt = RandomInt(1, maxInt);
+			int num_b = RandomInt(1, maxInt);
 
 			int num_a = correctAnswerInt * num_b;
 
