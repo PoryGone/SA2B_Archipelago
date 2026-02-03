@@ -99,7 +99,7 @@ static NJS_TEXANIM StageSelectAnim[Stage_Anim_Length] = {
 	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 30, 0},
 	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 31, 0},
 	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 32, 0},
-	
+
 	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 33, 0},
 	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 34, 0},
 	{ 128, 128, 0, 0, 0, 0, 0x100, 0x100, 35, 0},
@@ -330,9 +330,9 @@ CharacterItemRange GetItemRangeForCharacter(char character)
 	return CharacterItemRange();
 }
 
-void DrawString(std::string string, float xPos, float yPos, float scale = 1.0f) 
+void DrawString(std::string string, float xPos, float yPos, float scale = 1.0f)
 {
-	for (std::string::iterator it = string.begin(); it != string.end(); ++it) 
+	for (std::string::iterator it = string.begin(); it != string.end(); ++it)
 	{
 		auto data = NumberMap[*it];
 		xPos += data.width * 0.5f * scale;
@@ -876,7 +876,7 @@ void UpdateLevelCheckIcons()
 void UpdateChaosEmeraldIcons()
 {
 	int goal = StageSelectManager::GetInstance().GetGoal();
-	if (goal == 1 || goal == 2 || goal == 6)
+	if (goal == 1 || goal == 2 || goal == 6 || goal == 9)
 	{
 		ItemManager* itemMan = &ItemManager::getInstance();
 		std::vector<int> chaosEmeralds = itemMan->GetChaosEmeraldAddresses();
@@ -929,7 +929,7 @@ void UpdateChaosEmeraldIcons()
 void UpdateUpgradeIcons(bool inLevel)
 {
 	char overrideCharacter = -1;
-	if (inLevel) 
+	if (inLevel)
 	{
 		switch (CurrentLevel)
 		{
@@ -978,7 +978,7 @@ void UpdateUpgradeIcons(bool inLevel)
 					Sprite_2.tanim = &UpgradeIconsAnim_Inactive[(*ItemData_ptr).at(i).IconIndex];
 					Sprite_2.p = { maxXPos - ((iconPos + 1) * 28.0f), yPos, 0.0f };
 					DrawSprite2D(&Sprite_2, 1, 1, NJD_SPRITE_ALPHA);
-				}			
+				}
 				iconPos++;
 			}
 		}
@@ -1146,7 +1146,7 @@ void UpdateTimescale()
 	DrawString(timescaleMessage, timescaleX + 40.0f, timescaleY, 0.75f);
 }
 
-void UpdateMissionInLevel() 
+void UpdateMissionInLevel()
 {
 	std::vector<int> activeMissions = StageSelectManager::GetInstance().GetCurrentStageMissions();
 	std::vector<int> activeRanks = StageSelectManager::GetInstance().GetCurrentStageRanks();
@@ -1304,7 +1304,7 @@ void StageSelectIcons::OnInit(std::map<int, StageSelectStageData>* stageSelectDa
 	maxXPos = adjustedMax;
 }
 
-void StageSelectIcons::OnFrame() 
+void StageSelectIcons::OnFrame()
 {
 	if (!DrawIconObj && CurrentMenu == Menus::Menus_StageSelect && GameMode == GameMode::GameMode_Advertise)
 	{

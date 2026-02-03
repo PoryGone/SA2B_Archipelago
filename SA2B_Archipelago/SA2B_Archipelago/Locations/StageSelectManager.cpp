@@ -65,7 +65,7 @@ void __cdecl MissionDisplay_Begin_ASM()
 
 //67670b
 const void* const loc_676712 = (void*)0x676712;
-void __cdecl MissionDisplay_CompareActive_ASM() 
+void __cdecl MissionDisplay_CompareActive_ASM()
 {
 	__asm
 	{
@@ -220,7 +220,7 @@ void StageSelectManager::SetEmblemsForCannonsCore(int emblemsRequired)
 	_emblemsForCannonsCore = emblemsRequired;
 }
 
-int StageSelectManager::GetCannonsCoreEmblemCount() 
+int StageSelectManager::GetCannonsCoreEmblemCount()
 {
 	return this->_emblemsForCannonsCore;
 }
@@ -242,7 +242,7 @@ void StageSelectManager::SetRegionEmblemMap(std::map<int, int> map)
 	LayoutLevels();
 }
 
-std::vector<int> StageSelectManager::GetGateRequirements() 
+std::vector<int> StageSelectManager::GetGateRequirements()
 {
 	return this->_gateRequirements;
 }
@@ -858,6 +858,79 @@ void StageSelectManager::HandleGoal()
 	{
 		HandleMinigameMadness();
 	}
+	else if (this->_goal == 9)
+	{
+		HandleBiolizardChaosEmeralds();
+	}
+}
+
+void StageSelectManager::HandleBiolizardChaosEmeralds()
+{
+	ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
+	if (!apm || !apm->IsInit() || !apm->IsAuth())
+	{
+		return;
+	}
+
+	if (this->_chosenMissionsMap.find(StageSelectStage::SSS_CannonCore) == this->_chosenMissionsMap.end())
+	{
+		return;
+	}
+
+	if (this->_missionCountMap.find(StageSelectStage::SSS_CannonCore) == this->_missionCountMap.end())
+	{
+		return;
+	}
+
+	bool bHaveChaosEmeralds = this->HaveAllChaosEmeralds();
+	if (this->IsCannonsCoreComplete() && bHaveChaosEmeralds)
+	{
+		// Biolizard Tile
+		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_GreenHill].TileIDAddress, 0x41);
+		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_GreenHill].TileCharacterAddress, 0x01);
+		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_GreenHill].TileColumnAddress, 0x1B);
+		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_GreenHill].TileRowAddress, 0x04);
+
+		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_Biolizard].UnlockMemAddress, unlockByteData);
+	}
+	else
+	{
+		WriteData<1>((void*)this->_stageSelectDataMap[StageSelectStage::SSS_Biolizard].UnlockMemAddress, lockByteData);
+	}
+
+	if (CurrentLevel == LevelIDs_Biolizard)
+	{
+		if (TimerMinutes == 0 && TimerSeconds < 5)
+		{
+			WriteData<1>((void*)0x1DEB060, 0xCC);
+			WriteData<1>((void*)0x1DEB061, 0x00);
+			WriteData<1>((void*)0x1DEB062, 0x00);
+			WriteData<1>((void*)0x1DEB063, 0x00);
+			WriteData<1>((void*)0x1DEB064, 0xCD);
+			WriteData<1>((void*)0x1DEB065, 0x00);
+			WriteData<1>((void*)0x1DEB066, 0x00);
+			WriteData<1>((void*)0x1DEB067, 0x00);
+
+			WriteData<1>((void*)0x1DEB31E, 0x03);
+			WriteData<1>((void*)0x1DEB31F, 0x03);
+			WriteData<1>((void*)0x1DEB320, 0x03);
+
+			WriteData<1>((void*)0x174B044, 0x0C);
+		}
+	}
+
+	if (CurrentLevel == LevelIDs_FinalHazard)
+	{
+		if (GameState == GameStates_GoToNextLevel)
+		{
+			MessageQueue* messageQueue = &MessageQueue::GetInstance();
+			std::string msg = "Victory!";
+			messageQueue->AddMessage(msg);
+
+			ArchipelagoManager* apm = &ArchipelagoManager::getInstance();
+			apm->SendStoryComplete();
+		}
+	}
 }
 
 void StageSelectManager::HandleBiolizard()
@@ -1332,7 +1405,7 @@ void StageSelectManager::HandleMissionOrder()
 				WriteData<1>((void*)((int)(loc_Mission_1) + i*4), (char)(chosenMissionOrder[i] - 1));
 
 				//Update 1st mission anim atlas position
-				if (chosenMissionOrder[i] == 1 && i > 0 ) 
+				if (chosenMissionOrder[i] == 1 && i > 0 )
 				{
 					int prevMission = chosenMissionOrder[i - 1];
 					char value = *(char*)(this->_stageSelectDataMap.at(currentTileStageIndex).UnlockMemAddress - 6 + prevMission);
@@ -1342,13 +1415,13 @@ void StageSelectManager::HandleMissionOrder()
 						value = *(char*)(this->_stageSelectDataMap.at(currentTileStageIndex).UnlockMemAddress - 0x13 + prevMission);
 					}
 
-					if (value == 0x00) 
+					if (value == 0x00)
 					{
 						WriteData<1>((void*)(0xC69218 + 8), 0x96);
 						WriteData<1>((void*)(0xC69218 + 10), 0x96);
 						WriteData<1>((void*)(0xC69218 + 12), 0xC7);
 						WriteData<1>((void*)(0xC69218 + 14), 0xC8);
-					} 
+					}
 					else
 					{
 						WriteData<1>((void*)(0xC69218 + 8), 0x00);

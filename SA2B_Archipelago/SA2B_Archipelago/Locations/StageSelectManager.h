@@ -30,7 +30,7 @@ struct StageIconLocation
 struct GateBossLayout
 {
     GateBossLayout() : BossLocation(), StageLocation(), FirstGateStage() {}
-    GateBossLayout(StageIconLocation bossLocation, StageIconLocation stageLocation, StageSelectStage firstGateStage) : 
+    GateBossLayout(StageIconLocation bossLocation, StageIconLocation stageLocation, StageSelectStage firstGateStage) :
         BossLocation(bossLocation),
         StageLocation(stageLocation),
         FirstGateStage(firstGateStage) {}
@@ -104,6 +104,7 @@ private:
 	void HideMenuButtons();
 	void HandleGoal();
 	void HandleBiolizard();
+	void HandleBiolizardChaosEmeralds();
 	void HandleGreenHill();
 	void HandleGrandPrix();
 	void HandleBossRush();
