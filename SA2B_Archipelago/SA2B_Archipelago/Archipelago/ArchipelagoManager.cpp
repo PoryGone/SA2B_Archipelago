@@ -9,8 +9,8 @@
 
 #include "../Utilities/MessageQueue.h"
 #include "../../lib/APCpp/Archipelago.h"
-#include "../../lib/APCpp/json/reader.h"
-#include "../../lib/APCpp/json/writer.h"
+#include "../../lib/APCpp/jsoncpp/include/json/reader.h"
+#include "../../lib/APCpp/jsoncpp/include/json/writer.h"
 
 #include <chrono>
 #include <functional>
@@ -1749,7 +1749,7 @@ void ArchipelagoManager::SetDeathLink(bool deathLinkActive)
     {
         tags.push_back(std::string("TrapLink"));
     }
-    AP_SetTags(tags);
+    AP_UpdateTags(tags);
 }
 
 void ArchipelagoManager::SetRingLink(bool ringLinkActive)
@@ -1769,7 +1769,7 @@ void ArchipelagoManager::SetRingLink(bool ringLinkActive)
     {
         tags.push_back(std::string("TrapLink"));
     }
-    AP_SetTags(tags);
+    AP_UpdateTags(tags);
 }
 
 void ArchipelagoManager::SetTrapLink(bool trapLinkActive)
@@ -1789,7 +1789,7 @@ void ArchipelagoManager::SetTrapLink(bool trapLinkActive)
     {
         tags.push_back(std::string("TrapLink"));
     }
-    AP_SetTags(tags);
+    AP_UpdateTags(tags);
 }
 
 void ArchipelagoManager::VerfyModVersion(int modVersion)
