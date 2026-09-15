@@ -556,7 +556,22 @@ void ItemManager::OnFrameJunkQueue()
 		return;
 	}
 
-	if (CurrentLevel == LevelIDs_Route101280 || CurrentLevel == LevelIDs_KartRace || CurrentLevel == LevelIDs_ChaoWorld || CurrentLevel == LevelIDs_FinalHazard)
+	if (CurrentLevel == LevelIDs_Route101280 ||
+		CurrentLevel == LevelIDs_KartRace ||
+		CurrentLevel == LevelIDs_ChaoWorld ||
+		CurrentLevel == LevelIDs_KingBoomBoo ||
+		CurrentLevel == LevelIDs_FlyingDog ||
+		CurrentLevel == LevelIDs_BigFoot ||
+		CurrentLevel == LevelIDs_HotShot ||
+		CurrentLevel == LevelIDs_EggGolemE ||
+		CurrentLevel == LevelIDs_EggGolemS ||
+		CurrentLevel == LevelIDs_SonicVsShadow1 ||
+		CurrentLevel == LevelIDs_SonicVsShadow2 ||
+		CurrentLevel == LevelIDs_TailsVsEggman1 ||
+		CurrentLevel == LevelIDs_TailsVsEggman2 ||
+		CurrentLevel == LevelIDs_KnucklesVsRouge ||
+		CurrentLevel == LevelIDs_Biolizard ||
+		CurrentLevel == LevelIDs_FinalHazard)
 	{
 		return;
 	}
@@ -568,6 +583,7 @@ void ItemManager::OnFrameJunkQueue()
 
 	if (MainCharObj1[0] && (MainCharObj1[0]->Action == Action_Death ||
 		MainCharObj1[0]->Action == Action_Drown ||
+		MainCharObj1[0]->Action == Action_ObjectControl ||
 		MainCharObj1[0]->Action == Action_Fall ||
 		(MainCharObj1[0]->Action == Action_Quicksand && CurrentLevel != LevelIDs_EggGolemS)))
 	{
