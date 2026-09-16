@@ -1,4 +1,4 @@
 [submodule "SA2B_Archipelago/lib/APCpp"]
 	path = SA2B_Archipelago/lib/APCpp
 	url = https://github.com/PoryGone/APCpp.git
-        branch = sa2b-static
+    branch = sa2b-static

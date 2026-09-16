@@ -1159,7 +1159,7 @@ void ArchipelagoManager::Init(const char* ip, const char* playerName, const char
     net_ver.minor = 6;
     net_ver.build = 7;
 
-    AP_SetDeathLinkSupported(true);
+    //AP_SetDeathLinkSupported(true);
     AP_SetClientVersion(&net_ver);
     AP_EnableQueueItemRecvMsgs(false);
     AP_SetItemClearCallback(&SA2_ResetItems);
