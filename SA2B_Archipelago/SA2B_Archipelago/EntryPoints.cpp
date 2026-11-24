@@ -10,12 +10,13 @@
 #include "Aesthetics/StatsManager.h"
 #include "Items/Minigames/MinigameManager.h"
 #include "Items/Minigames/Backend/Collision/CollisionTest.h"
-
+#include "Items/Minigames/Backend/SpriteHierarchyManager.h"
 
 ItemManager* _itemManager;
 LocationManager* _locationManager;
 MusicManager* _musicManager;
 ArchipelagoManager* _archipelagoManager;
+SpriteHierarchyManager& _spriteHierarchyManager = SpriteHierarchyManager::GetInstance();
 CreditsManager& _creditsManager = CreditsManager::GetInstance();
 ChaoGardenManager& _chaoGardenManager = ChaoGardenManager::GetInstance();
 StageSelectManager& _stageSelectManager = StageSelectManager::GetInstance();
@@ -32,6 +33,8 @@ extern "C"
 		// Executed at startup, contains helperFunctions and the path to your mod (useful for getting the config file.)
 		// This is where we override functions, replace static data, etc.
 		_messageQueue.OnInitFunction(path, helperFunctions);
+		
+		_spriteHierarchyManager.OnInitFunction(path, helperFunctions);
 
 		_stageSelectManager.OnInitFunction(path, helperFunctions);
 
@@ -84,6 +87,8 @@ extern "C"
 		_statsManager.OnFrameFunction();
 
 		_minigameManager.OnFrameFunction();
+		
+		_spriteHierarchyManager.OnFrameFunction();
 
 		if (_archipelagoManager->IsDebug())
 		{

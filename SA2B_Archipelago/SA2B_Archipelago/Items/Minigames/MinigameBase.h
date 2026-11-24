@@ -5,6 +5,7 @@
 #include "../../Utilities/SpriteUtilities.h"
 #include "../../Utilities/EasingUtilities.h"
 #include "Backend/MinigameBackend.h"
+#include "Backend/SpriteHierarchyManager.h"
 #include "Backend/Time/TimeUtilities.h"
 #include <vector>
 
@@ -163,7 +164,7 @@ public:
 	MinigameIconData* icons;
 	TextDisplayData* text;
 	MinigameDifficulty difficulty;
-	SpriteHierarchy* hierarchy;
+	std::shared_ptr<SpriteHierarchy> hierarchy;
 	CollisionManager* collision;
 
 	std::vector<Timer*>* timers;

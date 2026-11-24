@@ -4,11 +4,11 @@
 #include "../ItemManager.h"
 #include "../../Locations/LocationManager.h"
 
-void DeleteUpgradeIcon_MG(ObjectMaster* obj)
+/*void DeleteUpgradeIcon_MG(ObjectMaster* obj)
 {
 	MinigameManager::GetInstance().EndMinigame();
-	MinigameManager::GetInstance().iconData.ReleaseIcons();
-	MinigameManager::GetInstance().textData.ReleaseIcons();
+	//MinigameManager::GetInstance().iconData.ReleaseIcons();
+	//MinigameManager::GetInstance().textData.ReleaseIcons();
 	MinigameManager::GetInstance().IconObjPtr = nullptr;
 }
 
@@ -41,16 +41,49 @@ void DrawUpgradeIconMain_MG(ObjectMaster* obj)
 		obj->DisplaySub_Delayed3 = DrawUpgradeIcon_MG;
 		obj->Data1.Entity->Action = 1;
 	}
+}*/
+
+void OnHierarchyCreation()
+{
+	return;
+	auto manager = MinigameManager::GetInstance();
+	manager.InitManagerData();
+	if (GameState == GameStates_Ingame)
+	{
+		manager.Resume();
+		//manager.UpdateCurrentMinigame();
+	}
+	else if (manager.IsInFinalBoss() && GameState == GameStates_NormalRestart)
+	{
+		manager.EndMinigame();
+	}
+	else
+	{
+		manager.Pause();
+	}
+}
+
+void OnHierarchyDelete()
+{
+	return;
+	MinigameManager::GetInstance().EndMinigame();
 }
 
 void MinigameManager::OnInitFunction(const char* path, const HelperFunctions& helperFunctions)
 {
 	_helperFunctions = &helperFunctions;
+	SpriteHierarchyManager& hierarchyManager = SpriteHierarchyManager::GetInstance();
+	hierarchyItemPtr = hierarchyManager.GetHierarchyItem(HPT_Minigames);
+	hierarchyItemPtr->callbacks = this;
+	//hierarchyItemPtr->onSceneObjectCreation = OnHierarchyCreation;
+	//hierarchyItemPtr->onSceneObjectDelete = OnHierarchyDelete;
+	//hierarchyItemPtr->onBeforeFrameUpdate = [&](SpriteHierarchy& hierarchy) {this->UpdateCurrentMinigame(hierarchy);};
+	//hierarchyItemPtr->onAfterFrameRender = this->PostRenderHierarchy; //[&](SpriteHierarchy& hierarchy) {this->PostRenderHierarchy(hierarchy);};
 }
 
 void MinigameManager::OnFrameFunction()
 {
-	if (!this->IconObjPtr && GameState == GameStates_Ingame)
+	/*if (!this->IconObjPtr && GameState == GameStates_Ingame)
 	{
 		this->iconData.LoadIcons();
 		this->_data.icons = &this->iconData;
@@ -66,7 +99,7 @@ void MinigameManager::OnFrameFunction()
 		this->IconObjPtr->MainSub = DrawUpgradeIconMain_MG;
 		this->IconObjPtr->DisplaySub_Delayed3 = DrawUpgradeIcon_MG;
 		this->IconObjPtr->Data1.Entity->Action = 1;
-	}
+	}*/
 }
 
 void MinigameManager::OnInputFunction()
@@ -126,9 +159,63 @@ void MinigameManager::OnInputFunction()
 	}
 }
 
-void MinigameManager::UpdateCurrentMinigame()
+void MinigameManager::InitManagerData()
 {
-	if (this->currentMinigame)
+	if (hierarchyItemPtr->hierarchy == nullptr)
+	{
+		PrintDebug("Hierarchy is null on data init");
+	}
+	SpriteHierarchyManager& hierarachyManager = SpriteHierarchyManager::GetInstance();
+	this->_data.icons = &hierarachyManager.iconData;
+	this->_data.text = &hierarachyManager.textData;
+	this->_data.hierarchy = hierarchyItemPtr->hierarchy;
+	this->_data.collision = &this->collisionManager;
+	this->_data.timers = &this->timers;
+	this->_data.stopwatches = &this->stopwatches;
+}
+
+void MinigameManager::OnSceneObjectCreation()
+{
+	PrintDebug("Scene Object Create");
+	InitManagerData();
+	if (GameState == GameStates_Ingame)
+	{
+		Resume();
+		//manager.UpdateCurrentMinigame();
+	}
+	else if (IsInFinalBoss() && GameState == GameStates_NormalRestart)
+	{
+		PrintDebug("End Minigame: Boss Restart");
+		EndMinigame();
+	}
+	else
+	{
+		Pause();
+	}
+}
+
+void MinigameManager::OnSceneObjectDelete()
+{
+	PrintDebug("End Minigame: Delete");
+	EndMinigame();
+}
+
+void MinigameManager::OnBeforeFrameUpdate(SpriteHierarchy& hierarchy)
+{
+	if (GameState == GameStates_Ingame)
+	{
+		this->Resume();
+	}
+	else if (IsInFinalBoss() && GameState == GameStates_NormalRestart)
+	{
+		PrintDebug("End Minigame: Boss Restart 2");
+		this->EndMinigame();
+	}
+	else
+	{
+		this->Pause();
+	}
+	if (this->currentMinigame && !this->isPaused)
 	{
 		if (this->state == MinigameState::MGS_None)
 		{
@@ -149,12 +236,9 @@ void MinigameManager::UpdateCurrentMinigame()
 		{
 			this->_data.managerState = this->state;
 			this->currentMinigame->OnFrame(this->_data);
-			this->_data.hierarchy->OnFrame();
-			this->_data.hierarchy->Render();
-			if (ArchipelagoManager::getInstance().IsDebug())
-			{
-				this->_data.collision->DebugDrawCollision(this->_data.icons);
-			}
+			//this->_data.hierarchy->OnFrame();
+			//this->_data.hierarchy->Render();
+			
 		}
 		if (this->currentMinigame->currentState == MinigameState::MGS_Victory ||
 			this->currentMinigame->currentState == MinigameState::MGS_Draw ||
@@ -169,6 +253,7 @@ void MinigameManager::UpdateCurrentMinigame()
 			{
 				this->HandleLoss();
 			}
+			PrintDebug("End Minigame: Normal Path");
 			this->EndMinigame();
 		}
 	}
@@ -185,8 +270,21 @@ void MinigameManager::UpdateCurrentMinigame()
 	}
 }
 
+void MinigameManager::OnAfterFrameRender(SpriteHierarchy& hierarchy)
+{
+	if (this->currentMinigame && !this->isPaused && ArchipelagoManager::getInstance().IsDebug())
+	{
+		this->_data.collision->DebugDrawCollision(this->_data.icons);
+	}
+}
+
 void MinigameManager::EndMinigame()
 {
+	if (this->_data.hierarchy == nullptr)
+	{
+		PrintDebug("Hierarchy ptr is null");
+		return;
+	}
 	if (this->currentMinigame)
 	{
 		this->currentMinigame->OnCleanup(this->_data);
@@ -375,11 +473,14 @@ void MinigameManager::Pause()
 		{
 			stopwatches[i]->Pause();
 		}
+		this->hierarchyItemPtr->isFrameUpdateActive = false;
+		this->hierarchyItemPtr->isRenderActive = false;
 	}
 
 	if (this->currentMinigameItem == ItemValue::IV_Maria)
 	{
-		this->_data.hierarchy->Render();
+		this->hierarchyItemPtr->isRenderActive = true;
+		//this->_data.hierarchy->Render();
 	}
 }
 
@@ -396,5 +497,7 @@ void MinigameManager::Resume()
 		{
 			stopwatches[i]->Resume();
 		}
+		this->hierarchyItemPtr->isFrameUpdateActive = true;
+		this->hierarchyItemPtr->isRenderActive = true;
 	}
 }

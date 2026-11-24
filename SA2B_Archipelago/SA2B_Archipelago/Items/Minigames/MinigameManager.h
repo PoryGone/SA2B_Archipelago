@@ -23,9 +23,7 @@
 #include "../../Aesthetics/StatsManager.h"
 #include <ctime>
 
-
-
-class MinigameManager
+class MinigameManager : HierarchyCallbacks
 {
 public:
 	static MinigameManager& GetInstance()
@@ -37,8 +35,17 @@ public:
 	void OnInitFunction(const char* path, const HelperFunctions& helperFunctions);
 	void OnFrameFunction();
 	void OnInputFunction();
-
-	void UpdateCurrentMinigame();
+	
+	void InitManagerData();
+	
+	//void OnHierarchyCreation();
+	//void OnHierarchyDelete();
+	//void UpdateCurrentMinigame(SpriteHierarchy& hierarchy);
+	//void PostRenderHierarchy(SpriteHierarchy& hierarchy);
+	void OnSceneObjectCreation();
+	void OnSceneObjectDelete();
+	void OnBeforeFrameUpdate(SpriteHierarchy& hierarchy);
+	void OnAfterFrameRender(SpriteHierarchy& hierarchy);
 	void EndMinigame();
 	void StartMinigame(ItemValue item, bool locationGame = false, bool linkedTrap = false);
 
@@ -54,9 +61,12 @@ public:
 
 	MinigameState state = MinigameState::MGS_None;
 	ObjectMaster* IconObjPtr;
-	MinigameIconData iconData = MinigameIconData();
+	
+	std::shared_ptr<HierarchyItem> hierarchyItemPtr;
+	
+	/*MinigameIconData iconData = MinigameIconData();
 	TextDisplayData textData = TextDisplayData();
-	SpriteHierarchy spriteHierarchy = SpriteHierarchy();
+	SpriteHierarchy spriteHierarchy = SpriteHierarchy();*/
 	CollisionManager collisionManager = CollisionManager();
 
 	std::vector<Timer*> timers = std::vector<Timer*>();
